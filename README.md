@@ -10,7 +10,7 @@ pnpm init @svelte-add/kit@latest
 ```
 
 Choose `typescript` and `tailwind`. The rest is optional.
-## Install
+## Install dependencies
 
 Install all the packages:
 
@@ -18,19 +18,30 @@ Install all the packages:
 pnpm install
 ```
 
+When using other `npm` libraries, use `pnpm i -D [name]` to save the dependency. 
+
+## Write `.svelte`
+
+Just write in the `src/routes` folder, `.svelte` with client-side javascript.
+
+Use absolute urls in `href` html properties and use `rel=external` when linking files from the `static` directory.
+## Install adapter
+
 Install the static adapter as mentioned in  https://kit.svelte.dev/docs#adapters-supported-environments
 ```
 pnpm install -D @sveltejs/adapter-static@next
 ```
 
-## Configure
+
+
+
+## Configure build
 
 Adjust `svelte.config.js` to contain
 
 ```
 import adapter from '@sveltejs/adapter-static';
 ```
-
 and specify a build directory
 
 `adapter({pages: "docs"})`
