@@ -52,7 +52,7 @@ Every time you run a build, commit the changes in the docs folder.
 
 `git add docs/*`
 
-`git commit -m "docs"
+`git commit -m "docs"`
 
 ## Deploy
 

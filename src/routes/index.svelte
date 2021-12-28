@@ -15,7 +15,7 @@
 		<div class="mt-6">
 			<div>Links:</div>
 			<div class="flex flex-col prose">
-				<a href="./cv.pdf">CV</a>
+				<a href="cv.pdf">CV</a>
 				<a href="https://github.com/wvhulle">Github</a>
 				<a href="https://keybase.io/willemvanhulle">Key-Base</a>
 				<a href="https://www.linkedin.com/in/willem-vanhulle-2657aa180/">LinkedIn</a>
