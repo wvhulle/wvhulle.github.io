@@ -3,11 +3,13 @@
 
 ## Initialize
 
+Start a new svelte repository.
+
 ```
 pnpm init @svelte-add/kit@latest
 ```
 
-
+Choose `typescript` and `tailwind`. The rest is optional.
 ## Install
 
 Install all the packages:
@@ -56,5 +58,5 @@ Every time you run a build, commit the changes in the docs folder.
 
 ## Deploy
 
-`git pull`
+`git push`
 

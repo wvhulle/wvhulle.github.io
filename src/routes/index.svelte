@@ -15,11 +15,16 @@
 		<div class="mt-6">
 			<div>Links:</div>
 			<div class="flex flex-col prose">
-				<a href="cv.pdf">CV</a>
+				<a href="https://wvhulle.github.io/cv.pdf">CV</a>
 				<a href="https://github.com/wvhulle">Github</a>
 				<a href="https://keybase.io/willemvanhulle">Key-Base</a>
 				<a href="https://www.linkedin.com/in/willem-vanhulle-2657aa180/">LinkedIn</a>
 			</div>
+		</div>
+
+		<div class="text-sm italic mt-6">
+			To make your own page, see <a href="https://github.com/wvhulle/wvhulle.github.io">README.md</a
+			>.
 		</div>
 	</div>
 </div>
