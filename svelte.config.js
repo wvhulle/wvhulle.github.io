@@ -15,9 +15,9 @@ const config = {
 
 	kit: {
 		adapter: adapter({pages: "docs"}),
-		paths: {
-					base: dev ? '' : '/wvhulle.github.io',
-				},
+		// paths: {
+		// 			base: dev ? '' : '/wvhulle.github.io',
+		// 		},
 		// hydrate the <div id="svelte"> element in src/app.html
 		target: '#svelte'
 	}
