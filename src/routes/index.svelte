@@ -1,3 +1,7 @@
+<svelte:head>
+	<title>Willem Vanhulle</title>
+</svelte:head>
+
 <div class="w-full h-full">
 	<div class="p-6 border rounded-2xl border-slate-600 shadow-2xl">
 		<div class="text-lg prose-h1">Willem Vanhulle</div>
