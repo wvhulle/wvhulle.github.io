@@ -24,7 +24,10 @@ When using other `npm` libraries, use `pnpm i -D [name]` to save the dependency.
 
 Just write in the `src/routes` folder, `.svelte` with client-side javascript.
 
-Use absolute urls in `href` html properties and use `rel=external` when linking files from the `static` directory.
+Important:
+
+- Use absolute urls in `href` html properties and 
+- use `rel=external` when linking files from the `static` directory (see [svelte kit anchor options](https://kit.svelte.dev/docs#anchor-options-rel-external)).
 ## Install adapter
 
 Install the static adapter as mentioned in  https://kit.svelte.dev/docs#adapters-supported-environments
