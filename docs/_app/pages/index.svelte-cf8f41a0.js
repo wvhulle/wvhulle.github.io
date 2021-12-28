@@ -1,1 +1,0 @@
-import{S as n,i as l,s as i,t as r,g as c,f as m,I as s,d as u}from"../chunks/vendor-14a40782.js";function p(a){let e;return{c(){e=r("Welcome to Willem's homepage")},l(t){e=c(t,"Welcome to Willem's homepage")},m(t,o){m(t,e,o)},p:s,i:s,o:s,d(t){t&&u(e)}}}class f extends n{constructor(e){super();l(this,e,null,p,i,{})}}export{f as default};
