@@ -1,7 +1,7 @@
 <script lang="ts">
 	import range from 'lodash-es/range';
 	import TimeSeries from './TimeSeries.svelte';
-	const now = new Date();
+	const now = new Date(0);
 	let data = range(0, 10000).map((n) => ({
 		time: new Date(now.getTime() + n * 3600 * 1000 * 24 * 10),
 		value: Math.sin(n / 1000)

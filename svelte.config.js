@@ -14,7 +14,7 @@ const config = {
 	preprocess: [preprocess({}), mdsvex()],
 
 	kit: {
-		adapter: adapter({ pages: 'build' })
+		adapter: adapter({ pages: 'build', fallback: '200.html' })
 	}
 };
 
