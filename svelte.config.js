@@ -14,11 +14,7 @@ const config = {
 	preprocess: [preprocess({}), mdsvex()],
 
 	kit: {
-		adapter: adapter({ pages: 'build' }),
-
-		paths: {
-			base: process.env.NODE_ENV === 'production' ? '/wvhulle.github.io' : ''
-		}
+		adapter: adapter({ pages: 'build' })
 	}
 };
 
