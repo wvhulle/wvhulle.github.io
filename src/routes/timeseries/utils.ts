@@ -1,6 +1,3 @@
-// import { takeProportion } from '$lib/data/arrays';
-// import { movingAverage } from '$lib/data/arrays/vectors';
-
 import clamp from 'lodash-es/clamp';
 import isDate from 'lodash-es/isDate';
 import sortBy from 'lodash-es/sortBy';
