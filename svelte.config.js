@@ -11,15 +11,10 @@ const config = {
 
 	// Consult https://github.com/sveltejs/svelte-preprocess
 	// for more information about preprocessors
-	preprocess: [preprocess({}), mdsvex(mdsvexConfig)],
+	preprocess: [preprocess({}), mdsvex()],
 
 	kit: {
 		adapter: adapter({pages: "docs"}),
-		// paths: {
-		// 			base: dev ? '' : '/wvhulle.github.io',
-		// 		},
-		// hydrate the <div id="svelte"> element in src/app.html
-		target: '#svelte'
 	}
 };
 
