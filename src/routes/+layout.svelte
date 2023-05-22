@@ -1,9 +1,13 @@
 <script>
 	import '../app.css';
+
+	export const prerender = true;
+
+	import { base } from '$app/paths';
 </script>
 
 <div class="grid place-content-center">
-	<a href="./timeseries" class="link">Time series</a>
+	<a href="{base}/timeseries" class="link">Time series</a>
 
 	<slot />
 </div>
