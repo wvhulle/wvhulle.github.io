@@ -14,7 +14,7 @@ const config = {
 	preprocess: [preprocess({}), mdsvex()],
 
 	kit: {
-		adapter: adapter({ pages: 'build', fallback: '200.html' }),
+		adapter: adapter({ pages: 'build', fallback: 'index.html' }),
 		paths: {
 			base: dev ? '' : '/wvhulle.github.io'
 		}
