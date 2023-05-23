@@ -8,30 +8,48 @@
 	<div class="flex flex-row p-0 m-0">
 		<h4 class="">Software engineer</h4>
 		<div class="flex flex-grow" />
-		<p class="">Ghent, Belgium</p>
+		<p class="">living in Ghent, Belgium</p>
 	</div>
-	<h2>About</h2>
+	<h2>Background</h2>
 	<p>
-		Mathematician and computer scientist, working as a full-stack software and data engineer. Has
-		solid knowledge of statistics and neural networks. Basic understanding of physics and biotech.
-		Problem solver, team worker, but can work solo on big projects. Experienced in lecturing
-		mathematics from primary to bachelor-level. Served in several coordinating volunteer roles.
-		Clear, professional communicator.
+		Grew up in Bruges, Belgium. Studied math and computer science in Brussels and Leuven. Took
+		courses on statistics, neural networks and physics. Active in language exchange, dancing and
+		intercultural community.
 	</p>
 
-	<h2>Experience</h2>
-	<p>
-		Develops code and designs UX for multi-user frontend in the web framework Svelte (HTML,
-		Javascript and CSS) including spreadsheet UI component for biochemical process development.
-	</p>
+	<div>
+		<h2>Skills</h2>
 
-	<p>
-		Built backend in SvelteKit (Typescript, Node.js, Python) using PostgreSQL, Prisma. Built API for
-		post-process analytics, consumed by statistical software R for reporting with Knitr. Creating
-		and managing Linux LXD containers and servers on-premise. Built Gitlab CI/CD pipeline with unit
-		tests.
-	</p>
+		<h3>Data visualization</h3>
 
+		<p>Uses D3, SVG and Svelte. Inspired by Matthias Stahl.</p>
+
+		<h3>Database design and management</h3>
+
+		<p>Uses PostgreSQL and Prisma.</p>
+
+		<h3>Web servers and protocols</h3>
+
+		<p>Uses Node and WebSocket.</p>
+	</div>
+	<div>
+		<h2>Large projects</h2>
+
+		<h3>Down-stream processing</h3>
+
+		<p>Made for micro-biological lab of company Inbiose, Ghent.</p>
+	</div>
+	<div>
+		<h2>Hobby projects</h2>
+
+		<h3>Molecular dynamics simulator</h3>
+
+		<p>Hobby project inspired by statistical mechanics teacher Enrico Carlon.</p>
+
+		<h3>Arithmetic problem sheet generator</h3>
+
+		<p>Tool to assist in teaching arithmetic.</p>
+	</div>
 	<div>
 		<h3>Links:</h3>
 		<ul class="">

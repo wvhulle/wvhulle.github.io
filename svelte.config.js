@@ -12,7 +12,7 @@ const config = {
 	preprocess: [preprocess({})],
 
 	kit: {
-		adapter: adapter(),
+		adapter: adapter({ precompress: true }),
 		paths: {
 			base: dev ? '' : '/wvhulle.github.io'
 		}

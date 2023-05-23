@@ -6,10 +6,14 @@
 
 <div class="flex flex-col h-full mx-auto relative">
 	<div
-		class="p-4 bg-white mb-4 border-b border-black flex flex-row gap-8 place-content-center text-lg sticky top-0"
+		class="p-2 bg-white mb-4 border-b border-black flex flex-row gap-8 place-content-center text-lg sticky top-0 items-center"
 	>
 		<a href="{base}/" class="link">Home</a>
-		<a href="{base}/timeseries" class="link">Time series</a>
+
+		<div class="flex flex-row gap-8 p-2 border border-black items-center">
+			<span class="text-gray-500">Demos</span>
+			<a href="{base}/timeseries" class="link">Time series</a>
+		</div>
 	</div>
 	<slot />
 </div>
