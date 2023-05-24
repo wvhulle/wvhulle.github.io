@@ -24,7 +24,7 @@
 
 <style>
 	.graph {
-		width: 50vw;
+		width: 100vw;
 		height: 50vh;
 	}
 </style>

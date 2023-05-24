@@ -1,14 +1,12 @@
 <script>
 	import '../app.css';
 
-	export const prerender = true;
-
 	import { base } from '$app/paths';
 </script>
 
 <div class="flex flex-col h-full mx-auto relative">
 	<div
-		class="p-4 mb-4 border-b border-black flex flex-row gap-8 place-content-center text-lg sticky top-0"
+		class="p-4 bg-white mb-4 border-b border-black flex flex-row gap-8 place-content-center text-lg sticky top-0"
 	>
 		<a href="{base}/" class="link">Home</a>
 		<a href="{base}/timeseries" class="link">Time series</a>
