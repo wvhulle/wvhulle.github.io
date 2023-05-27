@@ -30,10 +30,30 @@
 		data.length > 0 && timeVariable !== undefined && dataVariable !== undefined
 			? smoothen(data, timeVariable.toString(), dataVariable.toString(), window)
 			: undefined;
+
+	let tooltip = false;
+	let x = 0;
+	let y = 0;
 </script>
 
-<div bind:clientWidth={width} bind:clientHeight={height}>
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
+<div
+	class="container"
+	bind:clientWidth={width}
+	bind:clientHeight={height}
+	on:mouseover={() => (tooltip = true)}
+	on:mousemove={(e) => {
+		x = e.pageX;
+		y = e.pageY;
+	}}
+	on:mouseleave={() => (tooltip = false)}
+>
 	{#if smoothData && smoothData.length > 0 && width !== undefined && height !== undefined}
+		{#if tooltip}
+			<div class="tip" style:top={y} style:left={x}>{x} x {y}</div>
+		{:else}
+			<div class="tip" style:top={y} style:left={x}>hidden</div>
+		{/if}
 		<svg>
 			<DataLine data={smoothData} {width} {height} {minData} {maxData} />
 
@@ -56,7 +76,12 @@
 		min-height: 100%;
 	}
 
-	div {
+	.tip {
+		position: fixed;
+	}
+
+	.container {
+		position: relative;
 		display: flex;
 		/*height: 100%;                removed  */
 		flex: 1 1 auto;

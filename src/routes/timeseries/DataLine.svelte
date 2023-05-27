@@ -69,6 +69,7 @@
 	$: svgDataPath = data.length > 0 ? path(data) : undefined;
 </script>
 
+<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <g id="data-line">
 	{#if svgDataPath}
 		{#if svgDataPath.includes('NaN')}
