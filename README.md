@@ -11,11 +11,11 @@ While adding content:
 
 ## Dev
 
-Run `pnpm run dev`.
+Run `npm run dev`.
 
 ## Build
 
-Run `pnpm run build` and run preview with `pnpm run preview`
+Run `npm run build` and run preview with `npm run preview`
 
 ## Deploy
 
