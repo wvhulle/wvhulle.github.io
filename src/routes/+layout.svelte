@@ -13,6 +13,8 @@
     <a href="{base}/skills" class="link">Skills</a>
 
     <a href="{base}/portfolio" class="link">Portfolio</a>
+
+    <a href="{base}/blog" class="link">Blog</a>
   </div>
   <slot />
 </div>

@@ -1,0 +1,92 @@
+# Arch Linux
+
+I decided I needed to use a recent version of KDE for fractional scaling, since I have a 4k monitor.
+
+Follow https://wiki.archlinux.org/title/installation_guide
+
+Use Ventoy if you would like to try other distributions as well.
+
+
+```bash
+localectl set-keymap be-latin1
+timedatectl
+```
+
+
+pacstrap linux
+
+## Mounts
+
+get uuid 
+lsblk -dno UUID /dev/nvme0n1p4
+
+generate fstab
+
+arch-chroot /mnt
+
+localectl set-keymap be-latin1
+
+
+## Booting
+
+Install refind
+
+refind-install
+
+
+sudo vim /boot/EFI/refind/refind.conf
+
+lsblk -dno UUID /dev/nvme0n1p4
+add root=PARTUUID=.... to refind entry  
+
+
+pacman -S sudo
+
+
+sudo visudo
+add feedback, uncomment wheel
+
+adduser -aG sudo wvhulle
+
+
+
+## DE
+
+pacman -S sddm kde-applications plasma-desktop plasma-wayland networkmanager bluez-utils
+
+systemctl enable networkmanager
+enable sddm
+enable bluetooth
+
+start
+
+
+
+fish_config
+
+
+ localectl --no-convert set-x11-keymap be
+sudo pacman -S bluez-utils
+sudo vim /etc/bluetooth/main.conf
+autoconnect uncomment
+
+sudo pacman -S fuse2
+chmod a+x pcloud
+pcloud
+
+## Node
+
+sudo pacman -S pnpm
+ pnpm env use --global 19.4
+
+
+## Gitlab
+
+ python -m venv venv
+venv/bin/pip install gitlabber
+venv/bin/gitlabber -t glpat-t_ucrr61c8DCzc6zZJxz -u http://git.inbiose.lan -m http git
+
+
+sudo pacman -S yay
+
+yay -S vscodium
