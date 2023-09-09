@@ -1,7 +1,8 @@
 <h1>Portfolio</h1>
 
+<p>Large, successfully completed projects.</p>
 
-<h2>Frontend</h2>
+<h2>Data structures</h2>
 
 <h3>Reactive hashmaps</h3>
 <p>
@@ -10,19 +11,9 @@
   >
   that consists of entries which can be iterated through and behaves as an
   <a href="https://rxjs.dev/guide/overview">RxJS array observable</a>. Although
-  the keys are not reactive, the values of the map are and their initial values
-  can be reverted.
+  the keys are not reactive, the values of the map are and their values can be
+  reverted to an initial value.
 </p>
-
-<h4>Related</h4>
-<p>
-  To further understand the concept, take a look at data structure libraries
-  using RxJS. The theory of relativistic programming may also be relevant; see <a
-    href="https://www.usenix.org/legacy/event/atc11/tech/final_files/Triplett.pdf"
-    >relativistic programming</a
-  > for more information.
-</p>
-
 
 <p>
   An advancement of this is a recursive hashmap implementation which functions
@@ -32,6 +23,13 @@
   Performance improvements for over 10000 nodes are still in progress, though it
   is already useful for complex interactive data grids of less than 1000 rows.
 </p>
+
+<h2>Frontend</h2>
+
+<p>
+  Forms library for CSV, FormData and JSON. Inline and block versions available.
+</p>
+
 <h2>Backend</h2>
 
 <h3>Down-stream processing</h3>
@@ -39,9 +37,7 @@
   This project was made for the purification department of Inbiose, a
   microbiological lab in Ghent. It allows users to log process parameters and
   sample data in a structured way. Additionally, it can parse large data files
-  to create reports. The following user interface components are featured in
-  this system: <span class="badge">time series</span>,
-  <span class="badge">data grid</span>, and <span class="badge">CSV</span>.
+  to create reports.
 </p>
 
 <h3>RPC and Asynchronous PostgreSQL</h3>
@@ -63,8 +59,6 @@
   and <a href="https://www.npmjs.com/package/json-rpc-2.0">JSON-RPC</a>, but
   without broadcasting events.
 </p>
-
-
 
 <h2>Links:</h2>
 

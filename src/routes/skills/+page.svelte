@@ -7,14 +7,16 @@
   >, <a href="https://en.wikipedia.org/wiki/SVG">SVG</a> and
   <a href="https://svelte.dev/">Svelte</a>, taking inspiration from world-renown
   visualizations designer
-  <a href="https://www.matthiasstahl.com/">Matthias Stahl</a>.
+  <a href="https://www.higsch.com/">Matthias Stahl</a>.
 </p>
 
 <h2>Database Design and Management</h2>
 <p>
-  Used <a href="https://www.postgresql.org/">PostgreSQL</a>
-  and
-  <a href="https://www.prisma.io/">Prisma</a> in terms of database design and management.
+  For database design and management I have mostly used <a
+    href="https://www.postgresql.org/">PostgreSQL</a
+  >
+  as base and an ORM called
+  <a href="https://www.prisma.io/">Prisma</a> on top.
 </p>
 
 <h2>Web Servers and Protocols</h2>

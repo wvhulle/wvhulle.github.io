@@ -20,7 +20,6 @@
 <style>
   * {
     font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-      
   }
 
   :global(html, body) {
@@ -31,7 +30,6 @@
     min-height: 100%;
   }
 
-  
   #layout {
     background-image: linear-gradient(120deg, #ffffff 0%, #98cdff 100%);
 
@@ -54,7 +52,7 @@
     padding: 0.5em;
     background-color: rgba(0, 29, 80, 0.831);
     backdrop-filter: blur(0.3em);
-    color:white;
+    color: white;
     width: 100%;
     margin-bottom: 1em;
     display: flex;

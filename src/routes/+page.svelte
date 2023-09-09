@@ -2,38 +2,33 @@
   <title>Willem Vanhulle</title>
 </svelte:head>
 
-  <div id="header">
-    <div id="left">
-      <h1>Willem Vanhulle</h1>
-      <h2 class="">Software engineer</h2>
+<div id="header">
+  <div id="left">
+    <h1>Willem Vanhulle</h1>
+    <h2 class="">Software engineer</h2>
 
-      <h3 class="">Ghent, Belgium</h3>
-    </div>
-    <div id="profile">
-      <img src="lab.jpg" alt="Willem in the lab" />
-    </div>
+    <h3 class="">Ghent, Belgium</h3>
   </div>
-
-  <div id="body">
-    <p>
-      Working in a friendly bio-technological company at Zwijnaarde, Belgium.
-      
-    </p>
-
-
-    <p>
-      I'm open to projects related to web and app development using open
-      software.
-    </p>
+  <div id="profile">
+    <img src="lab.jpg" alt="Willem in the lab" />
   </div>
+</div>
 
-  <div id="spacer"></div>
+<div id="body">
+  <p>Working in a friendly bio-technological company at Zwijnaarde, Belgium.</p>
 
-  <div id="footer">
-    To make your own page, see the <a
-      href="https://github.com/wvhulle/wvhulle.github.io">source code</a
-    > of this website.
-  </div>
+  <p>
+    I'm open to projects related to web and app development using open software.
+  </p>
+</div>
+
+<div id="spacer"></div>
+
+<div id="footer">
+  To make your own personal website, see the <a
+    href="https://github.com/wvhulle/wvhulle.github.io">source code</a
+  > of this website.
+</div>
 
 <style>
   #header {
@@ -79,9 +74,9 @@
   }
 
   #spacer {
-    display:flex;
+    display: flex;
 
-    flex-grow: 1;;
+    flex-grow: 1;
   }
 
   #footer {
