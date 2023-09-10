@@ -1,8 +1,8 @@
-# Arch Linux
+# Installation and Configuration for Arch Linux
 
 I decided I needed to use a recent version of KDE for fractional scaling, since I have a 4k monitor.
 
-Follow https://wiki.archlinux.org/title/installation_guide
+This guide follows https://wiki.archlinux.org/title/installation_guide. Refer to this document for more information.
 
 Use Ventoy if you would like to try other distributions as well. Ventoy has to be written once to an empty usb-stick. Mount the Ventoy USB-stick. Drop the ISO image on the usb-stick.
 
@@ -15,31 +15,31 @@ timedatectl
 
 Follow the instructions from Arch Linux to install the Linux kernel. 
 
-```
+```bash
 pacstrap linux
 ```
+
 ## Mounts
 
 To be able to specify the uuid of the root disk partition to mount, you have to use lsblk  
 
-```
+```bash
 lsblk -dno UUID /dev/nvme0n1p4
 ```
-
 
 Follow Arch instructions to generate fstab.
 
 Then enter your future installation as guest using arch-chroot.
 
-
-```
+```bash
 arch-chroot /mnt
 ```
 
-Make sure the keyboard and time is correct.
+Make sure the keyboard and time zone is correct.
 
+```bash
 localectl set-keymap be-latin1
-
+```
 
 ## Preparing for Boot
 
@@ -47,75 +47,115 @@ Install refind
 
 Then configure it using 
 
-```
+```bash
 refind-install
 ```
 Later, in case there are problems, you can repeat the previous and then `vim /boot/EFI/refind/refind.conf`
 You can add the root partition UUID then to fix boot problems.
 
 ```
- root=PARTUUID=.... # to refind entry  
+root=PARTUUID=.... # to refind entry  
 ```
 
 
 ## Install SUDO
 
+Add an unpriviliged user. Then you have to install sudo, since it is not default in Arch.
+
+```bash
 pacman -S sudo
-
-```
-sudo visudo
+visudo
 ```
 
-add feedback, uncomment wheel
+Uncomment the wheel group
 
-adduser -aG sudo wvhulle
-
-
+```bash
+adduser -aG wheel wvhulle
+```
 
 ## Install DE
 
 In case, you want to go for plasma:
 
+```bash
 pacman -S sddm kde-applications plasma-desktop plasma-wayland networkmanager bluez-utils
+```
 
-systemctl enable networkmanager
-enable sddm
-enable bluetooth
+You have to enable the network manager
 
-Start the previous.
+```bash
+systemctl enable networkmanager sddm enable bluetooth
+```
 
+Replace enable with start in the previous to start it immediately.
 
+For X11 and SDDM you have to set the keymap externally with:
 
- localectl --no-convert set-x11-keymap be
+```bash
+localectl --no-convert set-x11-keymap be
+```
+
+Install bluetooth management for KDE
+
+```bash
 sudo pacman -S bluez-utils
+```
+
+Open the configuration for bluetooth
+
+```bash
 sudo vim /etc/bluetooth/main.conf
-uncomment autoconnect 
+```
+
+Find the line about autoconnect, and uncomment it.
 
 
-
-
-fish_config
-
+In case you have Fish installed, adjust the Fish configuration with fish_config and switch the prompt to a VCS compatible prompt.
 
 ## File sharing
 
+For file system mounts
+
+```bash
 sudo pacman -S fuse2
+```
+
+Download pcloud binary.
+
+```bash
+mv Downloads/pcloud Bin
 chmod a+x pcloud
-pcloud
+```
+
+
+Now you can launch pcloud
 
 ## Node
 
-sudo pacman -S pnpm
- pnpm env use --global 19.4
+In case you will be developing Node.JS software, you need PNPM for efficient package management.
 
+```bash
+sudo pacman -S pnpm
+pnpm env use --global 19.4
+```
+
+This will install the version of node that is specified. No need to install Node.JS separately.
 
 ## Gitlab
 
- python -m venv venv
+To download the internal Git lab, you can use Gitlabber. Create an access token in your Gitlab preferences and install gitlabber:
+
+```bash
+python -m venv venv
 venv/bin/pip install gitlabber
-venv/bin/gitlabber -t $TOKEN -u http://git.inbiose.lan -m http git
+venv/bin/gitlabber -t $TOKEN -u http://git.X.lan -m http git
+```
 
 
-sudo pacman -S yay
+For other software, you can install yay and octopi.
+
+```bash
+sudo pacman -S yay octopi
 
 yay -S vscodium
+```
