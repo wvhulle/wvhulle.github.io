@@ -4,53 +4,77 @@ I decided I needed to use a recent version of KDE for fractional scaling, since 
 
 Follow https://wiki.archlinux.org/title/installation_guide
 
-Use Ventoy if you would like to try other distributions as well.
+Use Ventoy if you would like to try other distributions as well. Ventoy has to be written once to an empty usb-stick. Mount the Ventoy USB-stick. Drop the ISO image on the usb-stick.
 
+Boot the USB. Configure time zone and keyboard.
 
 ```bash
 localectl set-keymap be-latin1
 timedatectl
 ```
 
+Follow the instructions from Arch Linux to install the Linux kernel. 
 
+```
 pacstrap linux
-
+```
 ## Mounts
 
-get uuid 
+To be able to specify the uuid of the root disk partition to mount, you have to use lsblk  
+
+```
 lsblk -dno UUID /dev/nvme0n1p4
+```
 
-generate fstab
 
+Follow Arch instructions to generate fstab.
+
+Then enter your future installation as guest using arch-chroot.
+
+
+```
 arch-chroot /mnt
+```
+
+Make sure the keyboard and time is correct.
 
 localectl set-keymap be-latin1
 
 
-## Booting
+## Preparing for Boot
 
 Install refind
 
+Then configure it using 
+
+```
 refind-install
+```
+Later, in case there are problems, you can repeat the previous and then `vim /boot/EFI/refind/refind.conf`
+You can add the root partition UUID then to fix boot problems.
+
+```
+ root=PARTUUID=.... # to refind entry  
+```
 
 
-sudo vim /boot/EFI/refind/refind.conf
-
-lsblk -dno UUID /dev/nvme0n1p4
-add root=PARTUUID=.... to refind entry  
-
+## Install SUDO
 
 pacman -S sudo
 
-
+```
 sudo visudo
+```
+
 add feedback, uncomment wheel
 
 adduser -aG sudo wvhulle
 
 
 
-## DE
+## Install DE
+
+In case, you want to go for plasma:
 
 pacman -S sddm kde-applications plasma-desktop plasma-wayland networkmanager bluez-utils
 
@@ -58,17 +82,22 @@ systemctl enable networkmanager
 enable sddm
 enable bluetooth
 
-start
+Start the previous.
+
+
+
+ localectl --no-convert set-x11-keymap be
+sudo pacman -S bluez-utils
+sudo vim /etc/bluetooth/main.conf
+uncomment autoconnect 
+
 
 
 
 fish_config
 
 
- localectl --no-convert set-x11-keymap be
-sudo pacman -S bluez-utils
-sudo vim /etc/bluetooth/main.conf
-autoconnect uncomment
+## File sharing
 
 sudo pacman -S fuse2
 chmod a+x pcloud
@@ -84,7 +113,7 @@ sudo pacman -S pnpm
 
  python -m venv venv
 venv/bin/pip install gitlabber
-venv/bin/gitlabber -t glpat-t_ucrr61c8DCzc6zZJxz -u http://git.inbiose.lan -m http git
+venv/bin/gitlabber -t $TOKEN -u http://git.inbiose.lan -m http git
 
 
 sudo pacman -S yay
