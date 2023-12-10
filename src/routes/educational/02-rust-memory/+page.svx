@@ -1,0 +1,355 @@
+## Memory
+
+Previous lecture: [basics](/educational/01-rust-basics)
+
+### Memory management
+
+When do we need better control over memory?
+
+- embedded systems have memory constraints
+- long-running processes can become slow if using too much memory
+- applications used by multiple users under severe load
+
+
+
+### Memory locations
+
+From fast to slow:
+
+- Register memory: CPUs
+- Working memory: RAM cards
+- Video memory: GPU
+- Solid state memory: SSD
+
+
+
+### RAM
+
+What does working memory do?
+
+- managed by operating system
+- shared between different processes
+- can be both written and read at the same time by different CPUs
+- mainly used for loading and pre-processing batches of data
+
+
+
+### CPU and RAM
+
+What is the interaction between CPU and RAM?
+
+- registers on CPU: contains intermediate results
+- stack in RAM: contains function calls and arguments (fast)
+- heap in RAM: allocated dynamically (slow)
+
+
+
+### Example of stack
+
+From top to bottom:
+
+```log
+move
+r1
+add
+5
+2
+...
+```
+
+Function calls added on top of arguments.
+
+
+
+### Types of memory
+
+- **variables**: the raw data in a register or on the heap
+  - mutable
+  - immutable constants
+- **pointers**: addresses to the location of a value on the heap in memory
+  - mutable: allows updating data at referenced location
+  - immutable
+- **composite**: consecutive list of pointers (array)
+
+
+
+## Memory Allocation
+
+
+
+### Definition of memory allocation
+
+Giving memory to user.
+
+Who does memory allocation?
+
+- on demand by interpreter (Python, R)
+- at compile time by a compiler (C, Rust)
+
+
+
+### Steps for memory allocation
+
+1. Determine *size* of object (can it grow?, can it be replaced?)
+2. *ask operating system* to find an appropriate place in registers, heap or stack
+3. *receive pointer* to free memory
+4. store *reference* in variable
+5. write to memory location
+
+
+
+### Step A: ask for memory
+
+1. Determine *size* of object (can it grow?, can it be replaced?)
+2. *ask operating system* to find an appropriate place in registers, heap or stack
+3. *receive pointer* to free memory
+
+
+
+### Small and static data
+
+Memory allocation of statically sized temporary variables is not on heap.
+
+For example in Rust:
+
+```rust
+let x: u8 = 5
+```
+
+Small static data can be inlined on stack. It is just replaced in the code on compilation.
+
+
+
+### Dynamic data
+
+Memory location of dynamic data can only happen on heap.
+
+For example in Rust:
+
+```rust
+let name: String = String::from("Willem")
+```
+
+`name` can change in size. Find empty area on heap.
+
+1. Save pointer to start string
+2. save length of string
+3. save capacity (size empty area)
+
+
+
+### Step B: manage memory
+
+1. store *reference* in variable
+2. write to memory location
+3. destroy memory
+
+```rust
+fn main() {
+   let name: String = String::from("Willem") // space is occupied, reference name is saved
+   name.push_str(" Vanhulle")
+   println!("{name}") // name Willem Vanhulle is printed
+   // name is destroyed, space is freed 
+}
+```
+
+
+
+## Memory de-allocation
+
+
+
+### Responsibility free-ing up
+
+Who will free up memory?
+
+- Operating system after unpredicted exit
+- Systems programmer
+- Runtime ?
+
+
+
+### Scope
+
+- area of function body that is being executed
+- scope contains variables
+- variables can be mutable (writable) or not
+
+```py
+x = 10
+
+def add(a: int, b: int):
+    return a + b # a and b are variables in scope, mutable 
+# a and b out of scope, x is still in scope
+
+```
+
+
+
+### Scope de-allocation
+
+- present in every programming language
+- variables out of scope are removed from stack and heap
+
+```py
+list = [1,2]
+def swap(index_a: int, index_b: int):
+   old_a = list[index_a] # temporary value old_a is stored on stack or heap
+   list[index_a] = list[index_b]
+   list[index_b] = old_a
+   # value old_a is removed from stack or heap
+```
+
+
+
+### Reference counting
+
+- Scope is not enough. Some data leaves the scope but has to stay.
+
+When to clean up?
+
+- Count number of pointers and frees up when no pointers remaining
+
+```py
+views = []
+def open_new_view():
+    new_view = # ...
+    views.push(new_view)
+    # what happens to views? 
+# views will always get bigger and bigger unless cleaned up
+```
+
+New concept = *reference counting*
+
+
+
+### Garbage collection
+
+Reference counting creates overhead.
+
+For every object, a look-up has to happen if it is still required.
+
+Reference counting is a form of *garbage collection*.
+
+Systems programming languages:
+
+- do not have reference counting → faster
+- alternative options for garbage collection
+
+
+
+### Memory de-allocation in C++
+
+Automatic: when variables leave scope
+
+Manual memory allocation:
+
+- allocation on heap with "new"
+- freeing on heap with "delete"
+
+
+
+### Problems memory allocation C++
+
+- Human de-allocation errors:
+  - forgetting to free up → filling all available memory (**memory leaks**)
+  - free-ing up too early → crashes
+
+
+
+## New concept: ownership
+
+
+
+### Memory allocation in Rust
+
+- variables have a scope or expression as owner → *ownership*
+- *ownership* = take responsibility for clean-up of data
+- ownership can be taken by function calls
+
+Benefits: no reference counting, no overhead
+
+
+
+### Example of ownership
+
+Full code:
+
+```rust
+fn main() // start scope of main 
+    let first = String::from("Ferris"); // ownership of first belongs to main
+    let full = add_suffix(first); // ownership for first is captured by add_suffix
+    println!("{full}, originally {first}");
+} // end scope of main 
+
+fn add_suffix(mut name: &mut String) -> String {
+    name.push_str(" Jr.");
+    return name
+}
+```
+
+Break-down in steps...[playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=9fcc1f58e4aa0fbede138b55bdde7fcb)
+
+
+
+### Creation of main scope
+
+First step: creation of a pointer `first` to a string:
+
+```rust
+let first = String::from("Ferris");
+```
+
+`main` function has current scope and receives ownership of `first`.
+
+```rust
+fn main() {  // start of scope
+    let first = String::from("Ferris"); 
+    // main receives ownership
+    let full = add_suffix(first);
+    println!("{full}, originally {first}"); 
+}
+```
+
+
+
+### Move of ownership
+
+- Functions have a scope and capture variables
+- The function `add_suffix` receives ownership for `name`
+
+```rust
+fn add_suffix(mut name: String) -> String { 
+    // ownership of name is captured 
+    name.push_str(" Jr.");
+    return name
+} // scope ends, free-up of name
+```
+
+First is moved into `add_suffix`. (*move semantics*)
+
+After function scope ends, data behind pointer `name` is de-allocated and free-ed up
+
+
+
+### Using a de-allocated variable
+
+Ownership means responsibility for de-allocation
+
+```rust
+fn main() {
+    let first = String::from("Ferris");
+    let full = add_suffix(first); // ownership first is moved
+    println!("{full}, originally {first}"); 
+    // first is now used here, compile-time error
+}
+```
+
+Variable was already de-allocated
+
+→ compile-time error
+
+
+
+
+Next lecture: [pointers](/educational/03-rust-pointers) (2023-10-23)

@@ -1,0 +1,196 @@
+## Pointers
+
+Previous lecture: [memory](/educational/02-rust-memory)
+
+### How to use pointers
+
+- Creating a pointer: `&`,
+- Following a pointer: `*`
+
+Benefits: share data without copying → speed
+
+Examples:
+
+- names of objects in JavaScript and Python
+
+
+
+### Types of pointers in Rust
+
+Rust has two types of pointers:
+
+**mutable** references to data:
+
+```rust
+let &mut name: &String = ...
+```
+
+**immutable** (read-only) references to data:
+
+```rust
+let &name: &String = ...
+```
+
+
+
+### Role of pointers in Rust
+
+Pointers do not capture and transfer ownership.
+
+```rust
+// replaced variable by a pointer to String
+fn add_suffix(&mut name: &String) -> &String { 
+    name.push_str(" Jr.");
+    return name
+} // scope ends but name is not de-allocated
+```
+
+No de-allocation of name
+
+Allow sharing data on heap between different parts of program.
+
+
+
+### Dangling pointers
+
+Situation:
+
+- input is a pointer to a memory location
+- output is a pointer to a memory location
+
+What if the memory location of input is cleaned in one but not the other?
+
+```rust
+fn add_suffix(&mut name: &String) -> &String {
+    name.push_str(" Jr.");
+    let modified_name = name // use different name
+    return modified_name // unclear how long this will live
+    // compared to input name
+} 
+```
+
+
+
+### Solution: Life-times
+
+```rust
+// added life-time variable
+fn add_suffix<'life>(name: &'life mut String) -> &'life String { 
+    name.push_str(" Jr.");
+    let modified_name = name 
+    return modified_name 
+    // life-time 'life is at least as long as input life
+} 
+```
+
+Interpretation:
+
+> Life output pointer > Life input pointer
+
+*Life-times* = compile-time temporal assertions about pointer validity
+
+
+
+### Mutable and immutable references
+
+We would like to write and read reference at the same time
+
+```rust
+fn main() {
+    let mut first = String::from("Ferris"); // creating string
+    let full = add_suffix(&mut first); // creating a mutable reference to string
+    println!("{full}, originally {first}"); // using an immutable reference to string
+}
+
+fn add_suffix<'life>(name: &'life mut String) -> &'life String {
+    name.push_str(" Jr.");
+    return name
+} 
+```
+
+Does not compile because of "borrowing rules" [playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=aa12abe0c71ffe3d1e5c3ba88404d6d8).
+
+
+
+## Sharing references to mutable data
+
+
+
+### Concurrency
+
+Scenario
+
+1. Create a location with string data
+2. Create a reference.
+3. Create another reference.
+
+
+
+### Problematic use of pointers
+
+Creation of two pointers:
+
+```rust
+let mut n = 10
+let r1 = &n
+let r2 = &n
+
+f(r1)
+g(r2)
+```
+
+What if `f` modifies the data and `g` needs it?
+
+Cause of uncertainty.
+
+
+
+### Unchecked shared access
+
+```rust
+let mut n = 10
+let r1 = &n
+let r2 = &n
+
+f(r1)
+g(r2)
+```
+
+What if `f` modifies the data at the same time as `g` in a multi-core situation?
+
+Cause of uncertainty.
+
+
+
+### Borrowing
+
+Using a reference in a function or scope is called *borrowing*.
+
+Solution is two options:
+
+1. variables can be referenced only once as mutable
+2. variables can be only referenced as immutable
+
+Rust has a **borrow-checker**
+
+```rust
+let mut n = 10
+let r1 = &mut n // r1 is a mutable borrow
+let r2 = &n // compile time error, only one mutable borrow at the same time
+
+f(r1) // will never be executed, because compile-time error
+g(r2)
+```
+
+
+
+### Summary about memory safety in Rust
+
+- more rules
+- more automatization
+- less human errors
+- more memory safety
+
+
+
+Next: [types](/educational/04-rust-types) (2023-10-23)

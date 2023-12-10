@@ -1,4 +1,7 @@
-# Installation and Configuration for Arch Linux
+## Arch Linux
+
+### Prepare
+
 
 I decided I needed to use a recent version of KDE for fractional scaling, since I have a 4k monitor.
 
@@ -19,7 +22,7 @@ Follow the instructions from Arch Linux to install the Linux kernel.
 pacstrap linux
 ```
 
-## Mounts
+### Mounts
 
 To be able to specify the uuid of the root disk partition to mount, you have to use lsblk  
 
@@ -41,7 +44,7 @@ Make sure the keyboard and time zone is correct.
 localectl set-keymap be-latin1
 ```
 
-## Preparing for Boot
+### Preparing for Boot
 
 Install refind
 
@@ -58,7 +61,7 @@ root=PARTUUID=.... # to refind entry
 ```
 
 
-## Install SUDO
+### Install SUDO
 
 Add an unpriviliged user. Then you have to install sudo, since it is not default in Arch.
 
@@ -73,7 +76,7 @@ Uncomment the wheel group
 adduser -aG wheel wvhulle
 ```
 
-## Install DE
+### Install desktop environment
 
 In case, you want to go for plasma:
 
@@ -112,7 +115,7 @@ Find the line about autoconnect, and uncomment it.
 
 In case you have Fish installed, adjust the Fish configuration with fish_config and switch the prompt to a VCS compatible prompt.
 
-## File sharing
+### File sharing
 
 For file system mounts
 
@@ -120,17 +123,8 @@ For file system mounts
 sudo pacman -S fuse2
 ```
 
-Download pcloud binary.
 
-```bash
-mv Downloads/pcloud Bin
-chmod a+x pcloud
-```
-
-
-Now you can launch pcloud
-
-## Node
+### Node
 
 In case you will be developing Node.JS software, you need PNPM for efficient package management.
 
@@ -140,17 +134,6 @@ pnpm env use --global 19.4
 ```
 
 This will install the version of node that is specified. No need to install Node.JS separately.
-
-## Gitlab
-
-To download the internal Git lab, you can use Gitlabber. Create an access token in your Gitlab preferences and install gitlabber:
-
-```bash
-python -m venv venv
-venv/bin/pip install gitlabber
-venv/bin/gitlabber -t $TOKEN -u http://git.X.lan -m http git
-```
-
 
 For other software, you can install yay and octopi.
 

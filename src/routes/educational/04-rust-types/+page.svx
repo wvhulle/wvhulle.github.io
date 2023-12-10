@@ -1,0 +1,269 @@
+## Types
+
+Previous lecture: [pointers](/educational/03-rust-pointers)
+
+### What are types
+
+Examples:
+
+- Primitive types: numbers, arrays, integers, strings
+- User types: objects, classes
+
+
+### Type system
+
+- tool to specify behavior of computer program at compile-time
+- can be used as constraints for software
+
+
+### Role of types
+
+In both mathematics and computer science:
+
+- Abstract away, simplify and model problems.
+- Add constraints to problem models.
+
+Think *lower bounds* and *upper bounds* to problems.
+
+
+### Different levels of typing
+
+Weakly-typed languages:
+
+> make conversions between unrelated types implicitly;
+
+strongly-typed languages
+
+> don't allow implicit conversions between unrelated types.
+
+
+### Basic data-types
+
+Weakly typed: Python, R
+
+```python
+a = 123456789
+a = "abcdef"
+```
+
+Strongly typed: Haskell, Rust (strong constraints), C++
+
+```rust
+let mut a : i8 = 123
+a = "abc" // compile error
+```
+
+
+### More types
+
+Common types:
+
+- Function
+- Class
+- DataFrame
+
+Advanced types:
+
+- Pointer: refer to data
+- Mutex: share data
+
+
+### Example: Null pointer in C++
+
+Undetected undefined behavior
+
+```cpp
+#include <cstddef>
+
+struct Foo {
+  int val;
+};
+    
+int main()  {
+    Foo* foo = NULL; 
+    // set to null pointer
+    foo->val = 44; 
+    // set val of foo to 44
+    return 0;
+}
+```
+
+> Address boundary error
+
+
+### Example: Null pointer in Rust
+
+Unsafe code has to be explicitly marked
+
+```rust
+#[derive(Debug)]
+struct Foo {
+    val: i32,
+}
+
+fn main() {
+    let  foo: *mut Foo = std::ptr::null_mut();
+    unsafe {
+        (*foo).val = 44;
+        // code crashes here
+    }
+}
+```
+
+Raw pointer `std::ptr::null_mut` has to be used
+
+
+### Single threading in C++
+
+```cpp
+int counter = 0;
+
+for (int i = 0; i < 10; ++i) {
+    ++counter;
+}
+```
+
+What if we want to update counter in parallel?
+
+Need to synchronize access
+
+
+### Multi-threading in C++
+
+```cpp
+int counter = 0;
+std::mutex mtx;
+ 
+void incrementCounter() {
+    mtx.lock();
+    ++counter;
+    mtx.unlock();
+}
+ 
+std::thread threads[10];
+for (int i = 0; i < 10; ++i) {
+    threads[i] = std::thread(incrementCounter);
+}
+```
+
+Source of errors: lock is independent of data
+
+[play](https://onlinegdb.com/3w8ifDn6h)
+
+
+### Multi-threading in Rust
+
+Lock is necessary to access data
+
+```rust
+let counter = Arc::new(Mutex::new(0));
+let mut handles = vec![];
+
+for _ in 0..10 {
+    let counter = Arc::clone(&counter);
+    let handle = thread::spawn(move || {
+        let mut num = counter.lock().unwrap();
+        *num += 1;
+    });
+    handles.push(handle);
+}
+```
+
+[play](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=18e92a25de1b97cd998ba0ca332154c0)
+
+
+### Single-threading in Rust: First step
+
+Single threading
+
+```rust
+use std::sync::Mutex;
+
+fn main() {
+    let m = Mutex::new(5);
+
+    {
+        let mut num = m.lock().unwrap();
+        *num = 6;
+    }
+}
+```
+
+`m.lock()` returns a reference to the data, no lock means no reference
+
+[play](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=4f1891f8c7df02ba586cde197c744fa8)
+
+
+### Multi-threading in Rust: First-step
+
+Creation of a **mutex** = lock-able variable
+
+```rust
+let counter = Mutex::new(0);
+let mut handles = vec![];
+
+for _ in 0..10 {
+    let handle = thread::spawn(move || {
+        // counter is moved into thread
+        let mut num = counter.lock().unwrap();
+        // counter cannot be used in next thread
+        *num += 1;
+    });
+    handles.push(handle);
+}
+```
+
+> moved value `counter` cannot be used after move
+
+[play](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=a3df1795edb02027039062ea9ad17feb)
+
+
+
+
+### Multi-threading in Rust: shared reference
+
+Create **smart-pointer** to counter: `Arc`. Pointers to not move or capture ownership
+
+```rust
+let counter = Arc::new(Mutex::new(0));
+let mut handles = vec![];
+
+for _ in 0..10 {
+    let counter = Arc::clone(&counter);
+    let handle = thread::spawn(move || {
+        let mut num = counter.lock().unwrap();
+
+        *num += 1;
+    });
+    handles.push(handle);
+}
+```
+
+Clone smart-pointer for each thread
+
+[play](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=234ab646dc385d613b99a1359ce7ff23)
+
+
+### Types = constraints
+
+Compile-time constraints in strongly-typed languages are useful:
+
+- Lack of constraints leads to unpredictable software
+- Unpredictable software leads to:
+  - Angry users
+  - Tired developers
+  - Bad business
+
+Fewer constraints in C++
+
+
+### High-performance data-frames in Rust
+
+Why not stick to Tidyverse and Pandas?
+
+- High-performance library available: [Polars](https://pola-rs.github.io)
+- Similar to R in benchmarks on working with data-frames: [benchmarks](https://duckdblabs.github.io/db-benchmark/)
+
+
+
+Next: [async](/educational/05-rust-async) (2023-11-12)

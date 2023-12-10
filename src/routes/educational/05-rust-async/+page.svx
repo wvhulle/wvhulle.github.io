@@ -1,0 +1,79 @@
+## Asynchronous programming
+
+
+Previous lecture: [types](/educational/04-rust-types)
+
+### Situation: Planning execution
+
+Imagine a situation with:
+
+- many computation tasks
+- start and end of computations bound externally
+- limited amount of time
+
+How to plan execution?
+
+### Solution
+
+Solution:
+
+1. start all
+2. switch away from computations when blocked by external factor.
+3. continue each computation as much as possible until blocked
+4. finish all computations in order of availability
+5. return to caller
+
+This is **asynchronous programming**
+
+
+### Position of asynchronous programming
+
+The role of asynchronous programming is in-between:
+
+1. Multi-threading or parallel computing on *multiple threads*
+2. **concurrent/asynchronous** programming on *one thread*
+3. blocking computation on *one thread*
+
+
+### Futures: backbone of async
+
+Future computations to be planned are called **future**s (promises in JavaScript).
+
+Examples:
+
+> Next moment a network packet arrives
+> Next moment a device writes to a COM port
+
+Futures are competing for execution by execution planner.
+
+
+### How does it work
+
+Futures can be `poll`-ed and return `Ready` or `Pending`.
+
+```rust
+enum Poll<T> {
+    Ready(T),
+    Pending
+}
+```
+
+Ready future is resolved when `Ready(T)` or may be pending and is awoken later.
+
+
+### Dealing with futures
+
+Futures have to be awaited.
+
+```rust
+async fn example() {
+    tokio::time::sleep(Duration::from_millis(50)).await
+    ...
+    tokio::time::sleep(Duration::from_millis(50)).await
+}
+```
+
+Multiple functions can be awaited
+
+1. sequentially with `await`
+2. at the same time with `join`

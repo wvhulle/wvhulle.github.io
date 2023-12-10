@@ -9,16 +9,21 @@
 
     <h3 class="">Ghent, Belgium</h3>
   </div>
-  <div id="profile">
-    <img src="lab.jpg" alt="Willem in the lab" />
-  </div>
+
+  <img src="lab.jpg" alt="Willem in the lab" />
 </div>
 
 <div id="body">
-  <p>Working in a friendly bio-technological company at Zwijnaarde, Belgium.</p>
+  <p>Working at a bio-technological company in Zwijnaarde, Belgium.</p>
 
   <p>
     I'm open to projects related to web and app development using open software.
+  </p>
+
+  <p>
+    Open source public work can be found on <a href="https://github.com/wvhulle"
+      >Github</a
+    >
   </p>
 </div>
 
@@ -30,7 +35,7 @@
   > of this website.
 </div>
 
-<style>
+<style lang="scss">
   #header {
     /* w-full h-full prose mx-auto pb-5 pt-5 */
     width: 100%;
@@ -59,17 +64,9 @@
     flex-direction: column;
   }
 
-  #profile {
-    margin: 2em;
-    place-self: center;
-    justify-self: center;
-    width: 10vw;
-    border-radius: 100%;
-    overflow: hidden;
-  }
-
   img {
-    width: 100%;
+    width: 50%;
+    margin: 2em;
     aspect-ratio: 1;
   }
 

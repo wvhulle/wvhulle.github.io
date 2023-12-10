@@ -1,0 +1,130 @@
+
+## Basics of Rust
+
+### Common Languages
+
+As of now:
+
+- Scientific: R, Python, Perl, SQL
+- Systems: C, Visual Basic Script
+- Web: JavaScript, TypeScript
+
+
+
+### Systems vs. scientific
+
+Comparison:
+
+- Scientific languages:
+  - writing scripts,
+  - short computational tasks
+- Systems languages:
+  - game engines,
+  - simulations,
+  - system control software,
+  - compilers
+
+
+
+### Systems programming languages
+
+Benefits:
+
+- Better control over dynamic memory
+- More predictable run-time behavior
+
+Rust is a systems language
+
+
+## Language introduction
+
+
+
+
+### Variables
+
+Immutable ~ constant
+
+```rust
+let x = 10
+```
+
+All variables are immutable by default
+
+Mutable
+
+```rust
+let mut x = 10
+```
+
+### Functions
+
+Types have to be provided.
+
+```rust
+fn add(a: u8, b: u8) -> u8 {
+    a + b
+}
+```
+
+`return` = ending without semicolon
+
+
+
+### Struct's
+
+Collect properties
+
+```rust
+struct Person {
+    name: String,
+    age: u8
+}
+```
+
+Called:
+
+1. classes in Python
+2. named lists in R
+3. objects in JavaScript
+4. also struct s in C(++)
+
+
+
+### Pattern matching
+
+```rust
+let person = Person { name: "Willem".to_string() }
+let pattern = Some(person)
+
+match pattern  {
+  Some(Person { name }) => println!("Hello {}", name),
+  None => println!("Hello no-one")
+}
+```
+
+
+
+### Garbage collection
+
+Garbage collection is about managing memory allocation by counting references.
+
+No references remaining -> invalidate data (creates overhead)
+
+
+
+
+
+
+### Solution to lack of garbage collection
+
+Rust has no garbage collection
+
+Strong static compile-time (and run-time) rules
+
+Every variable has an **owning expression** or scope responsible for clean-up
+
+Leads to other benefits.
+
+
+Next lecture: [memory](/educational/02-rust-memory) (2023-10-23)

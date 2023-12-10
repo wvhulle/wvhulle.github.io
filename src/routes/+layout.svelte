@@ -1,6 +1,5 @@
 <script>
-  import "../app.css";
-
+  import "prism-themes/themes/prism-cb.css";
   import { base } from "$app/paths";
 </script>
 
@@ -8,63 +7,81 @@
   <div id="links" class="">
     <a href="{base}/" class="link">Home</a>
 
-    <a href="{base}/biography" class="link">Biography</a>
+    <a href="{base}/projects" class="link">Projects</a>
 
-    <a href="{base}/skills" class="link">Skills</a>
+    <a href="{base}/educational" class="link">Educational</a>
 
-    <a href="{base}/portfolio" class="link">Portfolio</a>
-
-    <a href="{base}/blog" class="link">Blog</a>
+    <a href="{base}/about" class="link">About</a>
   </div>
   <slot />
 </div>
 
-<style>
+<style lang="scss">
   * {
     font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+    color: white;
   }
 
   :global(html, body) {
     display: flex;
+    justify-content: center;
     width: 100%;
     margin: 0;
     padding: 0;
     min-height: 100%;
+    background-color: rgb(0, 0, 0);
+  }
+
+  :global(a) {
+    color: rgb(132, 228, 255);
+  }
+
+  :global(img) {
+    max-width: 100%;
   }
 
   #layout {
-    background-image: linear-gradient(120deg, #ffffff 0%, #98cdff 100%);
-
+    background-image: linear-gradient(120deg, #005476 0%, #012444 100%);
     margin: 0;
     width: 100%;
     display: flex;
-    padding-left: 20%;
-    padding-right: 20%;
+    padding: 3em;
+
+    @media (min-width: 800px) {
+      width: 40em;
+    }
+
+    @media (max-width: 800px) {
+      padding: 0.5em;
+    }
+
     flex-direction: column;
     position: relative;
   }
 
-  .link {
-    text-decoration: none;
-    font-weight: 600;
-    color: inherit;
-  }
-
   #links {
-    padding: 0.5em;
-    background-color: rgba(0, 29, 80, 0.831);
+    padding: 0.5em 0em;
+    background-color: #222222;
+    border-radius: 0.5em;
     backdrop-filter: blur(0.3em);
-    color: white;
     width: 100%;
     margin-bottom: 1em;
     display: flex;
+    flex-direction: row;
     position: sticky;
     top: 0.5em;
-    gap: 3em;
+    gap: 0.5em 2em;
     place-content: center;
-    place-items: center;
+    justify-content: space-evenly;
     font-size: large;
+    flex-wrap: wrap;
 
+    & .link {
+      font-family: sans-serif;
+      text-decoration: none;
+      font-weight: 600;
+      color: inherit;
+    }
     /* p-2 bg-white mb-4 border-b border-black flex flex-row gap-8 place-content-center text-lg sticky top-0 items-center */
   }
 

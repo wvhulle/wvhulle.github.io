@@ -1,6 +1,4 @@
-<h1>Portfolio</h1>
-
-<p>Large, successfully completed projects.</p>
+<h1>Projects</h1>
 
 <h2>Data structures</h2>
 
@@ -58,12 +56,4 @@
   >
   and <a href="https://www.npmjs.com/package/json-rpc-2.0">JSON-RPC</a>, but
   without broadcasting events.
-</p>
-
-<h2>Links:</h2>
-
-<p>
-  Open source public work can be found on <a href="https://github.com/wvhulle"
-    >Github</a
-  >
 </p>
