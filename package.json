@@ -2,9 +2,6 @@
   "name": "wvhulle.github.io",
   "author": "Willem Vanhulle <willemvanhulle@gmail.com>",
   "description": "Personal Homepage of Willem Vanhulle",
-  "engines": {
-    "node": ">=19"
-  },
   "keywords": [
     "homepage",
     "cv",
