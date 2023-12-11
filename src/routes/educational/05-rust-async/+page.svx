@@ -28,28 +28,25 @@ This is **asynchronous programming**
 
 ### Position of asynchronous programming
 
-The role of asynchronous programming is in-between:
-
-1. Multi-threading or parallel computing on *multiple threads*
-2. **concurrent/asynchronous** programming on *one thread*
-3. blocking computation on *one thread*
+Asynchronous programming is software programming paradigmn that **avoids blocking computation** on *one thread*. Asynchronous programming is **non-blocking programming**. It can be used with multiple threads or one thread. It is essentially an abstraction that allows multiple computations happen faster all together.
 
 
 ### Futures: backbone of async
 
-Future computations to be planned are called **future**s (promises in JavaScript).
-
-Examples:
-
-> Next moment a network packet arrives
-> Next moment a device writes to a COM port
-
-Futures are competing for execution by execution planner.
+The core piece of asynchronous programming is a `Future`. A **future** is also called a "promise" in JavaScript. A future is a planned, possible finished computation. It carries the possibility of a completed computation.
 
 
-### How does it work
+Examples of futures are:
 
-Futures can be `poll`-ed and return `Ready` or `Pending`.
+- The content of a packet at the next moment a network packet arrives
+- The buffer content to be read at the next moment a device writes to a COM port
+
+Futures are competing for execution by an execution planner.
+
+
+### Futures
+
+A future is implemented as an object that has a **poll** method. This method can be used to `poll` and when the future object is *polled*, it returns an enum `Ready` or `Pending` (when the future is not ready).
 
 ```rust
 enum Poll<T> {
@@ -58,22 +55,41 @@ enum Poll<T> {
 }
 ```
 
-Ready future is resolved when `Ready(T)` or may be pending and is awoken later.
+When a future returns `Pending` it has to tell the caller, the poller, when it will be possibly ready. For that, it can arrange to call a `wake` function when it might be ready to be polled again.
+
+An example of a future is a timer
+
+```rust
+let fut = tokio::time::sleep(Duration::from_millis(50))
+```
+
+Here fut is future that when polled will check whether some time has been passed already. If enough time is passed, it will return ready, otherwise pending.
+
+### Await
+
+To poll futures, it is not necessary to use the poll method directly. It is actually not recommended.
 
 
-### Dealing with futures
-
-Futures have to be awaited.
+Instead, there is some syntactic sugar called `async`/`await` that allows a more subtle way to poll futures. Async-await is a specific way to write asynchronous functions, functions that have as output a future. During the execution futures may appear as temporary local variables. These can be **awaited**.
 
 ```rust
 async fn example() {
     tokio::time::sleep(Duration::from_millis(50)).await
-    ...
-    tokio::time::sleep(Duration::from_millis(50)).await
 }
 ```
 
-Multiple functions can be awaited
 
-1. sequentially with `await`
-2. at the same time with `join`
+When a future is awaited by calling `.await`, the `poll` method of the associated future is called. If the poll method returns `Pending`, the current scope (or function call stack) is saved to be returned to later. 
+If the poll returns `Ready`, the function is just continued. 
+
+
+### Coroutines
+
+If the poll method returns pending, the function is not ready and the stack frame of the function is essentially paused. This means the function is freezed until further notice. This concept is also known as a **coroutine**. In this case, the coroutine **yields** a stack frame. 
+
+The asynchronous run-time managing the execution of asynchronous functions will arrange to come back to a paused function. It will resume the function as soon as possible, using hints such as the `wake` function being called. To do this, it will fetch the stack frame as saved and resume function execution if possible, **continueing** the **yield**ed coroutine.
+
+
+### Advanced asynchronous operators 
+
+The previous gives rise to a new way of operating on futures. Futures can be **joined** which amounts to calling await semi-simultaneously on one or multiple threads for multiple futures.

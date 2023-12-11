@@ -37,7 +37,7 @@ strongly-typed languages
 > don't allow implicit conversions between unrelated types.
 
 
-### Basic data-types
+### Primitive data-types
 
 Weakly typed: Python, R
 
@@ -54,23 +54,53 @@ a = "abc" // compile error
 ```
 
 
-### More types
+### Simple Generic Data types
 
-Common types:
+Some types collect related data in a structure:
 
-- Function
-- Class
-- DataFrame
-
-Advanced types:
-
-- Pointer: refer to data
-- Mutex: share data
+- Lists
+- Classes
+- DataFrames
 
 
-### Example: Null pointer in C++
+### Logical generic types
 
-Undetected undefined behavior
+Some types do more than just collecting data fields. They also have some logic built-in.
+
+
+### Function types
+
+
+- Function type: for example `fn(a: u8) -> u8`
+
+### Pointer types
+
+The simplest pointer to a variable of type `u8` has type `&u8`. The ampersand literally means **an address to a `u8`**.
+
+This simple type of pointer is restricted by the borrowing rules in the previous chapter. If you want to escape the borrowing rules slightly and have more than a single owner and multiple references, you need a special type called an `Arc`. This is a reference counted pointer. When called like
+
+```rust
+let x = Arc::new(0)
+let y = x.clone()
+```
+
+This will copy a reference `x` to `0` and create a copy of this reference. When it creates the copy reference, it increases a integer variable that keeps track of the number of references. When the number of references becomes zero, the integer being 0 is dropped.
+
+A more advanced version of a pointer, is a locked pointer. This also called a **mutex**, which stands for **mutually exclusive**. This pointer can only expose a location, in case it is locked. This means it can be used to share data in a program. Usually it is used in conjunction with `Arc` as 
+
+
+```rust
+let m = Arc::new(Mutex::new(0))
+let reference = m.lock().unwrap()
+*reference = 1
+```
+
+### Null pointer
+
+
+In most mainstream programming languages, there is a **null pointer**. This is a stand-in value for anything missing, and can be assigned to any pointer. 
+
+However, it can lead to a lot of problems. In C++, the problems arising from using the null pointer are all undefined behavior, which means that anything could happen.
 
 ```cpp
 #include <cstddef>
@@ -88,12 +118,15 @@ int main()  {
 }
 ```
 
+In this example, the null pointer `NULL` is assigned and later a field of this object is accessed. However, since it is null, it does not point to a valid `Foo` object. This will result in a run-time failure:
+
 > Address boundary error
 
 
 ### Example: Null pointer in Rust
 
-Unsafe code has to be explicitly marked
+
+In Rust, the null pointer is not available in normal code. You need to use a modifier to enable it. Unsafe code has to be explicitly marked as **unsafe** and then the null pointer becomes available. 
 
 ```rust
 #[derive(Debug)]
@@ -110,10 +143,13 @@ fn main() {
 }
 ```
 
-Raw pointer `std::ptr::null_mut` has to be used
+Notice that the **raw pointer** `std::ptr::null_mut` has to be used. Similarly to C++ the program crashes, but it happens explicitly within an **unsafe** block.
 
 
 ### Single threading in C++
+
+It is very easy to write an increasing counter in C++.
+
 
 ```cpp
 int counter = 0;
@@ -123,12 +159,14 @@ for (int i = 0; i < 10; ++i) {
 }
 ```
 
-What if we want to update counter in parallel?
 
-Need to synchronize access
+
+What if we want to update counter in parallel? Then we need need to synchronize access somehow. If we cannot synchronize access, data races will occur and the value of the counter will be undetermined.
 
 
 ### Multi-threading in C++
+
+In C++, it is also necessary to use a special type, a mutex, to synchronize access. In C++ however, this mutex is independent of the rest of the program as you can see:
 
 ```cpp
 int counter = 0;
@@ -146,14 +184,16 @@ for (int i = 0; i < 10; ++i) {
 }
 ```
 
-Source of errors: lock is independent of data
+The lock and unlock operation have to be timed right before and after the access of the counter. This is a source of errors because it is possible to make a typo and forget to lock or unlock at the right time. 
 
-[play](https://onlinegdb.com/3w8ifDn6h)
+You can try this out for yourself on [play](https://onlinegdb.com/3w8ifDn6h)
 
 
 ### Multi-threading in Rust
 
-Lock is necessary to access data
+We can translate the previous C++ program in Rust. Again we need to create Mutex, but this time the Mutex is nested within an `Arc`.
+
+Again we need to lock, but the unlocking happens automatically after we leave the scope or expression, since mutex is a smart lock: it **unlocks automatically when it is dropped** (de-allocated) at the end of the spawn.
 
 ```rust
 let counter = Arc::new(Mutex::new(0));
@@ -171,10 +211,13 @@ for _ in 0..10 {
 
 [play](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=18e92a25de1b97cd998ba0ca332154c0)
 
+We will decompose the solution to this problem in multiple steps.
+
 
 ### Single-threading in Rust: First step
 
-Single threading
+First, we try to solve the problem on one CPU, single-threaded
+
 
 ```rust
 use std::sync::Mutex;
@@ -189,14 +232,14 @@ fn main() {
 }
 ```
 
-`m.lock()` returns a reference to the data, no lock means no reference
+The expression `m.lock()` returns a mutable reference to the data. Without calling lock, it is simple impossible to refer to the interior of the mutex. At the end of the curly braces block, the lock is dropped automatically, since de-allocation means dropping the lock.
 
-[play](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=4f1891f8c7df02ba586cde197c744fa8)
+[play](https://gist.github.com/rust-play/4f1891f8c7df02ba586cde197c744fa8)
 
 
 ### Multi-threading in Rust: First-step
 
-Creation of a **mutex** = lock-able variable
+When we try to make this application multi-threaded, we encounter a problem. We make multiple threads and call an expression in each thread to increase the counter. We still have a mutex, or a lock-able variable. However, it is moved inside one othe threads.
 
 ```rust
 let counter = Mutex::new(0);
@@ -213,16 +256,23 @@ for _ in 0..10 {
 }
 ```
 
+The error that we get says:
+
 > moved value `counter` cannot be used after move
 
 [play](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=a3df1795edb02027039062ea9ad17feb)
 
-
-
-
 ### Multi-threading in Rust: shared reference
 
-Create **smart-pointer** to counter: `Arc`. Pointers to not move or capture ownership
+To prevent one of the threads from capturing the mutex, we need to be able to share it in between multiple threads. The problem is that it's ownership is moved and we loose access to it in the next thread. We need to work with multiple references to the mutex. To do this, we create a **smart-pointer** to the mutex.
+
+The smart pointer is called `Arc` which stands for "atomic reference counted". It can be cloned infinitely many times.
+
+```rust
+let counter = Arc::new(Mutex::new(0));
+```
+
+Pointers such as `Arc` do not move or capture ownership. We can now share copies or clones of this pointer among the different threads. The copies of these references can be moved inside the threads and there is no problem anymore for the compiler.
 
 ```rust
 let counter = Arc::new(Mutex::new(0));
@@ -239,31 +289,23 @@ for _ in 0..10 {
 }
 ```
 
-Clone smart-pointer for each thread
+This time the acces to the pointer is synchronized using the Mutex and Arc in a software pattern called **interior mutability**.
 
 [play](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=234ab646dc385d613b99a1359ce7ff23)
+
+This demonstrates the power of advanced types such as `Arc` and `Mutex` to make more reliable software.
 
 
 ### Types = constraints
 
-Compile-time constraints in strongly-typed languages are useful:
+In general, a stronger type system means that more constraints can be imposed on your software. And what's even better, is that these constraints can be verified at compile-time before the software is run.
 
-- Lack of constraints leads to unpredictable software
-- Unpredictable software leads to:
-  - Angry users
-  - Tired developers
-  - Bad business
+A lack of constraints leads to unpredictable software. Unpredictable software leads to:
 
-Fewer constraints in C++
+- Angry users
+- Tired developers
+- Bad business
 
+Languages such as C++ impose fewer constraints on the program, which makes them at first sight easier, because less rules have to be learned. But in the long term, you will encounter more bugs such as "data races" and others if you impose less contraints.
 
-### High-performance data-frames in Rust
-
-Why not stick to Tidyverse and Pandas?
-
-- High-performance library available: [Polars](https://pola-rs.github.io)
-- Similar to R in benchmarks on working with data-frames: [benchmarks](https://duckdblabs.github.io/db-benchmark/)
-
-
-
-Next: [async](/educational/05-rust-async) (2023-11-12)
+Next: [async](/educational/05-rust-async)

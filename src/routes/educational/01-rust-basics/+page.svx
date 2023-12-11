@@ -117,4 +117,14 @@ Garbage collection in Rust is:
 
 Every variable has an **owning expression** or scope responsible for clean-up
 
+### High-performance data-frames in Rust
+
+Why not stick to Tidyverse and Pandas?
+
+- High-performance library available: [Polars](https://pola-rs.github.io)
+- Similar to R in benchmarks on working with data-frames: [benchmarks](https://duckdblabs.github.io/db-benchmark/)
+
+
+
+
 Next lecture: [memory](/educational/02-rust-memory)
