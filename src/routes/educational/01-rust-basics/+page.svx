@@ -1,30 +1,27 @@
 
 ## Basics of Rust
 
-### Common Languages
-
-As of now:
-
-- Scientific: R, Python, Perl, SQL
-- Systems: C, Visual Basic Script
-- Web: JavaScript, TypeScript
-
-
-
 ### Systems vs. scientific
 
 Comparison:
 
 - Scientific languages:
-  - writing scripts,
-  - short computational tasks
+  - writing maintenance scripts,
+  - short repetitive computational tasks
 - Systems languages:
   - game engines,
   - simulations,
   - system control software,
   - compilers
+- Frontend languages:
+  - writing phone apps
+  - writing websites
 
+Examples:
 
+- Scientific: R, Python, Perl, SQL
+- Systems: C, Visual Basic Script
+- Frontend: JavaScript, TypeScript
 
 ### Systems programming languages
 
@@ -36,22 +33,17 @@ Benefits:
 Rust is a systems language
 
 
-## Language introduction
-
-
-
-
 ### Variables
 
-Immutable ~ constant
+Assigning new variables is done like:
 
 ```rust
 let x = 10
 ```
 
-All variables are immutable by default
+All variables are immutable (constant) by default
 
-Mutable
+Mutable variables are not constant.
 
 ```rust
 let mut x = 10
@@ -59,7 +51,9 @@ let mut x = 10
 
 ### Functions
 
-Types have to be provided.
+Every function has a type. A function type describes the type of the input and output of the function.
+
+Types for function always have to be provided.
 
 ```rust
 fn add(a: u8, b: u8) -> u8 {
@@ -67,13 +61,13 @@ fn add(a: u8, b: u8) -> u8 {
 }
 ```
 
-`return` = ending without semicolon
+Not that it is not necessary to write a `return` statement. It is sufficient to have a last line ending without a semicolon.
 
+The type of intermediate variables is inferred where possible based on the function types.
 
+### Structs
 
-### Struct's
-
-Collect properties
+Data that shares a context, can be collected inside a `struct`. For example:
 
 ```rust
 struct Person {
@@ -82,16 +76,17 @@ struct Person {
 }
 ```
 
-Called:
+In other languages they are called:
 
 1. classes in Python
-2. named lists in R
-3. objects in JavaScript
-4. also struct s in C(++)
-
-
+2. S3 classes in R
+3. objects or classes in JavaScript
+4. also structs in C++
 
 ### Pattern matching
+
+
+In most languages there is a kind of `switch` statement. In Rust, this purpose is fullfilled with the `match` statement which is more powerful.
 
 ```rust
 let person = Person { name: "Willem".to_string() }
@@ -103,28 +98,23 @@ match pattern  {
 }
 ```
 
-
-
 ### Garbage collection
 
-Garbage collection is about managing memory allocation by counting references.
+Garbage collection is about managing memory allocation. Usually this is done by counting references.
 
-No references remaining -> invalidate data (creates overhead)
+1. Count number of references to data
+2. No references remaining 
+3. destroy data exactly once
 
-
-
-
-
+This creates an overhead.
 
 ### Solution to lack of garbage collection
 
-Rust has no garbage collection
+Garbage collection in Rust is:
 
-Strong static compile-time (and run-time) rules
+- not done by counting references.
+- done with strong static compile-time (and run-time) rules
 
 Every variable has an **owning expression** or scope responsible for clean-up
 
-Leads to other benefits.
-
-
-Next lecture: [memory](/educational/02-rust-memory) (2023-10-23)
+Next lecture: [memory](/educational/02-rust-memory)
