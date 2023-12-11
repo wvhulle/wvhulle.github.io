@@ -1,15 +1,12 @@
 # About
 
-## Complete CV
+## CV
 
-A copy of my CV can be found as: 
-
-- [download PDF](https://www.overleaf.com/read/cwpsbnytbzxt#202422)
-- <a href="https://www.linkedin.com/in/willem-vanhulle-2657aa180/"
-    >LinkedIn</a
-  >
+<a href="https://www.linkedin.com/in/willem-vanhulle-2657aa180/">LinkedIn</a>
 
 ## Skills
+
+The following skills that I have may be of use to you:
 
 <h3>Data Visualization</h3>
 <p>
@@ -23,7 +20,7 @@ A copy of my CV can be found as:
 
 <h3>Database Design and Management</h3>
 <p>
-  For database design and management I have mostly used <a
+  For database design and management I have mostly used the database software <a
     href="https://www.postgresql.org/">PostgreSQL</a
   >
   as base and an ORM called
