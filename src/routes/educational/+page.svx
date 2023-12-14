@@ -4,7 +4,7 @@
 
 Experiences with different Linux distributions:
 
-- Installation of [Arch Linux](/educational/00-arch") (2023-09-07)
+- Installation of [Arch Linux](/educational/00-arch) (2023-09-07)
 
 ## Programming languages
 

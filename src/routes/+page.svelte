@@ -14,17 +14,12 @@
 </div>
 
 <div id="body">
-  <p>Working at a bio-technological company in Zwijnaarde, Belgium.</p>
-
+  
   <p>
-    I'm open to projects related to web and app development using open software.
+    
   </p>
 
-  <p>
-    Open source public work can be found on <a href="https://github.com/wvhulle"
-      >Github</a
-    >
-  </p>
+  
 </div>
 
 <div id="spacer"></div>
@@ -37,7 +32,6 @@
 
 <style lang="scss">
   #header {
-    /* w-full h-full prose mx-auto pb-5 pt-5 */
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -48,24 +42,30 @@
   }
 
   h1 {
-    font-weight: 400;
+    font-weight: 700;
+    font-size: 4em;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     margin: 0;
-    text-align: center;
+    line-height: 1em;
+    text-align: right;
   }
 
-  h2,
-  h3 {
-    padding: 0;
+  h2,h3 {
+    font-weight: 400;
+    text-align: right;
+
+    padding: 0.5em 0;
     margin: 0;
   }
 
   #body {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
   }
 
   img {
-    width: 50%;
+    width: 15em;
     margin: 2em;
     aspect-ratio: 1;
   }

@@ -4,19 +4,19 @@ At work and in my spare time I created a few programming projects.
 
 ## Data structures
 
-- Reactive Combinator Library. Bind different observables and filter sets of observables. (TypeScript)
-- Reactive HashMaps Library. BTree-like structure that behaves as an [RxJS array observable](https://rxjs.dev/guide/overview) of key-value pairs. Although the keys are not reactive, the values of the map are and their values can be reverted to an initial value. (TypeScript)
-- Distributed data store library. Uses a protocol similar to JSON-RPC and uses HTTP and the WebSocket protocol for transport. (TypeScript)
+- **Reactive Combinator** library. Bind different observables and filter sets of observables. (TypeScript)
+- **Reactive HashMaps** library. BTree-like structure that behaves as an [RxJS array observable](https://rxjs.dev/guide/overview) of key-value pairs. Although the keys are not reactive, the values of the map are and their values can be reverted to an initial value. (TypeScript)
+- **Distributed data store** library. Uses a protocol similar to JSON-RPC and uses HTTP and the WebSocket protocol for transport. (TypeScript)
 
 ## Frontend
 
-- Forms library: supports different data types CSV, FormData and JSON. Contains inline and block versions available. (Svelte, SASS)
-- Time-series visualization (TypeScript, Svelte)
+- **Forms** library: supports different data types CSV, FormData and JSON. Contains inline and block versions available. (Svelte, SASS)
+- **Time-series** visualization (TypeScript, Svelte)
 
 ## Backend
 
-- DSP App. This project was made for the down-stream-processing (purification) department of [Inbiose](inbiose.com), a microbiological lab in Ghent. It allows users to log process parameters and sample data in a structured way. Additionally, it can parse large data files to create reports. (HTML, TypeScript, SASS, Python)
+- **DSP App**. This project was made for the down-stream-processing (purification) department of [Inbiose](inbiose.com), a microbiological lab in Ghent. It allows users to log process parameters and sample data in a structured way. Additionally, it can parse large data files to create reports. (HTML, TypeScript, SASS, Python)
 
 ## Embedded
 
-- Small fermentation reactor control. Communication happens over COM ports with control and measurement devices (Rust, Python).
+- Small **fermentation reactor control**. Communication happens over COM ports with control and measurement devices (Rust, Python).

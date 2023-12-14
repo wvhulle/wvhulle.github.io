@@ -13,13 +13,20 @@
 
     <a href="{base}/about" class="link">About</a>
   </div>
+  <div class="content">
   <slot />
+</div>
 </div>
 
 <style lang="scss">
-  * {
-    font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  :global(*) {
     color: white;
+  }
+
+  * {
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 1.1em;
+    line-height: 1.4em;
   }
 
   :global(html, body) {
@@ -45,45 +52,58 @@
     margin: 0;
     width: 100%;
     display: flex;
-    padding: 3em;
 
     @media (min-width: 800px) {
       width: 40em;
     }
 
-    @media (max-width: 800px) {
-      padding: 0.5em;
+    & #links {
+      padding: 0.5em 0em;
+      margin: 0em 1em;
+      max-width: 100%;
+      background-color: #222222;
+      border-radius: 0.5em;
+      backdrop-filter: blur(0.3em);
+      margin-bottom: 1em;
+      display: flex;
+      flex-direction: row;
+      position: sticky;
+      top: 0.5em;
+      gap: 0em 0em;
+      place-content: center;
+      justify-content: space-evenly;
+      font-size: large;
+      flex-wrap: wrap;
+
+      & .link {
+        text-decoration: none;
+        font-weight: 600;
+        color: inherit;
+      }
+    /* p-2 bg-white mb-4 border-b border-black flex flex-row gap-8 place-content-center text-lg sticky top-0 items-center */
+  }
+
+    
+    .content {
+      padding: 2em;
+      flex-grow: 1;
+      flex-direction: column;
+      height: 100%;
+      display:flex;
+
+      @media (max-width: 800px) {
+      padding: 1em;
     }
+    }
+    
+
+    
 
     flex-direction: column;
     position: relative;
   }
 
-  #links {
-    padding: 0.5em 0em;
-    background-color: #222222;
-    border-radius: 0.5em;
-    backdrop-filter: blur(0.3em);
-    width: 100%;
-    margin-bottom: 1em;
-    display: flex;
-    flex-direction: row;
-    position: sticky;
-    top: 0.5em;
-    gap: 0.5em 2em;
-    place-content: center;
-    justify-content: space-evenly;
-    font-size: large;
-    flex-wrap: wrap;
-
-    & .link {
-      font-family: sans-serif;
-      text-decoration: none;
-      font-weight: 600;
-      color: inherit;
-    }
-    /* p-2 bg-white mb-4 border-b border-black flex flex-row gap-8 place-content-center text-lg sticky top-0 items-center */
-  }
+  
 
   a {
     display: block;

@@ -1,3 +1,8 @@
 # About
 
-You can reach me through e-mail at [willemvanhulle@gmail.com](mailto:willemvanhulle@gmail.com) or at [LinkedIn](https://www.linkedin.com/in/willem-vanhulle-2657aa180/).
+I'm a Belgian software engineer, working at a bio-technological lab Inbiose in Ghent, Belgium.
+
+You can reach me through e-mail at [willemvanhulle@gmail.com](mailto:willemvanhulle@gmail.com) or at [LinkedIn](https://www.linkedin.com/in/willem-vanhulle-2657aa180/) or
+[GitHub](https://github.com/wvhulle).
+
+I'm open to contribute to projects related to web and app development using open software.
