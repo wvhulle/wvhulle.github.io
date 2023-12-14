@@ -1,9 +1,8 @@
-## Asynchronous programming
-
+# Asynchronous programming
 
 Previous lecture: [types](/educational/04-rust-types)
 
-### Situation: Planning execution
+## Situation: Planning execution
 
 Imagine a situation with:
 
@@ -13,28 +12,23 @@ Imagine a situation with:
 
 How to plan execution?
 
-### Solution
+## Solution
 
-Solution:
+One way to solve the problem of executing is:
 
-1. start all
-2. switch away from computations when blocked by external factor.
-3. continue each computation as much as possible until blocked
-4. finish all computations in order of availability
-5. return to caller
+1. start all tasks at the same time
+2. pause computations when blocked by external factor.
+3. continue other unblocked computations as much as possible until blocked
 
-This is **asynchronous programming**
+In this way, we can finish all computations in order of availability. This is **asynchronous programming**
 
+Asynchronous programming is software programming paradigm that **avoids blocking computation** on *one thread*. Because of this, asynchronous programming is **non-blocking programming**. It can be used with multiple threads or just one thread. It is essentially an abstraction that allows multiple (possibly blocked) computations happen faster as one set.
 
-### Position of asynchronous programming
+Asynchronous programming is about optimizing the schedule of computations that can happen in parallel but might each be blocked by separate factors.
 
-Asynchronous programming is software programming paradigmn that **avoids blocking computation** on *one thread*. Asynchronous programming is **non-blocking programming**. It can be used with multiple threads or one thread. It is essentially an abstraction that allows multiple computations happen faster all together.
-
-
-### Futures: backbone of async
+## Role of futures
 
 The core piece of asynchronous programming is a `Future`. A **future** is also called a "promise" in JavaScript. A future is a planned, possible finished computation. It carries the possibility of a completed computation.
-
 
 Examples of futures are:
 
@@ -43,8 +37,7 @@ Examples of futures are:
 
 Futures are competing for execution by an execution planner.
 
-
-### Futures
+## Polling futures
 
 A future is implemented as an object that has a **poll** method. This method can be used to `poll` and when the future object is *polled*, it returns an enum `Ready` or `Pending` (when the future is not ready).
 
@@ -63,12 +56,11 @@ An example of a future is a timer
 let fut = tokio::time::sleep(Duration::from_millis(50))
 ```
 
-Here fut is future that when polled will check whether some time has been passed already. If enough time is passed, it will return ready, otherwise pending.
+This is a future that will finished after 50 milliseconds. When we call the `poll` method of the future `fut` and it is polled, it will check whether some time has been passed already. If enough time has passed after the poll, it will return `Ready(())`, otherwise `Pending`.
 
-### Await
+## Awaiting futures
 
-To poll futures, it is not necessary to use the poll method directly. It is actually not recommended.
-
+To poll futures, it is not necessary to use the `poll` method directly. It is actually not recommended.
 
 Instead, there is some syntactic sugar called `async`/`await` that allows a more subtle way to poll futures. Async-await is a specific way to write asynchronous functions, functions that have as output a future. During the execution futures may appear as temporary local variables. These can be **awaited**.
 
@@ -78,18 +70,15 @@ async fn example() {
 }
 ```
 
+When a future is awaited by calling `.await`, the `poll` method of the associated future is called. If the poll method returns `Pending`, the current scope (or function call stack) is saved to be returned to later.
+If the poll returns `Ready`, the function is just continued.
 
-When a future is awaited by calling `.await`, the `poll` method of the associated future is called. If the poll method returns `Pending`, the current scope (or function call stack) is saved to be returned to later. 
-If the poll returns `Ready`, the function is just continued. 
+## Coroutines
 
+If the poll method returns pending, the function is not ready and the stack frame of the function is essentially paused. This means the function is freezed until further notice. The function that can be paused is a **coroutine**. When coroutines pause, we say that the coroutine **yields**. An asynchronous function that is blocked temporarily, yields a stack frame. Later on, the coroutine can be continued by restoring this stack frame.
 
-### Coroutines
+The asynchronous run-time managing the execution of asynchronous functions will arrange to come back to a paused function. It will resume the function as soon as possible. The run-time may use hints such as the `wake` function of an asynchronous context being called.
 
-If the poll method returns pending, the function is not ready and the stack frame of the function is essentially paused. This means the function is freezed until further notice. This concept is also known as a **coroutine**. In this case, the coroutine **yields** a stack frame. 
+## Advanced asynchronous operators
 
-The asynchronous run-time managing the execution of asynchronous functions will arrange to come back to a paused function. It will resume the function as soon as possible, using hints such as the `wake` function being called. To do this, it will fetch the stack frame as saved and resume function execution if possible, **continueing** the **yield**ed coroutine.
-
-
-### Advanced asynchronous operators 
-
-The previous gives rise to a new way of operating on futures. Futures can be **joined** which amounts to calling await semi-simultaneously on one or multiple threads for multiple futures.
+The previous gives rise to a new way of operating on futures, computations that may happen in the future. Futures can be **joined**, which means that all the selected futures are run simultaneously, as much as possible.

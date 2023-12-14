@@ -1,9 +1,8 @@
+# Basics of Rust
 
-## Basics of Rust
+## Systems vs. scientific
 
-### Systems vs. scientific
-
-Comparison:
+Programming languages can be largely divided into groups:
 
 - Scientific languages:
   - writing maintenance scripts,
@@ -17,13 +16,13 @@ Comparison:
   - writing phone apps
   - writing websites
 
-Examples:
+Examples of these groups are:
 
 - Scientific: R, Python, Perl, SQL
 - Systems: C, Visual Basic Script
 - Frontend: JavaScript, TypeScript
 
-### Systems programming languages
+## Systems programming languages
 
 Benefits:
 
@@ -32,6 +31,7 @@ Benefits:
 
 Rust is a systems language
 
+## Quick introduction of Rust syntax
 
 ### Variables
 
@@ -61,7 +61,7 @@ fn add(a: u8, b: u8) -> u8 {
 }
 ```
 
-Not that it is not necessary to write a `return` statement. It is sufficient to have a last line ending without a semicolon.
+Note that it is not necessary to write a `return` statement. It is sufficient to have a last line ending without a semicolon.
 
 The type of intermediate variables is inferred where possible based on the function types.
 
@@ -85,7 +85,6 @@ In other languages they are called:
 
 ### Pattern matching
 
-
 In most languages there is a kind of `switch` statement. In Rust, this purpose is fullfilled with the `match` statement which is more powerful.
 
 ```rust
@@ -98,33 +97,31 @@ match pattern  {
 }
 ```
 
-### Garbage collection
+## Garbage collection
 
-Garbage collection is about managing memory allocation. Usually this is done by counting references.
+Programming languages use memory and the life-time of memory is determined by the language and users of the language. Some variables may be short-lived, others not. When all the data is kept forever, the storage capacity is exceeded and we have a memory leak. We need to manage memory properly.
 
-1. Count number of references to data
-2. No references remaining 
-3. destroy data exactly once
+Garbage collection is the act of managing dynamic memory allocation throughout the life-time of a program. Usually this is done by counting references. **Reference counting** works as follows:
 
-This creates an overhead.
+1. At each important step, count the number of references to a variable
+2. When no references remaining, destroy the data
 
-### Solution to lack of garbage collection
+The references form a directed graph which may be cyclic. Reference counting amounts to looking for disjoint parts in the graph. Graph algorithms are not efficient, so reference counting creates an overhead.
 
-Garbage collection in Rust is:
+## Solution to lack of garbage collection
+
+Garbage collection in Rust is usually:
 
 - not done by counting references.
 - done with strong static compile-time (and run-time) rules
 
-Every variable has an **owning expression** or scope responsible for clean-up
+How is this done? Every variable has an **owning expression** or scope responsible for clean-up. See the next lecture.
 
-### High-performance data-frames in Rust
+## High-performance data-frames in Rust
 
-Why not stick to Tidyverse and Pandas?
+One more question that may arise: Why not stick to Tidyverse and Pandas for data wrangling?
 
-- High-performance library available: [Polars](https://pola-rs.github.io)
-- Similar to R in benchmarks on working with data-frames: [benchmarks](https://duckdblabs.github.io/db-benchmark/)
-
-
-
+There is a high-performance library available: [Polars](https://pola-rs.github.io)
+It performs similar to or even faster than R in [benchmarks](https://duckdblabs.github.io/db-benchmark/)
 
 Next lecture: [memory](/educational/02-rust-memory)
