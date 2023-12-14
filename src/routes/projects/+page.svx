@@ -15,7 +15,7 @@ At work and in my spare time I created a few programming projects.
 
 ## Backend
 
-- **DSP App**. This project was made for the down-stream-processing (purification) department of [Inbiose](inbiose.com), a microbiological lab in Ghent. It allows users to log process parameters and sample data in a structured way. Additionally, it can parse large data files to create reports. (HTML, TypeScript, SASS, Python)
+- **DSP App**. This project was made for the down-stream-processing (purification) department of [Inbiose](https://inbiose.com), a microbiological lab in Ghent. It allows users to log process parameters and sample data in a structured way. Additionally, it can parse large data files to create reports. (HTML, TypeScript, SASS, Python)
 
 ## Embedded
 
