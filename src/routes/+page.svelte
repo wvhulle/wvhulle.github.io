@@ -35,15 +35,16 @@
     width: 100%;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     justify-items: center;
     padding: auto;
   }
 
   h1 {
     font-weight: 700;
-    font-size: 4em;
+    font-size: 2em;
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     margin: 0;
     line-height: 1em;
@@ -66,7 +67,7 @@
 
   img {
     width: 15em;
-    margin: 2em;
+    margin: 1em;
     aspect-ratio: 1;
   }
 
