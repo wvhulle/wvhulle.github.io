@@ -54,7 +54,7 @@
     display: flex;
 
     @media (min-width: 800px) {
-      width: 40em;
+      width: 50em;
     }
 
     & #links {

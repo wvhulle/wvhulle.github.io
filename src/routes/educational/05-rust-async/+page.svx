@@ -4,42 +4,50 @@ Previous lecture: [types](/educational/04-rust-types)
 
 ## Situation: Planning execution
 
-Imagine a situation with:
+Imagine a situation where there are many separate tasks to be completed - each of which require a certain amount of work or computation. Additionally, they each have an externally bounded start and end point, for example a user connecting. Furthermore, there are time constraints that dictate when all computations must be completed. Thus, the question is how can these tasks be planned and executed?
 
-- many computation tasks
-- start and end of computations bound externally
-- limited amount of time
+## Scheduling
 
-How to plan execution?
+When using an operating system, a limited number of CPUs and cores are available which are used to distribute the tasks between processes. This can be done either in a cooperative scheduling fashion, in which processes are swapped upon signals received from the processes, or a pre-emptive scheduling fashion in which processes are swapped determined by an operating system priority level.
 
-## Solution
+When using Rust, however, the scheduling must be done at the application level no matter what type of scheduling is used. To optimize this scheduling, computations can be divided into IO-bound and non-IO-bound tasks. IO-bound tasks are bound by external factors, such as data being read or written, while non-IO-bound tasks only depend on local factors and can be handled by the processor more efficiently. Most languages will then spawn separate threads for IO-bound operations and use an event loop to handle and distribute actions accordingly.  
 
-One way to solve the problem of executing is:
+## Synchronous vs. asynchronous
 
-1. start all tasks at the same time
-2. pause computations when blocked by external factor.
-3. continue other unblocked computations as much as possible until blocked
+The simplest form of computation is **synchronous**, where each task runs after the previous one in a linear fashion. Synchronous code can be written in either a blocking or non-blocking way. In synchronous blocking code, everything runs on a single thread and each step of the program waits for the completion of the particular function or operation. In comparison, in non-blocking code, the program would be paused at points where the execution would block and then continue elsewhere, where progress can be made. For examples of this code, see languages such as Go and Ruby.
 
-In this way, we can finish all computations in order of availability. This is **asynchronous programming**
+When a language offers ways to schedule events and triggers responses from these events, it is considered **asynchronous**. In this type of programming, computations run as triggers to some event that arises in the event loop.
 
-Asynchronous programming is software programming paradigm that **avoids blocking computation** on *one thread*. Because of this, asynchronous programming is **non-blocking programming**. It can be used with multiple threads or just one thread. It is essentially an abstraction that allows multiple (possibly blocked) computations happen faster as one set.
+## Run-time vs No Run-time
 
-Asynchronous programming is about optimizing the schedule of computations that can happen in parallel but might each be blocked by separate factors.
+In an asynchronous and non-blocking language, events and triggers are usually exposed through an event loop that is continually run. This requires something to be running the loop in order to schedule certain tasks, which is referred to as a runtime and can add some overhead. To avoid this overhead, some languages such as Rust use minimal run-times.
 
-## Role of futures
+In Rust, every asynchronous function or part is compiled into a state machine that functions similarly to an event loop.
 
-The core piece of asynchronous programming is a `Future`. A **future** is also called a "promise" in JavaScript. A future is a planned, possible finished computation. It carries the possibility of a completed computation.
+## Pausing Computations
 
-Examples of futures are:
+To turn asynchronous functions into state machines, they need to have the ability to pause computation at different steps. This process of pausing and resuming is also known as a coroutine, and when it pauses, it yields an intermediate result so that another computation can begin. An example of this would be if a function requires a filled buffer, but does not have it available yet; instead of stalling, it can pause and yield its current execution state while waiting for data.
 
-- The content of a packet at the next moment a network packet arrives
-- The buffer content to be read at the next moment a device writes to a COM port
+## JavaScript
 
-Futures are competing for execution by an execution planner.
+In JavaScript, computations that can be paused are called promises. These promises are usually evaluated eagerly.
 
-## Polling futures
+## Role of Futures
 
-A future is implemented as an object that has a **poll** method. This method can be used to `poll` and when the future object is *polled*, it returns an enum `Ready` or `Pending` (when the future is not ready).
+The cornerstone of asynchronous programming in Rust is the `Future`. A future is also referred to as "promise" in JavaScript, and it is only evaluated when pushed towards completion. Put simply, a future is a planned, potential finished computation, with the possibility of being completed. Examples of futures include the content of a packet when a network packet arrives, or the buffer content to be read when a device writes to a COM port.
+
+## Polling Futures
+
+A future is implemented as an object that has a **poll** method. The interface or trait for a future is:
+
+```rust
+pub trait Future {
+    type Output;
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output>;
+}
+```
+
+Given a future, calling the `poll`-method is also called **polling the future**.This method can be used to `poll` and when the future object is *polled*, it returns an enum `Ready` or `Pending` (when the future is not ready).
 
 ```rust
 enum Poll<T> {
@@ -47,16 +55,6 @@ enum Poll<T> {
     Pending
 }
 ```
-
-When a future returns `Pending` it has to tell the caller, the poller, when it will be possibly ready. For that, it can arrange to call a `wake` function when it might be ready to be polled again.
-
-An example of a future is a timer
-
-```rust
-let fut = tokio::time::sleep(Duration::from_millis(50))
-```
-
-This is a future that will finished after 50 milliseconds. When we call the `poll` method of the future `fut` and it is polled, it will check whether some time has been passed already. If enough time has passed after the poll, it will return `Ready(())`, otherwise `Pending`.
 
 ## Awaiting futures
 
@@ -70,15 +68,14 @@ async fn example() {
 }
 ```
 
-When a future is awaited by calling `.await`, the `poll` method of the associated future is called. If the poll method returns `Pending`, the current scope (or function call stack) is saved to be returned to later.
-If the poll returns `Ready`, the function is just continued.
+When a future is awaited by calling `.await`, the `poll` method of the associated future is called. If the poll method returns `Pending`, the underlying future is not ready and the stack frame of the function is essentially paused. This means the function is freezed until further notice. The function that can be paused is a **coroutine**. When coroutines pause, we say that the coroutine **yields**.
 
-## Coroutines
+## Pinning
 
-If the poll method returns pending, the function is not ready and the stack frame of the function is essentially paused. This means the function is freezed until further notice. The function that can be paused is a **coroutine**. When coroutines pause, we say that the coroutine **yields**. An asynchronous function that is blocked temporarily, yields a stack frame. Later on, the coroutine can be continued by restoring this stack frame.
+An asynchronous function that is blocked temporarily, yields a stack frame. A stack frame is a snapshot of all the local variables and references that are valid at the point in time right before the `await`. This means that there may be self-references inside of the stack frame. This implies that this future may not be moved, because moving self-referential data in memory can create an invalid object. To prevent this the type of the future in the poll method is `Pin<&mut Self>`.
 
-The asynchronous run-time managing the execution of asynchronous functions will arrange to come back to a paused function. It will resume the function as soon as possible. The run-time may use hints such as the `wake` function of an asynchronous context being called.
+<https://rust-lang.github.io/async-book/04_pinning/01_chapter.html>
 
-## Advanced asynchronous operators
+## Operators on futures
 
-The previous gives rise to a new way of operating on futures, computations that may happen in the future. Futures can be **joined**, which means that all the selected futures are run simultaneously, as much as possible.
+The previous gives rise to a new way of operating on futures which are essentially computations that may happen in the future. Futures can be **join**ed or **select**ed. Joined futures are all started simultaneously and the joined future completes when each future completes. In a select, the first future to finished finishes the whole future.
