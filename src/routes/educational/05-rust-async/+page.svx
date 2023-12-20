@@ -26,7 +26,7 @@ In Rust, every asynchronous function or part is compiled into a state machine th
 
 ## Pausing Computations
 
-To turn asynchronous functions into state machines, they need to have the ability to pause computation at different steps. This process of pausing and resuming is also known as a coroutine, and when it pauses, it yields an intermediate result so that another computation can begin. An example of this would be if a function requires a filled buffer, but does not have it available yet; instead of stalling, it can pause and yield its current execution state while waiting for data.
+To turn asynchronous functions into state machines, they need to have the ability to pause evaluation or computation at different steps. This process of pausing and resuming is also known as a coroutine, and when it pauses, it yields an intermediate result so that another computation can begin. An example of this would be if a function requires a filled buffer, but does not have it available yet; instead of stalling, it can pause and yield its current execution state while waiting for data.
 
 ## JavaScript
 
@@ -75,6 +75,7 @@ When a future is awaited by calling `.await`, the `poll` method of the associate
 An asynchronous function that is blocked temporarily, yields a stack frame. A stack frame is a snapshot of all the local variables and references that are valid at the point in time right before the `await`. This means that there may be self-references inside of the stack frame. This implies that this future may not be moved, because moving self-referential data in memory can create an invalid object. To prevent this the type of the future in the poll method is `Pin<&mut Self>`.
 
 <https://rust-lang.github.io/async-book/04_pinning/01_chapter.html>
+
 
 ## Operators on futures
 
