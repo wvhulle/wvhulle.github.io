@@ -3,5 +3,8 @@
         "svelte",
         "svx"
     ],
-    "cSpell.enabled": true
+    "cSpell.enabled": true,
+    "cSpell.words": [
+        "Liskov"
+    ]
 }

@@ -16,11 +16,11 @@ that behave much like their physical counterparts, complete with individual char
 
 ## Classes and Objects
 
-Classes: Think of classes as templates for creating your objects, akin to DNA sequences which dictate the traits of living organisms. Classes contain public or private methods which are function definitions for associated operations.
+Classes: Think of classes as templates for creating your objects. Classes contain public or private methods which are function definitions for associated operations.
 
-Objects: These are specific instances of classes - like individual animals created from the same blueprint, each with its own state.
+Objects: These are specific instances of classes - like individual animals created from the same blueprint, each with its own state. For a mathematician, like me, everything in the world is an object of some class. This got me into troubles already. 
 
-## Example in Biological Research:**
+## Example
 
 A `Cell` class might encapsulate the complexity of a biological cell while exposing methods to trigger mitosis, apoptosis, or to alter chemical concentrations within the cell.
 
@@ -53,9 +53,9 @@ Encapsulation is about maintaining an object's state private inside a class and 
 
 In the previous example a cell encapsulates literally and philosophically speaking the sequence data and related functions. No other objects have this data or function. The cell is one unit or encapsulation
 
-## The Single-responsibility principle
+### The Single-responsibility principle
 
-Robert C. Martin
+Robert C. Martin:
 
 > "There should never be more than one reason for a class to change."
 
@@ -63,9 +63,11 @@ In other words, every class should have only one responsibility. Alternative exp
 
 ## 2. Abstraction
 
-Abstraction means hiding the detailed implementation and showing only the necessary features of an object.
+Abstraction means hiding the detailed implementation and showing only the necessary features of an object. A class is a form of abstraction. You use a class to represent a certain number objects that share something in common, without showing the objects itself.
 
 ## Example in Biological Research
+
+It is possible to define another layer of abstraction on top of a class, called an abstract class. An abstract class.
 
 An `Organism` abstraction might define methods like `eat()`, `sleep()`, and `reproduce()`, regardless of whether the organism is a plant, animal, or bacteria. Specific organisms would implement these in diverse ways.
 
@@ -217,6 +219,25 @@ animal_sound(Cat())  # Output: Meow!
 
 ## Summary
 
-These OOP principles facilitate the development of flexible, modular, reusable,  and maintainable software applications in biological research, which can range from simple bio-informatics tools to complex simulation platforms modeling entire ecosystems or biological processes. By leveraging OOP, developers can create models that mirror the hierarchical and diversified nature of biological entities and systems.
+These OOP principles facilitate the development of:
+
+- flexible, modular, reusable,
+- readable, maintainable 
+
+software applications in biological research, which can range from simple bio-informatics tools to complex simulation platforms modeling entire ecosystems or biological processes. By leveraging OOP, developers can create models that mirror the hierarchical and diversified nature of biological entities and systems.
+
+## Practical
+
+To apply object-oriented programming, you have to make a model of the domain you are working in and understand how it works. A domain is nothing more than people who know what they are doing. So first, you have to look at how people do their work. Usually people will spontaneously tell you what their annoyances are and these are a starting point for object-oriented modelling. 
+
+### Abstraction
+
+The next step is modeling data. Which types of objects are there? These will become classes. Are there patterns in usage of the data? These will become methods. 
+
+Once in a while you have look at a higher level and see whether more abstraction is necessary (or unnecessary) and create abstract classes or interfaces. While doing this you have to keep in mind that complexity is your enemy. An abstraction should only be made if it simplifies the bigger picture. Copy-pasting only increases the length and the complexity, so should be avoided at all cost.
+
+### Naming
+
+Throughout the whole process you have give appropriate names to everything. The least amount of surprise is necessary. Names should be as mainstream as possible. Writing code is an act of communication to whoever is reading it in the future. Code is not supposed to be read by machines, it supposed to be read by humans from different backgrounds. That means that code should not be complicated. Code should be as simple as possible. The only target is the speed of consumption by a future reader. A future reader can process the code faster if names are obvious and self-explanatory to new readers, they serve as a way of documentation. Using a modern IDE, it is easy to change names. (In VS Code, you can press f2.)
 
 Next lecture: [object-oriented design patterns](/educational/08-rust-object-design-patterns)

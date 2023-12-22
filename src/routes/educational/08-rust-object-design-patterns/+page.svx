@@ -4,9 +4,12 @@ Previous lecture: [object-oriented programming](/educational/06-python-object-or
 
 Existing literature:
 
+- Search for de acronyms SOLID and DRY.
 - More advanced specific patterns to Rust can be found on <https://rust-unofficial.github.io/patterns>
 
 ## Principles
+
+There are a couple of principles that are taught to programmers that are important throughout a typical working day of a developer. This section gives an overview.
 
 ### The Dependency inversion principle
 
@@ -14,10 +17,81 @@ Existing literature:
 
 High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details. Details should depend on abstractions.
 
+#### Example
+
+In biology, organisms often have different ways of communicating or sensing the environment. We can create an example based on this concept where we have a `Sensor` interface representing the abstraction and several implementations that could sense temperature, humidity, etc. Our high-level module will be an `Organism` class that depends on these `Sensor` abstractions.
+
+```cpp
+#include <iostream>
+#include <string>
+#include <memory>
+
+// Sensor Interface (Abstraction)
+class ISensor {
+public:
+    virtual ~ISensor() = default;
+    virtual std::string Sense() const = 0;
+};
+
+// Temperature Sensor (Low-level module)
+class TemperatureSensor : public ISensor {
+public:
+    std::string Sense() const override {
+        return "The temperature is warm.";
+    }
+};
+
+// Humidity Sensor (Another Low-level module)
+class HumiditySensor : public ISensor {
+public:
+    std::string Sense() const override {
+        return "The humidity is high.";
+    }
+};
+
+// Organism (High-level module)
+class Organism {
+private:
+    std::shared_ptr<ISensor> sensor;
+public:
+    explicit Organism(std::shared_ptr<ISensor> sensor) : sensor(std::move(sensor)) {}
+
+    void ReactToEnvironment() {
+        // The organism uses its sensor to detect something about the environment.
+        std::cout << "Organism reacts: " << sensor->Sense() << std::endl;
+    }
+};
+
+int main() {
+    auto tempSensor = std::make_shared<TemperatureSensor>();
+    Organism frog(tempSensor);
+
+    frog.ReactToEnvironment(); // Uses the Temperature Sensor
+
+    // Now let's change the sensor to a Humidity Sensor
+    auto humiditySensor = std::make_shared<HumiditySensor>();
+    Organism cactus(humiditySensor);
+
+    cactus.ReactToEnvironment(); // Uses the Humidity Sensor
+
+    return 0;
+}
+```
+
+In this example:
+
+- `ISensor` is the abstract interface for sensors.
+- `TemperatureSensor` and `HumiditySensor` are concrete, low-level modules that implement the `ISensor` interface.
+- `Organism` is our high-level class which relies on some `ISensor` to react to the environment.
+
+Just like in biology where different organisms might use different senses to interact with their environment, our `Organism` class can easily switch sensing strategies without any changes to its own implementation. This demonstrates the Dependency Inversion Principle by having both high-level (`Organism`) and low-level (`TemperatureSensor`, `HumiditySensor`) modules depend on the abstraction (`ISensor`).
+
 ### The Interface segregation principle
 
 - Clients should not be forced to depend upon interfaces that they do not use.
 - Larger interfaces should be split into smaller ones. By doing so, we can ensure that implementing classes only need to be concerned with methods that are of interest to them.
+
+#### Example
 
 In the context of biology, let's imagine we have various entities like "Bird", "Fish", and "Frog". A simple violation of ISP would be to create a single interface which includes methods like `fly`, `swim`, and `croak`, and then force all implementers to define those methods even if they aren't relevant.
 
@@ -293,7 +367,7 @@ This pattern defines a family of algorithms, encapsulates each one, and makes th
 
 #### The Concept in Rust
 
-Rust, being an expressive language with support for traits and generics, provides an excellent platform for demonstrating the Strategy Pattern. Unlike traditional object-oriented languages that rely on classes, Rust uses `structs` and `traits`.
+Rust, being an expressive language with support for traits and generics, provides an excellent platform for demonstrating the Strategy Pattern. Unlike traditional object-oriented languages that rely on classes, Rust uses `struct`s and `traits`.
 
 Let's define our traits:
 
@@ -382,4 +456,4 @@ For example, in a simulation of evolutionary processes, organisms might need to 
 
 Using this pattern results in flexible and maintainable code, as we can extend algorithms without modifying the clients that use them. This pattern can also reduce the complexity of large conditional statements, which is key when modeling complex biological systems where multifaceted adaptations are the norm.
 
-Next lecture: [functional design patterns](/educational/09-rust-functional-design-patterns)
+Next lecture: [functional design patterns](/educational/09-rust-functional-design-patterns).

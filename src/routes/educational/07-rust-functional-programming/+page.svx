@@ -10,49 +10,21 @@ Existing literature:
 
 ## 1. Immutability
 
-**Concept:** Data structures that never change their state after creation, enabling safer concurrency and predictable code behavior. Rust, despite not being a purely functional language, encourages the use of immutable data structures to ensure safety and concurrency without data races.
+A returning concept in functional programming are data structures that never change their state after creation, enabling safer concurrency and predictable code behavior. Rust, despite not being a purely functional language, encourages the use of immutable data structures to ensure safety and concurrency without data races. All variables in Rust are immutable by default and have to be declared as mutable explicitly.
 
-**Biology Example in Rust:**
-
-Let's consider simulating an evolutionary process where a population of organisms evolves over time. Each organism has a genetic code, and over generations, this code might undergo mutations. In this simulation, we maintain immutability by creating a new population with mutated genetic codes instead of altering the existing population.
+For example, the following will not compile
 
 ```rust
-#[derive(Clone, Debug)]
-struct Organism {
-    genetic_code: String,
-}
-
-
-impl Organism {
-    fn mutate(&self) -> Organism {
-        // For simplicity, mutation just appends a "*" to the genetic code.
-        let mut new_genetic_code = self.genetic_code.clone();
-        new_genetic_code.push('*');
-        Organism { 
-            genetic_code: new_genetic_code 
-        }
-    }
-}
-
-fn evolve(generation: Vec<Organism>) -> Vec<Organism> {
-    generation.iter().map(|organism| organism.mutate()).collect()
-}
-
-fn main() {
-    let initial_population = vec![
-        Organism { genetic_code: "ATCG".to_string() },
-        Organism { genetic_code: "CGTA".to_string() },
-    ];
-
-    // Simulate one step of evolution; original population remains unchanged.
-    let next_generation = evolve(initial_population.clone());
-
-    println!("Original Population: {:?}", initial_population);
-    println!("Evolved Population: {:?}", next_generation);
-}
+let x = 5;
+x = 6; // This will cause a compile-time error because `x` is immutable.
 ```
 
-In the `mutate` method, we are cloning the genetic code and modifying the clone, thus preserving the immutability of the original `Organism` instance. The `evolve` function then takes a vector of organisms and applies the mutation to each, producing a new vector that represents the next-generation population. This pattern ensures that the original population is never modified, which is a cornerstone of functional programming's emphasis on immutability.
+This leads to:
+
+- Predictability: Immutable variables lead to more predictable code. When you see a variable being used multiple times in a function or across functions, you can be confident that its value hasn't been altered since initialization, which makes it easier to follow and reason about the program's flow.
+- Concurrency safe: Rust aims to prevent data races at compile time. If multiple threads have access to immutable data, there's no risk of one thread unexpectedly modifying the data while another is reading it. This reduces the need for locks and simplifies writing concurrent programs.
+- Compiler optimizations: Knowing that a variable won't change allows the compiler to optimize code under the hood. It could cache the value or elide certain checks, leading to potentially better performance.
+
 
 ## 2. First-Class and Higher-Order Functions
 
@@ -60,31 +32,45 @@ Functions are the building blocks of functional programming. Remember that a fun
 
 FP treats functions as first-class citizens, allowing them to be assigned to variables, passed as arguments, or returned by other functions. Higher-order functions can take other functions as parameters or return them, leading to powerful abstractions.
 
-**Biology example**: Analogy with enzymes – enzymes act on substrates (like functions on data) and can be regulated or combined for complex reactions (similar to higher-order functions operating on and returning other functions).
+### Example 
+
+Inspired by biology, let's create a series of functions that mimic the actions of different enzymes in a metabolic pathway, where each enzyme (function) might modify a substrate and pass it on to the next enzyme.
 
 ```rust
 fn main() {
-    // A function that squares its input
-    let square = |x: i32| x * x;
+    // Define a sequence of 'substrates', in this case a string representing a molecule
+    let initial_substrate = "molecule";
 
-    // A function that doubles its input
-    let double = |x: i32| x * 2;
+    // Functions representing different enzymes in a metabolic pathway
+    let enzyme1 = |substrate: &str| format!("{}-modified-by-enzyme1", substrate);
+    let enzyme2 = |substrate: &str| format!("{}-modified-by-enzyme2", substrate);
+    let enzyme3 = |substrate: &str| format!("{}-modified-by-enzyme3", substrate);
 
-    // The higher-order function that applies a given function to a value
-    fn apply(f: fn(i32) -> i32, value: i32) -> i32 {
-        f(value)
-    }
+    // Pass functions as arguments to simulate the metabolic pathway
+    let result = metabolic_pathway(initial_substrate, enzyme1, enzyme2, enzyme3);
 
-    // Use `apply` to apply `square` and `double` to the number 5
-    let squared_value = apply(square, 5);
-    let doubled_value = apply(double, 5);
+    println!("Final product: {}", result); // Output the final product of the metabolic pathway
+}
 
-    println!("The square of 5 is {}", squared_value);
-    println!("Double of 5 is {}", doubled_value);
+// Function simulating a metabolic pathway where enzymes are applied in sequence
+fn metabolic_pathway(
+    start: &str,
+    enzymatic_process1: fn(&str) -> String,
+    enzymatic_process2: fn(&str) -> String,
+    enzymatic_process3: fn(&str) -> String,
+) -> String {
+    let intermediate1 = enzymatic_process1(start);
+    let intermediate2 = enzymatic_process2(&intermediate1);
+    enzymatic_process3(&intermediate2)
 }
 ```
 
-In functional programming, functions are treated as first-class citizens, meaning they can be passed around as values, assigned to variables, and returned from other functions—similar to objects in OOP.
+In this code:
+
+- We define three closures (`enzyme1`, `enzyme2`, `enzyme3`) that represent the action of different enzymes.
+- We pass these closures as arguments to a function called `metabolic_pathway`, showing how functions can be treated as first-class citizens in Rust. Each function modifies the input in some way, mimicking the transformation of a substrate by an enzyme.
+- The final output shows the product after it has been processed by all three enzymatic functions, simulating a series of reactions in a biological metabolic pathway.
+
 
 ### Naming
 
@@ -100,14 +86,16 @@ Consequences:
 
 1. Predictability: Since expressions can be substituted with their results, you know exactly what they will do based on their inputs. Also called referential transparency, meaning that a function call can be replaced with its resulting value without changing the program's behavior
 2. Parallelization: functions can easily run in parallel because they don't rely on shared mutable state.
-3. Cacheability: The result of an expression can be cached and reused because it will always produce the same output for the same inputs.
+3. Cache-ability: The result of an expression can be cached and reused because it will always produce the same output for the same inputs.
 4. Ease of Refactoring: You can freely refactor your code by replacing expressions with variables or other expressions without worrying about altering the behavior of your program.
 
 ## 4. Recursion Over Loops
 
 FP favors recursion for repetitive tasks instead of iterative loops common in OOP. This aligns well with mathematical functions and can simplify certain algorithms at the expense of potential performance drawbacks like stack overflow.
 
-**Biology example**: The structure of a fractal, like the Romanesco broccoli, naturally exhibits recursive patterns, similar to how FP uses recursive structures and functions.
+### Example
+
+The structure of a fractal, like the Romanesco broccoli, naturally exhibits recursive patterns, similar to how FP uses recursive structures and functions.
 
 ![brocolli](https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Romanesco_broccoli_%28Brassica_oleracea%29.jpg/750px-Romanesco_broccoli_%28Brassica_oleracea%29.jpg)
 
@@ -137,7 +125,7 @@ Using recursion to solve such a problem can be clear and concise, especially whe
 
 For efficient computation, one would typically use an iterative approach or memoization (dynamic programming) to avoid recalculating the same values. In biological systems, similar optimization strategies might occur, but they wouldn't necessarily be implemented through code—it would be through the evolution of more efficient physical structures and processes.
 
-Nonetheless, if you specifically want a recursive solution to a biological problem that is prefered over loops, it's worth noting that real-world preference generally arises from how elegantly recursion can represent the solution rather than from a computational efficiency standpoint.
+Nonetheless, if you specifically want a recursive solution to a biological problem that is preferred over loops, it's worth noting that real-world preference generally arises from how elegantly recursion can represent the solution rather than from a computational efficiency standpoint.
 
 ### 5. Expressiveness
 
@@ -151,7 +139,59 @@ Many functional languages encourage strong static type systems, which can reduce
 
 **Biology example**: The body's immune system distinguishes between different types of cells based on markers, akin to strong typing systems distinguishing between data types.
 
-### Example: Modeling an Ecosystem
+It is possible to put an entire formal logic into a type system. Functions become implications and so on. In this way, whole fields of mathematics can be embedded in code. See languages such as Agda and Coq. 
+
+#### Example
+
+There are many interesting and more complex proofs in mathematics that can be represented in Agda. Let's consider a proof about the existence and uniqueness of inverses in group theory. In group theory, a group is a set equipped with an operation satisfying certain axioms: closure, associativity, identity, and invertibility.
+
+
+
+```agda
+{-# OPTIONS --without-K --exact-split --safe #-}
+
+open import Relation.Binary.PropositionalEquality as Eq using (_≡_; refl; cong)
+open Eq.≡-Reasoning
+
+record Group : Set₁ where
+  field
+    Carrier   : Set
+    ε         : Carrier
+    _∙_       : Carrier → Carrier → Carrier
+    _⁻¹       : Carrier → Carrier
+    _≈_       : Carrier → Carrier → Set
+    assoc     : ∀ {x y z} → x ∙ (y ∙ z) ≈ (x ∙ y) ∙ z
+    identityʳ : ∀ x → x ∙ ε ≈ x
+    identityˡ : ∀ x → ε ∙ x ≈ x
+    inverseʳ  : ∀ x → x ∙ x ⁻¹ ≈ ε
+    inverseˡ  : ∀ x → x ⁻¹ ∙ x ≈ ε
+    ∙-congˡ   : ∀ {x y z} → x ≈ y → x ∙ z ≈ y ∙ z
+    ∙-congʳ   : ∀ {x y z} → y ≈ z → x ∙ y ≈ x ∙ z
+
+
+```
+We'll prove that if a certain element in a group has an inverse, this inverse is unique. 
+
+This example illustrates a proof carried out in the context of abstract algebra (group theory) and demonstrates the power of type theories and dependent types in capturing mathematical structures.
+
+```agda
+  identityˡ-unique : ∀ x y → x ∙ y ≈ y → x ≈ ε
+  identityˡ-unique x y eq = begin
+    x              ≈˘⟨ identityʳ x ⟩
+    x ∙ ε          ≈˘⟨ ∙-congˡ (inverseʳ y) ⟩
+    x ∙ (y ∙ y ⁻¹) ≈˘⟨ assoc x y (y ⁻¹) ⟩
+    (x ∙ y) ∙ y ⁻¹ ≈⟨ ∙-congʳ eq ⟩
+         y  ∙ y ⁻¹ ≈⟨ inverseʳ y ⟩
+    ε              ∎
+```
+
+See https://alexarice.github.io/posts/strict-group-theory.html
+
+The proof above is a non-trivial example that combines dependently typed programming with mathematical theorem proving. It demonstrates how Agda can encode and verify fundamental properties of abstract algebraic structures.
+
+### OOP vs Functional programming
+
+#### Example: Modeling an Ecosystem
 
 Imagine modeling an ecosystem with species interactions such as predation, competition, and symbiosis.
 
