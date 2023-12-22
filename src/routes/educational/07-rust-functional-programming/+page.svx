@@ -1,0 +1,164 @@
+# Functional programming
+
+Previous lecture: [object-oriented programming](/educational/06-python-object-oriented)
+
+Existing literature:
+
+- A famous book with a philosophical background on functional programming is [Structure and Interpretation of Computer Programs](https://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs)
+
+**Functional Programming (FP)** and **Object-Oriented Programming (OOP)** are two predominant programming paradigms, each with its own principles and approaches to solving problems. FP offers several distinctive advantages over OOP in various scenarios:
+
+## 1. Immutability
+
+**Concept:** Data structures that never change their state after creation, enabling safer concurrency and predictable code behavior. Rust, despite not being a purely functional language, encourages the use of immutable data structures to ensure safety and concurrency without data races.
+
+**Biology Example in Rust:**
+
+Let's consider simulating an evolutionary process where a population of organisms evolves over time. Each organism has a genetic code, and over generations, this code might undergo mutations. In this simulation, we maintain immutability by creating a new population with mutated genetic codes instead of altering the existing population.
+
+```rust
+#[derive(Clone, Debug)]
+struct Organism {
+    genetic_code: String,
+}
+
+
+impl Organism {
+    fn mutate(&self) -> Organism {
+        // For simplicity, mutation just appends a "*" to the genetic code.
+        let mut new_genetic_code = self.genetic_code.clone();
+        new_genetic_code.push('*');
+        Organism { 
+            genetic_code: new_genetic_code 
+        }
+    }
+}
+
+fn evolve(generation: Vec<Organism>) -> Vec<Organism> {
+    generation.iter().map(|organism| organism.mutate()).collect()
+}
+
+fn main() {
+    let initial_population = vec![
+        Organism { genetic_code: "ATCG".to_string() },
+        Organism { genetic_code: "CGTA".to_string() },
+    ];
+
+    // Simulate one step of evolution; original population remains unchanged.
+    let next_generation = evolve(initial_population.clone());
+
+    println!("Original Population: {:?}", initial_population);
+    println!("Evolved Population: {:?}", next_generation);
+}
+```
+
+In the `mutate` method, we are cloning the genetic code and modifying the clone, thus preserving the immutability of the original `Organism` instance. The `evolve` function then takes a vector of organisms and applies the mutation to each, producing a new vector that represents the next-generation population. This pattern ensures that the original population is never modified, which is a cornerstone of functional programming's emphasis on immutability.
+
+## 2. First-Class and Higher-Order Functions
+
+Functions are the building blocks of functional programming. Remember that a function is a map from a source A to a target B. Functions in functional programming are very similar to functions in mathematics.
+
+FP treats functions as first-class citizens, allowing them to be assigned to variables, passed as arguments, or returned by other functions. Higher-order functions can take other functions as parameters or return them, leading to powerful abstractions.
+
+**Biology example**: Analogy with enzymes – enzymes act on substrates (like functions on data) and can be regulated or combined for complex reactions (similar to higher-order functions operating on and returning other functions).
+
+```rust
+fn main() {
+    // A function that squares its input
+    let square = |x: i32| x * x;
+
+    // A function that doubles its input
+    let double = |x: i32| x * 2;
+
+    // The higher-order function that applies a given function to a value
+    fn apply(f: fn(i32) -> i32, value: i32) -> i32 {
+        f(value)
+    }
+
+    // Use `apply` to apply `square` and `double` to the number 5
+    let squared_value = apply(square, 5);
+    let doubled_value = apply(double, 5);
+
+    println!("The square of 5 is {}", squared_value);
+    println!("Double of 5 is {}", doubled_value);
+}
+```
+
+In functional programming, functions are treated as first-class citizens, meaning they can be passed around as values, assigned to variables, and returned from other functions—similar to objects in OOP.
+
+### Naming
+
+Because functions are considered building blocks, they have to be properly named and have a clear declaration. A proper function name and declaration are a form of documentation. Using good names is like writing a love letter to the next person who will read your code. On top, functions should be simple to understand and take as few arguments as possible, certainly never more than a handful.
+
+## 3. Pure Functions
+
+FP emphasizes pure functions, without side effects, which means that given the same input, a function will always produce the same output. This predictability facilitates testing and concurrent code execution.
+
+**Biology example**: A pure function is akin to a physiological function like photosynthesis that always converts CO₂ and water into glucose and oxygen given light energy, regardless of external conditions, similar to a function always producing the same output for the same set of inputs.
+
+Consequences:
+
+1. Predictability: Since expressions can be substituted with their results, you know exactly what they will do based on their inputs. Also called referential transparency, meaning that a function call can be replaced with its resulting value without changing the program's behavior
+2. Parallelization: functions can easily run in parallel because they don't rely on shared mutable state.
+3. Cacheability: The result of an expression can be cached and reused because it will always produce the same output for the same inputs.
+4. Ease of Refactoring: You can freely refactor your code by replacing expressions with variables or other expressions without worrying about altering the behavior of your program.
+
+## 4. Recursion Over Loops
+
+FP favors recursion for repetitive tasks instead of iterative loops common in OOP. This aligns well with mathematical functions and can simplify certain algorithms at the expense of potential performance drawbacks like stack overflow.
+
+**Biology example**: The structure of a fractal, like the Romanesco broccoli, naturally exhibits recursive patterns, similar to how FP uses recursive structures and functions.
+
+![brocolli](https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Romanesco_broccoli_%28Brassica_oleracea%29.jpg/750px-Romanesco_broccoli_%28Brassica_oleracea%29.jpg)
+
+In Rust, recursion can sometimes be a more natural fit for algorithms that model biological processes or systems when those processes are inherently recursive. An example of such a process is calculating the (n)th number in the Fibonacci sequence, which appears in various natural phenomena including branching in trees, the arrangement of leaves on a stem, the fruitlets of a pineapple, the flowering of an artichoke, and the unfurling of a fern.
+
+Here's an idiomatic Rust example of a recursive function to calculate the (n)th Fibonacci number:
+
+```rust
+fn main() {
+    let n = 10;
+    println!("The {}th Fibonacci number is {}", n, fibonacci(n));
+}
+
+// A recursive function to calculate the nth Fibonacci number
+fn fibonacci(n: u32) -> u32 {
+    match n {
+        0 => 0,
+        1 => 1,
+        _ => fibonacci(n - 1) + fibonacci(n - 2),
+    }
+}
+```
+
+> The 10th Fibonacci number is 55
+
+Using recursion to solve such a problem can be clear and concise, especially when translating a naturally recursive mathematical definition into code. However, this naive recursive approach is inefficient for large (n) because it performs many redundant calculations. It has exponential time complexity due to the repeated work done at each level of recursion.
+
+For efficient computation, one would typically use an iterative approach or memoization (dynamic programming) to avoid recalculating the same values. In biological systems, similar optimization strategies might occur, but they wouldn't necessarily be implemented through code—it would be through the evolution of more efficient physical structures and processes.
+
+Nonetheless, if you specifically want a recursive solution to a biological problem that is prefered over loops, it's worth noting that real-world preference generally arises from how elegantly recursion can represent the solution rather than from a computational efficiency standpoint.
+
+### 5. Expressiveness
+
+FP can lead to more concise and expressive code, which can be easier to read and maintain once the paradigm is fully understood.
+
+**Biology example**: DNA transcription and translation are very efficient and compact ways to synthesize proteins. Similarly, FP strives for expressiveness through concise and efficient code.
+
+### 6. Stronger Emphasis on Type Systems
+
+Many functional languages encourage strong static type systems, which can reduce bugs by catching errors at compile time.
+
+**Biology example**: The body's immune system distinguishes between different types of cells based on markers, akin to strong typing systems distinguishing between data types.
+
+### Example: Modeling an Ecosystem
+
+Imagine modeling an ecosystem with species interactions such as predation, competition, and symbiosis.
+
+**With OOP**, you might define classes for individual species with methods to express behaviors and properties to store current states like population size. Interactions would involve altering the states of these objects, potentially involving complex chains of mutual state updates when multiple species interact.
+
+**Using FP**, you would model an ecosystem as a series of transformations of a state represented by a collection of data structures. Each interaction is a function that takes a state and returns a new state without modifying the original. Complex interactions are composed of simpler functions that are easy to reuse and test. For example, population changes due to predation would be modeled as a function that takes the current populations and returns the new populations, accounting for the consumption rates, without altering the original state.
+
+Overall, FP adds a perspective that emphasizes safety, purity, and transformations, while OOP focuses on encapsulating state and behavior within objects. Each has its strengths, and modern programming often benefits from combining aspects of both paradigms.
+
+Next lecture: [functional design patterns](/educational/09-rust-functional-design-patterns)

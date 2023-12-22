@@ -2,6 +2,11 @@
 
 Previous lecture: [types](/educational/04-rust-types)
 
+Existing literature: 
+
+- Practical introduction in "Programming Rust", by Jim Blandy et al.
+- Longer in-depth technical chapter in "Rust for Rustaceans", by Jon Gengjist.
+
 ## Situation: Planning execution
 
 Imagine a situation where there are many separate tasks to be completed - each of which require a certain amount of work or computation. Additionally, they each have an externally bounded start and end point, for example a user connecting. Furthermore, there are time constraints that dictate when all computations must be completed. Thus, the question is how can these tasks be planned and executed?

@@ -1,0 +1,222 @@
+# Object-Oriented Programming
+
+Existing literature:
+
+- [Object-Oriented Python](https://www.oreilly.com/library/view/object-oriented-python/9781098129842/)
+
+## Introduction
+
+Object-Oriented Programming is an intuitive way of structuring your code by mirroring real-world systems. Imagine being able to define:
+
+- digital organisms,
+- molecules, or
+- ecosystems
+
+that behave much like their physical counterparts, complete with individual characteristics and abilities.
+
+## Classes and Objects
+
+Classes: Think of classes as templates for creating your objects, akin to DNA sequences which dictate the traits of living organisms. Classes contain public or private methods which are function definitions for associated operations.
+
+Objects: These are specific instances of classes - like individual animals created from the same blueprint, each with its own state.
+
+## Example in Biological Research:**
+
+A `Cell` class might encapsulate the complexity of a biological cell while exposing methods to trigger mitosis, apoptosis, or to alter chemical concentrations within the cell.
+
+```python
+class Cell:
+    def __init__(self, dna: str):
+        self.dna = dna
+        self.proteins = ["Hemoglobin", "Insulin"]
+
+    def mitosis(self):
+        # Logic for cell division
+
+    def apoptosis(self):
+        # Logic for programmed cell death
+
+    def replicate_dna(self):
+        return self.dna * 2  # Method to interact with the encapsulated attribute
+
+# Usage:
+cell = Cell("ATCG")
+cell.mitosis()  # Public interface to initiate cell division
+```
+
+The `__init__` call is the constructor of the class. It produces an object. Objects can contain data that is similar for all sibling objects of it's class. For example a property called DNA. Objects contain references to the methods of it's class. For example a cell object can contain the method `mitosis`.
+All methods are simply functions that take the `self` argument.
+
+## 1. Encapsulation
+
+Encapsulation is about maintaining an object's state private inside a class and providing access only through public methods.
+
+In the previous example a cell encapsulates literally and philosophically speaking the sequence data and related functions. No other objects have this data or function. The cell is one unit or encapsulation
+
+## The Single-responsibility principle
+
+Robert C. Martin
+
+> "There should never be more than one reason for a class to change."
+
+In other words, every class should have only one responsibility. Alternative explanation: Gather together the things that change for the same reasons. Separate those things that change for different reasons
+
+## 2. Abstraction
+
+Abstraction means hiding the detailed implementation and showing only the necessary features of an object.
+
+## Example in Biological Research
+
+An `Organism` abstraction might define methods like `eat()`, `sleep()`, and `reproduce()`, regardless of whether the organism is a plant, animal, or bacteria. Specific organisms would implement these in diverse ways.
+
+```python
+from abc import ABC, abstractmethod
+
+class Organism(ABC):
+
+    @abstractmethod
+    def eat(self):
+        pass
+
+    @abstractmethod
+    def sleep(self):
+        pass
+
+    @abstractmethod
+    def reproduce(self):
+        pass
+```
+
+In Python, ABC stands for **abstract base class**. It represent an abstract class. In other languages this is called an interface or trait. An interface is the opposite of an implementation. An implementation provides functionality by giving concrete implementations.
+
+Below are concrete implementations for different types of organisms extending the `Organism` abstract base class. Each subclass provides its own version of the `eat`, `sleep`, and `reproduce` methods:
+
+```python
+class Plant(Organism):
+
+    def eat(self):
+        print("Plant is photosynthesizing.")
+
+    def sleep(self):
+        print("Plant enters a state of lower metabolic activity at night.")
+
+    def reproduce(self):
+        print("Plant releases seeds into the environment.")
+
+
+class Animal(Organism):
+
+    def eat(self):
+        print("Animal is hunting for food.")
+
+    def sleep(self):
+        print("Animal is sleeping to restore energy.")
+
+    def reproduce(self):
+        print("Animal finds a mate for reproduction.")
+
+
+class Bacterium(Organism):
+
+    def eat(self):
+        print("Bacterium absorbs nutrients from its surroundings.")
+
+    def sleep(self):
+        # Many bacteria do not have sleep cycles as eukaryotes do
+        # But they can enter dormant states, which we'll call 'sleep' here for simplicity
+        print("Bacterium enters a dormant state.")
+
+    def reproduce(self):
+        print("Bacterium reproduces via binary fission.")
+```
+
+With these implementations, each subclass of `Organism` now behaves according to its biological characteristics:
+
+```python
+# Usage example:
+plant = Plant()
+animal = Animal()
+bacterium = Bacterium()
+
+plant.eat()  # Plant is photosynthesizing.
+animal.sleep()  # Animal is sleeping to restore energy.
+bacterium.reproduce()  # Bacterium reproduces via binary fission.
+```
+
+The type hints in the original `Organism` class ensure that any further subclasses must implement `eat`, `sleep`, and `reproduce` methods if they are to be instantiated. This enforces a consistent interface across all organism types.
+
+## 3. Inheritance
+
+Inheritance allows a new class to adopt the behavior and properties of an existing class. According to the OCP, you should be able to extend the behavior of a class without altering its source code. This can be done by creating subclasses that inherit from a base class.
+
+**Example in Biological Research:**
+A specialized `BacterialCell` class might inherit from a more general `Cell` class, gaining basic cellular functions while adding bacterial-specific behaviors.
+
+```python
+# Parent class
+class Plant:
+    def __init__(self, height: float):
+        self.height = height
+
+# Child class
+class Tree(Plant):
+    def __init__(self, height: float, age: float):
+        super().__init__(height)
+        self.age = age
+
+oak = Tree(100, 80)
+print(oak.height)  # Output: 100
+```
+
+In this example `Plant` is the super class or parent class of `Tree`. One parent or super class may have multiple child classes. The parent class is a more general version of the child classes which are more constraint.
+
+## 4. Polymorphism
+
+Polymorphism enables one interface to implement different functions. In other words, one function may accept multiple types of classes.
+
+**Example in Biological Research:**
+A function that simulates the response of an organism to a stimulus could operate on any object that implements a `respond_to_stimulus` method, whether it's a plant cell or an animal cell.
+
+```python
+def simulate_response(cell: Cell):
+    cell.respond_to_stimulus()
+
+class PlantCell(Cell):
+    def respond_to_stimulus(self):
+        # Plant-specific stimulus response
+
+class AnimalCell(Cell):
+    def respond_to_stimulus(self):
+        # Animal-specific stimulus response
+
+# Both PlantCell and AnimalCell can be passed to simulate_response
+```
+
+Another example with mammals. One class has several child-classes and one function takes the super class as argument.
+
+```python
+class Animal:
+    def speak(self):
+        pass
+
+class Dog(Animal):
+    def speak(self):
+        return "Woof!"
+
+class Cat(Animal):
+    def speak(self):
+        return "Meow!"
+
+def animal_sound(animal):
+    print(animal.speak())
+
+# Both Dog and Cat are treated as Animal
+animal_sound(Dog())  # Output: Woof!
+animal_sound(Cat())  # Output: Meow!
+```
+
+## Summary
+
+These OOP principles facilitate the development of flexible, modular, reusable,  and maintainable software applications in biological research, which can range from simple bio-informatics tools to complex simulation platforms modeling entire ecosystems or biological processes. By leveraging OOP, developers can create models that mirror the hierarchical and diversified nature of biological entities and systems.
+
+Next lecture: [object-oriented design patterns](/educational/08-rust-object-design-patterns)
