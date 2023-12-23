@@ -6,13 +6,14 @@ Existing literature:
 
 ## Introduction
 
-Object-Oriented Programming is an intuitive way of structuring your code by mirroring real-world systems. Imagine being able to define:
+Object oriented programming started around 1960 and was named by Alan Kay. Object-Oriented Programming is an intuitive way of structuring your code by mirroring real-world systems. Imagine being able to define:
 
 - digital organisms,
 - molecules, or
 - ecosystems
 
-that behave much like their physical counterparts, complete with individual characteristics and abilities.
+that behave much like their physical counterparts, complete with individual characteristics and abilities. Object oriented programming enables this by providing building blocks for building accurate models of physical systems.
+
 
 ## Classes and Objects
 
@@ -43,15 +44,29 @@ class Cell:
 cell = Cell("ATCG")
 cell.mitosis()  # Public interface to initiate cell division
 ```
+ 
 
-The `__init__` call is the constructor of the class. It produces an object. Objects can contain data that is similar for all sibling objects of it's class. For example a property called DNA. Objects contain references to the methods of it's class. For example a cell object can contain the method `mitosis`.
-All methods are simply functions that take the `self` argument.
+### Attributes
+
+Objects can contain both data and code such as for example a property called DNA which stands for some data representing the sequence. This data is also called **attributes** of the object. Private attributes can only be used by the object itself. Attributes represent the **internal state** of an object and may change throughout the life-time of an object. Attributes can be both private and public.
+
+### Methods
+
+Objects also contain code, for example a cell object can contain the method `mitosis`. All methods are functions that take the `self` or `this` argument. Methods are not really part of the object. They are shared between objects of the same class. Methods are functions, so they can take type hints. It is recommended to use type hints, because they prevent errors by imposing constraints on the way your function can be used. One way to enforce type hints, is by using tools like "mypy" and "pylint" in Python. Ask for help on how to setup.
+
+Methods can be public and private. Private methods can only be referenced inside other methods of the same class.
+
+The `__init__` method is not really a method but a special function. It is the constructor of the class and produces  an instance of a class. It takes some initial data as arguments.
+
+
 
 ## 1. Encapsulation
 
 Encapsulation is about maintaining an object's state private inside a class and providing access only through public methods.
 
-In the previous example a cell encapsulates literally and philosophically speaking the sequence data and related functions. No other objects have this data or function. The cell is one unit or encapsulation
+In the previous example a cell encapsulates literally and philosophically speaking the sequence data and related functions. No other objects have this data or function. The cell is one unit or encapsulation.
+
+It is possible to encapsulate too much state and make you classes too complex. There is the following rule:
 
 ### The Single-responsibility principle
 
@@ -63,13 +78,21 @@ In other words, every class should have only one responsibility. Alternative exp
 
 ## 2. Abstraction
 
-Abstraction means hiding the detailed implementation and showing only the necessary features of an object. A class is a form of abstraction. You use a class to represent a certain number objects that share something in common, without showing the objects itself.
+Abstraction means hiding the detailed implementation and showing only the necessary features of an object. 
 
-## Example in Biological Research
+### Classes as abstraction
 
-It is possible to define another layer of abstraction on top of a class, called an abstract class. An abstract class.
+A class is a form of abstraction. You use a class to represent a certain number objects that share something in common, without showing the objects itself.
+
+### Interfaces
+
+It is possible to define another layer of abstraction on top of a class, called an abstract class. In other languages this is called an **interface** or trait. An interface is the opposite of an implementation. An implementation provides functionality by giving concrete implementations.
+
+### Example
 
 An `Organism` abstraction might define methods like `eat()`, `sleep()`, and `reproduce()`, regardless of whether the organism is a plant, animal, or bacteria. Specific organisms would implement these in diverse ways.
+
+In Python, ABC stands for **abstract base class**. It represent an abstract class, which is another name for an interface.
 
 ```python
 from abc import ABC, abstractmethod
@@ -89,7 +112,7 @@ class Organism(ABC):
         pass
 ```
 
-In Python, ABC stands for **abstract base class**. It represent an abstract class. In other languages this is called an interface or trait. An interface is the opposite of an implementation. An implementation provides functionality by giving concrete implementations.
+
 
 Below are concrete implementations for different types of organisms extending the `Organism` abstract base class. Each subclass provides its own version of the `eat`, `sleep`, and `reproduce` methods:
 
@@ -151,7 +174,8 @@ The type hints in the original `Organism` class ensure that any further subclass
 
 Inheritance allows a new class to adopt the behavior and properties of an existing class. According to the OCP, you should be able to extend the behavior of a class without altering its source code. This can be done by creating subclasses that inherit from a base class.
 
-**Example in Biological Research:**
+### Example
+
 A specialized `BacterialCell` class might inherit from a more general `Cell` class, gaining basic cellular functions while adding bacterial-specific behaviors.
 
 ```python
@@ -176,7 +200,9 @@ In this example `Plant` is the super class or parent class of `Tree`. One parent
 
 Polymorphism enables one interface to implement different functions. In other words, one function may accept multiple types of classes.
 
-**Example in Biological Research:**
+
+### Example
+
 A function that simulates the response of an organism to a stimulus could operate on any object that implements a `respond_to_stimulus` method, whether it's a plant cell or an animal cell.
 
 ```python
@@ -219,18 +245,13 @@ animal_sound(Cat())  # Output: Meow!
 
 ## Summary
 
-These OOP principles facilitate the development of:
+Object-oriented programming is a way of programming that includes concepts such as encapsulation, abstraction, inheritance and polymorphism. These OOP principles facilitate the development of modular and maintainable software applications in biological research, which can range from simple bio-informatics tools to complex simulation platforms modeling entire ecosystems or biological processes. By leveraging OOP, developers can create models that mirror the hierarchical and diversified nature of biological entities and systems.
 
-- flexible, modular, reusable,
-- readable, maintainable 
-
-software applications in biological research, which can range from simple bio-informatics tools to complex simulation platforms modeling entire ecosystems or biological processes. By leveraging OOP, developers can create models that mirror the hierarchical and diversified nature of biological entities and systems.
-
-## Practical
+## Practical final remarks
 
 To apply object-oriented programming, you have to make a model of the domain you are working in and understand how it works. A domain is nothing more than people who know what they are doing. So first, you have to look at how people do their work. Usually people will spontaneously tell you what their annoyances are and these are a starting point for object-oriented modelling. 
 
-### Abstraction
+### Modeling
 
 The next step is modeling data. Which types of objects are there? These will become classes. Are there patterns in usage of the data? These will become methods. 
 
@@ -238,6 +259,6 @@ Once in a while you have look at a higher level and see whether more abstraction
 
 ### Naming
 
-Throughout the whole process you have give appropriate names to everything. The least amount of surprise is necessary. Names should be as mainstream as possible. Writing code is an act of communication to whoever is reading it in the future. Code is not supposed to be read by machines, it supposed to be read by humans from different backgrounds. That means that code should not be complicated. Code should be as simple as possible. The only target is the speed of consumption by a future reader. A future reader can process the code faster if names are obvious and self-explanatory to new readers, they serve as a way of documentation. Using a modern IDE, it is easy to change names. (In VS Code, you can press f2.)
+Throughout the whole process you have give appropriate names to everything. The least amount of surprise is necessary. Names should be as mainstream as possible. Writing code is an act of communication to whoever is reading it in the future. Code is not supposed to be read by machines, it supposed to be read by humans from different backgrounds. That means that code should not be complicated. Code should be as simple as possible. The only target is the speed of consumption by a future reader. A future reader can process the code faster if names are obvious and self-explanatory to new readers, they serve as a way of documentation. Using a modern IDE, it is easy to change and improve names. (In VS Code, you can press f2.)
 
 Next lecture: [object-oriented design patterns](/educational/08-rust-object-design-patterns)

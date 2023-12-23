@@ -19,72 +19,95 @@ High-level modules should not depend on low-level modules. Both should depend on
 
 #### Example
 
-In biology, organisms often have different ways of communicating or sensing the environment. We can create an example based on this concept where we have a `Sensor` interface representing the abstraction and several implementations that could sense temperature, humidity, etc. Our high-level module will be an `Organism` class that depends on these `Sensor` abstractions.
+Let's use a simple example of a light switch application to illustrate the Dependency Inversion Principle in Python.
 
-```cpp
-#include <iostream>
-#include <string>
-#include <memory>
+First, let's define our high-level module and low-level module *without* applying the Dependency Inversion Principle:
 
-// Sensor Interface (Abstraction)
-class ISensor {
-public:
-    virtual ~ISensor() = default;
-    virtual std::string Sense() const = 0;
-};
+```python
+# Without Dependency Inversion Principle
 
-// Temperature Sensor (Low-level module)
-class TemperatureSensor : public ISensor {
-public:
-    std::string Sense() const override {
-        return "The temperature is warm.";
-    }
-};
+class LightBulb:
+    def turn_on(self):
+        print("LightBulb: turned on...")
+    
+    def turn_off(self):
+        print("LightBulb: turned off...")
 
-// Humidity Sensor (Another Low-level module)
-class HumiditySensor : public ISensor {
-public:
-    std::string Sense() const override {
-        return "The humidity is high.";
-    }
-};
+class ElectricPowerSwitch:
+    def __init__(self, bulb: LightBulb):
+        self.bulb = bulb
+        self.on = False
+    
+    def press(self):
+        if self.on:
+            self.bulb.turn_off()
+            self.on = False
+        else:
+            self.bulb.turn_on()
+            self.on = True
 
-// Organism (High-level module)
-class Organism {
-private:
-    std::shared_ptr<ISensor> sensor;
-public:
-    explicit Organism(std::shared_ptr<ISensor> sensor) : sensor(std::move(sensor)) {}
-
-    void ReactToEnvironment() {
-        // The organism uses its sensor to detect something about the environment.
-        std::cout << "Organism reacts: " << sensor->Sense() << std::endl;
-    }
-};
-
-int main() {
-    auto tempSensor = std::make_shared<TemperatureSensor>();
-    Organism frog(tempSensor);
-
-    frog.ReactToEnvironment(); // Uses the Temperature Sensor
-
-    // Now let's change the sensor to a Humidity Sensor
-    auto humiditySensor = std::make_shared<HumiditySensor>();
-    Organism cactus(humiditySensor);
-
-    cactus.ReactToEnvironment(); // Uses the Humidity Sensor
-
-    return 0;
-}
+# Usage
+bulb = LightBulb()
+switch = ElectricPowerSwitch(bulb)
+switch.press()  # Turns on
+switch.press()  # Turns off
 ```
 
-In this example:
+Here, `ElectricPowerSwitch` is directly dependent on the `LightBulb` class, which violates the Dependency Inversion Principle.
 
-- `ISensor` is the abstract interface for sensors.
-- `TemperatureSensor` and `HumiditySensor` are concrete, low-level modules that implement the `ISensor` interface.
-- `Organism` is our high-level class which relies on some `ISensor` to react to the environment.
+Now, let's refactor this code to apply the Dependency Inversion Principle by using abstractions:
 
-Just like in biology where different organisms might use different senses to interact with their environment, our `Organism` class can easily switch sensing strategies without any changes to its own implementation. This demonstrates the Dependency Inversion Principle by having both high-level (`Organism`) and low-level (`TemperatureSensor`, `HumiditySensor`) modules depend on the abstraction (`ISensor`).
+```python
+# Applying Dependency Inversion Principle
+
+from abc import ABC, abstractmethod
+
+# Abstraction (Interface)
+class Switchable(ABC):
+    @abstractmethod
+    def turn_on(self):
+        pass
+
+    @abstractmethod
+    def turn_off(self):
+        pass
+
+# Low-Level Module
+class LightBulb(Switchable):
+    def turn_on(self):
+        print("LightBulb: turned on...")
+
+    def turn_off(self):
+        print("LightBulb: turned off...")
+
+# High-Level Module
+class ElectricPowerSwitch:
+    def __init__(self, device: Switchable):
+        self.device = device
+        self.on = False
+    
+    def press(self):
+        if self.on:
+            self.device.turn_off()
+            self.on = False
+        else:
+            self.device.turn_on()
+            self.on = True
+
+# Usage
+bulb = LightBulb()
+switch = ElectricPowerSwitch(bulb)
+switch.press()  # Turns on the bulb
+switch.press()  # Turns off the bulb
+```
+
+In the refactored version, we have:
+
+- An abstraction (`Switchable`) which creates an interface with methods that can be implemented by any device.
+- A high-level module (`ElectricPowerSwitch`) that depends only on the abstraction, not on concrete implementations.
+- A low-level module (`LightBulb`) that implements the `Switchable` interface.
+
+Now, `ElectricPowerSwitch` doesn't need to know the details of `LightBulb`; it just needs something that complies with the `Switchable` interface. This decouples the high-level and low-level modules, allowing for more flexibility and easier maintenance.
 
 ### The Interface segregation principle
 

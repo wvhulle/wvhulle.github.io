@@ -6,7 +6,7 @@ Existing literature:
 
 - A famous book with a philosophical background on functional programming is [Structure and Interpretation of Computer Programs](https://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs)
 
-**Functional Programming (FP)** and **Object-Oriented Programming (OOP)** are two predominant programming paradigms, each with its own principles and approaches to solving problems. FP offers several distinctive advantages over OOP in various scenarios:
+**Functional Programming (FP)** and **Object-Oriented Programming (OOP)** are two predominant programming paradigms, each with its own principles and approaches to solving problems. FP offers several distinctive advantages over OOP in various scenarios. Functional programming as a concept is older than object-oriented programming and dates back to abstract models for computing in 1940 such as lambda calculus. It was implemented for the first time in 1960 in Lisp. In functional programming all computations are treated as the result of applying mathematically sound functions without side effects.
 
 ## 1. Immutability
 
@@ -18,6 +18,8 @@ For example, the following will not compile
 let x = 5;
 x = 6; // This will cause a compile-time error because `x` is immutable.
 ```
+
+In general, it is necessary, while modeling a system, to distinguish constant and mutable data from the very beginning. 
 
 This leads to:
 
@@ -121,17 +123,51 @@ fn fibonacci(n: u32) -> u32 {
 
 > The 10th Fibonacci number is 55
 
-Using recursion to solve such a problem can be clear and concise, especially when translating a naturally recursive mathematical definition into code. However, this naive recursive approach is inefficient for large (n) because it performs many redundant calculations. It has exponential time complexity due to the repeated work done at each level of recursion.
+Using recursion to solve such a problem can be clear and concise, especially when translating a naturally recursive mathematical definition into code. However, this naive recursive approach is inefficient for large (n) because it performs many redundant calculations. It has exponential time complexity due to the repeated work done at each level of recursion. 
 
-For efficient computation, one would typically use an iterative approach or memoization (dynamic programming) to avoid recalculating the same values. In biological systems, similar optimization strategies might occur, but they wouldn't necessarily be implemented through code—it would be through the evolution of more efficient physical structures and processes.
-
-Nonetheless, if you specifically want a recursive solution to a biological problem that is preferred over loops, it's worth noting that real-world preference generally arises from how elegantly recursion can represent the solution rather than from a computational efficiency standpoint.
+It would be more efficient to use an iterative approach. However, it can also be sufficient to use a tail-call. A tail call is a recursive call at the end of a function. This type of function can be optimized by the compiler into a loop. 
 
 ### 5. Expressiveness
 
 FP can lead to more concise and expressive code, which can be easier to read and maintain once the paradigm is fully understood.
 
-**Biology example**: DNA transcription and translation are very efficient and compact ways to synthesize proteins. Similarly, FP strives for expressiveness through concise and efficient code.
+In JavaScript, which supports functional programming concepts, combining `map`, `reduce`, and `filter` functions showcases the expressiveness of the language. These functions can operate on arrays to transform, filter, and accumulate values in a clear declarative style.
+
+Here's an example that demonstrates their combined use:
+
+```javascript
+// A sample array of objects representing people with age and name
+const people = [
+  { name: "Alice", age: 25 },
+  { name: "Bob", age: 20 },
+  { name: "Carol", age: 30 },
+  { name: "Dave", age: 35 },
+  { name: "Eve", age: 40 }
+];
+
+// We want to calculate the average age of people older than 25
+const averageAge = people
+  .filter(person => person.age > 25) // Filter out people aged 25 or below
+  .map(person => person.age)         // Transform the filtered list into a list of ages
+  .reduce((acc, age, _, array) => {  // Reduce to accumulate ages and compute average
+    acc += age;
+    return array.length - 1 === index ? acc / array.length : acc;
+  }, 0);
+
+console.log(averageAge); // Expected output: Average age of people older than 25
+```
+
+Let's go step by step:
+
+1. **Filter**: The `filter` function is used first to obtain only the people whose ages are above 25.
+2. **Map**: After filtering, we use the `map` function on the resulting array to extract just the ages of the remaining people.
+3. **Reduce**: Finally, the `reduce` function accumulates the ages and computes the average by dividing the accumulated sum by the length of the filtered array.
+
+This chain of `filter`, `map`, and `reduce` demonstrates how you can clearly and succinctly express a complex data transformation without having to write imperative loops and temporary variables. It shows what needs to be done, abstracting away the details of how it should be implemented under the hood.
+
+
+
+
 
 ### 6. Stronger Emphasis on Type Systems
 
@@ -139,20 +175,15 @@ Many functional languages encourage strong static type systems, which can reduce
 
 **Biology example**: The body's immune system distinguishes between different types of cells based on markers, akin to strong typing systems distinguishing between data types.
 
-It is possible to put an entire formal logic into a type system. Functions become implications and so on. In this way, whole fields of mathematics can be embedded in code. See languages such as Agda and Coq. 
 
-#### Example
+It is possible to put an entire formal logic into a type system. Functions become implications and so on. In this way, whole fields of mathematics can be embedded in code. To do this, you have to introduce a concept known as *dependent types* which are types that are constructed from values of other types. For example, a type of vectors of fixed length N. See languages such as Agda and Coq. 
 
-There are many interesting and more complex proofs in mathematics that can be represented in Agda. Let's consider a proof about the existence and uniqueness of inverses in group theory. In group theory, a group is a set equipped with an operation satisfying certain axioms: closure, associativity, identity, and invertibility.
+#### Example in mathematics
 
+There are many interesting and complex proofs in mathematics that can be represented in Agda. Let's consider a proof about the existence and uniqueness of inverses in group theory. In group theory, a group is a set equipped with an operation satisfying certain axioms: closure, associativity, identity, and invertibility.
 
 
 ```agda
-{-# OPTIONS --without-K --exact-split --safe #-}
-
-open import Relation.Binary.PropositionalEquality as Eq using (_≡_; refl; cong)
-open Eq.≡-Reasoning
-
 record Group : Set₁ where
   field
     Carrier   : Set
@@ -167,8 +198,6 @@ record Group : Set₁ where
     inverseˡ  : ∀ x → x ⁻¹ ∙ x ≈ ε
     ∙-congˡ   : ∀ {x y z} → x ≈ y → x ∙ z ≈ y ∙ z
     ∙-congʳ   : ∀ {x y z} → y ≈ z → x ∙ y ≈ x ∙ z
-
-
 ```
 We'll prove that if a certain element in a group has an inverse, this inverse is unique. 
 
@@ -188,6 +217,41 @@ This example illustrates a proof carried out in the context of abstract algebra 
 See https://alexarice.github.io/posts/strict-group-theory.html
 
 The proof above is a non-trivial example that combines dependently typed programming with mathematical theorem proving. It demonstrates how Agda can encode and verify fundamental properties of abstract algebraic structures.
+
+#### Example: conditional types
+
+In the previous example, we used a kind of dependent typing. Dependent typing exists also in more mainstream languages. One kind of dependent typing is conditional typing in TypeScript. 
+
+Imagine modeling biological entities where we want to define a type that depends on whether the entity is a plant or an animal:
+
+```typescript
+type LivingOrganism<T extends "plant" | "animal"> =
+  T extends "plant"
+    ? { species: string; photosynthesis: boolean }
+    : { species: string; heartRate: number };
+
+// Usage
+let fern: LivingOrganism<"plant"> = {
+  species: "Pteridophyta",
+  photosynthesis: true,
+};
+
+let tiger: LivingOrganism<"animal"> = {
+  species: "Panthera tigris",
+  heartRate: 120,
+};
+```
+
+In this TypeScript example, we have a conditional type `LivingOrganism` whose structure changes based on whether it represents a plant or an animal. To do this, we use the ternary if then operator.
+
+##### Relation to Type Systems and Dependent Type Form
+
+TypeScript's conditional types are reminiscent of dependent typing because a type choice is made based on another type (although not on runtime values).
+
+Agda and Coq have more sophisticated forms of dependent types, where the type can depend on specific values. In these systems, you could express constraints such as "an array of exactly `n` elements," with `n` being a compile-time constant or even a value computed at runtime, something not possible with TypeScript's static type system.
+
+However, through conditional types, TypeScript does allow for a form of compile-time type dependency, which adds a level of safety and expressivity to the language similar in spirit to some uses of dependent types, albeit with much less power than seen in Agda or Coq.
+
 
 ### OOP vs Functional programming
 

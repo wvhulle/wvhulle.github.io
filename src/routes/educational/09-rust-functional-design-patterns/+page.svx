@@ -4,7 +4,7 @@ Previous lecture: [functional programming](/educational/07-rust-functional-progr
 
 See:
 
-- Advanced functional programming concepts often come from category theory. See[fantasy-land](https://github.com/fantasyland/fantasy-land)
+- Advanced functional programming concepts often come from category theory. See [fantasy-land](https://github.com/fantasyland/fantasy-land).
 
 Functional programming (FP) has several design patterns and concepts that differ from those typically found in object-oriented programming (OOP). While OOP design patterns focus on object relationships and communication, FP patterns emphasize stateless computation and transformations. Some FP design concepts that stand out as distinctly different or new compared to OOP include:
 
@@ -39,6 +39,8 @@ fn main() {
         .map(|p| p.name.clone())
         .collect()
 
+    adult_names.sort()
+    
     println!("Adults: {:?}", adult_names);
 }
 ```
@@ -95,7 +97,12 @@ A monad is like a container for a dirty computation with side effects. When usin
 - core to the algorithm and has computational value
 - you declare what happens when an operation fails
 
+Strictly speaking, a monad is a type constructor which takes an underlying type and puts it into a specific computational context. For example, Maybe or Option types for dealing with optional values, List for non-deterministic computations, or IO for input/output operations.
+
 ### Biology Example in Rust
+
+In this example, `Result` is a monad in Rust that handles errors during function chaining and it's constructor is `Ok` in the case of success or `Err` in the case of an error.
+
 
 ```rust
 use std::result;
@@ -110,9 +117,8 @@ fn analyze_sample(sample: BloodSample) -> result::Result<DNASequence, AnalysisEr
 }
 ```
 
-Strictly speaking, a monad is a type constructor which takes an underlying type and puts it into a specific computational context. For example, Maybe or Option types for dealing with optional values, List for non-deterministic computations, or IO for input/output operations.
+We can also chain "dirty" or monadic computations while staying within the monad. Let's say, for example, that we analyze a sequence and the replicate it.
 
-In this example, `Result` is a monad in Rust that handles errors during function chaining and it's constructor is `Ok` in the case of success or `Err` in the case of an error.
 
 ```rust
 fn replicate_sequence(sequence: DNASequence) -> result::Result<Vec<DNASequence>, ReplicationError> {
@@ -123,32 +129,40 @@ fn replicate_sequence(sequence: DNASequence) -> result::Result<Vec<DNASequence>,
 let result = analyze_sample(sample).and_then(replicate_sequence);
 ```
 
-The last function is a bind function. This function takes a monadic value and a function that transforms the underlying plain value, then yields a new monadic value. The key here is that the transformation function also returns a result in a monadic context, allowing the actions to be chained together
+The function `and_then` is a bind function. This function takes a monadic value and a function that transforms the underlying plain value, then yields a new monadic value. The key here is that the transformation function also returns a result in a monadic context, allowing the actions to be chained together
 
 ## 3. Currying and Partial Application
 
-**Concept:** Breaking down a function that takes multiple arguments into a series of functions each taking a single argument.
+Currying is a functional programming concept where a function with multiple arguments is transformed into a chain of functions, each with a single argument. In the context of biology, we can think of a simple example such as calculating the Body Mass Index (BMI), which depends on both weight and height.
 
-**Biology Example in Rust:**
+Below is an example of how you might implement curried functions to calculate BMI in Python:
 
-```rust
-fn add_nutrient(nutrient: Nutrient) -> Box<dyn Fn(Environment) -> Environment> {
-    Box::new(move |mut environment: Environment| {
-        environment.add(nutrient.clone());
-        environment
-    })
-}
+```python
+# First, we define a curried function that takes the person's height.
+def bmi_for_height(height_in_meters):
+    # The inner function takes the weight, using the height from the outer function.
+    def bmi_for_weight_and_height(weight_in_kilograms):
+        return weight_in_kilograms / (height_in_meters ** 2)
+    return bmi_for_weight_and_height
 
-let enriched_environment = add_nutrient(Nutrient::Nitrogen)(initial_environment);
+# Example usage:
+# We have a person with a height of 1.75 meters.
+calculate_bmi_for_person = bmi_for_height(1.75)
+
+# Now we can use this function to find the BMI for any weight of this person.
+print(f"BMI for 70kg: {calculate_bmi_for_person(70)}")
+print(f"BMI for 80kg: {calculate_bmi_for_person(80)}")
 ```
 
-`add_nutrient` partially applies the function by fixing the nutrient parameter and returning a new function.
+In this example, the `bmi_for_height` function takes one argument (the height), and returns another function (`bmi_for_weight_and_height`) that takes the next argument (the weight). This way, if you often need to calculate BMI for a person of a certain height, you can 'curry' their height and get a custom function to calculate BMIs just for them based on various weights.
 
 ## 4. Algebraic Data Types (ADTs)
 
-**Concept:** Composing types via "sums" (e.g., enums, which provide a way to define a type by enumerating its possible variants) and "products" (e.g., structs, which bundle several values together).
+### Sums
 
-**Biology Example in Rust:**
+We can compose types via "sums" (e.g., enums). These  provide a way to define a type by enumerating its possible variants.
+
+For example,
 
 ```rust
 enum CellState {
@@ -156,20 +170,99 @@ enum CellState {
     Dead,
     Dormant,
 }
+```
 
+
+### Products
+
+You can also bundle several values together into records that are called **products**. In some sense, classes are a kind of product.
+
+**Biology Example in Rust:**
+
+```rust
 struct Cell {
     state: CellState,
     energy_level: u32,
 }
+```
 
-fn check_cell_state(cell: &Cell) -> CellState {
-    match cell.state {
-        CellState::Alive if cell.energy_level > 10 => CellState::Alive,
-        _ => CellState::Dead,
+In R, data-frames are products. In JavaScript, JSON objects are also a form of products.
+
+### Combining
+
+By combining sum types (`enums`) and product types (`structs`), we can model cell states and behaviors comprehensively. In Rust, we can implement a method for checking the cell state. This means function programming is compatible with object-oriented programming.
+
+```rust
+impl Cell {
+    fn check_cell_state(self) -> CellState {
+        match cell.state {
+            CellState::Alive if cell.energy_level > 10 => CellState::Alive,
+            _ => CellState::Dead,
+        }
     }
 }
 ```
 
-Using sum types (`enums`) and product types (`structs`), we model cell states and behaviors comprehensively.
+### Discriminate Union
+
+Discriminated unions in TypeScript are a pattern that makes it easier to work with union types that share common fields. A discriminant (or tag) property is shared among all members of the union, but has different literal type values for each member. This allows TypeScript to correctly narrow down the type when using conditional checks.
+
+Here's an example of a discriminated union in TypeScript:
+
+```typescript
+// Define the discriminant property `type` within each interface
+interface Circle {
+  type: 'circle';
+  radius: number;
+}
+
+interface Rectangle {
+  type: 'rectangle';
+  width: number;
+  height: number;
+}
+
+interface Triangle {
+  type: 'triangle';
+  base: number;
+  height: number;
+}
+
+// Create the discriminated union type Shape
+type Shape = Circle | Rectangle | Triangle;
+
+// Function to calculate the area of a shape
+function calculateArea(shape: Shape): number {
+  switch (shape.type) {
+    case 'circle':
+      return Math.PI * shape.radius ** 2;
+    
+    case 'rectangle':
+      return shape.width * shape.height;
+      
+    case 'triangle':
+      return (shape.base * shape.height) / 2;
+      
+    default:
+      // Exhaustiveness check
+      const _exhaustiveCheck: never = shape;
+      return _exhaustiveCheck;
+  }
+}
+
+// Usage
+const myCircle: Circle = { type: 'circle', radius: 5 };
+console.log(calculateArea(myCircle)); // Output: Area of the circle
+
+const myRectangle: Rectangle = { type: 'rectangle', width: 10, height: 20 };
+console.log(calculateArea(myRectangle)); // Output: Area of the rectangle
+```
+
+In this example, `Circle`, `Rectangle`, and `Triangle` each have a `type` property with a unique string literal type that acts as the discriminant. The union type `Shape` is composed of these three types.
+
+When writing the `calculateArea` function, we can perform a `switch` on the `type` field, and TypeScript will know in each case block which variant of the `Shape` type is being handled, allowing access to the correct properties for that shape without further type assertions.
+
+## Conclusion
+
 
 These FP concepts bring a different approach to software design compared to OOP, often leading to more predictable and maintainable code, especially in systems where functions can elegantly express domain logic, like in modeling biological processes. Rust, as a language that supports both FP and OOP paradigms, allows developers to use these concepts effectively, providing robustness and flexibility in design choices.
