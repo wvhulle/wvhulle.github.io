@@ -8,11 +8,11 @@ Existing literature:
 
 Object oriented programming started around 1960 and was named by Alan Kay. Object-Oriented Programming is an intuitive way of structuring your code by mirroring real-world systems. Imagine being able to define:
 
-- digital organisms,
-- molecules, or
+- organisms,
+- molecules,
 - ecosystems
 
-that behave much like their physical counterparts, complete with individual characteristics and abilities. Object oriented programming enables this by providing building blocks for building accurate models of physical systems.
+that behave much like their physical counterparts, complete with individual characteristics and abilities. Object-oriented programming enables this by providing building blocks for building accurate models of physical systems.
 
 
 ## Classes and Objects
@@ -21,7 +21,7 @@ Classes: Think of classes as templates for creating your objects. Classes contai
 
 Objects: These are specific instances of classes - like individual animals created from the same blueprint, each with its own state. For a mathematician, like me, everything in the world is an object of some class. This got me into troubles already. 
 
-## Example
+### Example in Python
 
 A `Cell` class might encapsulate the complexity of a biological cell while exposing methods to trigger mitosis, apoptosis, or to alter chemical concentrations within the cell.
 
@@ -44,19 +44,89 @@ class Cell:
 cell = Cell("ATCG")
 cell.mitosis()  # Public interface to initiate cell division
 ```
- 
 
-### Attributes
+
+
+
+#### Attributes
 
 Objects can contain both data and code such as for example a property called DNA which stands for some data representing the sequence. This data is also called **attributes** of the object. Private attributes can only be used by the object itself. Attributes represent the **internal state** of an object and may change throughout the life-time of an object. Attributes can be both private and public.
 
-### Methods
+#### Methods
 
-Objects also contain code, for example a cell object can contain the method `mitosis`. All methods are functions that take the `self` or `this` argument. Methods are not really part of the object. They are shared between objects of the same class. Methods are functions, so they can take type hints. It is recommended to use type hints, because they prevent errors by imposing constraints on the way your function can be used. One way to enforce type hints, is by using tools like "mypy" and "pylint" in Python. Ask for help on how to setup.
+Objects also contain code, for example a cell object can contain the method `mitosis`. All methods are functions that take the `self` or `this` argument. Methods are not really part of the object. They are shared between objects of the same class. Methods are functions, so they can take type hints. 
 
 Methods can be public and private. Private methods can only be referenced inside other methods of the same class.
 
 The `__init__` method is not really a method but a special function. It is the constructor of the class and produces  an instance of a class. It takes some initial data as arguments.
+
+#### Type Hints
+
+It is recommended to use type hints, because they prevent errors by imposing constraints on the way your function can be used. One way to enforce type hints, is by using tools like "mypy" and "pylint" in Python. Ask for help on how to setup.
+
+
+### Example in C++
+
+Below is an example of a C++ class with a constructor.
+```cpp
+#include <string>
+#include <ostream>
+#include <iostream>
+
+class Car {
+private:
+    std::string make;
+    std::string model;
+    int year;
+
+public:
+    // Constructor with an initializer list to initialize the data members
+    Car(const std::string& make, const std::string& model, int year)
+        : make(make), model(model), year(year) {
+    }
+
+    // Example method to display car information
+    void displayInfo() const {
+       std::cout << "Make: " << make << ", Model: " << model << ", Year: " << year << std::endl;
+    }
+};
+
+
+```
+
+This class, `Car`, has a constructor that initializes the car's make, model, and year.
+In the constructor of the `Car` class, an initializer list is used:
+
+```cpp
+Car(const std::string& make, const std::string& model, int year)
+    : make(make), model(model), year(year) {
+}
+```
+
+The line `: make(make), model(model), year(year)` uses an initializer list to initialize the member variables of the class with the values passed to the constructor. This is a common practice in C++ for several reasons, including efficiency and clarity.
+
+Here's what's happening:
+
+- `make(make)` initializes the member variable `make` with the value of the constructor parameter `make`.
+- `model(model)` initializes the member variable `model` with the value of the constructor parameter `model`.
+- `year(year)` initializes the member variable `year` with the value of the constructor parameter `year`.
+
+In this context, the names within the parentheses refer to the parameters passed to the constructor, while the names before the parentheses refer to the class's member variables. Since they have the same name, we can distinguish between them because the context of an initializer list clearly indicates that the left-hand side of each initialization refers to the class members.
+
+
+
+
+```cpp
+// The usage of the constructor would be like this:
+int main() {
+    Car myCar("Toyota", "Corolla", 2020);
+    myCar.displayInfo();
+    return 0;
+}
+```
+
+In the `main` function, we create an object of `Car` called `myCar`. The constructor for `Car` is called with the arguments `"Toyota"`, `"Corolla"`, and `2020` to initialize the `make`, `model`, and `year` of the car, respectively. 
+
 
 
 
@@ -88,7 +158,7 @@ A class is a form of abstraction. You use a class to represent a certain number 
 
 It is possible to define another layer of abstraction on top of a class, called an abstract class. In other languages this is called an **interface** or trait. An interface is the opposite of an implementation. An implementation provides functionality by giving concrete implementations.
 
-### Example
+### Example in Python
 
 An `Organism` abstraction might define methods like `eat()`, `sleep()`, and `reproduce()`, regardless of whether the organism is a plant, animal, or bacteria. Specific organisms would implement these in diverse ways.
 
@@ -111,6 +181,22 @@ class Organism(ABC):
     def reproduce(self):
         pass
 ```
+
+In C++, this would become
+
+```cpp
+#include <iostream>
+
+using namespace std;
+
+class Organism {
+public:
+    virtual void eat() = 0;
+    virtual void sleep() = 0;
+    virtual void reproduce() = 0;
+};
+```
+
 
 
 
@@ -201,7 +287,7 @@ In this example `Plant` is the super class or parent class of `Tree`. One parent
 Polymorphism enables one interface to implement different functions. In other words, one function may accept multiple types of classes.
 
 
-### Example
+### Example in Python
 
 A function that simulates the response of an organism to a stimulus could operate on any object that implements a `respond_to_stimulus` method, whether it's a plant cell or an animal cell.
 
@@ -242,6 +328,92 @@ def animal_sound(animal):
 animal_sound(Dog())  # Output: Woof!
 animal_sound(Cat())  # Output: Meow!
 ```
+
+### Example in C++
+
+Polymorphism in C++ can be demonstrated through the use of inheritance and virtual functions. Here is a simple example illustrating polymorphism with a base class `Shape` and its derived classes `Circle` and `Rectangle`.
+
+
+The interface or abstract class `Shape` is declared first. Afterwards multiple concrete implementing classes are defined.
+
+```cpp
+#include <iostream>
+#include <cmath>
+
+// Base class
+class Shape {
+public:
+    // Virtual method for calculating area
+    virtual double area() const = 0;
+
+    // Virtual destructor to allow derived class destructors to be called
+    virtual ~Shape() {}
+};
+
+```
+
+In the following code, `Shape` is an abstract base class that defines a pure virtual function `area()`. `Circle` and `Rectangle` are derived classes that override the `area()` method.
+
+```cpp
+
+
+// Derived class: Circle
+class Circle : public Shape {
+private:
+    double radius;
+
+public:
+    Circle(double r) : radius(r) {}
+
+    // Override the area method to compute the area of a circle
+    virtual double area() const override {
+        return M_PI * radius * radius;
+    }
+};
+
+// Derived class: Rectangle
+class Rectangle : public Shape {
+private:
+    double width;
+    double height;
+
+public:
+    Rectangle(double w, double h) : width(w), height(h) {}
+
+    // Override the area method to compute the area of a rectangle
+    virtual double area() const override {
+        return width * height;
+    }
+};
+
+
+```
+
+
+Next comes a polymorphic function that takes a reference to a `Shape` and prints out its area. Because it is using a reference to the base class, it will work with any object of a class derived from `Shape`.
+
+```rust
+// Function to display the area of a shape
+void printArea(const Shape& shape) {
+    std::cout << "Area: " << shape.area() << std::endl;
+}
+
+int main() {
+    Circle circle(5.0);
+    Rectangle rectangle(10.0, 2.0);
+
+    // The same function, printArea, can operate on objects of different classes
+    // and produce different results based on which class's area method is invoked.
+    // This is an example of polymorphism.
+    printArea(circle);       // Calls Circle::area
+    printArea(rectangle);    // Calls Rectangle::area
+
+    return 0;
+}
+```
+
+Inside `main`, we create instances of `Circle` and `Rectangle`, then call `printArea` on each. Despite calling the same function, `printArea`, polymorphism allows us to calculate the correct area for each shape due to the virtual dispatch mechanism of C++. The area method appropriate for the actual type of object is called at runtime.
+
 
 ## Summary
 
