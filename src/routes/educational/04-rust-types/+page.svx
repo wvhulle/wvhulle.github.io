@@ -1,6 +1,6 @@
 # Types
 
-Previous lecture: [pointers](/educational/03-rust-pointers)
+Previous lecture: [references](/educational/03-rust-references).
 
 ## What are types
 
@@ -277,7 +277,7 @@ The smart pointer is called `Arc` which stands for "atomic reference counted". I
 let counter = Arc::new(Mutex::new(0));
 ```
 
-Pointers such as `Arc` do not move or capture ownership. We can now share copies or clones of this pointer among the different threads. The copies of these references can be moved inside the threads and there is no problem anymore for the compiler.
+Smart non-owning pointers such as `Arc` do not move or capture ownership. We can now share copies or clones of this pointer among the different threads. The copies of these references can be moved inside the threads and there is no problem anymore for the compiler.
 
 ```rust
 let counter = Arc::new(Mutex::new(0));
@@ -312,4 +312,4 @@ A lack of constraints leads to unpredictable software. Unpredictable software le
 
 Languages such as C++ impose fewer constraints on the program, which makes them at first sight easier, because less rules have to be learned. But in the long term, you will encounter more bugs such as "data races" and others if you impose less contraints.
 
-Next: [async](/educational/05-rust-async)
+Next: [async](/educational/05-rust-async).

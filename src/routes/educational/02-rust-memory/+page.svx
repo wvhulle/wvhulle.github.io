@@ -14,10 +14,10 @@ When do we need better control over memory?
 
 From fast to slow:
 
-- Register memory: CPUs
-- Working memory: RAM cards
-- Video memory: GPU
-- Solid state memory: SSD
+- Register memory: stored in the CPU
+- Working memory: stored in (several) RAM cards
+- Video memory: used for tensor computations, done on the GPU
+- Solid state memory: SSD drives connected over SATA or PCIe (NVMe)
 
 ## RAM
 
@@ -78,10 +78,10 @@ Always points to the part of free memory that is the largest.
 
 ## Types of memory
 
-- **variables**: location in heap or on stack
+- **data**: location in heap or on stack
   - mutable
   - immutable
-- **pointers**: addresses to the location of a variable
+- **addresses**: addresses to the location of a variable
   - mutable: allows updating data at referenced location
   - immutable: referenced data cannot be updated
 
@@ -138,7 +138,7 @@ The string called `name` can change in size. It can grow in length, so:
 
 Then we allocate the string the string.
 
-1. Save pointer to start string
+1. Save address in memory of the start of the string
 2. save length of string
 3. save capacity (size empty area)
 4. mark the part of the heap as taken
@@ -357,7 +357,7 @@ fn add_suffix(mut name: String) -> String {
 ```
 
 The ownership of reference to the local variable `first` is moved into the expression of `add_suffix`.
-After the function scope of the `add_suffix` function ends, data behind pointer `name` is de-allocated and free-ed up
+After the function scope of the `add_suffix` function ends, data behind reference `name` is de-allocated and free-ed up
 
 This process of moving of ownership happens automatically at run-time and is enforced by the compiler.
 
@@ -378,4 +378,4 @@ Since the local variable `first` was captured by the local function call `add_su
 
 It enforces without the run-time overhead of reference counting that data is always cleaned up at the right point in time. In this way, Rust programs can have a very small memory footprint at run-time and run on devices with small memory.
 
-Next lecture: [pointers](/educational/03-rust-pointers) (2023-10-23)
+Next lecture: [references](/educational/03-rust-references) (2023-10-23)

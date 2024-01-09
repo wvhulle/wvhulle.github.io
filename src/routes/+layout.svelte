@@ -14,8 +14,8 @@
     <a href="{base}/about" class="link">About</a>
   </div>
   <div class="content">
-  <slot />
-</div>
+    <slot />
+  </div>
 </div>
 
 <style lang="scss">
@@ -24,7 +24,8 @@
   }
 
   * {
-    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+      "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
     font-size: 1.1em;
     line-height: 1.4em;
   }
@@ -80,30 +81,24 @@
         font-weight: 600;
         color: inherit;
       }
-    /* p-2 bg-white mb-4 border-b border-black flex flex-row gap-8 place-content-center text-lg sticky top-0 items-center */
-  }
+      /* p-2 bg-white mb-4 border-b border-black flex flex-row gap-8 place-content-center text-lg sticky top-0 items-center */
+    }
 
-    
     .content {
       padding: 2em;
       flex-grow: 1;
       flex-direction: column;
       height: 100%;
-      display:flex;
+      display: flex;
 
       @media (max-width: 800px) {
-      padding: 1em;
+        padding: 1em;
+      }
     }
-    }
-    
-
-    
 
     flex-direction: column;
     position: relative;
   }
-
-  
 
   a {
     display: block;
