@@ -1,5 +1,0 @@
-# Basics of Rust
-
-See the book https://doc.rust-lang.org/book/
-
-Next lecture: [memory](/educational/02-rust-memory)

@@ -1,0 +1,32 @@
+# Functional programming in R
+
+The `tidyverse` in R is a collection of packages designed for data science that share an underlying design philosophy. Function composition in `tidyverse` is often achieved using the `%>%` operator from the `magrittr` package, which allows for clear and readable chaining of functions. Below is an example of a data manipulation sequence on a hypothetical `data.frame` called `df`.
+
+Let's assume you want to:
+
+1. Select certain columns,
+2. Filter rows based on some condition,
+3. Summarize the data with some aggregation, and
+4. Arrange the results.
+
+Her's how this might look using `dplyr`, which is part of the `tidyverse`:
+
+```r
+library(tidyverse)
+
+# Assuming df is your data.frame with columns: id, category, and value
+
+result <- df %>%
+  select(id, category, value) %>%   # Select only the columns you're interested in
+  filter(value > 10) %>%            # Filter rows where 'value' is greater than 10
+  group_by(category) %>%            # Group data by 'category' column
+  summarize(
+    mean_value = mean(value),       # Calculate the mean of 'value' for each group
+    max_value = max(value)          # Find the max 'value' for each group
+  ) %>%
+  arrange(desc(mean_value))         # Arrange the summarized result by 'mean_value' descending
+
+print(result)
+```
+
+By chaining these function calls, `tidyverse` lets you write data transformations in a way that is both functional and readable. Each stage of the transformation is clear, and the overall process reads almost like a sentence describing what you want to do with the data.

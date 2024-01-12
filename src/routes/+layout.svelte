@@ -24,10 +24,7 @@
   }
 
   * {
-    font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-      "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-    font-size: 1.1em;
-    line-height: 1.4em;
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   }
 
   :global(html, body) {

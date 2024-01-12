@@ -1,0 +1,39 @@
+# Proofs in Agda
+
+There are many interesting and complex proofs in mathematics that can be represented in Agda. Let's consider a proof about the existence and uniqueness of inverses in group theory. In group theory, a group is a set equipped with an operation satisfying certain axioms: closure, associativity, identity, and invertibility.
+
+
+```agda
+record Group : Set₁ where
+  field
+    Carrier   : Set
+    ε         : Carrier
+    _∙_       : Carrier → Carrier → Carrier
+    _⁻¹       : Carrier → Carrier
+    _≈_       : Carrier → Carrier → Set
+    assoc     : ∀ {x y z} → x ∙ (y ∙ z) ≈ (x ∙ y) ∙ z
+    identityʳ : ∀ x → x ∙ ε ≈ x
+    identityˡ : ∀ x → ε ∙ x ≈ x
+    inverseʳ  : ∀ x → x ∙ x ⁻¹ ≈ ε
+    inverseˡ  : ∀ x → x ⁻¹ ∙ x ≈ ε
+    ∙-congˡ   : ∀ {x y z} → x ≈ y → x ∙ z ≈ y ∙ z
+    ∙-congʳ   : ∀ {x y z} → y ≈ z → x ∙ y ≈ x ∙ z
+```
+We'll prove that if a certain element in a group has an inverse, this inverse is unique. 
+
+This example illustrates a proof carried out in the context of abstract algebra (group theory) and demonstrates the power of type theories and dependent types in capturing mathematical structures.
+
+```agda
+  identityˡ-unique : ∀ x y → x ∙ y ≈ y → x ≈ ε
+  identityˡ-unique x y eq = begin
+    x              ≈˘⟨ identityʳ x ⟩
+    x ∙ ε          ≈˘⟨ ∙-congˡ (inverseʳ y) ⟩
+    x ∙ (y ∙ y ⁻¹) ≈˘⟨ assoc x y (y ⁻¹) ⟩
+    (x ∙ y) ∙ y ⁻¹ ≈⟨ ∙-congʳ eq ⟩
+         y  ∙ y ⁻¹ ≈⟨ inverseʳ y ⟩
+    ε              ∎
+```
+
+See https://alexarice.github.io/posts/strict-group-theory.html
+
+The proof above is a non-trivial example that combines dependently typed programming with mathematical theorem proving. It demonstrates how Agda can encode and verify fundamental properties of abstract algebraic structures.

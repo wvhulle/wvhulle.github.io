@@ -1,0 +1,129 @@
+# Functional design patterns
+
+See:
+
+- Advanced functional programming concepts often come from category theory. See [fantasy-land](https://github.com/fantasyland/fantasy-land).
+
+Functional programming (FP) has several design patterns and concepts that differ from those typically found in object-oriented programming (OOP). While OOP design patterns focus on object relationships and communication, FP patterns emphasize stateless computation and transformations. Some FP design concepts that stand out as distinctly different or new compared to OOP include:
+
+## 1. Function Composition
+
+It is possible to build complex functions by composing simpler ones, each performing a discrete operation. Functions do not have side effects by default. A side effect is something that happens outside the body of a function. This is enabled by disallowing shared state.
+
+### Example
+
+A method is a kind of function that works on a class. It is called by writing the instance of of the class, a dot and then the name of the function.
+
+An iterator is a data structure that is used to iterate over a structure. Rust provides powerful iterator methods which can be chained together to perform complex operations in a clear and elegant manner. Here's an example that demonstrates this:
+
+Imagine we have a list of `Person` structs, and we want to find the names of all people who are over 18 years old, sort those names, and then collect them into a vector.
+
+```rust
+struct Person {
+    name: String,
+    age: u8,
+}
+
+fn main() {
+    let people = vec![
+        Person { name: "Alice".to_string(), age: 30 },
+        Person { name: "Bob".to_string(), age: 20 },
+        Person { name: "Charlie".to_string(), age: 17 },
+        Person { name: "Dave".to_string(), age: 23 },
+    ];
+
+    let adult_names: Vec<String> = people.iter()
+        .filter(|p| p.age > 18)
+        .map(|p| p.name.clone())
+        .collect()
+
+    adult_names.sort()
+    
+    println!("Adults: {:?}", adult_names);
+}
+```
+
+Let's break down the method chaining above:
+
+- `.iter()` creates an iterator over the `people` vector.
+- `.filter(|p| p.age > 18)` filters out the `Person` instances that do not meet the condition (i.e., being older than 18).
+- `.map(|p| p.name.clone())` transforms the iterator from `Person` instances to their associated `name` strings.
+- `.collect()` collects the transformed values into a `Vec<String>`.
+- with the addition of `sort()`, we collect the adults' names and then
+
+Method chaining allows for such transformations to be expressed succinctly, making the code both elegant and readable.
+
+
+## 2. Monads
+
+**Concept:** Monads wrap and handle values within a context (like error handling, state representation), providing mechanisms for chaining operations in a safe way.
+
+A monad is like a container for a dirty computation with side effects. When using a monad, you declare what is
+
+- core to the algorithm and has computational value
+- you declare what happens when an operation fails
+
+Strictly speaking, a monad is a type constructor which takes an underlying type and puts it into a specific computational context. For example, Maybe or Option types for dealing with optional values, List for non-deterministic computations, or IO for input/output operations.
+
+### Biology Example in Rust
+
+In this example, `Result` is a monad in Rust that handles errors during function chaining and it's constructor is `Ok` in the case of success or `Err` in the case of an error.
+
+
+```rust
+use std::result;
+
+fn analyze_sample(sample: BloodSample) -> result::Result<DNASequence, AnalysisError> {
+    // Analyze the blood sample and extract DNA sequence.
+    if sequence.len > 0 {
+        Ok(sequence)
+    } else {
+        Err(error)
+    }
+}
+```
+
+We can also chain "dirty" or monadic computations while staying within the monad. Let's say, for example, that we analyze a sequence and the replicate it.
+
+
+```rust
+fn replicate_sequence(sequence: DNASequence) -> result::Result<Vec<DNASequence>, ReplicationError> {
+    // Replicate the given DNA sequence.
+}
+
+// Using `and_then` to chain operations using monadic behavior
+let result = analyze_sample(sample).and_then(replicate_sequence);
+```
+
+The function `and_then` is a bind function. This function takes a monadic value and a function that transforms the underlying plain value, then yields a new monadic value. The key here is that the transformation function also returns a result in a monadic context, allowing the actions to be chained together
+
+## 3. Currying and Partial Application
+
+Currying is a functional programming concept where a function with multiple arguments is transformed into a chain of functions, each with a single argument. In the context of biology, we can think of a simple example such as calculating the Body Mass Index (BMI), which depends on both weight and height.
+
+Below is an example of how you might implement curried functions to calculate BMI in Python:
+
+```python
+# First, we define a curried function that takes the person's height.
+def bmi_for_height(height_in_meters):
+    # The inner function takes the weight, using the height from the outer function.
+    def bmi_for_weight_and_height(weight_in_kilograms):
+        return weight_in_kilograms / (height_in_meters ** 2)
+    return bmi_for_weight_and_height
+
+# Example usage:
+# We have a person with a height of 1.75 meters.
+calculate_bmi_for_person = bmi_for_height(1.75)
+
+# Now we can use this function to find the BMI for any weight of this person.
+print(f"BMI for 70kg: {calculate_bmi_for_person(70)}")
+print(f"BMI for 80kg: {calculate_bmi_for_person(80)}")
+```
+
+In this example, the `bmi_for_height` function takes one argument (the height), and returns another function (`bmi_for_weight_and_height`) that takes the next argument (the weight). This way, if you often need to calculate BMI for a person of a certain height, you can 'curry' their height and get a custom function to calculate BMIs just for them based on various weights.
+
+
+## Conclusion
+
+
+These FP concepts bring a different approach to software design compared to OOP, often leading to more predictable and maintainable code, especially in systems where functions can elegantly express domain logic, like in modeling biological processes. Rust, as a language that supports both FP and OOP paradigms, allows developers to use these concepts effectively, providing robustness and flexibility in design choices.

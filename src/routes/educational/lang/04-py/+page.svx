@@ -1,0 +1,5 @@
+# Python
+
+1. [Functional programming Python](./01-fp)
+2. [Object-oriented programming in Python](./02-oop)
+3. [Interfaces in Python](./03-interfaces)

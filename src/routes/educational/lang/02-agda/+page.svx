@@ -1,0 +1,7 @@
+# Agda
+
+Agda is a language that used in formal proof verification for mathematics and computer science.
+
+1. [Introduction to Agda](./01-basic)
+2. [Dependent types in Agda](./02-dependent)
+3. [Proofs in Agda](./03-proofs)

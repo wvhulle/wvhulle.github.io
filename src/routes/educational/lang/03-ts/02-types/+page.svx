@@ -1,0 +1,60 @@
+# Types in TypeScript
+
+### Discriminate Union
+
+Discriminated unions in TypeScript are a pattern that makes it easier to work with union types that share common fields. A discriminant (or tag) property is shared among all members of the union, but has different literal type values for each member. This allows TypeScript to correctly narrow down the type when using conditional checks.
+
+Here's an example of a discriminated union in TypeScript:
+
+```typescript
+// Define the discriminant property `type` within each interface
+interface Circle {
+  type: 'circle';
+  radius: number;
+}
+
+interface Rectangle {
+  type: 'rectangle';
+  width: number;
+  height: number;
+}
+
+interface Triangle {
+  type: 'triangle';
+  base: number;
+  height: number;
+}
+
+// Create the discriminated union type Shape
+type Shape = Circle | Rectangle | Triangle;
+
+// Function to calculate the area of a shape
+function calculateArea(shape: Shape): number {
+  switch (shape.type) {
+    case 'circle':
+      return Math.PI * shape.radius ** 2;
+    
+    case 'rectangle':
+      return shape.width * shape.height;
+      
+    case 'triangle':
+      return (shape.base * shape.height) / 2;
+      
+    default:
+      // Exhaustiveness check
+      const _exhaustiveCheck: never = shape;
+      return _exhaustiveCheck;
+  }
+}
+
+// Usage
+const myCircle: Circle = { type: 'circle', radius: 5 };
+console.log(calculateArea(myCircle)); // Output: Area of the circle
+
+const myRectangle: Rectangle = { type: 'rectangle', width: 10, height: 20 };
+console.log(calculateArea(myRectangle)); // Output: Area of the rectangle
+```
+
+In this example, `Circle`, `Rectangle`, and `Triangle` each have a `type` property with a unique string literal type that acts as the discriminant. The union type `Shape` is composed of these three types.
+
+When writing the `calculateArea` function, we can perform a `switch` on the `type` field, and TypeScript will know in each case block which variant of the `Shape` type is being handled, allowing access to the correct properties for that shape without further type assertions.

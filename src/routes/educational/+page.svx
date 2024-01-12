@@ -1,26 +1,6 @@
 # Educational
 
-## Linux operating system
+I collect topics of interest to myself and maybe of interest to others.
 
-Experiences with different Linux distributions:
-
-- Installation of [Arch Linux](/educational/00-arch) (2023-09-07)
-
-## Programming languages
-
-### Rust
-
-Series of introductory lectures on Rust:
-
-1. Overview of Rust: [basics](/educational/01-rust-basics) (2023-11-12)
-2. How the ownership model works: [memory](/educational/02-rust-memory) (2023-10-23)
-3. Role of [references](/educational/03-rust-references) (2023-10-23)
-4. Logical [types](/educational/04-rust-types) (2023-10-23)
-5. Asynchronous programming: [async](/educational/05-rust-async) (2023-11-12)
-
-### Paradigms and Design Patterns
-
-1. Introduction to [object-oriented programming](/educational/06-python-object-oriented) in Python (2024-01-02)
-2. Introduction [functional programming](/educational/07-rust-functional-programming) in Rust
-3. Advanced object-oriented programming or introduction to [object-oriented design patterns](/educational/08-rust-object-design-patterns) in Rust
-4. Advanced functional programming or introduction to [functional design patterns](/educational/09-rust-functional-design-patterns) in Rust
+- [Linux](./linux)
+- [Programming languages](./lang)

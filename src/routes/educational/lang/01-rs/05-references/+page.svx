@@ -1,0 +1,243 @@
+# References 
+
+*first written on 2023-10-23*
+
+*rewritten on 2024-01-09*
+
+There are global and local variables. It is necessary to use local variables as much as possible. Variables come in owning and non-owning versions.
+
+## Owning variables
+
+This type of variables become owner of the data as soon as the data is created through a declaration and an assignment. Owning variables are bound to a scope or expression and may pass ownership to a different scope, but as long as they have the ownership, they are responsible for destroying or de-initializing the data they refer to a the end of the scope.
+
+Types of owning variables:
+
+- normal local variables: Every programming language gives the ability to define names for data and allocate local variables on the stack for temporary storage.
+- owning **smart pointers**: A more advanced version of normal variables. These are explicitly allocated on the heap. 
+    - Rust. The most basic example of a smart pointer in Rust is `Box`. This type gives a level of indirection by pointing to a location on the heap. A more complicated version is  `RefCell`, which enables some kind of locking so that no more than variable can modify the content at the same time. The multi-threaded version of `RefCell` is `Mutex`. A mutex is a programming concept that is frequently used to solve multi-threading problems. It is a synchronization primitive that can be used to protect shared data from being simultaneously accessed by multiple threads. 
+    - C also has owning smart pointers such as mutexes.
+    
+    
+## Non-owning variables
+
+This type of variables are not an owner of the data. We say "they don't capture ownership". Ownership entails responsibility to clean up. Non-owning variables are not responsible for cleaning up data. The advantage of non-owning variables is that you can share data without copying, so they can increase the speed of your program.
+
+
+They come in two types (see [question](https://stackoverflow.com/questions/62232753/what-are-the-differences-between-a-pointer-and-a-reference-in-rust)):
+
+
+### References
+
+An alias for a piece of data, does not take up extra space, cannot be re-initialized. A reference can be dropped, which is usually done at the end of the scope. A reference is a *borrow*. Using references in Rust is called *borrowing* data.
+
+**Special for Rust**: A reference in Rust is any variable that implements the `Deref` trait (which is a kind of type class or interface). This means that it needs to have a *dereferencing* operation implemented. In Rust, references also have a life time (a time over which they are valid) and cannot capture ownership (they do not become responsible for cleaning up data). Life-times are annoted with the special syntax `&'a x` with a single quote. Rust has special borrow rules that distinguish immutable from mutable borrows, see below.
+
+
+Types of references:
+
+- immutable: used when we want to read data but not change it, checked at compile-time, so has the best performance.
+    - Rust:  An immutable reference does not steal acces, so this allows for sharing of data in a larger programs between different components. After a reference is created, you can follow it by writing the dereference operator `*`. The address of a reference can be printed with `println!("{:p}", &1);`.
+    - C: `const char& r = c`, does not steal access.
+- mutable: exclusive access to data, written as 
+    - Rust: You can create an immutable reference by prefixing a variable with `&`: `let a = &b`, steals the access to some data while the mutable reference is valid. 
+    - C: `char& r = c`, does not steal access.
+    - Python: alternative variable names for data.
+    
+### Pointers
+
+A pointer is an address that points to a different point in memory. A pointer takes up extra space, on top of the data at the destination. The declaration of a pointer entails the allocation of some empty space in memory which makes it a run-time feature (see [question](https://stackoverflow.com/questions/4995899/difference-between-pointer-and-reference-in-c)). It may be created on the stack or the heap and usually takes the space of the size of a register on the CPU, which may be 32 or 64 bit.
+
+**Special for Rust**: Raw pointers are like references but do not have a lifetime. They do not have any kind of access control or compile-time borrowing rules imposed. 
+
+Types of pointers:
+
+- raw pointers: This type of pointer is usually created on the stack. Such pointers may be pointing to an invalid memory region, memory that contains invalid or no data. 
+    - mutable: This type of pointers can be used to update the data at the target address.
+        - Rust: A mutable raw pointer in Rust is written `*mut`. It is used mostly in unsafe code, code that works with raw pointers.  Rust has a special `unsafe` environment to work with raw pointers. 
+        - C: `char* p = &c`. C also has the famous `NULL` pointer which leads to many problems, since every pointer is mutable by default and can be the `NULL` pointer.
+    - immutable:  This type of pointer cannot be used to update the data at the target address.
+        - Rust: immutable pointers are declared with `*const`.
+- (non-owning) **smart pointers**: created on the heap, may not point to invalid memory. 
+    - Rust: The data `Arc` gives the ability to share ownership with multiple pointers. New pointers can be created by cloning the `Arc`. When no pointers remain that point to the data anymore, the reference count becomes zero and the data is de-allocated. This is called *reference counting*. Reference counting is the default way to share data in standard garbage-collected dynamic languages.
+    - C++: Also has a kind of smart pointers. See for example the analogue of `Arc` called `shared_ptr` (see [smart pointers in c++](https://www.geeksforgeeks.org/smart-pointers-cpp/)).
+
+
+## References and pointers in other programming languages
+
+
+### Languages with only implicit references
+
+Implicit references are more concise and easier to use than explicit references, but they can also be less intuitive and more difficult to understand. Implicit run-time references are used for example when aliasing a variable. Explicit compile-time references are missing in many mainstream programming languages. Since they are more of a run-time feature, they are more like pointers in compiled languages such C, but they are still called references.
+
+
+#### JavaScript
+
+To use something similar to a reference in JavaScript for example, you have to use an object which acts as a pointer. You can write
+
+```js
+let a = {x: 0}
+let b = {x: 1}
+Object.assign(a, b)
+```
+
+This will create two pointers pointing to two different objects. The last assignment turns `a` in a pointer to `b`. This means that names of objects in JavaScript function like pointers.
+
+### Languages with explicit references
+
+Explicit references are more flexible and powerful than implicit references, but they can also be more error-prone and difficult to manage. 
+
+#### C
+
+C has references and pointers but C does not have the exclusive borrowing constraints for references as in Rust. There may be mutable and immutable references at the same time to some data in C. 
+
+
+## Longer example of references in Rust
+
+As mentioned before, references do not capture and transfer ownership. This means that in the following program the `name` keyword stands for an address to a variable or a reference. Because it is a reference, the expression of `add_suffix` does not capture this variable and receive ownership.
+
+```rust
+// replaced variable by a reference to String
+fn add_suffix(&mut name: &String) -> &String { 
+    name.push_str(" Jr.");
+    return name
+} // scope ends but name is not de-allocated
+```
+
+Since `add_suffix` did not receive ownership of `name` because it is a non-owning reference, it is also not responsible for cleaning it up.
+
+This implies that there is no de-allocation of the variable `name` at the end of the `add_suffix` expression.
+
+### Dangling references
+
+There are some problems with using references and pointers. Imagine you have the following situation:
+
+- **input** is a reference to a memory location
+- **output** is a reference to a memory location
+
+What if the memory location of input is cleaned but not the memory location in the output?
+
+More precisely, in the previous example the local variable `name` was a reference to some data representing the name, but `add_suffix` also outputs a reference to the modified name.
+
+```rust
+fn add_suffix(&mut name: &String) -> &String {
+    name.push_str(" Jr.");
+    let modified_name = name // use different name
+    return modified_name // unclear how long this will live
+    // compared to input name
+} 
+```
+
+In case the reference to the input `name` is cleaned up, the output `modified_name` should also be cleaned up after the function `add_suffix` ends. If this does not happen, we have a reference pointing to the output, which itself points into nowhere. This is also called a **dangling pointer**.
+
+### Life-times
+
+The solution to the dangling pointer problem, is the introduction of **life-times**.
+
+The following function `add_suffix` receives an extra parameter, a life-time that represents the duration in which the reference `name` is a valid reference pointing to real data.
+
+```rust
+// added life-time variable
+fn add_suffix<'life>(name: &'life mut String) -> &'life String { 
+    name.push_str(" Jr.");
+    let modified_name = name 
+    return modified_name 
+    // life-time 'life is at least as long as input life
+} 
+```
+
+The output of the function `add_suffix` also receives a life-time, and it is exactly the same life-time as the life-time of the input. This means that the life-time of the output is valid for as long as the life-time of the input is valid.
+
+Interpretation:
+
+> Life of the output reference `modified_name` is shorter than the life of the input reference `name`. Or in other words, the `name` reference should exist as long as the `modified_name` reference exists.
+
+In a sense *life-times* are compile-time **temporal assertions** about reference validity.
+
+### Combining mutable and immutable references
+
+The combination of writable and read-only references may lead to problems.
+
+For example, in the following function, we create a writable mutable reference `&mut first` to the string located at `first`. Later on, we create a read-only reference to the variable `first` when we print it.
+
+```rust
+fn main() {
+    let mut first = String::from("Ferris"); // creating string
+    let full = add_suffix(&mut first); // creating a mutable reference to string
+    println!("{full}, originally {first}"); // using an immutable reference to string
+}
+
+fn add_suffix<'life>(name: &'life mut String) -> &'life String {
+    name.push_str(" Jr.");
+    return name
+} 
+```
+
+This program does not compile because of "borrowing rules". [playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=aa12abe0c71ffe3d1e5c3ba88404d6d8).
+
+The reason is that we cannot both have a writable or mutable reference as an immutable or read-only reference. This happens in the previous code and because it may lead to bugs at run-time, it is forbidden.
+
+## Concurrency
+
+Why would it lead to problems to share immutable with mutable variables? Imagine a scenario where we
+
+1. Create a location with string data `S`
+2. Create a reference `R1` to the location of the string `S`.
+3. Create another reference `R2` to the location of the string `S`.
+
+More precisely, we do:
+
+```rust
+let mut n = 10
+let r1 = &n
+let r2 = &n
+
+f(r1)
+g(r2)
+```
+
+What if `f` modifies the data and `g` needs it?
+
+This is not possible in the current case because both references are read-only references.
+
+But if they are mutable references (writable references) and if `f` *modifies the data at the same time* as `g` (for example in a multi-core situation):
+
+```rust
+let mut n = 10
+let r1 = &mut n
+let r2 = &mut n
+
+f(r1)
+g(r2)
+```
+
+we may introduce bugs because access to the data `n` is not deterministically synchronized. In some cases `f` might be the fastest and in other cases `g` may be the fastest. This is called a **data race**. We want to avoid this.
+
+## Borrowing
+
+To prevent bugs in a multi-core context with mutable references, Rust introduces the concept of **borrowing**.
+
+Using a reference to a variable in an expression is called **borrowing the variable**.
+
+The solution to the data race mentioned before exists out of two rules that are enforced by the Rust compiler ar comile time:
+
+1. variables can be **referenced only once as mutable**
+2. variables can be **only referenced as immutable anywhere, when referenced immutable once**
+
+The system that enforces this in Rust is called the **borrow-checker** and it will for example prevent the following program from being compiled.
+
+```rust
+let mut n = 10
+let r1 = &mut n // r1 is a mutable borrow
+let r2 = &n // compile time error, only one mutable borrow at the same time
+
+f(r1) // will never be executed, because compile-time error
+g(r2)
+```
+
+Since it breaks the rule that a variable should referenced immutable everywhere, once it is referenced immutable.
+
+## Summary about memory safety in Rust
+
+By enforcing rules on "borrows", it is less like to encounter "data races" without influencing the life-time of variables.
+
+Next: [types](/educational/04-rust-types)

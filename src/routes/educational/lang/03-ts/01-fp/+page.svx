@@ -1,0 +1,3 @@
+# Functional programming in JavaScript and TypeScript
+
+Work in progress.

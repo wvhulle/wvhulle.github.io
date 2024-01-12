@@ -1,0 +1,266 @@
+# Design Patterns in Rust
+
+*written around 2023-12-18*
+
+Existing literature:
+
+- Search for de acronyms SOLID and DRY.
+- More advanced specific patterns to Rust can be found on <https://rust-unofficial.github.io/patterns>
+
+## Principles
+
+There are a couple of principles that are taught to programmers that are important throughout a typical working day of a developer. This section gives an overview.
+
+
+
+### The Open-closed principle
+
+Bertrand Meyer
+
+> "Software entities ... should be open for extension, but closed for modification."
+
+Being "open for extension" means that the behavior of a module can be extended. As the application grows and new features are needed, developers should be able to add new behaviors or functionalities without changing the existing code.
+
+Being "closed for modification" implies that the source code is set and cannot be modified to introduce new behavior. This reduces the risk of introducing new bugs in existing functionality.
+
+### Composition over inheritance
+
+It is necessary to be aware of "coupling" when using inheritance. Inheritance may introduce complexity. And it is sometimes better to work with composition.
+
+The concept composition decouples the relationship between parent and child classes. We reverse the hierarchy. Instead of one parent, we have several abstract parents and the implementation happens in the children. This is called **multiple inheritance**.
+
+In Rust this is done using *traits*, in JavaScript using mixins and in Haskell using type classes.
+
+
+### The Liskov substitution principle
+
+Barbara Liskov
+
+> "Functions that use pointers or references to base classes must be able to use objects of derived classes without knowing it.
+
+Objects of a superclass should be replaceable with objects of a subclass without affecting the correctness of the program. To adhere to this principle, subclasses must not alter the expected behavior of the superclass, meaning they should:
+
+- Not strengthen pre-conditions
+- Not weaken post-conditions
+- Preserve invariants
+
+By doing so, the principle encourages designing each class and its subclass in a way that allows them to be interchangeable. This interchangeability leads to loose coupling because components that use the superclass can operate with any of its subclasses, which reduces dependency on specific implementations.
+
+## Patterns
+
+### The Observer Pattern
+
+As someone deeply involved in the biological sciences, you're familiar with how ecosystems operate based on the concept of signaling and responses. Certain stimuli trigger specific behaviors in organisms - this can be seen in processes like phototaxis, chemotaxis, etc.
+
+The Observer Pattern is quite analogous to these natural phenomena. It's a design pattern where an object, known as the subject, maintains a list of its dependents, called observers, and notifies them automatically of any state changes, usually by calling one of their methods. This pattern is especially useful in situations where you need to maintain consistency between related objects without making classes tightly coupled.
+
+In "Elements of Reusable Object-Oriented Software," the Observer Pattern is described for enabling this kind of loose coupling. Let's dive into a Rust-inspired explanation, with a concrete example.
+
+#### The Concept
+
+In Rust, rather than classes, we have `structs` and `traits`. A `trait` defines a common interface for different types while a `struct` holds data. For our observer pattern, we can define a `Subject` trait and an `Observer` trait.
+
+#### Example in Biology: Monitoring Environmental Changes
+
+Imagine you are simulating an environment and want to monitor changes in parameters like temperature or pH that affect the organisms within it.
+
+First, let's define our traits:
+
+```rust
+trait Subject {
+    fn register_observer(&mut self, observer: Box<dyn Observer>);
+    fn remove_observer(&mut self, observer: Box<dyn Observer>);
+    fn notify_observers(&self);
+}
+
+trait Observer {
+    fn update(&self, temp: f64, ph: f64);
+}
+```
+
+Now, let's create a concrete `Environment` struct that implements the `Subject` trait:
+
+```rust
+#[derive(Default)]
+struct Environment {
+    observers: Vec<Box<dyn Observer>>,
+    temperature: f64,
+    ph_level: f64,
+}
+
+impl Environment {
+    fn set_conditions(&mut self, temperature: f64, ph: f64) {
+        self.temperature = temperature;
+        self.ph_level = ph;
+        self.notify_observers();
+    }
+}
+
+impl Subject for Environment {
+    fn register_observer(&mut self, observer: Box<dyn Observer>) {
+        self.observers.push(observer);
+    }
+
+    fn remove_observer(&mut self, observer: Box<dyn Observer>) {
+        // Logic to remove observer from the list
+    }
+
+    fn notify_observers(&self) {
+        for observer in self.observers.iter() {
+            observer.update(self.temperature, self.ph_level);
+        }
+    }
+}
+```
+
+And organism `structures` that will act as observers:
+
+```rust
+struct Plant;
+
+impl Observer for Plant {
+    fn update(&self, temp: f64, ph: f64) {
+        if temp > 30.0 {
+            println!("Plant: Too hot! Transpiring more to cool down.");
+        }
+        if ph < 6.5 {
+            println!("Plant: pH level too low, adjusting root chemistry.");
+        }
+    }
+}
+
+struct Fish;
+
+impl Observer for Fish {
+    fn update(&self, temp: f64, _ph: f64) {
+        if temp < 10.0 {
+            println!("Fish: It's too cold, moving to warmer waters.");
+        }
+    }
+}
+```
+
+Here's how it all works together:
+
+```rust
+fn main() {
+    // Create an environment
+    let mut pond = Environment::default();
+    
+    // Create observers
+    let plant = Box::new(Plant {});
+    let fish = Box::new(Fish {});
+
+    // Register observers to the environment
+    pond.register_observer(plant);
+    pond.register_observer(fish);
+
+    // Changing environmental conditions
+    pond.set_conditions(32.0, 7.0); // It's a hot day!
+}
+```
+
+Upon running the program, both organisms (observers) receive updates about the environment and take action accordingly.
+
+#### Why Is It Practical?
+
+For biologists, this pattern is extremely practical because it reflects real-world biological monitoring systems, where multiple entities might respond to environmental changes. For instance, when the concentration of a substance in a habitat changes, various species may alter their behavior, physiological processes, or population dynamics. In software terms, the Observer Pattern ensures that our simulated entities can adjust to changes without being directly connected to each other—just like in a natural ecosystem.
+
+Using the Observer Pattern, we develop a system where changes propagate elegantly through our simulation, respecting the separation of concerns and leading to code that is easier to manage and extend. This is crucial when simulating complex biological systems where changes are frequent and unpredictable.
+
+### The Strategy Pattern
+
+In the biological world, organisms often adapt their strategies to survive and thrive in a variety of environmental conditions. Similarly, in software design, we use different strategies to solve various problems within a system. In object-oriented design, the Strategy Pattern is a behavioral pattern that enables selecting an algorithm's behavior at runtime.
+
+This pattern defines a family of algorithms, encapsulates each one, and makes them interchangeable. It allows for the variation of parts of an algorithm's behavior independently from the clients that use it.
+
+#### The Concept in Rust
+
+Rust, being an expressive language with support for traits and generics, provides an excellent platform for demonstrating the Strategy Pattern. Unlike traditional object-oriented languages that rely on classes, Rust uses `struct`s and `traits`.
+
+Let's define our traits:
+
+```rust
+trait Behavior {
+    fn execute(&self) -> String;
+}
+```
+
+Now let's build some behaviors that implement this trait:
+
+```rust
+// A behavior where organisms use photosynthesis to gather energy
+struct Photosynthesis;
+
+impl Behavior for Photosynthesis {
+    fn execute(&self) -> String {
+        "using sunlight to produce energy.".to_owned()
+    }
+}
+
+// Another strategy could be chemosynthesis for organisms living in environments without sunlight
+struct Chemosynthesis;
+
+impl Behavior for Chemosynthesis {
+    fn execute(&self) -> String {
+        "using chemicals to produce energy.".to_owned()
+    }
+}
+```
+
+A context `struct` will hold a reference to one of the strategies:
+
+```rust
+struct Organism<'a> {
+    name: String,
+    energy_gathering_behavior: Box<dyn Behavior + 'a>,
+}
+
+impl<'a> Organism<'a> {
+    fn new(name: String, behavior: Box<dyn Behavior + 'a>) -> Organism {
+        Organism {
+            name,
+            energy_gathering_behavior: behavior,
+        }
+    }
+
+    fn gather_energy(&self) -> String {
+        self.energy_gathering_behavior.execute()
+    }
+
+    // Change the Organism's behavior dynamically (at runtime)
+    fn set_behavior(&mut self, behavior: Box<dyn Behavior + 'a>) {
+        self.energy_gathering_behavior = behavior;
+    }
+}
+```
+
+With our setup complete, we can now create a scenario where organisms can adapt to their environment by changing their behavior dynamically:
+
+```rust
+fn main() {
+    let sunlit_area = Photosynthesis {};
+    let vent_area = Chemosynthesis {};
+
+    let mut plant = Organism::new("Plant".to_owned(), Box::new(sunlit_area));
+    let mut bacterium = Organism::new("Bacterium".to_owned(), Box::new(vent_area));
+
+    // Outputs "Plant is using sunlight to produce energy."
+    println!("{} is {}", plant.name, plant.gather_energy());
+
+    // What if our Plant needs to survive in an environment without sunlight?
+    // We can change its energy-gathering strategy to Chemosynthesis
+    plant.set_behavior(bacterium.energy_gathering_behavior);
+    
+    // Outputs "Plant is using chemicals to produce energy."
+    println!("{} is {}", plant.name, plant.gather_energy());
+}
+```
+
+#### Practicality for Biologists
+
+As a biologist, you might appreciate the Strategy Pattern because it reflects adaptive behavior found in nature. Just as organisms switch their feeding or reproductive strategies according to external conditions, we can swap out algorithms or processing methods on the fly without altering the objects that use them.
+
+For example, in a simulation of evolutionary processes, organisms might need to switch between different survival strategies based on environmental changes. The Strategy Pattern would allow us to easily simulate this without hardcoding the behavior into the organism models.
+
+Using this pattern results in flexible and maintainable code, as we can extend algorithms without modifying the clients that use them. This pattern can also reduce the complexity of large conditional statements, which is key when modeling complex biological systems where multifaceted adaptations are the norm.

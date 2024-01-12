@@ -1,0 +1,7 @@
+# Functional programming in Python
+
+Work in progress.
+
+#### Type Hints
+
+It is recommended to use type hints, because they prevent errors by imposing constraints on the way your function can be used. One way to enforce type hints, is by using tools like "mypy" and "pylint" in Python. Ask for help on how to setup.

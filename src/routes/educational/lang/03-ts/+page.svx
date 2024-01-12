@@ -1,0 +1,7 @@
+# TypeScript
+
+TypeScript is a language popularized by Microsoft that extends JavaScript with types.
+
+1. [Functional programming in TypeScript](./01-fp)
+2. [Types in TypeScript](./02-types)
+3. [Advanced types in TypeScript](./03-types-advanced)

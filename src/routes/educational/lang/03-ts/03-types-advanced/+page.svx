@@ -1,0 +1,35 @@
+# Advanced types in TypeScript
+
+## Conditional types
+
+In the [example](), we used a kind of dependent typing. Dependent typing exists also in more mainstream languages. One kind of dependent typing is conditional typing in TypeScript. 
+
+Imagine modeling biological entities where we want to define a type that depends on whether the entity is a plant or an animal:
+
+```typescript
+type LivingOrganism<T extends "plant" | "animal"> =
+  T extends "plant"
+    ? { species: string; photosynthesis: boolean }
+    : { species: string; heartRate: number };
+
+// Usage
+let fern: LivingOrganism<"plant"> = {
+  species: "Pteridophyta",
+  photosynthesis: true,
+};
+
+let tiger: LivingOrganism<"animal"> = {
+  species: "Panthera tigris",
+  heartRate: 120,
+};
+```
+
+In this TypeScript example, we have a conditional type `LivingOrganism` whose structure changes based on whether it represents a plant or an animal. To do this, we use the ternary if then operator.
+
+##### Relation to Type Systems and Dependent Type Form
+
+TypeScript's conditional types are reminiscent of dependent typing because a type choice is made based on another type (although not on runtime values).
+
+Agda and Coq have more sophisticated forms of dependent types, where the type can depend on specific values. In these systems, you could express constraints such as "an array of exactly `n` elements," with `n` being a compile-time constant or even a value computed at runtime, something not possible with TypeScript's static type system.
+
+However, through conditional types, TypeScript does allow for a form of compile-time type dependency, which adds a level of safety and expressivity to the language similar in spirit to some uses of dependent types, albeit with much less power than seen in Agda or Coq.
