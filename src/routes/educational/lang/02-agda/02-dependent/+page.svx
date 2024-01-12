@@ -1,3 +1,0 @@
-# Dependent types in Agda
-
-Work in progress.

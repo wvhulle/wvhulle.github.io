@@ -1,0 +1,36 @@
+# Functional programming in Python
+
+Work in progress.
+
+Use lambda functions.
+
+## Type Hints
+
+It is recommended to use type hints, because they prevent errors by imposing constraints on the way your function can be used. One way to enforce type hints, is by using tools like "mypy" and "pylint" in Python. Ask for help on how to setup.
+
+
+## Currying and Partial Application
+
+Currying is a functional programming concept where a function with multiple arguments is transformed into a chain of functions, each with a single argument. In the context of biology, we can think of a simple example such as calculating the Body Mass Index (BMI), which depends on both weight and height.
+
+Below is an example of how you might implement curried functions to calculate BMI in Python:
+
+```python
+# First, we define a curried function that takes the person's height.
+def bmi_for_height(height_in_meters):
+    # The inner function takes the weight, using the height from the outer function.
+    def bmi_for_weight_and_height(weight_in_kilograms):
+        return weight_in_kilograms / (height_in_meters ** 2)
+    return bmi_for_weight_and_height
+
+# Example usage:
+# We have a person with a height of 1.75 meters.
+calculate_bmi_for_person = bmi_for_height(1.75)
+
+# Now we can use this function to find the BMI for any weight of this person.
+print(f"BMI for 70kg: {calculate_bmi_for_person(70)}")
+print(f"BMI for 80kg: {calculate_bmi_for_person(80)}")
+```
+
+In this example, the `bmi_for_height` function takes one argument (the height), and returns another function (`bmi_for_weight_and_height`) that takes the next argument (the weight). This way, if you often need to calculate BMI for a person of a certain height, you can 'curry' their height and get a custom function to calculate BMIs just for them based on various weights.
+

@@ -1,0 +1,84 @@
+# Polymorphism in C++
+
+Polymorphism in C++ can be demonstrated through the use of inheritance and virtual functions. Here is a simple example illustrating polymorphism with a base class `Shape` and its derived classes `Circle` and `Rectangle`.
+
+
+The interface or abstract class `Shape` is declared first. Afterwards multiple concrete implementing classes are defined.
+
+```cpp
+#include <iostream>
+#include <cmath>
+
+// Base class
+class Shape {
+public:
+    // Virtual method for calculating area
+    virtual double area() const = 0;
+
+    // Virtual destructor to allow derived class destructors to be called
+    virtual ~Shape() {}
+};
+
+```
+
+In the following code, `Shape` is an abstract base class that defines a pure virtual function `area()`. `Circle` and `Rectangle` are derived classes that override the `area()` method.
+
+```cpp
+
+
+// Derived class: Circle
+class Circle : public Shape {
+private:
+    double radius;
+
+public:
+    Circle(double r) : radius(r) {}
+
+    // Override the area method to compute the area of a circle
+    virtual double area() const override {
+        return M_PI * radius * radius;
+    }
+};
+
+// Derived class: Rectangle
+class Rectangle : public Shape {
+private:
+    double width;
+    double height;
+
+public:
+    Rectangle(double w, double h) : width(w), height(h) {}
+
+    // Override the area method to compute the area of a rectangle
+    virtual double area() const override {
+        return width * height;
+    }
+};
+
+
+```
+
+
+Next comes a polymorphic function that takes a reference to a `Shape` and prints out its area. Because it is using a reference to the base class, it will work with any object of a class derived from `Shape`.
+
+```cpp
+// Function to display the area of a shape
+void printArea(const Shape& shape) {
+    std::cout << "Area: " << shape.area() << std::endl;
+}
+
+int main() {
+    Circle circle(5.0);
+    Rectangle rectangle(10.0, 2.0);
+
+    // The same function, printArea, can operate on objects of different classes
+    // and produce different results based on which class's area method is invoked.
+    // This is an example of polymorphism.
+    printArea(circle);       // Calls Circle::area
+    printArea(rectangle);    // Calls Rectangle::area
+
+    return 0;
+}
+```
+
+Inside `main`, we create instances of `Circle` and `Rectangle`, then call `printArea` on each. Despite calling the same function, `printArea`, polymorphism allows us to calculate the correct area for each shape due to the virtual dispatch mechanism of C++. The area method appropriate for the actual type of object is called at runtime.

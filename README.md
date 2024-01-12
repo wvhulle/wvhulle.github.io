@@ -1,6 +1,6 @@
 # Willem Vanhulle
 
-Portfolio website of Willem Vanhulle, online at <https://wvhulle.github.io/>.
+Personal website of Willem Vanhulle, online at <https://wvhulle.github.io/>.
 
 ## Development
 

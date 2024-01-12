@@ -1,0 +1,159 @@
+# Interfaces in Python
+
+*2024-01-02*
+
+It is possible to define another layer of abstraction on top of a class, called an abstract class. In other languages this is called an **interface** or trait. An interface is the opposite of an implementation. An implementation provides functionality by giving concrete implementations.
+
+### Example in Python
+
+An `Organism` abstraction might define methods like `eat()`, `sleep()`, and `reproduce()`, regardless of whether the organism is a plant, animal, or bacteria. Specific organisms would implement these in diverse ways.
+
+In Python, ABC stands for **abstract base class**. It represent an abstract class, which is another name for an interface.
+
+```python
+from abc import ABC, abstractmethod
+
+class Organism(ABC):
+
+    @abstractmethod
+    def eat(self):
+        pass
+
+    @abstractmethod
+    def sleep(self):
+        pass
+
+    @abstractmethod
+    def reproduce(self):
+        pass
+```
+
+Below are concrete implementations for different types of organisms extending the `Organism` abstract base class. Each subclass provides its own version of the `eat`, `sleep`, and `reproduce` methods:
+
+```python
+class Plant(Organism):
+
+    def eat(self):
+        print("Plant is photosynthesizing.")
+
+    def sleep(self):
+        print("Plant enters a state of lower metabolic activity at night.")
+
+    def reproduce(self):
+        print("Plant releases seeds into the environment.")
+
+
+class Animal(Organism):
+
+    def eat(self):
+        print("Animal is hunting for food.")
+
+    def sleep(self):
+        print("Animal is sleeping to restore energy.")
+
+    def reproduce(self):
+        print("Animal finds a mate for reproduction.")
+
+
+class Bacterium(Organism):
+
+    def eat(self):
+        print("Bacterium absorbs nutrients from its surroundings.")
+
+    def sleep(self):
+        # Many bacteria do not have sleep cycles as eukaryotes do
+        # But they can enter dormant states, which we'll call 'sleep' here for simplicity
+        print("Bacterium enters a dormant state.")
+
+    def reproduce(self):
+        print("Bacterium reproduces via binary fission.")
+```
+
+With these implementations, each subclass of `Organism` now behaves according to its biological characteristics:
+
+```python
+# Usage example:
+plant = Plant()
+animal = Animal()
+bacterium = Bacterium()
+
+plant.eat()  # Plant is photosynthesizing.
+animal.sleep()  # Animal is sleeping to restore energy.
+bacterium.reproduce()  # Bacterium reproduces via binary fission.
+```
+
+The type hints in the original `Organism` class ensure that any further subclasses must implement `eat`, `sleep`, and `reproduce` methods if they are to be instantiated. This enforces a consistent interface across all organism types.
+
+### The Interface segregation principle
+
+- Clients should not be forced to depend upon interfaces that they do not use.
+- Larger interfaces should be split into smaller ones. By doing so, we can ensure that implementing classes only need to be concerned with methods that are of interest to them.
+
+#### Example
+
+In the context of biology, let's imagine we have various entities like "Bird", "Fish", and "Frog". A simple violation of ISP would be to create a single interface which includes methods like `fly`, `swim`, and `croak`, and then force all implementers to define those methods even if they aren't relevant.
+
+Instead, we should segregate the interface into specific contracts like `Flyer`, `Swimmer`, and `Croaker`.
+
+Here's how you could apply ISP in Python:
+
+```python
+from abc import ABC, abstractmethod
+
+# Segregated Interfaces
+class Flyer(ABC):
+    @abstractmethod
+    def fly(self):
+        pass
+
+class Swimmer(ABC):
+    @abstractmethod
+    def swim(self):
+        pass
+
+class Croaker(ABC):
+    @abstractmethod
+    def croak(self):
+        pass
+```
+
+By creating the `Flyer`, `Swimmer`, and `Croaker` interfaces, we allow each animal to implement only the behavior it requires.
+
+```py
+# Concrete implementations for Birds
+class Bird(Flyer, Swimmer):
+    def fly(self):
+        return "This bird can fly."
+    
+    def swim(self):
+        return "This bird can also swim."
+
+# Concrete implementations for Fish
+class Fish(Swimmer):
+    def swim(self):
+        return "This fish can swim."
+
+# Concrete implementations for Frogs
+class Frog(Swimmer, Croaker):
+    def swim(self):
+        return "This frog can swim."
+
+    def croak(self):
+        return "This frog can also croak."
+
+# Using the classes
+sparrow = Bird()
+print(sparrow.fly())
+
+goldfish = Fish()
+print(goldfish.swim())
+
+tree_frog = Frog()
+print(tree_frog.croak())
+```
+
+The `Bird` class implements both `Flyer` and `Swimmer`, showing that it can both fly and swim without having to implement `Croaker`, which would not make sense for a bird. Similarly, `Fish` only needs to implement `Swimmer` and `Frog` implements both `Swimmer` and `Croaker`.
+
+This follows ISP by segregating the interfaces based on functionality rather than creating one large interface that assumes all animals can perform all behaviors.
+
+

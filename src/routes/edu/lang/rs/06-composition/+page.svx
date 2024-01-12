@@ -1,0 +1,18 @@
+# Composition
+
+*written around 2023-12-18*
+
+Work in progress.
+
+## Inheritance
+
+It is necessary to be aware of "coupling" when using inheritance. Inheritance may introduce complexity. And it is sometimes better to work with composition.
+
+The concept composition decouples the relationship between parent and child classes. We reverse the hierarchy. Instead of one parent, we have several abstract parents and the implementation happens in the children. This is called **multiple inheritance**.
+
+In Rust this is done using *traits*, in JavaScript using mixins and in Haskell using type classes.
+
+
+## Traits
+
+Mention traits and super-traits. Dynamic and static dispatch.

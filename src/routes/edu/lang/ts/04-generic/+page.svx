@@ -1,0 +1,3 @@
+# Generic programming in TypeScript
+
+Work in progress.

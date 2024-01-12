@@ -1,0 +1,8 @@
+# Introduction to NumPy
+
+
+Work in progress
+
+## Polars
+
+Alternative data frame implementation.

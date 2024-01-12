@@ -1,0 +1,367 @@
+# Ownership 
+
+*2023-10-23*
+
+## Memory management
+
+When do we need better control over memory?
+
+- embedded systems have memory constraints
+- long-running processes can become slow if using too much memory
+- applications used by multiple users under severe load
+
+## Memory locations
+
+From fast to slow:
+
+- Register memory: stored in the CPU
+- Working memory: stored in (several) RAM cards
+- Video memory: used for tensor computations, done on the GPU
+- Solid state memory: SSD drives connected over SATA or PCIe (NVMe)
+
+## RAM
+
+What does working memory do?
+
+- managed by operating system
+- can be shared between different processes
+- can be both written and read at the same time by different CPUs
+- mainly used for loading and pre-processing batches of data
+
+## CPU and RAM
+
+What is the interaction between CPU and RAM?
+
+- registers on CPU: contains intermediate results
+- stack in RAM: contains function calls and arguments, local variables (fast)
+- heap in RAM: allocated dynamically (slow)
+
+## Stack
+
+Linear structure. First in last out (FILO) queue.
+
+Function calls added on top of arguments.
+
+For example the following computation is divided in two steps depending on the precedence:
+
+```rust
+fn mul(p: u8, q: u8) -> u8 {
+    p * q
+}
+
+fn add(a: u8, b: u8) -> u8 {
+    a + b
+}
+
+mul(add(1,2),3)
+```
+
+First operation will be addition. Second operation will be multiplication
+
+Steps:
+
+1. push mul and 3 on stack;
+2. push add  on stack
+3. push 1 and 2 on stack
+
+New function calls are placed on top of previous calls. The stack is then evaluated from the top to the bottom. In between, data is copied over and back from registers on the CPU.
+
+All local variables in Rust have to be pushed on the stack. As a consequence they have to have a finite size. Otherwise you get stack overflow.
+
+## Heap
+
+Opposite mechanism of stack.
+
+Unordered collection of parts of contiguous memory.
+
+Always points to the part of free memory that is the largest.
+
+## Types of memory
+
+- **data**: location in heap or on stack
+  - mutable
+  - immutable
+- **addresses**: addresses to the location of a variable
+  - mutable: allows updating data at referenced location
+  - immutable: referenced data cannot be updated
+
+## Definition of memory allocation
+
+Memory allocation is the act of looking for an available empty address for a variable.
+
+Who does memory allocation?
+
+- on demand by interpreter (Python, R)
+- at compile time by a compiler (C, Rust)
+
+## Steps for memory allocation
+
+Determine *size* of object
+
+- can it grow? → look for a location large enough on the heap
+- does it have a static size → take first available empty spot on stack
+
+*receive address* to piece of free memory
+
+- occupy the the free memory and mark it as occupied
+- determine if the memory location is writable
+
+## Sized variables allocation
+
+For example in Rust:
+
+```rust
+let x: u8 = 5
+```
+
+The compiler writes logic for a computation step in which the processor takes the next free spot on the stack of size `u8` and places the number 5 inside.
+
+## Dynamic variables
+
+Some variables can grow. They are added on the heap.
+
+Examples are:
+
+- containers of strings, called `String`
+- containers for growable lists such as `Vec<u8>`
+
+For example in Rust:
+
+```rust
+let name: String = String::from("Ferris")
+```
+
+The string called `name` can change in size. It can grow in length, so:
+
+1. estimate final length
+2. find empty location on heap.
+
+Then we allocate the string the string.
+
+1. Save address in memory of the start of the string
+2. save length of string
+3. save capacity (size empty area)
+4. mark the part of the heap as taken
+
+## Manage occupied memory
+
+We cannot hand out everything and never reclaim. We also have reclaim memory that is not in use anymore.
+
+In the following, the local variable `name` is allocated but at the end of the main function it is not necessary anymore to keep it.
+
+```rust
+fn main() {
+   let name: String = String::from("Willem") // space is occupied, reference name is saved
+   name.push_str(" Vanhulle")
+   println!("{name}") // name Willem Vanhulle is printed
+   // name is destroyed, space is freed 
+}
+```
+
+At the end of the function, the data at the memory address pointed to `name` is destroyed to make space for other data. This process is called memory de-allocation.
+
+## Responsibility free-ing up
+
+Who will free up memory?
+
+- Operating system after fatal error
+- Systems programming language such as Rust
+- Runtime of the programming language such as Python
+
+Whether you choose a systems programming language or a run-time solution has a big effect on the speed of your program.
+
+## Scope
+
+Most languages work with scope to determine whether some part of the memory has to be cleaned up.
+
+The definition of scope is
+
+- area of function body that is being executed
+- scope contains variables
+- variables can be mutable (writable) or not
+
+In the following Python script, x is in scope during the length of the program,
+
+```py
+x = 10
+
+def add(a: int, b: int):
+    return a + b # a and b are variables in scope, mutable 
+# a and b out of scope, x is still in scope
+
+add(x, 10)
+```
+
+But the variables a and b are only in scope during the call to `add`
+
+## Scope de-allocation
+
+One way to manage memory is
+
+- allocate new memory as soon as something goes into scope
+- and de-allocate when it goes out of scope
+
+This type of memory management is present in every programming language.
+
+- present in every programming language
+- variables out of scope are removed from stack and heap
+
+For example, the variable old_a is cleaned up in the following code at the end of the function.
+
+```py
+list = [1,2]
+def swap(index_a: int, index_b: int):
+   old_a = list[index_a] # temporary value old_a is stored on stack or heap
+   list[index_a] = list[index_b]
+   list[index_b] = old_a
+   # value old_a is removed from stack or heap
+```
+
+## Reference counting
+
+However, there is a problem. A single variable
+
+- can belong to multiple scopes
+- multiple scopes have different references to a single variable
+
+When one scope ends, the other scopes do not necessarily end and the variable should not be cleaned up yet.
+
+For example, in the following code, the `views` variable never gets cleaned up because it is in the top-level scope which is visible to the whole program.
+
+```py
+views = []
+def open_new_view():
+    new_view = # ...
+    views.push(new_view)
+    # what happens to views? 
+# views will always get bigger and bigger unless cleaned up
+```
+
+The question now is
+
+> "How do we know when to clean up the variable `views`?"
+
+Solution: Count number of references and free up when no references remaining
+
+This procedure is called *reference counting*.
+
+## Garbage collection
+
+Reference counting is a form of *garbage collection*, since it helps to reclaim space occupied by unused data.
+
+However, counting the number of references at every computation step creates overhead.
+
+For every object, at every time step a look-up has to happen if it is still required by checking whether the number of references became zero.
+
+Systems programming languages:
+
+- do not have reference counting for data on the heap → faster
+- alternative options for garbage collection such as *destructors* and explicit de-allocation
+
+
+## Memory allocation in Rust
+
+The language designers of Rust introduced a set of rules around a concept called **ownership**. The concept of ownership may have already existed before, but it was made more explicit in Rust.
+
+In short ownership in Rust works as follows:
+
+- local variables have an **expression as owner**
+- when some expression has the *ownership*, it **takes responsibility for clean-up** of the variable
+
+## Expression
+
+What is an **expression**?
+
+- creation of a struct
+- if else expression
+- pattern matching
+- function call
+
+## Transferability of ownership
+
+Rust also introduces rules about transfer of ownership. Ownership can be transferred and captures or taken by applying local function calls or expressions.
+
+This means that the responsibility for memory allocation moves throughout the program in between expressions. It might be related to the concept of **move semantics**.
+
+The benefits of ownership are that no reference counting is necessary anymore. This means that there is less overhead throughout the whole program.
+
+## Example of ownership
+
+In the following example, you have to look at the variables accompanied with their **owning expression**.
+
+```rust
+fn main(){ // start scope of main 
+    let first = String::from("Ferris"); // ownership of first belongs to main
+    let full = add_suffix(first); // ownership for first is captured by add_suffix
+    println!("{full}, originally {first}");
+} // end scope of main 
+
+fn add_suffix(mut name: &mut String) -> String {
+    name.push_str(" Jr.");
+    return name
+}
+```
+
+Inside the scope of `main`, lives an expression and this expression owns the local variable `first`.
+
+Break-down in steps...[playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=9fcc1f58e4aa0fbede138b55bdde7fcb)
+
+## Creation of main scope
+
+In the first step inside the main expression, we create a reference `first` to a string and transfer the ownership to the main function:
+
+```rust
+let first = String::from("Ferris");
+```
+
+Now the `main` function's interior expression receives the ownership of local variable `first`.
+
+```rust
+fn main() {  // start of scope
+    let first = String::from("Ferris"); 
+    // main receives ownership
+    let full = add_suffix(first);
+    println!("{full}, originally {first}"); 
+}
+```
+
+Later on in the program, the variable first stays available within the expression and scope ending with a closing curly brace. So it can be used for adding a suffix.
+
+## Move of ownership
+
+However, it is possible for the ownership of the local variable `first` to be transferred.
+
+- Functions have a scope or expression and this expression can capture the ownership of lcoal variables
+- The application of the function `add_suffix` starts a new scope or expression and captures and receives ownership for `name`
+
+```rust
+fn add_suffix(mut name: String) -> String { 
+    // ownership of name is captured 
+    name.push_str(" Jr.");
+    return name
+} // scope ends, free-up of name
+```
+
+The ownership of reference to the local variable `first` is moved into the expression of `add_suffix`.
+After the function scope of the `add_suffix` function ends, data behind reference `name` is de-allocated and free-ed up
+
+This process of moving of ownership happens automatically at run-time and is enforced by the compiler.
+
+## Using a de-allocated variable
+
+Ownership means responsibility for de-allocation
+
+```rust
+fn main() {
+    let first = String::from("Ferris");
+    let full = add_suffix(first); // ownership first is moved
+    println!("{}, originally {}", full, first); 
+    // first is now used here, compile-time error
+}
+```
+
+Since the local variable `first` was captured by the local function call `add_suffix` it was already **consumed** or de-allocated. Trying to reference the variable again after it was captured, consumed and de-allocated will lead to compile-time error. The compiler enforces in this way memory safety.
+
+It enforces without the run-time overhead of reference counting that data is always cleaned up at the right point in time. In this way, Rust programs can have a very small memory footprint at run-time and run on devices with small memory.
+
+

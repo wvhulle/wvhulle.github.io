@@ -9,7 +9,7 @@
 
     <a href="{base}/projects" class="link">Projects</a>
 
-    <a href="{base}/educational" class="link">Educational</a>
+    <a href="{base}/edu" class="link">Educational</a>
 
     <a href="{base}/about" class="link">About</a>
   </div>

@@ -1,0 +1,264 @@
+# Object-oriented programming in Python 
+
+*2024-01-02
+
+Existing literature:
+
+- [Object-Oriented Python](https://www.oreilly.com/library/view/object-oriented-python/9781098129842/)
+
+## Introduction
+
+Object oriented programming started around 1960 and was named by Alan Kay. Object-Oriented Programming is an intuitive way of structuring your code by mirroring real-world systems. Imagine being able to define:
+
+- organisms,
+- molecules,
+- ecosystems
+
+that behave much like their physical counterparts, complete with individual characteristics and abilities. Object-oriented programming enables this by providing building blocks for building accurate models of physical systems.
+
+
+## Classes and Objects
+
+Classes: Think of classes as templates for creating your objects. Classes contain public or private methods which are function definitions for associated operations.
+
+Objects: These are specific instances of classes - like individual animals created from the same blueprint, each with its own state. For a mathematician, like me, everything in the world is an object of some class. This got me into troubles already. 
+
+### Example in Python
+
+A `Cell` class might encapsulate the complexity of a biological cell while exposing methods to trigger mitosis, apoptosis, or to alter chemical concentrations within the cell.
+
+```python
+class Cell:
+    def __init__(self, dna: str):
+        self.dna = dna
+        self.proteins = ["Hemoglobin", "Insulin"]
+
+    def mitosis(self):
+        # Logic for cell division
+
+    def apoptosis(self):
+        # Logic for programmed cell death
+
+    def replicate_dna(self):
+        return self.dna * 2  # Method to interact with the encapsulated attribute
+
+# Usage:
+cell = Cell("ATCG")
+cell.mitosis()  # Public interface to initiate cell division
+```
+
+
+
+
+#### Attributes
+
+Objects can contain both data and code such as for example a property called DNA which stands for some data representing the sequence. This data is also called **attributes** of the object. Private attributes can only be used by the object itself. Attributes represent the **internal state** of an object and may change throughout the life-time of an object. Attributes can be both private and public.
+
+#### Methods
+
+Objects also contain code, for example a cell object can contain the method `mitosis`. All methods are functions that take the `self` or `this` argument. Methods are not really part of the object. They are shared between objects of the same class. Methods are functions, so they can take type hints. 
+
+Methods can be public and private. Private methods can only be referenced inside other methods of the same class.
+
+The `__init__` method is not really a method but a special function. It is the constructor of the class and produces  an instance of a class. It takes some initial data as arguments.
+
+
+
+## 1. Encapsulation
+
+Encapsulation is about maintaining an object's state private inside a class and providing access only through public methods.
+
+In the previous example a cell encapsulates literally and philosophically speaking the sequence data and related functions. No other objects have this data or function. The cell is one unit or encapsulation.
+
+It is possible to encapsulate too much state and make you classes too complex. There is the following rule:
+
+### The Single-responsibility principle
+
+Robert C. Martin:
+
+> "There should never be more than one reason for a class to change."
+
+In other words, every class should have only one responsibility. Alternative explanation: Gather together the things that change for the same reasons. Separate those things that change for different reasons
+
+## 2. Abstraction
+
+Abstraction means hiding the detailed implementation and showing only the necessary features of an object. 
+
+### Classes as abstraction
+
+A class is a form of abstraction. You use a class to represent a certain number objects that share something in common, without showing the objects itself.
+
+
+
+## 3. Inheritance
+
+Inheritance allows a new class to adopt the behavior and properties of an existing class. According to the OCP, you should be able to extend the behavior of a class without altering its source code. This can be done by creating subclasses that inherit from a base class.
+
+### Example
+
+A specialized `BacterialCell` class might inherit from a more general `Cell` class, gaining basic cellular functions while adding bacterial-specific behaviors.
+
+```python
+# Parent class
+class Plant:
+    def __init__(self, height: float):
+        self.height = height
+
+# Child class
+class Tree(Plant):
+    def __init__(self, height: float, age: float):
+        super().__init__(height)
+        self.age = age
+
+oak = Tree(100, 80)
+print(oak.height)  # Output: 100
+```
+
+In this example `Plant` is the super class or parent class of `Tree`. One parent or super class may have multiple child classes. The parent class is a more general version of the child classes which are more constraint.
+
+
+
+## Summary
+
+Object-oriented programming is a way of programming that includes concepts such as encapsulation, abstraction, inheritance and polymorphism. These OOP principles facilitate the development of modular and maintainable software applications in biological research, which can range from simple bio-informatics tools to complex simulation platforms modeling entire ecosystems or biological processes. By leveraging OOP, developers can create models that mirror the hierarchical and diversified nature of biological entities and systems.
+
+## Practical final remarks
+
+To apply object-oriented programming, you have to make a model of the domain you are working in and understand how it works. A domain is nothing more than people who know what they are doing. So first, you have to look at how people do their work. Usually people will spontaneously tell you what their annoyances are and these are a starting point for object-oriented modelling. 
+
+### Modeling
+
+The next step is modeling data. Which types of objects are there? These will become classes. Are there patterns in usage of the data? These will become methods. 
+
+Once in a while you have look at a higher level and see whether more abstraction is necessary (or unnecessary) and create abstract classes or interfaces. While doing this you have to keep in mind that complexity is your enemy. An abstraction should only be made if it simplifies the bigger picture. Copy-pasting only increases the length and the complexity, so should be avoided at all cost.
+
+### Naming
+
+Throughout the whole process you have give appropriate names to everything. The least amount of surprise is necessary. Names should be as mainstream as possible. Writing code is an act of communication to whoever is reading it in the future. Code is not supposed to be read by machines, it supposed to be read by humans from different backgrounds. That means that code should not be complicated. Code should be as simple as possible. The only target is the speed of consumption by a future reader. A future reader can process the code faster if names are obvious and self-explanatory to new readers, they serve as a way of documentation. Using a modern IDE, it is easy to change and improve names. (In VS Code, you can press f2.)
+
+
+### The Dependency inversion principle
+
+> "Depend upon abstractions, [not] concretes.
+
+High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details. Details should depend on abstractions.
+
+#### Example
+
+Let's use a simple example of a light switch application to illustrate the Dependency Inversion Principle in Python.
+
+First, let's define our high-level module and low-level module *without* applying the Dependency Inversion Principle:
+
+```python
+# Without Dependency Inversion Principle
+
+class LightBulb:
+    def turn_on(self):
+        print("LightBulb: turned on...")
+    
+    def turn_off(self):
+        print("LightBulb: turned off...")
+
+class ElectricPowerSwitch:
+    def __init__(self, bulb: LightBulb):
+        self.bulb = bulb
+        self.on = False
+    
+    def press(self):
+        if self.on:
+            self.bulb.turn_off()
+            self.on = False
+        else:
+            self.bulb.turn_on()
+            self.on = True
+
+# Usage
+bulb = LightBulb()
+switch = ElectricPowerSwitch(bulb)
+switch.press()  # Turns on
+switch.press()  # Turns off
+```
+
+Here, `ElectricPowerSwitch` is directly dependent on the `LightBulb` class, which violates the Dependency Inversion Principle.
+
+Now, let's refactor this code to apply the Dependency Inversion Principle by using abstractions:
+
+```python
+# Applying Dependency Inversion Principle
+
+from abc import ABC, abstractmethod
+
+# Abstraction (Interface)
+class Switchable(ABC):
+    @abstractmethod
+    def turn_on(self):
+        pass
+
+    @abstractmethod
+    def turn_off(self):
+        pass
+
+# Low-Level Module
+class LightBulb(Switchable):
+    def turn_on(self):
+        print("LightBulb: turned on...")
+
+    def turn_off(self):
+        print("LightBulb: turned off...")
+
+# High-Level Module
+class ElectricPowerSwitch:
+    def __init__(self, device: Switchable):
+        self.device = device
+        self.on = False
+    
+    def press(self):
+        if self.on:
+            self.device.turn_off()
+            self.on = False
+        else:
+            self.device.turn_on()
+            self.on = True
+
+# Usage
+bulb = LightBulb()
+switch = ElectricPowerSwitch(bulb)
+switch.press()  # Turns on the bulb
+switch.press()  # Turns off the bulb
+```
+
+In the refactored version, we have:
+
+- An abstraction (`Switchable`) which creates an interface with methods that can be implemented by any device.
+- A high-level module (`ElectricPowerSwitch`) that depends only on the abstraction, not on concrete implementations.
+- A low-level module (`LightBulb`) that implements the `Switchable` interface.
+
+Now, `ElectricPowerSwitch` doesn't need to know the details of `LightBulb`; it just needs something that complies with the `Switchable` interface. This decouples the high-level and low-level modules, allowing for more flexibility and easier maintenance.
+
+
+
+### The Open-closed principle
+
+Bertrand Meyer
+
+> "Software entities ... should be open for extension, but closed for modification."
+
+Being "open for extension" means that the behavior of a module can be extended. As the application grows and new features are needed, developers should be able to add new behaviors or functionalities without changing the existing code.
+
+Being "closed for modification" implies that the source code is set and cannot be modified to introduce new behavior. This reduces the risk of introducing new bugs in existing functionality.
+
+
+
+### The Liskov substitution principle
+
+Barbara Liskov
+
+> "Functions that use pointers or references to base classes must be able to use objects of derived classes without knowing it.
+
+Objects of a superclass should be replaceable with objects of a subclass without affecting the correctness of the program. To adhere to this principle, subclasses must not alter the expected behavior of the superclass, meaning they should:
+
+- Not strengthen pre-conditions
+- Not weaken post-conditions
+- Preserve invariants
+
+By doing so, the principle encourages designing each class and its subclass in a way that allows them to be interchangeable. This interchangeability leads to loose coupling because components that use the superclass can operate with any of its subclasses, which reduces dependency on specific implementations.
