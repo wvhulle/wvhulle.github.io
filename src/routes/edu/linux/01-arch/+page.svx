@@ -1,4 +1,6 @@
-# Arch Linux  (2023-09-07)
+# Arch Linux  
+
+*2023-09-07*
 
 ## Prepare
 
