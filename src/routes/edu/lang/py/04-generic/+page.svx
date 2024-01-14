@@ -4,7 +4,6 @@
 
 Polymorphism enables one interface to implement different functions. In other words, one function may accept multiple types of classes.
 
-
 ### Example in Python
 
 A function that simulates the response of an organism to a stimulus could operate on any object that implements a `respond_to_stimulus` method, whether it's a plant cell or an animal cell.

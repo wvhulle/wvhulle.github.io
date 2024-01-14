@@ -1,3 +1,5 @@
 # Dependent types in Agda
 
-It is possible to put an entire formal logic into a type system. Functions become implications and so on. In this way, whole fields of mathematics can be embedded in code. To do this, you have to introduce a concept known as *dependent types* which are types that are constructed from values of other types. For example, a type of vectors of fixed length N. See languages such as Agda and Coq. 
+It is possible to put an entire formal logic into a type system. Functions become implications and so on. In this way, whole fields of mathematics can be embedded in code. To do this, you have to introduce a concept known as *dependent types* which are types that are constructed from values of other types. For example, a type of vectors of fixed length N. See languages such as Agda and Coq.
+
+See <https://agda.readthedocs.io/en/v2.6.0.1/getting-started/tutorial-list.html>

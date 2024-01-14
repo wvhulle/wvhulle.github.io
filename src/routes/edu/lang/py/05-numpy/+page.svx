@@ -1,6 +1,5 @@
 # Introduction to NumPy
 
-
 Work in progress
 
 ## Polars

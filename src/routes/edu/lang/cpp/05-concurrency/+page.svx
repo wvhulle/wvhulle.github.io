@@ -1,0 +1,40 @@
+
+# Concurrency in C++
+
+## Single threading in C++
+
+It is very easy to write an increasing counter in C++.
+
+```cpp
+int counter = 0;
+
+for (int i = 0; i < 10; ++i) {
+    ++counter;
+}
+```
+
+What if we want to update counter in parallel? Then we need need to synchronize access somehow. If we cannot synchronize access, data races will occur and the value of the counter will be undetermined.
+
+## Multi-threading in C++
+
+In C++, it is also necessary to use a special type, a mutex, to synchronize access. In C++ however, this mutex is independent of the rest of the program as you can see:
+
+```cpp
+int counter = 0;
+std::mutex mtx;
+ 
+void incrementCounter() {
+    mtx.lock();
+    ++counter;
+    mtx.unlock();
+}
+ 
+std::thread threads[10];
+for (int i = 0; i < 10; ++i) {
+    threads[i] = std::thread(incrementCounter);
+}
+```
+
+You can try this out for yourself on [play](https://onlinegdb.com/3w8ifDn6h)
+
+The lock and unlock operation have to be timed right before and after the access of the counter. This is a source of errors because it is possible to make a typo and forget to lock or unlock at the right time.

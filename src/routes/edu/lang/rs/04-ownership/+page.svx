@@ -1,6 +1,6 @@
-# Ownership 
+# Ownership
 
-*2023-10-23*
+Written on *2023-10-23*
 
 ## Memory management
 
@@ -258,7 +258,6 @@ Systems programming languages:
 - do not have reference counting for data on the heap → faster
 - alternative options for garbage collection such as *destructors* and explicit de-allocation
 
-
 ## Memory allocation in Rust
 
 The language designers of Rust introduced a set of rules around a concept called **ownership**. The concept of ownership may have already existed before, but it was made more explicit in Rust.
@@ -363,5 +362,3 @@ fn main() {
 Since the local variable `first` was captured by the local function call `add_suffix` it was already **consumed** or de-allocated. Trying to reference the variable again after it was captured, consumed and de-allocated will lead to compile-time error. The compiler enforces in this way memory safety.
 
 It enforces without the run-time overhead of reference counting that data is always cleaned up at the right point in time. In this way, Rust programs can have a very small memory footprint at run-time and run on devices with small memory.
-
-

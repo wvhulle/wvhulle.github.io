@@ -1,0 +1,7 @@
+# Memory management in C++
+
+Work in progress.
+
+See:
+
+- <https://www.amazon.com.be/-/en/Josh-Lospinoso/dp/1593278888>

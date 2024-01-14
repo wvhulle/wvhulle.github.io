@@ -1,6 +1,6 @@
 # Functional programming in Rust
 
-*written on 2023-12-18*
+Written on  *2023-12-18*
 
 Existing literature:
 
@@ -19,7 +19,7 @@ let x = 5;
 x = 6; // This will cause a compile-time error because `x` is immutable.
 ```
 
-In general, it is necessary, while modeling a system, to distinguish constant and mutable data from the very beginning. 
+In general, it is necessary, while modeling a system, to distinguish constant and mutable data from the very beginning.
 
 This leads to:
 
@@ -27,14 +27,13 @@ This leads to:
 - Concurrency safe: Rust aims to prevent data races at compile time. If multiple threads have access to immutable data, there's no risk of one thread unexpectedly modifying the data while another is reading it. This reduces the need for locks and simplifies writing concurrent programs.
 - Compiler optimizations: Knowing that a variable won't change allows the compiler to optimize code under the hood. It could cache the value or elide certain checks, leading to potentially better performance.
 
-
 ## 2. First-Class and Higher-Order Functions
 
 Functions are the building blocks of functional programming. Remember that a function is a map from a source A to a target B. Functions in functional programming are very similar to functions in mathematics.
 
 FP treats functions as first-class citizens, allowing them to be assigned to variables, passed as arguments, or returned by other functions. Higher-order functions can take other functions as parameters or return them, leading to powerful abstractions.
 
-### Example 
+### Example
 
 Inspired by biology, let's create a series of functions that mimic the actions of different enzymes in a metabolic pathway, where each enzyme (function) might modify a substrate and pass it on to the next enzyme.
 
@@ -73,21 +72,17 @@ In this code:
 - We pass these closures as arguments to a function called `metabolic_pathway`, showing how functions can be treated as first-class citizens in Rust. Each function modifies the input in some way, mimicking the transformation of a substrate by an enzyme.
 - The final output shows the product after it has been processed by all three enzymatic functions, simulating a series of reactions in a biological metabolic pathway.
 
-
 ### Naming
 
 Because functions are considered building blocks, they have to be properly named and have a clear declaration. A proper function name and declaration are a form of documentation. Using good names is like writing a love letter to the next person who will read your code. On top, functions should be simple to understand and take as few arguments as possible, certainly never more than a handful.
 
-
-## 1. Function Composition
+## Function Composition
 
 It is possible to build complex functions by composing simpler ones, each performing a discrete operation. Functions do not have side effects by default. A side effect is something that happens outside the body of a function. This is enabled by disallowing shared state.
 
 ### Example
 
 A method is a kind of function that works on a class. It is called by writing the instance of of the class, a dot and then the name of the function.
-
-An iterator is a data structure that is used to iterate over a structure. Rust provides powerful iterator methods which can be chained together to perform complex operations in a clear and elegant manner. Here's an example that demonstrates this:
 
 Imagine we have a list of `Person` structs, and we want to find the names of all people who are over 18 years old, sort those names, and then collect them into a vector.
 
@@ -118,7 +113,7 @@ fn main() {
 
 Let's break down the method chaining above:
 
-- `.iter()` creates an iterator over the `people` vector.
+- `.iter()` creates an iterator over the `people` vector. An iterator is a data structure that is used to iterate over a structure. Rust provides powerful iterator methods which can be chained together to perform complex operations in a clear and elegant manner.
 - `.filter(|p| p.age > 18)` filters out the `Person` instances that do not meet the condition (i.e., being older than 18).
 - `.map(|p| p.name.clone())` transforms the iterator from `Person` instances to their associated `name` strings.
 - `.collect()` collects the transformed values into a `Vec<String>`.
@@ -126,8 +121,7 @@ Let's break down the method chaining above:
 
 Method chaining allows for such transformations to be expressed succinctly, making the code both elegant and readable.
 
-
-## 3. Pure Functions
+## Pure Functions
 
 FP emphasizes pure functions, without side effects, which means that given the same input, a function will always produce the same output. This predictability facilitates testing and concurrent code execution.
 
@@ -139,9 +133,6 @@ Consequences:
 2. Parallelization: functions can easily run in parallel because they don't rely on shared mutable state.
 3. Cache-ability: The result of an expression can be cached and reused because it will always produce the same output for the same inputs.
 4. Ease of Refactoring: You can freely refactor your code by replacing expressions with variables or other expressions without worrying about altering the behavior of your program.
-
-
-
 
 ## Recursion Over Loops
 
@@ -175,9 +166,9 @@ fn fibonacci(n: u32) -> u32 {
 
 > The 10th Fibonacci number is 55
 
-Using recursion to solve such a problem can be clear and concise, especially when translating a naturally recursive mathematical definition into code. However, this naive recursive approach is inefficient for large (n) because it performs many redundant calculations. It has exponential time complexity due to the repeated work done at each level of recursion. 
+Using recursion to solve such a problem can be clear and concise, especially when translating a naturally recursive mathematical definition into code. However, this naive recursive approach is inefficient for large (n) because it performs many redundant calculations. It has exponential time complexity due to the repeated work done at each level of recursion.
 
-It would be more efficient to use an iterative approach. However, it can also be sufficient to use a tail-call. A tail call is a recursive call at the end of a function. This type of function can be optimized by the compiler into a loop. 
+It would be more efficient to use an iterative approach. However, it can also be sufficient to use a tail-call. A tail call is a recursive call at the end of a function. This type of function can be optimized by the compiler into a loop.
 
 ## Expressiveness
 
@@ -216,12 +207,3 @@ Let's go step by step:
 3. **Reduce**: Finally, the `reduce` function accumulates the ages and computes the average by dividing the accumulated sum by the length of the filtered array.
 
 This chain of `filter`, `map`, and `reduce` demonstrates how you can clearly and succinctly express a complex data transformation without having to write imperative loops and temporary variables. It shows what needs to be done, abstracting away the details of how it should be implemented under the hood.
-
-## Stronger Emphasis on Type Systems
-
-Many functional languages encourage strong static type systems, which can reduce bugs by catching errors at compile time.
-
-**Biology example**: The body's immune system distinguishes between different types of cells based on markers, akin to strong typing systems distinguishing between data types.
-
-
-

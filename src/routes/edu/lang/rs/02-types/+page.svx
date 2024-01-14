@@ -1,5 +1,9 @@
 # Types
 
+## Stronger Emphasis on Type Systems
+
+Many functional languages encourage strong static type systems, which can reduce bugs by catching errors at compile time.
+
 ## What are types
 
 Examples:
@@ -39,7 +43,8 @@ a = "abcdef"
 
 It is also possible to use non-boolean data as a boolean.
 
-For example 
+For example
+
 ```js
 let n = 0
 if (!n) {
@@ -86,11 +91,11 @@ fn id<T>(t: T) -> T {
 
 The type variable is `T`.
 
-### Pointer types
+### Reference types
 
-The simplest pointer to a variable of type `u8` has type `&u8`. The ampersand literally means **an address to a `u8`**.
+The type of a reference to a variable of type `u8` is written as `&u8`. The ampersand literally means **a reference** to a `u8`.
 
-This simple type of pointer is restricted by the borrowing rules in the previous chapter. If you want to escape the borrowing rules slightly and have more than a single owner and multiple references, you need a special type called an `Arc`. This is a reference counted pointer. When called like
+This simple type of references is restricted by the [borrowing rules](../05-references). If you want to escape the borrowing rules slightly and have more than a single owner and multiple references, you need a special type called an `Arc`. This is a reference counted pointer. When called like
 
 ```rust
 let x = Arc::new(0)
@@ -99,7 +104,7 @@ let y = x.clone()
 
 This will copy a reference `x` to `0` and create a copy of this reference. When it creates the copy reference, it increases a integer variable that keeps track of the number of references. When the number of references becomes zero, the integer being 0 is dropped.
 
-A more advanced version of a pointer, is a locked pointer. This also called a **mutex**, which stands for **mutually exclusive**. This pointer can only expose a location, in case it is locked. This means it can be used to share data in a program. Usually it is used in conjunction with `Arc` as
+A more advanced version of a reference, is a locked reference. This also called a **mutex**, which stands for **mutually exclusive**. This reference can only expose a location, in case it is locked. This means it can be used to share data in a program. Usually it is used in conjunction with `Arc` as
 
 ```rust
 let m = Arc::new(Mutex::new(0))
@@ -107,196 +112,6 @@ let reference = m.lock().unwrap()
 *reference = 1
 ```
 
-#### Null pointer
-
-In most mainstream programming languages, there is a **null pointer**. This is a stand-in value for anything missing, and can be assigned to any pointer.
-
-However, it can lead to a lot of problems. In C++, the problems arising from using the null pointer are all undefined behavior, which means that anything could happen.
-
-```cpp
-#include <cstddef>
-
-struct Foo {
-  int val;
-};
-    
-int main()  {
-    Foo* foo = NULL; 
-    // set to null pointer
-    foo->val = 44; 
-    // set val of foo to 44
-    return 0;
-}
-```
-
-In this example, the null pointer `NULL` is assigned and later a field of this object is accessed. However, since it is null, it does not point to a valid `Foo` object. This will result in a run-time failure:
-
-> Address boundary error
-
-### Example: Null pointer in Rust
-
-In Rust, the null pointer is not available in normal code. You need to use a modifier to enable it. Unsafe code has to be explicitly marked as **unsafe** and then the null pointer becomes available.
-
-```rust
-#[derive(Debug)]
-struct Foo {
-    val: i32,
-}
-
-fn main() {
-    let  foo: *mut Foo = std::ptr::null_mut();
-    unsafe {
-        (*foo).val = 44;
-        // code crashes here
-    }
-}
-```
-
-Notice that the **raw pointer** `std::ptr::null_mut` has to be used. Similarly to C++ the program crashes, but it happens explicitly within an **unsafe** block.
-
-
-## Multi-threading
-
-### Single threading in C++
-
-It is very easy to write an increasing counter in C++.
-
-```cpp
-int counter = 0;
-
-for (int i = 0; i < 10; ++i) {
-    ++counter;
-}
-```
-
-What if we want to update counter in parallel? Then we need need to synchronize access somehow. If we cannot synchronize access, data races will occur and the value of the counter will be undetermined.
-
-### Multi-threading in C++
-
-In C++, it is also necessary to use a special type, a mutex, to synchronize access. In C++ however, this mutex is independent of the rest of the program as you can see:
-
-```cpp
-int counter = 0;
-std::mutex mtx;
- 
-void incrementCounter() {
-    mtx.lock();
-    ++counter;
-    mtx.unlock();
-}
- 
-std::thread threads[10];
-for (int i = 0; i < 10; ++i) {
-    threads[i] = std::thread(incrementCounter);
-}
-```
-
-The lock and unlock operation have to be timed right before and after the access of the counter. This is a source of errors because it is possible to make a typo and forget to lock or unlock at the right time.
-
-You can try this out for yourself on [play](https://onlinegdb.com/3w8ifDn6h)
-
-### Multi-threading in Rust
-
-We can translate the previous C++ program in Rust. Again we need to create Mutex, but this time the Mutex is nested within an `Arc`.
-
-Again we need to lock, but the unlocking happens automatically after we leave the scope or expression, since mutex is a smart lock: it **unlocks automatically when it is dropped** (de-allocated) at the end of the spawn.
-
-```rust
-let counter = Arc::new(Mutex::new(0));
-let mut handles = vec![];
-
-for _ in 0..10 {
-    let counter = Arc::clone(&counter);
-    let handle = thread::spawn(move || {
-        let mut num = counter.lock().unwrap();
-        *num += 1;
-    });
-    handles.push(handle);
-}
-```
-
-[play](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=18e92a25de1b97cd998ba0ca332154c0)
-
-We will decompose the solution to this problem in multiple steps.
-
-#### Single-threading in Rust: First step
-
-First, we try to solve the problem on one CPU, single-threaded
-
-```rust
-use std::sync::Mutex;
-
-fn main() {
-    let m = Mutex::new(5);
-
-    {
-        let mut num = m.lock().unwrap();
-        *num = 6;
-    }
-}
-```
-
-The expression `m.lock()` returns a mutable reference to the data. Without calling lock, it is simple impossible to refer to the interior of the mutex. At the end of the curly braces block, the lock is dropped automatically, since de-allocation means dropping the lock.
-
-[play](https://gist.github.com/rust-play/4f1891f8c7df02ba586cde197c744fa8)
-
-#### Multi-threading in Rust: First-step
-
-When we try to make this application multi-threaded, we encounter a problem. We make multiple threads and call an expression in each thread to increase the counter. We still have a mutex, or a lock-able variable. However, it is moved inside one othe threads.
-
-```rust
-let counter = Mutex::new(0);
-let mut handles = vec![];
-
-for _ in 0..10 {
-    let handle = thread::spawn(move || {
-        // counter is moved into thread
-        let mut num = counter.lock().unwrap();
-        // counter cannot be used in next thread
-        *num += 1;
-    });
-    handles.push(handle);
-}
-```
-
-The error that we get says:
-
-> moved value `counter` cannot be used after move
-
-[play](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=a3df1795edb02027039062ea9ad17feb)
-
-#### Multi-threading in Rust: shared reference
-
-To prevent one of the threads from capturing the mutex, we need to be able to share it in between multiple threads. The problem is that it's ownership is moved and we loose access to it in the next thread. We need to work with multiple references to the mutex. To do this, we create a **smart-pointer** to the mutex.
-
-The smart pointer is called `Arc` which stands for "atomic reference counted". It can be cloned infinitely many times.
-
-```rust
-let counter = Arc::new(Mutex::new(0));
-```
-
-Smart non-owning pointers such as `Arc` do not move or capture ownership. We can now share copies or clones of this pointer among the different threads. The copies of these references can be moved inside the threads and there is no problem anymore for the compiler.
-
-```rust
-let counter = Arc::new(Mutex::new(0));
-let mut handles = vec![];
-
-for _ in 0..10 {
-    let counter = Arc::clone(&counter);
-    let handle = thread::spawn(move || {
-        let mut num = counter.lock().unwrap();
-
-        *num += 1;
-    });
-    handles.push(handle);
-}
-```
-
-This time the acces to the pointer is synchronized using the Mutex and Arc in a software pattern called **interior mutability**.
-
-[play](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=234ab646dc385d613b99a1359ce7ff23)
-
-This demonstrates the power of advanced types such as `Arc` and `Mutex` to make more reliable software.
 
 ## Types = constraints
 
@@ -325,7 +140,6 @@ enum CellState {
     Dormant,
 }
 ```
-
 
 ### Products
 
@@ -356,5 +170,3 @@ impl Cell {
     }
 }
 ```
-
-

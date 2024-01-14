@@ -1,4 +1,4 @@
-# Object-oriented programming in Python 
+# Object-oriented programming in Python
 
 *2024-01-02
 
@@ -16,12 +16,11 @@ Object oriented programming started around 1960 and was named by Alan Kay. Objec
 
 that behave much like their physical counterparts, complete with individual characteristics and abilities. Object-oriented programming enables this by providing building blocks for building accurate models of physical systems.
 
-
 ## Classes and Objects
 
 Classes: Think of classes as templates for creating your objects. Classes contain public or private methods which are function definitions for associated operations.
 
-Objects: These are specific instances of classes - like individual animals created from the same blueprint, each with its own state. For a mathematician, like me, everything in the world is an object of some class. This got me into troubles already. 
+Objects: These are specific instances of classes - like individual animals created from the same blueprint, each with its own state. For a mathematician, like me, everything in the world is an object of some class. This got me into troubles already.
 
 ### Example in Python
 
@@ -47,24 +46,19 @@ cell = Cell("ATCG")
 cell.mitosis()  # Public interface to initiate cell division
 ```
 
-
-
-
 #### Attributes
 
 Objects can contain both data and code such as for example a property called DNA which stands for some data representing the sequence. This data is also called **attributes** of the object. Private attributes can only be used by the object itself. Attributes represent the **internal state** of an object and may change throughout the life-time of an object. Attributes can be both private and public.
 
 #### Methods
 
-Objects also contain code, for example a cell object can contain the method `mitosis`. All methods are functions that take the `self` or `this` argument. Methods are not really part of the object. They are shared between objects of the same class. Methods are functions, so they can take type hints. 
+Objects also contain code, for example a cell object can contain the method `mitosis`. All methods are functions that take the `self` or `this` argument. Methods are not really part of the object. They are shared between objects of the same class. Methods are functions, so they can take type hints.
 
 Methods can be public and private. Private methods can only be referenced inside other methods of the same class.
 
 The `__init__` method is not really a method but a special function. It is the constructor of the class and produces  an instance of a class. It takes some initial data as arguments.
 
-
-
-## 1. Encapsulation
+## Encapsulation
 
 Encapsulation is about maintaining an object's state private inside a class and providing access only through public methods.
 
@@ -80,17 +74,15 @@ Robert C. Martin:
 
 In other words, every class should have only one responsibility. Alternative explanation: Gather together the things that change for the same reasons. Separate those things that change for different reasons
 
-## 2. Abstraction
+## Abstraction
 
-Abstraction means hiding the detailed implementation and showing only the necessary features of an object. 
+Abstraction means hiding the detailed implementation and showing only the necessary features of an object.
 
 ### Classes as abstraction
 
 A class is a form of abstraction. You use a class to represent a certain number objects that share something in common, without showing the objects itself.
 
-
-
-## 3. Inheritance
+## Inheritance
 
 Inheritance allows a new class to adopt the behavior and properties of an existing class. According to the OCP, you should be able to extend the behavior of a class without altering its source code. This can be done by creating subclasses that inherit from a base class.
 
@@ -116,26 +108,23 @@ print(oak.height)  # Output: 100
 
 In this example `Plant` is the super class or parent class of `Tree`. One parent or super class may have multiple child classes. The parent class is a more general version of the child classes which are more constraint.
 
-
-
 ## Summary
 
 Object-oriented programming is a way of programming that includes concepts such as encapsulation, abstraction, inheritance and polymorphism. These OOP principles facilitate the development of modular and maintainable software applications in biological research, which can range from simple bio-informatics tools to complex simulation platforms modeling entire ecosystems or biological processes. By leveraging OOP, developers can create models that mirror the hierarchical and diversified nature of biological entities and systems.
 
 ## Practical final remarks
 
-To apply object-oriented programming, you have to make a model of the domain you are working in and understand how it works. A domain is nothing more than people who know what they are doing. So first, you have to look at how people do their work. Usually people will spontaneously tell you what their annoyances are and these are a starting point for object-oriented modelling. 
+To apply object-oriented programming, you have to make a model of the domain you are working in and understand how it works. A domain is nothing more than people who know what they are doing. So first, you have to look at how people do their work. Usually people will spontaneously tell you what their annoyances are and these are a starting point for object-oriented modelling.
 
 ### Modeling
 
-The next step is modeling data. Which types of objects are there? These will become classes. Are there patterns in usage of the data? These will become methods. 
+The next step is modeling data. Which types of objects are there? These will become classes. Are there patterns in usage of the data? These will become methods.
 
 Once in a while you have look at a higher level and see whether more abstraction is necessary (or unnecessary) and create abstract classes or interfaces. While doing this you have to keep in mind that complexity is your enemy. An abstraction should only be made if it simplifies the bigger picture. Copy-pasting only increases the length and the complexity, so should be avoided at all cost.
 
 ### Naming
 
 Throughout the whole process you have give appropriate names to everything. The least amount of surprise is necessary. Names should be as mainstream as possible. Writing code is an act of communication to whoever is reading it in the future. Code is not supposed to be read by machines, it supposed to be read by humans from different backgrounds. That means that code should not be complicated. Code should be as simple as possible. The only target is the speed of consumption by a future reader. A future reader can process the code faster if names are obvious and self-explanatory to new readers, they serve as a way of documentation. Using a modern IDE, it is easy to change and improve names. (In VS Code, you can press f2.)
-
 
 ### The Dependency inversion principle
 
@@ -235,8 +224,6 @@ In the refactored version, we have:
 
 Now, `ElectricPowerSwitch` doesn't need to know the details of `LightBulb`; it just needs something that complies with the `Switchable` interface. This decouples the high-level and low-level modules, allowing for more flexibility and easier maintenance.
 
-
-
 ### The Open-closed principle
 
 Bertrand Meyer
@@ -246,8 +233,6 @@ Bertrand Meyer
 Being "open for extension" means that the behavior of a module can be extended. As the application grows and new features are needed, developers should be able to add new behaviors or functionalities without changing the existing code.
 
 Being "closed for modification" implies that the source code is set and cannot be modified to introduce new behavior. This reduces the risk of introducing new bugs in existing functionality.
-
-
 
 ### The Liskov substitution principle
 
@@ -262,3 +247,13 @@ Objects of a superclass should be replaceable with objects of a subclass without
 - Preserve invariants
 
 By doing so, the principle encourages designing each class and its subclass in a way that allows them to be interchangeable. This interchangeability leads to loose coupling because components that use the superclass can operate with any of its subclasses, which reduces dependency on specific implementations.
+
+## Multiple inheritance
+
+We can also reverse the parent-child hierarchy by using **multiple inheritance**. Instead of one parent, we have several abstract parents and the implementation happens in the children.
+
+Related:
+
+- JavaScript: mixins
+- Haskell: type classes
+- Rust: traits

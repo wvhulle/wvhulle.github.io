@@ -1,0 +1,20 @@
+# Composition
+
+Written around *2023-12-18*
+
+Work in progress.
+
+## Inheritance
+
+It is necessary to be aware of "coupling" when using inheritance. Inheritance may introduce complexity. And it is sometimes better to work with composition. See the chapter on inheritance in <https://www.amazon.com.be/-/nl/Martin-Robert/dp/0132350882>.
+
+The solution in Rust is to either use:
+
+- structs: bundle smaller objects into large product types
+- *traits*: specify constraints on multiple smaller objects
+
+## Introduction to traits
+
+Work in progress.
+
+I should mention dynamic and static dispatch.

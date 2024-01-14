@@ -1,8 +1,8 @@
-# Asynchronous programming 
+# Asynchronous programming
 
-*2023-11-12*
+Written on *2023-11-12*
 
-Existing literature: 
+Existing literature:
 
 - Practical introduction in "Programming Rust", by Jim Blandy et al.
 - Longer in-depth technical chapter in "Rust for Rustaceans", by Jon Gengjist.
@@ -80,7 +80,6 @@ When a future is awaited by calling `.await`, the `poll` method of the associate
 An asynchronous function that is blocked temporarily, yields a stack frame. A stack frame is a snapshot of all the local variables and references that are valid at the point in time right before the `await`. This means that there may be self-references inside of the stack frame. This implies that this future may not be moved, because moving self-referential data in memory can create an invalid object. To prevent this the type of the future in the poll method is `Pin<&mut Self>`.
 
 <https://rust-lang.github.io/async-book/04_pinning/01_chapter.html>
-
 
 ## Operators on futures
 

@@ -1,4 +1,4 @@
-# References 
+# References
 
 *first written on 2023-10-23*
 
@@ -13,62 +13,55 @@ This type of variables become owner of the data as soon as the data is created t
 Types of owning variables:
 
 - normal local variables: Every programming language gives the ability to define names for data and allocate local variables on the stack for temporary storage.
-- owning **smart pointers**: A more advanced version of normal variables. These are explicitly allocated on the heap. 
-    - Rust. The most basic example of a smart pointer in Rust is `Box`. This type gives a level of indirection by pointing to a location on the heap. A more complicated version is  `RefCell`, which enables some kind of locking so that no more than variable can modify the content at the same time. The multi-threaded version of `RefCell` is `Mutex`. A mutex is a programming concept that is frequently used to solve multi-threading problems. It is a synchronization primitive that can be used to protect shared data from being simultaneously accessed by multiple threads. 
-    - C also has owning smart pointers such as mutexes.
-    
-    
+- owning **smart pointers**: A more advanced version of normal variables. These are explicitly allocated on the heap.
+  - Rust. The most basic example of a smart pointer in Rust is `Box`. This type gives a level of indirection by pointing to a location on the heap. A more complicated version is  `RefCell`, which enables some kind of locking so that no more than variable can modify the content at the same time. The multi-threaded version of `RefCell` is `Mutex`. A mutex is a programming concept that is frequently used to solve multi-threading problems. It is a synchronization primitive that can be used to protect shared data from being simultaneously accessed by multiple threads.
+  - C also has owning smart pointers such as mutexes.
+
 ## Non-owning variables
 
 This type of variables are not an owner of the data. We say "they don't capture ownership". Ownership entails responsibility to clean up. Non-owning variables are not responsible for cleaning up data. The advantage of non-owning variables is that you can share data without copying, so they can increase the speed of your program.
 
-
 They come in two types (see [question](https://stackoverflow.com/questions/62232753/what-are-the-differences-between-a-pointer-and-a-reference-in-rust)):
 
-
-### References
+### References as aliases
 
 An alias for a piece of data, does not take up extra space, cannot be re-initialized. A reference can be dropped, which is usually done at the end of the scope. A reference is a *borrow*. Using references in Rust is called *borrowing* data.
 
 **Special for Rust**: A reference in Rust is any variable that implements the `Deref` trait (which is a kind of type class or interface). This means that it needs to have a *dereferencing* operation implemented. In Rust, references also have a life time (a time over which they are valid) and cannot capture ownership (they do not become responsible for cleaning up data). Life-times are annoted with the special syntax `&'a x` with a single quote. Rust has special borrow rules that distinguish immutable from mutable borrows, see below.
 
-
 Types of references:
 
 - immutable: used when we want to read data but not change it, checked at compile-time, so has the best performance.
-    - Rust:  An immutable reference does not steal acces, so this allows for sharing of data in a larger programs between different components. After a reference is created, you can follow it by writing the dereference operator `*`. The address of a reference can be printed with `println!("{:p}", &1);`.
-    - C: `const char& r = c`, does not steal access.
-- mutable: exclusive access to data, written as 
-    - Rust: You can create an immutable reference by prefixing a variable with `&`: `let a = &b`, steals the access to some data while the mutable reference is valid. 
-    - C: `char& r = c`, does not steal access.
-    - Python: alternative variable names for data.
-    
+  - Rust:  An immutable reference does not steal acces, so this allows for sharing of data in a larger programs between different components. After a reference is created, you can follow it by writing the dereference operator `*`. The address of a reference can be printed with `println!("{:p}", &1);`.
+  - C: `const char& r = c`, does not steal access.
+- mutable: exclusive access to data, written as
+  - Rust: You can create an immutable reference by prefixing a variable with `&`: `let a = &b`, steals the access to some data while the mutable reference is valid.
+  - C: `char& r = c`, does not steal access.
+  - Python: alternative variable names for data.
+
 ### Pointers
 
 A pointer is an address that points to a different point in memory. A pointer takes up extra space, on top of the data at the destination. The declaration of a pointer entails the allocation of some empty space in memory which makes it a run-time feature (see [question](https://stackoverflow.com/questions/4995899/difference-between-pointer-and-reference-in-c)). It may be created on the stack or the heap and usually takes the space of the size of a register on the CPU, which may be 32 or 64 bit.
 
-**Special for Rust**: Raw pointers are like references but do not have a lifetime. They do not have any kind of access control or compile-time borrowing rules imposed. 
+**Special for Rust**: Raw pointers are like references but do not have a lifetime. They do not have any kind of access control or compile-time borrowing rules imposed.
 
 Types of pointers:
 
-- raw pointers: This type of pointer is usually created on the stack. Such pointers may be pointing to an invalid memory region, memory that contains invalid or no data. 
-    - mutable: This type of pointers can be used to update the data at the target address.
-        - Rust: A mutable raw pointer in Rust is written `*mut`. It is used mostly in unsafe code, code that works with raw pointers.  Rust has a special `unsafe` environment to work with raw pointers. 
-        - C: `char* p = &c`. C also has the famous `NULL` pointer which leads to many problems, since every pointer is mutable by default and can be the `NULL` pointer.
-    - immutable:  This type of pointer cannot be used to update the data at the target address.
-        - Rust: immutable pointers are declared with `*const`.
-- (non-owning) **smart pointers**: created on the heap, may not point to invalid memory. 
-    - Rust: The data `Arc` gives the ability to share ownership with multiple pointers. New pointers can be created by cloning the `Arc`. When no pointers remain that point to the data anymore, the reference count becomes zero and the data is de-allocated. This is called *reference counting*. Reference counting is the default way to share data in standard garbage-collected dynamic languages.
-    - C++: Also has a kind of smart pointers. See for example the analogue of `Arc` called `shared_ptr` (see [smart pointers in c++](https://www.geeksforgeeks.org/smart-pointers-cpp/)).
-
+- raw pointers: This type of pointer is usually created on the stack. Such pointers may be pointing to an invalid memory region, memory that contains invalid or no data.
+  - mutable: This type of pointers can be used to update the data at the target address.
+    - Rust: A mutable raw pointer in Rust is written `*mut`. It is used mostly in unsafe code, code that works with raw pointers.  Rust has a special `unsafe` environment to work with raw pointers.
+    - C: `char* p = &c`. C also has the famous `NULL` pointer which leads to many problems, since every pointer is mutable by default and can be the `NULL` pointer.
+  - immutable:  This type of pointer cannot be used to update the data at the target address.
+    - Rust: immutable pointers are declared with `*const`.
+- (non-owning) **smart pointers**: created on the heap, may not point to invalid memory.
+  - Rust: The data `Arc` gives the ability to share ownership with multiple pointers. New pointers can be created by cloning the `Arc`. When no pointers remain that point to the data anymore, the reference count becomes zero and the data is de-allocated. This is called *reference counting*. Reference counting is the default way to share data in standard garbage-collected dynamic languages.
+  - C++: Also has a kind of smart pointers. See for example the analogue of `Arc` called `shared_ptr` (see [smart pointers in c++](https://www.geeksforgeeks.org/smart-pointers-cpp/)).
 
 ## References and pointers in other programming languages
-
 
 ### Languages with only implicit references
 
 Implicit references are more concise and easier to use than explicit references, but they can also be less intuitive and more difficult to understand. Implicit run-time references are used for example when aliasing a variable. Explicit compile-time references are missing in many mainstream programming languages. Since they are more of a run-time feature, they are more like pointers in compiled languages such C, but they are still called references.
-
 
 #### JavaScript
 
@@ -84,12 +77,7 @@ This will create two pointers pointing to two different objects. The last assign
 
 ### Languages with explicit references
 
-Explicit references are more flexible and powerful than implicit references, but they can also be more error-prone and difficult to manage. 
-
-#### C
-
-C has references and pointers but C does not have the exclusive borrowing constraints for references as in Rust. There may be mutable and immutable references at the same time to some data in C. 
-
+Explicit references are more flexible and powerful than implicit references, but they can also be more error-prone and difficult to manage.
 
 ## Longer example of references in Rust
 
@@ -239,3 +227,24 @@ Since it breaks the rule that a variable should referenced immutable everywhere,
 ## Summary about memory safety in Rust
 
 By enforcing rules on "borrows", it is less like to encounter "data races" without influencing the life-time of variables.
+
+### Example: Null pointer in Rust
+
+In Rust, the null pointer is not available in normal code. You need to use a modifier to enable it. Unsafe code has to be explicitly marked as **unsafe** and then the null pointer becomes available.
+
+```rust
+#[derive(Debug)]
+struct Foo {
+    val: i32,
+}
+
+fn main() {
+    let  foo: *mut Foo = std::ptr::null_mut();
+    unsafe {
+        (*foo).val = 44;
+        // code crashes here
+    }
+}
+```
+
+Notice that the **raw pointer** `std::ptr::null_mut` has to be used. Similarly to C++ the program crashes, but it happens explicitly within an **unsafe** block.

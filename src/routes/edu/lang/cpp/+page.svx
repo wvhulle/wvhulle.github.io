@@ -1,7 +1,12 @@
 # C++
 
+I started working on C++ out of necessity. This is still very incomplete.
+
 1. [Functional programming in C++](./01-fp)
-2. [Object-oriented programming in C++](./02-oop)
-3. [Memory management in C++](./03-memory)
-4. [Interfaces in C++](./04-interfaces)
-5. [Polymorphism in C++](./05-polymorphism)
+2. [Memory management in C++](./02-memory)
+3. [Pointers in C++](./03-pointers/)
+4. [Object-oriented programming in C++](./04-oop)
+5. [Concurrency in C++](./05-concurrency)
+6. [Interfaces in C++](./06-interfaces)
+7. [Polymorphism in C++](./07-polymorphism/)
+8. [Standard template library in C++](./08-stl)

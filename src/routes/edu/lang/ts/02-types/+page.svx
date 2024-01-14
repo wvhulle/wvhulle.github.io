@@ -1,6 +1,10 @@
 # Types in TypeScript
 
-### Discriminate Union
+Work in progress.
+
+See <https://www.typescriptlang.org/docs/handbook/2/everyday-types.html>
+
+## Discriminate Union
 
 Discriminated unions in TypeScript are a pattern that makes it easier to work with union types that share common fields. A discriminant (or tag) property is shared among all members of the union, but has different literal type values for each member. This allows TypeScript to correctly narrow down the type when using conditional checks.
 

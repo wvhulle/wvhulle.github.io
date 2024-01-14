@@ -1,7 +1,10 @@
 # Proofs in Agda
 
-There are many interesting and complex proofs in mathematics that can be represented in Agda. Let's consider a proof about the existence and uniqueness of inverses in group theory. In group theory, a group is a set equipped with an operation satisfying certain axioms: closure, associativity, identity, and invertibility.
+See <https://dl.acm.org/doi/book/10.1145/2841316>
 
+## Group theory
+
+There are many interesting and complex proofs in mathematics that can be represented in Agda. Let's consider a proof about the existence and uniqueness of inverses in group theory. In group theory, a group is a set equipped with an operation satisfying certain axioms: closure, associativity, identity, and invertibility.
 
 ```agda
 record Group : Set₁ where
@@ -19,7 +22,8 @@ record Group : Set₁ where
     ∙-congˡ   : ∀ {x y z} → x ≈ y → x ∙ z ≈ y ∙ z
     ∙-congʳ   : ∀ {x y z} → y ≈ z → x ∙ y ≈ x ∙ z
 ```
-We'll prove that if a certain element in a group has an inverse, this inverse is unique. 
+
+We'll prove that if a certain element in a group has an inverse, this inverse is unique.
 
 This example illustrates a proof carried out in the context of abstract algebra (group theory) and demonstrates the power of type theories and dependent types in capturing mathematical structures.
 
@@ -34,6 +38,10 @@ This example illustrates a proof carried out in the context of abstract algebra 
     ε              ∎
 ```
 
-See https://alexarice.github.io/posts/strict-group-theory.html
+See <https://alexarice.github.io/posts/strict-group-theory.html>
 
 The proof above is a non-trivial example that combines dependently typed programming with mathematical theorem proving. It demonstrates how Agda can encode and verify fundamental properties of abstract algebraic structures.
+
+## Further reading
+
+See <https://homotopytypetheory.org/book/>.

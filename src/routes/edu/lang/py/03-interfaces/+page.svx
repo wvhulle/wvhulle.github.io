@@ -155,5 +155,3 @@ print(tree_frog.croak())
 The `Bird` class implements both `Flyer` and `Swimmer`, showing that it can both fly and swim without having to implement `Croaker`, which would not make sense for a bird. Similarly, `Fish` only needs to implement `Swimmer` and `Frog` implements both `Swimmer` and `Croaker`.
 
 This follows ISP by segregating the interfaces based on functionality rather than creating one large interface that assumes all animals can perform all behaviors.
-
-

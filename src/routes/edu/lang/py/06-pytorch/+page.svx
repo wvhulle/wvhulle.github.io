@@ -1,3 +1,5 @@
 # PyTorch
 
 Work in progress.
+
+See <https://www.amazon.com/Deep-Learning-Coders-fastai-PyTorch/dp/1492045527/ref=monarch_sidesheet>

@@ -1,3 +1,5 @@
 # Introduction to Agda
 
 Work in progress.
+
+See <http://learnyouanagda.liamoc.net/pages/peano.html>.

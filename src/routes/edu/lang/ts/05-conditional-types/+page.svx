@@ -1,8 +1,10 @@
 # Conditional types
 
+See <https://www.typescriptlang.org/docs/handbook/2/conditional-types.html>.
+
 Dependent types are an advanced feature of programming languages, usually only found in languages like [Agda](../../agda)
 
-Dependent typing exists also in more mainstream languages. One kind of dependent typing is conditional typing in TypeScript. 
+Dependent typing exists also in more mainstream languages. One kind of dependent typing is conditional typing in TypeScript.
 
 Imagine modeling biological entities where we want to define a type that depends on whether the entity is a plant or an animal:
 
