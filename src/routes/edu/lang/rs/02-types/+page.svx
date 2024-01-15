@@ -52,7 +52,7 @@ if (!n) {
 }
 ```
 
-In strongly typed languages such as Haskell, Rust there are more constraints. It is not possible to use a number and boolean interchangeably.
+In strongly typed languages such as Haskell or Rust there are more constraints. It is not possible to use a number and boolean interchangeably.
 
 For example, the following is disallowed:
 
@@ -103,15 +103,6 @@ let y = x.clone()
 ```
 
 This will copy a reference `x` to `0` and create a copy of this reference. When it creates the copy reference, it increases a integer variable that keeps track of the number of references. When the number of references becomes zero, the integer being 0 is dropped.
-
-A more advanced version of a reference, is a locked reference. This also called a **mutex**, which stands for **mutually exclusive**. This reference can only expose a location, in case it is locked. This means it can be used to share data in a program. Usually it is used in conjunction with `Arc` as
-
-```rust
-let m = Arc::new(Mutex::new(0))
-let reference = m.lock().unwrap()
-*reference = 1
-```
-
 
 ## Types = constraints
 

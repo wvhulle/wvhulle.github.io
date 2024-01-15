@@ -24,7 +24,8 @@
   }
 
   * {
-    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+      sans-serif;
   }
 
   :global(html, body) {
@@ -46,7 +47,7 @@
   }
 
   #layout {
-    background-image: linear-gradient(120deg, #005476 0%, #012444 100%);
+    background-image: linear-gradient(120deg, #006d97 0%, #01509a 100%);
     margin: 0;
     width: 100%;
     display: flex;

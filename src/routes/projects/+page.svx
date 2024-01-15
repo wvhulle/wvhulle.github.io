@@ -16,7 +16,8 @@ At work and in my spare time I created a few programming projects.
 ## Backend
 
 - **DSP App**. This project was made for the down-stream-processing (purification) department of [Inbiose](https://inbiose.com), a microbiological lab in Ghent. It allows users to log process parameters and sample data in a structured way. Additionally, it can parse large data files to create reports. (PostgreSQL, HTML, TypeScript, SASS, Python, Node.JS, Express)
+- Database migration scripts for biological data such as DNA and amino acid sequences. (PostgreSQL, SQLite, MariaDB)
 
 ## Embedded
 
-- Small **fermentation reactor control**. Communication happens over COM ports with control and measurement devices (PostgreSQL, Rust, Python).
+- Small fermentation **reactor control**. Communication happens over COM ports with control and measurement devices (PostgreSQL, Rust, Python).

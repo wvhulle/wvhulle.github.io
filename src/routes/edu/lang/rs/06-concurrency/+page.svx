@@ -2,31 +2,19 @@
 
 ## Multi-threading in Rust
 
-We can translate the previous C++ program in Rust. Again we need to create Mutex, but this time the Mutex is nested within an `Arc`.
-
-Again we need to lock, but the unlocking happens automatically after we leave the scope or expression, since mutex is a smart lock: it **unlocks automatically when it is dropped** (de-allocated) at the end of the spawn.
-
-```rust
-let counter = Arc::new(Mutex::new(0));
-let mut handles = vec![];
-
-for _ in 0..10 {
-    let counter = Arc::clone(&counter);
-    let handle = thread::spawn(move || {
-        let mut num = counter.lock().unwrap();
-        *num += 1;
-    });
-    handles.push(handle);
-}
-```
-
-[play](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=18e92a25de1b97cd998ba0ca332154c0)
+We can translate the [C++ program](../../cpp/05-concurrency/) in Rust.
 
 We will decompose the solution to this problem in multiple steps.
 
 ## Single-threading in Rust: First step
 
-First, we try to solve the problem on one CPU, single-threaded
+As in the C++ example, we need to lock the data manually with a **mutex** which stands for **mutually exclusive**. It is an advanced kind of reference which can only expose a writable (mutable) reference to a variable while it is locked.
+
+Unlocking happens automatically after we leave the scope or expression, since mutex is a smart lock: it **unlocks automatically when it is dropped** (de-allocated) at the end of the spawn.
+
+This means it can be used to share data in a program and control simultaneous access.
+
+First, we try to solve the problem on one CPU, single-threaded.
 
 ```rust
 use std::sync::Mutex;
@@ -47,7 +35,7 @@ The expression `m.lock()` returns a mutable reference to the data. Without calli
 
 ## Multi-threading in Rust: First-step
 
-When we try to make this application multi-threaded, we encounter a problem. We make multiple threads and call an expression in each thread to increase the counter. We still have a mutex, or a lock-able variable. However, it is moved inside one othe threads.
+When we try to make this application multi-threaded, we encounter a problem. We make multiple threads and call an expression in each thread to increase the counter. We still have a mutex, or a lock-able variable. However, it is moved inside one of the threads.
 
 ```rust
 let counter = Mutex::new(0);
