@@ -2,15 +2,31 @@
 
 Work in progress.
 
-Use lambda functions.
+## Typing in Python
 
-## Type Hints
+There are two types of functions in Python:
 
-It is recommended to use type hints, because they prevent errors by imposing constraints on the way your function can be used. One way to enforce type hints, is by using tools like "mypy" and "pylint" in Python. Ask for help on how to setup.
+- anonymous functions: also called **lambda expressions**, these functions cannot be explicitly typed
+- functions defined with the keyword `def`, these can be fully typed.
 
-## Currying and Partial Application
+## Enforcing types
 
-Currying is a functional programming concept where a function with multiple arguments is transformed into a chain of functions, each with a single argument. In the context of biology, we can think of a simple example such as calculating the Body Mass Index (BMI), which depends on both weight and height.
+Types are by default not enforced in Python. To enforce typing, you need to use type hints. It is recommended to use type hints, because they prevent errors by imposing constraints on the way your function can be used. One way to enforce type hints, is by using linters.
+
+The default combination that should be used in every project should be:
+
+1. [pylint](https://pypi.org/project/pylint/): this checks for very basic errors, it already contains a lot of checks on functions such as using the wrong number of arguments
+2. [mypy](https://www.mypy-lang.org/): this checks for errors in function composition and more advanced problems with types.
+
+More advanced typing in Python is done using the typing module. It can be used for generic programming.
+
+## Partial Application
+
+**Currying** is a functional programming concept where a function with multiple arguments is transformed into a chain of functions, each with a single argument. So instead of a function `f: (A,B) -> C` you split it up in a chain of functions `g: (A -> (B -> C))`.
+
+The name "currying" is a misnomer, since it was known to mathematicians in the 19th centure, years before Curry invented lambda calculus. However, since Curry contributed a famous theory, his name stuck to the concept.
+
+In the context of biology, we can think of a simple example such as calculating the Body Mass Index (BMI), which depends on both weight and height.
 
 Below is an example of how you might implement curried functions to calculate BMI in Python:
 

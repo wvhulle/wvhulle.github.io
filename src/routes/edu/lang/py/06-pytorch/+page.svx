@@ -3,3 +3,5 @@
 Work in progress.
 
 See <https://www.amazon.com/Deep-Learning-Coders-fastai-PyTorch/dp/1492045527/ref=monarch_sidesheet>
+
+See [Karpathy](https://www.youtube.com/watch?v=kCc8FmEb1nY&t=1811s)

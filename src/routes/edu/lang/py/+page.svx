@@ -4,5 +4,5 @@
 2. [Object-oriented programming in Python](./02-oop)
 3. [Interfaces in Python](./03-interfaces)
 4. [Generic programming](./04-generic)
-5. [Introduction to NumPy](./05-numpy)
+5. [Introduction to numerical Python](./05-numpy)
 6. [Deep learning with PyTorch](./06-pytorch)

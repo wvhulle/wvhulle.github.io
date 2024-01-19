@@ -2,7 +2,9 @@
 
 ## Stronger Emphasis on Type Systems
 
-Many functional languages encourage strong static type systems, which can reduce bugs by catching errors at compile time.
+As seen in [fp](../01-fp/), functions are building blocks. As in mathematics, their input and output must have a pre-determined set or type such as the integers. Types are the computer science equivalent of sets and determine what we can expect from a function. Predictability is important, so in functional languages the types of functions are quite restrictive.
+
+Functions can only accept a restricted set of inputs. This is also called a **strong static type system**, since the restriction may happen statically, before the program is run. This helps to catch errors at compile time, before it used by actual users.
 
 ## What are types
 
@@ -23,7 +25,7 @@ In both mathematics and computer science, types:
 - Abstract away, simplify and model problems.
 - Add constraints to problem models.
 
-Think about types as specifying *lower bounds* and *upper bounds* to problems.
+Think about types as specifying _lower bounds_ and _upper bounds_ to problems.
 
 ## Different levels of typing
 
@@ -34,7 +36,7 @@ There is distinction between the following types of languages
 
 ## Primitive data-types
 
-In weakly typed languages such as Python, R, JS the following is possible:
+In weakly typed languages such as Python, R, JS, the following is possible:
 
 ```python
 a = 123456789
@@ -46,9 +48,9 @@ It is also possible to use non-boolean data as a boolean.
 For example
 
 ```js
-let n = 0
+let n = 0;
 if (!n) {
-    // do something
+  // do something
 }
 ```
 
@@ -73,13 +75,9 @@ Examples of generic data types are:
 
 To use a generic type, you have to specify the content type of the contained type. For example in Rust, a vector or a list of number is denoted by `Vec<u8>`. In this case the **type variable** `T` in `Vec<T>` is set to `u8`
 
-## Logical generic types
+## Function types
 
-Some types do more than just collecting data fields. They also have some logic built-in.
-
-### Function types
-
-A special kind of generic type is a function type. In Rust, for example, a function that maps an integer on an integer is denoted by: `fn(a: u8) -> u8`. Function types are generic because it is possible to swap the input and output type.
+A special kind of generic type is a function type. In Rust, for example, a function that maps an integer on an integer is denoted by: `fn(a: u8) -> u8`. Function types such as this simple one are generic because it is possible to swap out the input or the output type.
 
 For example, the identity function is defined in Rust as
 
@@ -91,7 +89,7 @@ fn id<T>(t: T) -> T {
 
 The type variable is `T`.
 
-### Reference types
+## Reference types
 
 The type of a reference to a variable of type `u8` is written as `&u8`. The ampersand literally means **a reference** to a `u8`.
 
@@ -102,7 +100,7 @@ let x = Arc::new(0)
 let y = x.clone()
 ```
 
-This will copy a reference `x` to `0` and create a copy of this reference. When it creates the copy reference, it increases a integer variable that keeps track of the number of references. When the number of references becomes zero, the integer being 0 is dropped.
+This will copy a reference `x` to `0` and create a copy of this reference. When it creates the copy reference, it increases an integer variable that keeps track of the number of references. When the number of references becomes zero, the integer being 0 is dropped.
 
 ## Types = constraints
 
@@ -116,25 +114,13 @@ A lack of constraints leads to unpredictable software. Unpredictable software le
 
 Languages such as C++ impose fewer constraints on the program, which makes them at first sight easier, because less rules have to be learned. But in the long term, you will encounter more bugs such as "data races" and others if you impose less contraints.
 
-## 4. Algebraic Data Types (ADTs)
+## Algebraic Data Types (ADTs)
 
-### Sums
-
-We can compose types via "sums" (e.g., enums). These  provide a way to define a type by enumerating its possible variants.
-
-For example,
-
-```rust
-enum CellState {
-    Alive,
-    Dead,
-    Dormant,
-}
-```
+A special feature of Rust is algebraic data types which could also be found in Haskell
 
 ### Products
 
-You can also bundle several values together into records that are called **products**. In some sense, classes are a kind of product.
+You can also bundle several values together into records. A record collects several items and gives them a name. The offical mathematical computer science name for a record is a **product**. A product is a type that can normally be created in any programming language, whether functional or not. They are known as products because the number of possible values they can have is the product of the number of possible values of the component parts, see [What is an Algebraic Data Type (ADT)?](https://stackoverflow.com/questions/44991429/what-is-an-algebraic-data-type-adt).
 
 **Biology Example in Rust:**
 
@@ -145,7 +131,23 @@ struct Cell {
 }
 ```
 
-In R, data-frames are products. In JavaScript, JSON objects are also a form of products.
+In R, data-frames are lists of products. In JavaScript, JSON objects are also a form of products.C++ has structs as well. JavaScript and C++ have classes which, in some sense, are a kind of product since they bundle different items in one single entity.
+
+### Sums
+
+We can consider a data type that can only take value in several disjoint instances For example, true or false but not both. This is called a discriminated union, disjoint union. An element of such a type is either one of the possible options.
+
+Discriminated unions are known as sums because the number of possible values that can have is: the sum of the number of possible values of the parts that compose it.
+
+For example, a cell would be in one of the following states:
+
+```rust
+enum CellState {
+    Alive,
+    Dead,
+    Dormant,
+}
+```
 
 ### Combining
 

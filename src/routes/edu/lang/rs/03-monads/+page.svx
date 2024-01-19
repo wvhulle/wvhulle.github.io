@@ -4,10 +4,7 @@ See:
 
 - Advanced functional programming concepts often come from category theory. See [fantasy-land](https://github.com/fantasyland/fantasy-land).
 
-Functional programming (FP) has several design patterns and concepts that differ from those typically found in object-oriented programming (OOP). While OOP design patterns focus on object relationships and communication, FP patterns emphasize stateless computation and transformations. Some FP design concepts that stand out as distinctly different or new compared to OOP include:
-
-
-**Concept:** Monads wrap and handle values within a context (like error handling, state representation), providing mechanisms for chaining operations in a safe way.
+FP patterns emphasize stateless computation and transformations. Monads wrap and handle values within a context (like error handling, state representation), providing mechanisms for chaining operations in a safe way.
 
 A monad is like a container for a dirty computation with side effects. When using a monad, you declare what is
 
@@ -15,35 +12,3 @@ A monad is like a container for a dirty computation with side effects. When usin
 - you declare what happens when an operation fails
 
 Strictly speaking, a monad is a type constructor which takes an underlying type and puts it into a specific computational context. For example, Maybe or Option types for dealing with optional values, List for non-deterministic computations, or IO for input/output operations.
-
-### Biology Example in Rust
-
-In this example, `Result` is a monad in Rust that handles errors during function chaining and it's constructor is `Ok` in the case of success or `Err` in the case of an error.
-
-
-```rust
-use std::result;
-
-fn analyze_sample(sample: BloodSample) -> result::Result<DNASequence, AnalysisError> {
-    // Analyze the blood sample and extract DNA sequence.
-    if sequence.len > 0 {
-        Ok(sequence)
-    } else {
-        Err(error)
-    }
-}
-```
-
-We can also chain "dirty" or monadic computations while staying within the monad. Let's say, for example, that we analyze a sequence and the replicate it.
-
-
-```rust
-fn replicate_sequence(sequence: DNASequence) -> result::Result<Vec<DNASequence>, ReplicationError> {
-    // Replicate the given DNA sequence.
-}
-
-// Using `and_then` to chain operations using monadic behavior
-let result = analyze_sample(sample).and_then(replicate_sequence);
-```
-
-The function `and_then` is a bind function. This function takes a monadic value and a function that transforms the underlying plain value, then yields a new monadic value. The key here is that the transformation function also returns a result in a monadic context, allowing the actions to be chained together

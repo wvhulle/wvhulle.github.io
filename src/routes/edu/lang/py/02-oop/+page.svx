@@ -1,6 +1,6 @@
 # Object-oriented programming in Python
 
-*2024-01-02
+\*2024-01-02
 
 Existing literature:
 
@@ -56,7 +56,7 @@ Objects also contain code, for example a cell object can contain the method `mit
 
 Methods can be public and private. Private methods can only be referenced inside other methods of the same class.
 
-The `__init__` method is not really a method but a special function. It is the constructor of the class and produces  an instance of a class. It takes some initial data as arguments.
+The `__init__` method is not really a method but a special function. It is the constructor of the class and produces an instance of a class. It takes some initial data as arguments.
 
 ## Encapsulation
 
@@ -108,10 +108,6 @@ print(oak.height)  # Output: 100
 
 In this example `Plant` is the super class or parent class of `Tree`. One parent or super class may have multiple child classes. The parent class is a more general version of the child classes which are more constraint.
 
-## Summary
-
-Object-oriented programming is a way of programming that includes concepts such as encapsulation, abstraction, inheritance and polymorphism. These OOP principles facilitate the development of modular and maintainable software applications in biological research, which can range from simple bio-informatics tools to complex simulation platforms modeling entire ecosystems or biological processes. By leveraging OOP, developers can create models that mirror the hierarchical and diversified nature of biological entities and systems.
-
 ## Practical final remarks
 
 To apply object-oriented programming, you have to make a model of the domain you are working in and understand how it works. A domain is nothing more than people who know what they are doing. So first, you have to look at how people do their work. Usually people will spontaneously tell you what their annoyances are and these are a starting point for object-oriented modelling.
@@ -126,103 +122,13 @@ Once in a while you have look at a higher level and see whether more abstraction
 
 Throughout the whole process you have give appropriate names to everything. The least amount of surprise is necessary. Names should be as mainstream as possible. Writing code is an act of communication to whoever is reading it in the future. Code is not supposed to be read by machines, it supposed to be read by humans from different backgrounds. That means that code should not be complicated. Code should be as simple as possible. The only target is the speed of consumption by a future reader. A future reader can process the code faster if names are obvious and self-explanatory to new readers, they serve as a way of documentation. Using a modern IDE, it is easy to change and improve names. (In VS Code, you can press f2.)
 
-### The Dependency inversion principle
+## Advanced object-oriented principles
+
+### The dependency inversion principle
 
 > "Depend upon abstractions, [not] concretes.
 
 High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details. Details should depend on abstractions.
-
-#### Example
-
-Let's use a simple example of a light switch application to illustrate the Dependency Inversion Principle in Python.
-
-First, let's define our high-level module and low-level module *without* applying the Dependency Inversion Principle:
-
-```python
-# Without Dependency Inversion Principle
-
-class LightBulb:
-    def turn_on(self):
-        print("LightBulb: turned on...")
-    
-    def turn_off(self):
-        print("LightBulb: turned off...")
-
-class ElectricPowerSwitch:
-    def __init__(self, bulb: LightBulb):
-        self.bulb = bulb
-        self.on = False
-    
-    def press(self):
-        if self.on:
-            self.bulb.turn_off()
-            self.on = False
-        else:
-            self.bulb.turn_on()
-            self.on = True
-
-# Usage
-bulb = LightBulb()
-switch = ElectricPowerSwitch(bulb)
-switch.press()  # Turns on
-switch.press()  # Turns off
-```
-
-Here, `ElectricPowerSwitch` is directly dependent on the `LightBulb` class, which violates the Dependency Inversion Principle.
-
-Now, let's refactor this code to apply the Dependency Inversion Principle by using abstractions:
-
-```python
-# Applying Dependency Inversion Principle
-
-from abc import ABC, abstractmethod
-
-# Abstraction (Interface)
-class Switchable(ABC):
-    @abstractmethod
-    def turn_on(self):
-        pass
-
-    @abstractmethod
-    def turn_off(self):
-        pass
-
-# Low-Level Module
-class LightBulb(Switchable):
-    def turn_on(self):
-        print("LightBulb: turned on...")
-
-    def turn_off(self):
-        print("LightBulb: turned off...")
-
-# High-Level Module
-class ElectricPowerSwitch:
-    def __init__(self, device: Switchable):
-        self.device = device
-        self.on = False
-    
-    def press(self):
-        if self.on:
-            self.device.turn_off()
-            self.on = False
-        else:
-            self.device.turn_on()
-            self.on = True
-
-# Usage
-bulb = LightBulb()
-switch = ElectricPowerSwitch(bulb)
-switch.press()  # Turns on the bulb
-switch.press()  # Turns off the bulb
-```
-
-In the refactored version, we have:
-
-- An abstraction (`Switchable`) which creates an interface with methods that can be implemented by any device.
-- A high-level module (`ElectricPowerSwitch`) that depends only on the abstraction, not on concrete implementations.
-- A low-level module (`LightBulb`) that implements the `Switchable` interface.
-
-Now, `ElectricPowerSwitch` doesn't need to know the details of `LightBulb`; it just needs something that complies with the `Switchable` interface. This decouples the high-level and low-level modules, allowing for more flexibility and easier maintenance.
 
 ### The Open-closed principle
 
@@ -256,4 +162,4 @@ Related:
 
 - JavaScript: mixins
 - Haskell: type classes
-- Rust: traits
+- Rust: [traits](../../rs/08-composition/)

@@ -3,3 +3,42 @@
 Work in progress.
 
 See <https://www.manning.com/books/functional-programming-in-javascript>.
+
+## Expressiveness
+
+FP can lead to more concise and expressive code, which can be easier to read and maintain once the paradigm is fully understood.
+
+In JavaScript, which supports functional programming concepts, combining `map`, `reduce`, and `filter` functions showcases the expressiveness of the language. These functions can operate on arrays to transform, filter, and accumulate values in a clear declarative style.
+
+Here's an example that demonstrates their combined use:
+
+```javascript
+// A sample array of objects representing people with age and name
+const people = [
+  { name: "Alice", age: 25 },
+  { name: "Bob", age: 20 },
+  { name: "Carol", age: 30 },
+  { name: "Dave", age: 35 },
+  { name: "Eve", age: 40 },
+];
+
+// We want to calculate the average age of people older than 25
+const averageAge = people
+  .filter((person) => person.age > 25) // Filter out people aged 25 or below
+  .map((person) => person.age) // Transform the filtered list into a list of ages
+  .reduce((acc, age, _, array) => {
+    // Reduce to accumulate ages and compute average
+    acc += age;
+    return array.length - 1 === index ? acc / array.length : acc;
+  }, 0);
+
+console.log(averageAge); // Expected output: Average age of people older than 25
+```
+
+Let's go step by step:
+
+1. **Filter**: The `filter` function is used first to obtain only the people whose ages are above 25.
+2. **Map**: After filtering, we use the `map` function on the resulting array to extract just the ages of the remaining people.
+3. **Reduce**: Finally, the `reduce` function accumulates the ages and computes the average by dividing the accumulated sum by the length of the filtered array.
+
+This chain of `filter`, `map`, and `reduce` demonstrates how you can clearly and succinctly express a complex data transformation without having to write imperative loops and temporary variables. It shows what needs to be done, abstracting away the details of how it should be implemented under the hood.

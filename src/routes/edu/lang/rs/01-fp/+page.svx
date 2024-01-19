@@ -1,16 +1,31 @@
 # Functional programming in Rust
 
-Written on  *2023-12-18*
+Written on _2023-12-18_
 
 Existing literature:
 
 - A famous book with a philosophical background on functional programming is [Structure and Interpretation of Computer Programs](https://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs)
 
-**Functional Programming (FP)** and **Object-Oriented Programming (OOP)** are two predominant programming paradigms, each with its own principles and approaches to solving problems. FP offers several distinctive advantages over OOP in various scenarios. Functional programming as a concept is older than object-oriented programming and dates back to abstract models for computing in 1940 such as lambda calculus. It was implemented for the first time in 1960 in Lisp. In functional programming all computations are treated as the result of applying mathematically sound functions without side effects.
+Functional programming as a concept dates back to abstract models for computing in 1940 such as lambda calculus. It was implemented for the first time in 1960 in Lisp. In functional programming all computations are treated as the result of applying mathematically sound functions without side effects.
 
-## 1. Immutability
+## Pure Functions
 
-A returning concept in functional programming are data structures that never change their state after creation, enabling safer concurrency and predictable code behavior. Rust, despite not being a purely functional language, encourages the use of immutable data structures to ensure safety and concurrency without data races. All variables in Rust are immutable by default and have to be declared as mutable explicitly.
+FP emphasizes pure functions, without side effects, which means that given the same input, a function will always produce the same output.
+
+Consequences:
+
+1. Predictability: Since expressions can be substituted with their results, you know exactly what they will do based on their inputs. Also called referential transparency, meaning that a function call can be replaced with its resulting value without changing the program's behavior
+2. Parallelization: functions can easily run in parallel because they don't rely on shared mutable state.
+3. Cache-ability: The result of an expression can be cached and reused because it will always produce the same output for the same inputs.
+4. Ease of refactoring: You can freely refactor your code by replacing expressions with variables or other expressions without worrying about altering the behavior of your program.
+
+### Naming
+
+Because functions are considered building blocks, they have to be properly named and have a clear declaration. A proper function name and declaration are a form of documentation. Using good names is like writing a love letter to the next person who will read your code. On top, functions should be simple to understand and take as few arguments as possible, certainly never more than a handful.
+
+## Immutability
+
+A returning concept in functional programming are data structures that never change their state after creation, enabling safer concurrency and predictable code behavior. These are called **immutable data-structures**. Rust, despite not being a purely functional language, encourages the use of immutable data structures to ensure safety and concurrency without data races. All variables in Rust are immutable by default and have to be declared as mutable explicitly.
 
 For example, the following will not compile
 
@@ -23,68 +38,17 @@ In general, it is necessary, while modeling a system, to distinguish constant an
 
 This leads to:
 
-- Predictability: Immutable variables lead to more predictable code. When you see a variable being used multiple times in a function or across functions, you can be confident that its value hasn't been altered since initialization, which makes it easier to follow and reason about the program's flow.
+- Predictability: Immutable variables lead to more predictable code. When you see an immutable variable being used multiple times in a function or across functions, you can be confident that its value hasn't been altered since initialization, which makes it easier to follow and reason about the program's flow.
 - Concurrency safe: Rust aims to prevent data races at compile time. If multiple threads have access to immutable data, there's no risk of one thread unexpectedly modifying the data while another is reading it. This reduces the need for locks and simplifies writing concurrent programs.
 - Compiler optimizations: Knowing that a variable won't change allows the compiler to optimize code under the hood. It could cache the value or elide certain checks, leading to potentially better performance.
 
-## 2. First-Class and Higher-Order Functions
-
-Functions are the building blocks of functional programming. Remember that a function is a map from a source A to a target B. Functions in functional programming are very similar to functions in mathematics.
-
-FP treats functions as first-class citizens, allowing them to be assigned to variables, passed as arguments, or returned by other functions. Higher-order functions can take other functions as parameters or return them, leading to powerful abstractions.
-
-### Example
-
-Inspired by biology, let's create a series of functions that mimic the actions of different enzymes in a metabolic pathway, where each enzyme (function) might modify a substrate and pass it on to the next enzyme.
-
-```rust
-fn main() {
-    // Define a sequence of 'substrates', in this case a string representing a molecule
-    let initial_substrate = "molecule";
-
-    // Functions representing different enzymes in a metabolic pathway
-    let enzyme1 = |substrate: &str| format!("{}-modified-by-enzyme1", substrate);
-    let enzyme2 = |substrate: &str| format!("{}-modified-by-enzyme2", substrate);
-    let enzyme3 = |substrate: &str| format!("{}-modified-by-enzyme3", substrate);
-
-    // Pass functions as arguments to simulate the metabolic pathway
-    let result = metabolic_pathway(initial_substrate, enzyme1, enzyme2, enzyme3);
-
-    println!("Final product: {}", result); // Output the final product of the metabolic pathway
-}
-
-// Function simulating a metabolic pathway where enzymes are applied in sequence
-fn metabolic_pathway(
-    start: &str,
-    enzymatic_process1: fn(&str) -> String,
-    enzymatic_process2: fn(&str) -> String,
-    enzymatic_process3: fn(&str) -> String,
-) -> String {
-    let intermediate1 = enzymatic_process1(start);
-    let intermediate2 = enzymatic_process2(&intermediate1);
-    enzymatic_process3(&intermediate2)
-}
-```
-
-In this code:
-
-- We define three closures (`enzyme1`, `enzyme2`, `enzyme3`) that represent the action of different enzymes.
-- We pass these closures as arguments to a function called `metabolic_pathway`, showing how functions can be treated as first-class citizens in Rust. Each function modifies the input in some way, mimicking the transformation of a substrate by an enzyme.
-- The final output shows the product after it has been processed by all three enzymatic functions, simulating a series of reactions in a biological metabolic pathway.
-
-### Naming
-
-Because functions are considered building blocks, they have to be properly named and have a clear declaration. A proper function name and declaration are a form of documentation. Using good names is like writing a love letter to the next person who will read your code. On top, functions should be simple to understand and take as few arguments as possible, certainly never more than a handful.
-
 ## Function Composition
 
-It is possible to build complex functions by composing simpler ones, each performing a discrete operation. Functions do not have side effects by default. A side effect is something that happens outside the body of a function. This is enabled by disallowing shared state.
+It is possible to build complex functions by composing simpler ones, each performing a discrete step in a sequence of perations. Because each step is pure, the composition is deterministic.
 
-### Example
+### Method chaining
 
-A method is a kind of function that works on a class. It is called by writing the instance of of the class, a dot and then the name of the function.
-
-Imagine we have a list of `Person` structs, and we want to find the names of all people who are over 18 years old, sort those names, and then collect them into a vector.
+Imagine we have a list of `Person` structs (structs are a kind of objects), and we want to find the names of all people who are over 18 years old, collect them and sort them.
 
 ```rust
 struct Person {
@@ -92,61 +56,47 @@ struct Person {
     age: u8,
 }
 
-fn main() {
-    let people = vec![
-        Person { name: "Alice".to_string(), age: 30 },
-        Person { name: "Bob".to_string(), age: 20 },
-        Person { name: "Charlie".to_string(), age: 17 },
-        Person { name: "Dave".to_string(), age: 23 },
-    ];
+let people = vec![
+    Person { name: "Alice".to_string(), age: 30 },
+    Person { name: "Bob".to_string(), age: 20 },
+    Person { name: "Charlie".to_string(), age: 17 },
+    Person { name: "Dave".to_string(), age: 23 },
+];
+```
 
+We will do this by chaining methods. A method is a function associated with objects. To use it syntactically, you write the instance of the class, a dot and then the name of the function.
+
+```rust
+fn main() {
     let adult_names: Vec<String> = people.iter()
         .filter(|p| p.age > 18)
         .map(|p| p.name.clone())
         .collect()
 
     adult_names.sort()
-    
+
     println!("Adults: {:?}", adult_names);
 }
 ```
 
-Let's break down the method chaining above:
+Let's break down the method chaining above.
 
-- `.iter()` creates an iterator over the `people` vector. An iterator is a data structure that is used to iterate over a structure. Rust provides powerful iterator methods which can be chained together to perform complex operations in a clear and elegant manner.
+First, `.iter()` creates an iterator over the `people` vector. An iterator is a data structure that is used to iterate over a structure. Rust provides powerful iterator methods which can be chained together to perform complex operations in a clear and elegant manner.
+
 - `.filter(|p| p.age > 18)` filters out the `Person` instances that do not meet the condition (i.e., being older than 18).
 - `.map(|p| p.name.clone())` transforms the iterator from `Person` instances to their associated `name` strings.
-- `.collect()` collects the transformed values into a `Vec<String>`.
-- with the addition of `sort()`, we collect the adults' names and then
+- `.collect()` collects the transformed values into a vector `Vec<String>`.
+- with the addition of `sort()`, we sort the names
 
 Method chaining allows for such transformations to be expressed succinctly, making the code both elegant and readable.
 
-## Pure Functions
-
-FP emphasizes pure functions, without side effects, which means that given the same input, a function will always produce the same output. This predictability facilitates testing and concurrent code execution.
-
-**Biology example**: A pure function is akin to a physiological function like photosynthesis that always converts CO₂ and water into glucose and oxygen given light energy, regardless of external conditions, similar to a function always producing the same output for the same set of inputs.
-
-Consequences:
-
-1. Predictability: Since expressions can be substituted with their results, you know exactly what they will do based on their inputs. Also called referential transparency, meaning that a function call can be replaced with its resulting value without changing the program's behavior
-2. Parallelization: functions can easily run in parallel because they don't rely on shared mutable state.
-3. Cache-ability: The result of an expression can be cached and reused because it will always produce the same output for the same inputs.
-4. Ease of Refactoring: You can freely refactor your code by replacing expressions with variables or other expressions without worrying about altering the behavior of your program.
-
 ## Recursion Over Loops
 
-FP favors recursion for repetitive tasks instead of iterative loops common in OOP. This aligns well with mathematical functions and can simplify certain algorithms at the expense of potential performance drawbacks like stack overflow.
+FP favors recursion for repetitive tasks instead of iterative loops. As in mathematics, think about differential equations, sometimes recursion can simplify the statement of problems and solutions to certain algorithms. This comes at the expense of potential performance drawbacks like stack overflow.
 
 ### Example
 
-The structure of a fractal, like the Romanesco broccoli, naturally exhibits recursive patterns, similar to how FP uses recursive structures and functions.
-
-![brocolli](https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Romanesco_broccoli_%28Brassica_oleracea%29.jpg/750px-Romanesco_broccoli_%28Brassica_oleracea%29.jpg)
-
-In Rust, recursion can sometimes be a more natural fit for algorithms that model biological processes or systems when those processes are inherently recursive. An example of such a process is calculating the (n)th number in the Fibonacci sequence, which appears in various natural phenomena including branching in trees, the arrangement of leaves on a stem, the fruitlets of a pineapple, the flowering of an artichoke, and the unfurling of a fern.
-
-Here's an idiomatic Rust example of a recursive function to calculate the (n)th Fibonacci number:
+An example is calculating the (n)th number in the Fibonacci sequence, which appears in various natural phenomena including branching in trees, the arrangement of leaves on a stem, the fruitlets of a pineapple, the flowering of an artichoke, and the unfurling of a fern.
 
 ```rust
 fn main() {
@@ -168,42 +118,16 @@ fn fibonacci(n: u32) -> u32 {
 
 Using recursion to solve such a problem can be clear and concise, especially when translating a naturally recursive mathematical definition into code. However, this naive recursive approach is inefficient for large (n) because it performs many redundant calculations. It has exponential time complexity due to the repeated work done at each level of recursion.
 
-It would be more efficient to use an iterative approach. However, it can also be sufficient to use a tail-call. A tail call is a recursive call at the end of a function. This type of function can be optimized by the compiler into a loop.
+## Tail-call optimization
 
-## Expressiveness
+In the case of the above algorithm, it would be more efficient to use an iterative approach. However, it can also be sufficient to use a tail-call. A tail call is a recursive call at the end of a function. A function written with a tail-call can be optimized by the compiler into a loop. This is done by just replacing the stack frame by itself, see [What is tail call optimization?](https://stackoverflow.com/questions/310974/what-is-tail-call-optimization). In Rust, this is not done automatically for every function.
 
-FP can lead to more concise and expressive code, which can be easier to read and maintain once the paradigm is fully understood.
+## First-Class and Higher-Order Functions
 
-In JavaScript, which supports functional programming concepts, combining `map`, `reduce`, and `filter` functions showcases the expressiveness of the language. These functions can operate on arrays to transform, filter, and accumulate values in a clear declarative style.
+Functions are pure and can be composed freely. On top of that, FP allows functions to be
 
-Here's an example that demonstrates their combined use:
+- assigned to variables,
+- passed as arguments,
+- returned by other functions.
 
-```javascript
-// A sample array of objects representing people with age and name
-const people = [
-  { name: "Alice", age: 25 },
-  { name: "Bob", age: 20 },
-  { name: "Carol", age: 30 },
-  { name: "Dave", age: 35 },
-  { name: "Eve", age: 40 }
-];
-
-// We want to calculate the average age of people older than 25
-const averageAge = people
-  .filter(person => person.age > 25) // Filter out people aged 25 or below
-  .map(person => person.age)         // Transform the filtered list into a list of ages
-  .reduce((acc, age, _, array) => {  // Reduce to accumulate ages and compute average
-    acc += age;
-    return array.length - 1 === index ? acc / array.length : acc;
-  }, 0);
-
-console.log(averageAge); // Expected output: Average age of people older than 25
-```
-
-Let's go step by step:
-
-1. **Filter**: The `filter` function is used first to obtain only the people whose ages are above 25.
-2. **Map**: After filtering, we use the `map` function on the resulting array to extract just the ages of the remaining people.
-3. **Reduce**: Finally, the `reduce` function accumulates the ages and computes the average by dividing the accumulated sum by the length of the filtered array.
-
-This chain of `filter`, `map`, and `reduce` demonstrates how you can clearly and succinctly express a complex data transformation without having to write imperative loops and temporary variables. It shows what needs to be done, abstracting away the details of how it should be implemented under the hood.
+The last two options allow for higher-order functions. These are functions that can take other functions as parameters or return them, leading to powerful abstractions. Many languages have a feature called decorators, which are in essence functions that take other functions as input and return modified versions of the functions. For example, such a decorator could be a timed version of the original function.
