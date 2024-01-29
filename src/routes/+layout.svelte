@@ -5,13 +5,13 @@
 
 <div id="layout">
   <div id="links" class="">
-    <a href="{base}/" class="link">Home</a>
+    <a href="/" class="link">Home</a>
 
-    <a href="{base}/projects" class="link">Projects</a>
+    <a href="/projects" class="link">Projects</a>
 
-    <a href="{base}/edu" class="link">Educational</a>
+    <a href="/edu" class="link">Educational</a>
 
-    <a href="{base}/about" class="link">About</a>
+    <a href="/about" class="link">About</a>
   </div>
   <div class="content">
     <slot />
