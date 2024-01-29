@@ -16,9 +16,7 @@ const config = {
 
   kit: {
     adapter: adapter({ precompress: true }),
-    paths: {
-      base: dev ? "" : "",
-    },
+
   },
 };
 
