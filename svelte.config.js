@@ -17,7 +17,7 @@ const config = {
   kit: {
     adapter: adapter({ precompress: true }),
     paths: {
-      base: dev ? "" : "/wvhulle.github.io",
+      base: dev ? "" : "",
     },
   },
 };
