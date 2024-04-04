@@ -44,7 +44,7 @@ This leads to:
 
 ## Function Composition
 
-It is possible to build complex functions by composing simpler ones, each performing a discrete step in a sequence of perations. Because each step is pure, the composition is deterministic.
+It is possible to build complex functions by composing simpler ones, each performing a discrete step in a sequence of operations. Because each step is pure, the composition is deterministic.
 
 ### Method chaining
 
