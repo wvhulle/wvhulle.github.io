@@ -4,11 +4,23 @@ See:
 
 - Advanced functional programming concepts often come from category theory. See [fantasy-land](https://github.com/fantasyland/fantasy-land).
 
-FP patterns emphasize stateless computation and transformations. Monads wrap and handle values within a context (like error handling, state representation), providing mechanisms for chaining operations in a safe way.
 
-A monad is like a container for a dirty computation with side effects. When using a monad, you declare what is
+## Pattern matching
+
+In Rust, (almost) all built-in data types can be matched against with pattern matching. In Python, you use the `match` keyword for this. Rust also uses the same keyword, but a difference with Rust is that it should be exhaustive. This means that all the possible arms of the match expression should be covered in Rust.
+
+## Containers
+
+Monads wrap and handle values within a context. A monad is like a container for a dirty computation with side effects. When using a monad, you declare what is
 
 - core to the algorithm and has computational value
 - you declare what happens when an operation fails
 
-Strictly speaking, a monad is a type constructor which takes an underlying type and puts it into a specific computational context. For example, Maybe or Option types for dealing with optional values, List for non-deterministic computations, or IO for input/output operations.
+Strictly speaking, a monad is a type constructor which takes an underlying type and puts it into a specific computational context. There are different types of context, defined as different monads. For example, in Rust there are the following monads
+
+- `Result`: a generic output type for general computations representing operations that may yield a result corresponding to a fixed set of failures. This is the same as adding exceptions that may be thrown to the output type in Java. Rust also does have exceptions as in JavaScript, but they are called `panic`s in Rust. The need for the documentation of a lot of run-time errors is eliminated, when `Result` is used.
+- `Option`: a generic type for dealing with nullable data. It replaces explicit "non-null" checks (that may be forgotten) with (explicitly exhaustive) pattern matching. Turning a type `A` into an `Option<A>` is the same as writing `A | null` in TypeScript.
+- Domain-specific versions of `Result`. These are versions ofr `Result` that correspond to safe computations within a certain field of programming:
+    - `io::Result` for all safe operations that perform input/output.
+
+Using these monads in functions requires the use of pattern matching. Pattern matching in Rust is always be exhaustive. This means that pattern matching results in more transparent code with less bugs.

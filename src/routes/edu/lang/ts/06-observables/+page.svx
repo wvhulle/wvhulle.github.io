@@ -1,0 +1,50 @@
+# Publisher-subscriber pattern
+
+Work in progress.
+
+One of the patterns from the [Design-patterns](https://www.amazon.co.uk/Design-patterns-elements-reusable-object-oriented/dp/0201633612) book is the observer-subscriber pattern. It is a way to keep track of changing state.
+
+This works by having both a:
+
+- subject/publisher/observable/store/stream/reactive variable: this is an object that captures the current state and has a subscribe method and a list of subscribed subscribers. It should also allow for the cancellation of subscription.
+- one or more observers/subscribers: these are objects that want to be notified by the publisher through a subscription. Observers are kept alive by the garbage collector if their subscription is never cancelled.
+
+
+## Applied observables: Stores
+
+There exist implementations of streams in multiple web frameworks:
+
+- RxJS
+- [Svelte](https://learn.svelte.dev/tutorial/welcome-to-svelte) has support for the observer pattern using the so-called **store contract**.
+
+## Reactive modifiers
+
+An observable can be given memory to be able to revert to one or more previous values.
+
+## Reactive bindings
+
+It is possible to start with a stream, and create another stream that depends on the first stream. The dependency can be two-way between two observables.
+
+## Advanced combinators
+
+Instead of binding to streams to each-other, you can also create new streams from existing streams:
+
+- deep filter: combines a stream of streams
+- project: converts a stream into one of it's components
+- merge: merges a list of streams into a combined stream
+
+
+
+## Signals
+
+An implicit version of the store pattern is signals. Signals make use of getters to read and update state. Subscription happens inside effects. Effects track dependencies between signals at run-time.
+
+For a simple implementation, see https://dev.to/ratiu5/implementing-signals-from-scratch-3e4c.
+
+In order of appearance:
+
+- Knockout: https://knockoutjs.com/documentation/observables.html
+- Angular https://angular.io/guide/signals.
+- SolidJS: https://www.solidjs.com/docs/latest/api#createsignal
+- Leptos: a framework for WebAssembly in Rust https://github.com/leptos-rs/leptos
+- The newest version of Svelte, 5, uses signals instead of stores. It switched from compile-time reactivity to run-time reactivity.

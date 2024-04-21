@@ -7,5 +7,4 @@ TypeScript is a language popularized by Microsoft that extends JavaScript with t
 3. [Object-oriented programming in TypeScript](./03-oop)
 4. [Generic programming in TypeScript](./04-generic)
 5. [Conditional types in TypeScript](./05-conditional-types)
-6. [Publisher-subscriber pattern](./06-pub-sub)
-7. [Reactivity](./07-reactivity)
+6. [Observables](./06-observables)

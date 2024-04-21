@@ -1,13 +1,54 @@
 # Conditional types
 
-See <https://www.typescriptlang.org/docs/handbook/2/conditional-types.html>.
+See [Conditional Types](https://www.typescriptlang.org/docs/handbook/2/conditional-types.html)
 
-Dependent types are an advanced feature of programming languages, usually only found in languages like [Agda](../../agda)
+## Dependent types
 
-Dependent typing exists also in more mainstream languages. One kind of dependent typing is conditional typing in TypeScript. Conditional types are the alternative to if then else for types. However, they still are types that only exist at run-time. If you need to run the program first, before you know some information, you cannot model it with conditional types. Conditional types need to be provided enough information before they can function as if then expressions for types.
+Dependent types are types that depend on the values of other types. In most programming languages this is not possible. Types are considered compile-time tools for static code analysis. Types usually prevent bugs at compile-time.
+
+## TypeScript
+
+TypeScript is a special one. TypeScript extends JavaScript and adds a compilation step on top of the just-in-time compilation of JavaScript by a run-time such as NodeJS. TypeScript adds a few features to JavaScript such as 
+
+- compile-time strict null checks,
+- compile-time conditional typing.
+
+
+## Conditional types 
+
+Conditional types are the alternative to "if-then-else" on the type level. They check whether or not some given type is a sub-type of another type and decide on an output. Syntactically they use a ternary question-mark operator. 
+
+```ts
+type Cond = A extends B ? C : D
+```
+
+Conditional types, like most types introduced by TypeScript, are types that only exist at compile-time, pre-run-time. There is a general rule of thumb. If you need to run the program first, before you know some information, you cannot model it with conditional types. Conditional types need to be provided enough information before they can function as "if-then" expressions for types.
+
+## Pattern matching
+
+Using the `infer` keyword, you can perform a kind of pattern-matching on the type-level with conditional types.
+
+An example is the type that replaces the type `From` recursively from a type `Type` with `To`:
+
+```typescript
+export type Replace<Type, From, To> = Type extends object
+	? Type extends (infer A)[]
+		? Replace<A, From, To>[]
+		: Type extends (...args: unknown[]) => unknown
+		? Type
+		: Type extends Record<string | number, unknown>
+		? { [K in keyof Type]: Replace<Type[K], From, To> }
+		: Type extends From
+		? To
+		: Type
+	: Type
+```
+
+It is important to keep in mind that arrays and functions are objects in JavaScript (and TypeScript). Complicated conditional types can be hard to-read.
+
 
 ## Stronger alternatives
 
 TypeScript's conditional types are reminiscent of dependent typing because a type choice is made based on another type (although not on runtime values).
 
-Agda and Coq have more sophisticated forms of dependent types, where the type can depend on specific values. In these systems, you could express constraints such as "an array of exactly `n` elements," with `n` being a compile-time constant or even a value computed at runtime, something not possible with TypeScript's static type system. See [dependent types](../../agda/02-dependent/).
+Dependent types are an advanced feature of programming languages, usually only found in languages like [Agda](../../agda) or Coq. These languages are part of the family of proof assistants. In a proof assistant you can express constraints such as "an array of exactly `n` elements," with `n` being a compile-time constant or even a value computed at runtime, something not possible with TypeScript's static type system. See [dependent types](../../agda/02-dependent/).

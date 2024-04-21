@@ -46,7 +46,7 @@
   }
 
   #layout {
-    background-image: linear-gradient(120deg, #006d97 0%, #01509a 100%);
+    background-image: linear-gradient(120deg, #888888 0%, #2b2b2b 100%);
     margin: 0;
     width: 100%;
     display: flex;
@@ -60,7 +60,7 @@
       margin: 0em 1em;
       max-width: 100%;
       background-color: #222222;
-      border-radius: 0.5em;
+      border-radius: 0.2em;
       backdrop-filter: blur(0.3em);
       margin-bottom: 1em;
       display: flex;
@@ -75,8 +75,13 @@
 
       & .link {
         text-decoration: none;
-        font-weight: 600;
+        font-weight: 400;
+        font-size: larger;
         color: inherit;
+
+        &:hover {
+          text-decoration: underline;
+        }
       }
       /* p-2 bg-white mb-4 border-b border-black flex flex-row gap-8 place-content-center text-lg sticky top-0 items-center */
     }
@@ -85,52 +90,17 @@
       padding: 2em;
       flex-grow: 1;
       flex-direction: column;
-      height: 100%;
       display: flex;
 
       @media (max-width: 800px) {
         padding: 1em;
       }
+      
     }
 
     flex-direction: column;
     position: relative;
   }
 
-  a {
-    display: block;
-    position: relative;
-    padding: 0.2em 0;
-  }
 
-  /* Fade in */
-  a::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 0.1em;
-    background-color: rgb(255, 255, 255);
-    opacity: 0;
-    transition:
-      opacity 300ms,
-      transform 300ms;
-  }
-
-  a:hover::after,
-  a:focus::after {
-    opacity: 1;
-    transform: translate3d(0, 0.2em, 0);
-  }
-  div a::after {
-    opacity: 1;
-    transform: scale(0);
-    transform-origin: center;
-  }
-
-  div a:hover::after,
-  div a:focus::after {
-    transform: scale(1);
-  }
 </style>
