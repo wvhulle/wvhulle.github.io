@@ -1,10 +1,10 @@
 # Design patterns in Rust
 
+Work-in-progress
+
 Existing literature:
 
 - Search for de acronyms SOLID and DRY.
 - More advanced specific patterns to Rust can be found on <https://rust-unofficial.github.io/patterns>
 
-See [pub-sub](../../ts/06-pub-sub/).
-
-Work-in-progress.
+For an example of a design pattern in JavaScript/TypeScript, see [observables](../../ts/06-observables/).
