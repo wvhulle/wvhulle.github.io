@@ -2,44 +2,44 @@
 
 Work in progress.
 
-One of the patterns from the [Design-patterns](https://www.amazon.co.uk/Design-patterns-elements-reusable-object-oriented/dp/0201633612) book is the observer-subscriber pattern. It is a way to keep track of changing state.
+One of the patterns from the [Design-patterns](https://www.amazon.co.uk/Design-patterns-elements-reusable-object-oriented/dp/0201633612) book is the publisher-subscriber pattern. It is a way to keep track of changing state.
 
-This works by having both a:
+This works by having both a subscriber and a publisher:
 
-- subject/publisher/observable/store/stream/reactive variable: this is an object that captures the current state and has a subscribe method and a list of subscribed subscribers. It should also allow for the cancellation of subscription.
-- one or more observers/subscribers: these are objects that want to be notified by the publisher through a subscription. Observers are kept alive by the garbage collector if their subscription is never cancelled.
+- One or more **subscriber**s: these are objects that want to be notified by the publisher through a subscription. An alternative name for a subscriber is *observer*. Observers are kept alive by the garbage collector if their subscription is never cancelled.
+- A **publisher**: an object that models data flow or a variable, changing through time. A publisher has a subscribe method that is used to send data to a newly made subscriber. It should also allow for the cancellation of subscription. 
+    - Unicast: In RxJS a unicast publisher is called an *observable*. 
+    - Multi-cast: an explicit list of subscribers is maintained and all of them are notified of changes. This is called a **subject**
+ 
+In RxJS, a subject with an initial value, is called a **behavior subject**. 
+In Svelte, such a subject is called a writable store. See [Svelte](https://learn.svelte.dev/tutorial/welcome-to-svelte). In Svelte, a writable store is implemented using the *store contract*, an interface that is compatible with the subjects from RxJS
 
+## Stores
 
-## Applied observables: Stores
+A writable store can be given extra functionality. For example a store can be given memory to be able to revert to one or more previous values.
 
-There exist implementations of streams in multiple web frameworks:
+## Store bindings
 
-- RxJS
-- [Svelte](https://learn.svelte.dev/tutorial/welcome-to-svelte) has support for the observer pattern using the so-called **store contract**.
+Two-way:
 
-## Reactive modifiers
+- Bind: Two stores can be attached through a two-way transformation.
 
-An observable can be given memory to be able to revert to one or more previous values.
+One-way:
 
-## Reactive bindings
+- Project: converts a stream into one of it's components
+- Merge: merges a list of streams into a combined stream
 
-It is possible to start with a stream, and create another stream that depends on the first stream. The dependency can be two-way between two observables.
+## Operators on stores
 
-## Advanced combinators
-
-Instead of binding to streams to each-other, you can also create new streams from existing streams:
-
-- deep filter: combines a stream of streams
-- project: converts a stream into one of it's components
-- merge: merges a list of streams into a combined stream
-
-
+Instead of binding stores to each-other, you can also create new stores from existing stores. One example is a deep filter. This filters a store of stores based on the value of the smaller individual stores.
 
 ## Signals
 
 An implicit version of the store pattern is signals. Signals make use of getters to read and update state. Subscription happens inside effects. Effects track dependencies between signals at run-time.
 
 For a simple implementation, see https://dev.to/ratiu5/implementing-signals-from-scratch-3e4c.
+
+## History of reactive programming
 
 In order of appearance:
 
