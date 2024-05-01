@@ -2,49 +2,33 @@
 
 Work in progress.
 
-One of the patterns from the [Design-patterns](https://www.amazon.co.uk/Design-patterns-elements-reusable-object-oriented/dp/0201633612) book is the publisher-subscriber pattern. It is a way to keep track of changing state.
-
-This works by having both a subscriber and a publisher:
-
-- One or more **subscriber**s: these are objects that want to be notified by the publisher through a subscription. An alternative name for a subscriber is *observer*. Observers are kept alive by the garbage collector if their subscription is never cancelled.
-- A **publisher**: an object that models data flow or a variable, changing through time. A publisher has a subscribe method that is used to send data to a newly made subscriber. It should also allow for the cancellation of subscription. 
-    - Unicast: In RxJS a unicast publisher is called an *observable*. 
-    - Multi-cast: an explicit list of subscribers is maintained and all of them are notified of changes. This is called a **subject**
- 
-In RxJS, a subject with an initial value, is called a **behavior subject**. 
-In Svelte, such a subject is called a writable store. See [Svelte](https://learn.svelte.dev/tutorial/welcome-to-svelte). In Svelte, a writable store is implemented using the *store contract*, an interface that is compatible with the subjects from RxJS
-
-## Stores
-
-A writable store can be given extra functionality. For example a store can be given memory to be able to revert to one or more previous values.
-
-## Store bindings
-
-Two-way:
-
-- Bind: Two stores can be attached through a two-way transformation.
-
-One-way:
-
-- Project: converts a stream into one of it's components
-- Merge: merges a list of streams into a combined stream
-
-## Operators on stores
-
-Instead of binding stores to each-other, you can also create new stores from existing stores. One example is a deep filter. This filters a store of stores based on the value of the smaller individual stores.
-
-## Signals
-
-An implicit version of the store pattern is signals. Signals make use of getters to read and update state. Subscription happens inside effects. Effects track dependencies between signals at run-time.
-
-For a simple implementation, see https://dev.to/ratiu5/implementing-signals-from-scratch-3e4c.
-
 ## History of reactive programming
 
 In order of appearance:
 
-- Knockout: https://knockoutjs.com/documentation/observables.html
-- Angular https://angular.io/guide/signals.
-- SolidJS: https://www.solidjs.com/docs/latest/api#createsignal
-- Leptos: a framework for WebAssembly in Rust https://github.com/leptos-rs/leptos
-- The newest version of Svelte, 5, uses signals instead of stores. It switched from compile-time reactivity to run-time reactivity.
+- 1994: Publisher-subscriber design pattern. See [Design-patterns](https://www.amazon.co.uk/Design-patterns-elements-reusable-object-oriented/dp/0201633612)
+- 2010-07: Knockout.JS: https://knockoutjs.com/documentation/observables.html
+- 2010-11: ReactiveX. provides a powerful way to manage sequences of asynchronous events. Introduces operators on observables. Types of observables
+    - Unicast: In RxJS a unicast publisher is called an *observable*. 
+    - Multi-cast: an explicit list of subscribers is maintained and all of them are notified of changes. This is called a **subject**. In RxJS, a subject with an initial value, is called a **behavior subject**. 
+- 2012-03: Elm
+- 2013-10: RxJS: JS implementation of ReactiveX.
+- 2014-01: S.js: origin of modern meaning of "signals". Introduced concept of reactive ownership
+- 2014-02: Vue: all changes are collected but not processed until the effects queue is run on the next microtask
+- 2015: MobX: push-pull hybrid system
+- 2016: Angular and RxJS: introduction of observables
+- 2019-03: SolidJS https://www.solidjs.com/docs/latest/api#createsignal. For a simple implementation, see https://dev.to/ratiu5/implementing-signals-from-scratch-3e4c
+- 2019-04: Svelte 3: the store contract, compile away the reactivity completely. In Svelte, a behavior subject is called a writable store. 
+- 2022-12: Leptos: a framework for WebAssembly in Rust https://github.com/leptos-rs/leptos
+- 2023-09: Svelte 5 adds signals. It switched from compile-time reactivity to run-time reactivity. Signals make use of getters to read and update state. Subscription happens inside effects. Effects track dependencies between signals at run-time.
+
+
+## Stores in Svelte 3 and 4
+
+A store can be given extra functionality. For example a store can be given memory to be able to revert to one or more previous values.
+
+You can also create completely new stores, given existing stores. Such operations are called operators. For example, given a store you can create a new store that is connected through a two-way bind. If you don't want the original store to update when the new store updates, you can use one way bind.
+
+If you have multiple stores, you can create a merged store. Such a store merges a list of streams into a combined stream.
+
+When you have a store that contains an array of stores, you can apply a higher-order operator. I call this operator a *deep filter*. This operator filters a store of an array of stores based on the value of the smaller individual stores.
