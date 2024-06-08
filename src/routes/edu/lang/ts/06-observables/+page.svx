@@ -1,34 +1,29 @@
-# Publisher-subscriber pattern
-
-Work in progress.
+# User interfaces
 
 ## History of reactive programming
 
-In order of appearance:
 
-- 1994: Publisher-subscriber design pattern. See [Design-patterns](https://www.amazon.co.uk/Design-patterns-elements-reusable-object-oriented/dp/0201633612)
-- 2010-07: Knockout.JS: https://knockoutjs.com/documentation/observables.html
-- 2010-11: ReactiveX. provides a powerful way to manage sequences of asynchronous events. Introduces operators on observables. Types of observables
-    - Unicast: In RxJS a unicast publisher is called an *observable*. 
-    - Multi-cast: an explicit list of subscribers is maintained and all of them are notified of changes. This is called a **subject**. In RxJS, a subject with an initial value, is called a **behavior subject**. 
-- 2012-03: Elm
-- 2013-10: RxJS: JS implementation of ReactiveX.
-- 2014-01: S.js: origin of modern meaning of "signals". Introduced concept of reactive ownership
-- 2014-02: Vue: all changes are collected but not processed until the effects queue is run on the next microtask
-- 2015: MobX: push-pull hybrid system
-- 2016: Angular and RxJS: introduction of observables
-- 2019-03: SolidJS https://www.solidjs.com/docs/latest/api#createsignal. For a simple implementation, see https://dev.to/ratiu5/implementing-signals-from-scratch-3e4c
-- 2019-04: Svelte 3: the store contract, compile away the reactivity completely. In Svelte, a behavior subject is called a writable store. 
-- 2022-12: Leptos: a framework for WebAssembly in Rust https://github.com/leptos-rs/leptos
-- 2023-09: Svelte 5 adds signals. It switched from compile-time reactivity to run-time reactivity. Signals make use of getters to read and update state. Subscription happens inside effects. Effects track dependencies between signals at run-time.
+| Year | Month | Framework   | Version | Flavour    | Description                                                                                                            | Link                                                                                      |
+|------|-------|-------------|---------|------------|-----------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
+| 1970 |       | Smalltalk   |         | Observable | ValueHolder: a class that holds a mutable value and notifies its dependents whenever its value changes                |                                                                                           |
+| 1994 |       |             |         | Observable | Publisher-subscriber design pattern.                                                                                   | [Link](https://www.amazon.co.uk/Design-patterns-elements-reusable-object-oriented/dp/0201633612)  |
+| 2003 |       | QT          |         | Signals    | Properties                                                                                                             |                                                                                           |
+| 2010 |       | Knockout.JS |         | Observable |                                                                                                                        | [Link](https://knockoutjs.com/documentation/observables.html)                                     |
+| 2010 | 11    | ReactiveX   |         | Observable | Provides a powerful way to manage sequences of asynchronous events. Introduces operators on observables.               |                                                                                           |
+| 2012 | 03    | Elm         |         | Signals    | Functional reactive programming language for declaratively creating web browser-based graphical user interfaces        |                                                                                           |
+| 2012 |       | QT          |         | Signals    | Bindable properties                                                                                                    | [Link](https://doc.qt.io/qt-6/bindableproperties.html)                                            |
+| 2013 | 10    | RxJS        |         | Observable | Behaviour subject                                                                                                      |                                                                                           |
+| 2014 | 01    | S.JS        |         | Signals    | Origin of modern meaning of "signals". Introduced concept of reactive ownership                                        |                                                                                           |
+| 2014 | 02    | Vue         |         | Observable | All changes are collected but not processed until the effects queue is run on the next microtask                       |                                                                                           |
+| 2015 |       | MobX        |         | Observable | Push-pull hybrid system                                                                                                |                                                                                           |
+| 2016 | 09    | Angular     |         | Observable | Observables become a core part                                                                                         |                                                                                           |
+| 2019 | 03    | SolidJS     |         | Signals    | Simple and performant reactivity system                                                                                | [Link](https://www.solidjs.com/docs/latest/api#createsignal)                                      |
+| 2019 | 03    | Svelte      | 3       | Observable | The store contract, compile away the reactivity completely. In Svelte, a behavior subject is called a writable store.  |                                                                                           |
+| 2022 | 12    | Leptos      |         | Signals    | A framework for WebAssembly in Rust                                                                                    | [Link](https://github.com/leptos-rs/leptos)                                                       |
+| 2023 | 09    | Svelte      | 5       | Signals    | Switched from compile-time reactivity to run-time reactivity. Subscription happens inside effects.                     |                                                                                           |
 
+See [blog](https://dev.to/this-is-learning/the-evolution-of-signals-in-javascript-8ob)
 
-## Stores in Svelte 3 and 4
+## Personal contribution
 
-A store can be given extra functionality. For example a store can be given memory to be able to revert to one or more previous values.
-
-You can also create completely new stores, given existing stores. Such operations are called operators. For example, given a store you can create a new store that is connected through a two-way bind. If you don't want the original store to update when the new store updates, you can use one way bind.
-
-If you have multiple stores, you can create a merged store. Such a store merges a list of streams into a combined stream.
-
-When you have a store that contains an array of stores, you can apply a higher-order operator. I call this operator a *deep filter*. This operator filters a store of an array of stores based on the value of the smaller individual stores.
+I wrote a [library](https://www.npmjs.com/package/@wvhulle/reactive) that does some things similar to what RxJS does.
