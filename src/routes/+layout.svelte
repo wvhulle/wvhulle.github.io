@@ -46,7 +46,7 @@
   }
 
   #layout {
-    background-image: linear-gradient(120deg, #888888 0%, #2b2b2b 100%);
+    background-image: linear-gradient(120deg, #00657e 0%, #2b2b2b 100%);
     margin: 0;
     width: 100%;
     display: flex;

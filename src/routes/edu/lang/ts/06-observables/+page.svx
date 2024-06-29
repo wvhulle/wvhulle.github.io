@@ -24,6 +24,8 @@
 
 See [blog](https://dev.to/this-is-learning/the-evolution-of-signals-in-javascript-8ob)
 
+For implementation of signals vs. observables see [video](https://www.youtube.com/watch?v=1TSLEzNzGQM&list=LL&index=1).
+
 ## Personal contribution
 
-I wrote a [library](https://www.npmjs.com/package/@wvhulle/reactive) that does some things similar to what RxJS does.
+I wrote a [library](https://www.npmjs.com/package/@wvhulle/reactive) that does some things similar to what RxJS does. 

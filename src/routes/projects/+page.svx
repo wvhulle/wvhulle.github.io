@@ -1,23 +1,14 @@
 # Projects
 
-At work and in my spare time I created a few programming projects.
+## Professional
 
-## Data structures
+- **Distributed data-frames**: Distributed persisted data-grid. Changes are broadcast to users at different browsers, using custom-built middle-ware (based on JSON-RPC). Middle-ware supports discovery of new peers. Supports communication over HTTP, Web-Socket or any transport protocol. The data-model of the grid is based on a personal project about iterable data structures.
+- **Spreadsheet interface**: Custom table view with edit options. Used by lab workers to enter chemical process data. Has columns grouping and multiple cell-types. Validation errors are shown to end-users. Implemented from scratch with CSS, HTML, TypeScript and Svelte.
+- **Time-series visualizer**: Data visualisation library for messy data files containing one or multiple time series. Built using D3 scales, TypeScript, SVG and rendered with Svelte. Accepts any kind of spreadsheet format such as XLSX, CSV. Supports cropping of the data.
+- **Forms toolkit**: Built a responsive and progressive form library that deals with different formats of data such as JSON, CSV and form-data in block or inline layouts. Has different complex visual components, written in Svelte, such as a pop-up JavaScript object selector and type-ahead with drop-down.
+**Serial communication abstraction layer**: Managed communication with COM devices on Windows 7 through a high-level and safe API in Rust. Built-in error detection at the raw connection level using pattern matching. Errors are bubbled up towards end-user.
 
-- **Reactive Combinator** library. Bind different observables and filter sets of observables. (TypeScript)
-- **Reactive HashMaps** library. BTree-like structure that behaves as an [RxJS array observable](https://rxjs.dev/guide/overview) of key-value pairs. Although the keys are not reactive, the values of the map are and their values can be reverted to an initial value. (TypeScript)
-- **Distributed data store** library. Uses a protocol similar to JSON-RPC and uses HTTP and the WebSocket protocol for transport. (TypeScript, WebSocket)
+## Personal
 
-## Frontend
-
-- **Forms** library: supports different data types CSV, FormData and JSON. Contains inline and block-type frontend components. (Svelte, TypeScript SASS)
-- **Time-series** visualization (D3, TypeScript, SASS, Svelte)
-
-## Backend
-
-- **DSP App**. This project was made for the down-stream-processing (purification) department of [Inbiose](https://inbiose.com), a microbiological lab in Ghent. It allows users to log process parameters and sample data in a structured way. Additionally, it can parse large data files to create reports. (PostgreSQL, HTML, TypeScript, SASS, Python, Node.JS, Express)
-- Database migration scripts for biological data such as DNA and amino acid sequences. (PostgreSQL, SQLite, MariaDB)
-
-## Embedded
-
-- Small fermentation **reactor control**. Communication happens over COM ports with control and measurement devices (PostgreSQL, Rust, Python).
+- **Reactive operators**: Library to create several types of observable (a kind of reactive variable, also called stream) from one or more input observables. Added automated testing. Published in NPM at [@wvhulle/reactive](https://www.npmjs.com/package/@wvhulle/reactive). Inspired by observables in RxJS and the store contract in Svelte.
+- **Iterable reactive data structures**: Contains several commonly used data structures such as sets and maps enriched with reactivity. Keys of entries are constant, while values are reactive. Available to download at [@wvhulle/map](https://www.npmjs.com/package/@wvhulle/map). Also includes a recursively-indexed map and tensor implementation. Uses another personal project about reactive operators. Used several features of TypeScript to make the whole package type-safe.
