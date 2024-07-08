@@ -10,25 +10,20 @@
     <h3 class="">Ghent, Belgium</h3>
   </div>
 
+  <div id="profile">
   <img src="lab.jpg" alt="Willem in the lab" />
+  </div>
 </div>
 
 <div id="body">
   
   <p>
-    
   </p>
 
   
 </div>
 
-<div id="spacer"></div>
 
-<div id="footer">
-  To make your own personal website, see the <a
-    href="https://github.com/wvhulle/wvhulle.github.io">source code</a
-  > of this website.
-</div>
 
 <style lang="scss">
   #header {
@@ -66,8 +61,7 @@
   }
 
   img {
-    width: 15em;
-    margin: 1em;
+    width: 20em;
     aspect-ratio: 1;
   }
 
@@ -76,6 +70,15 @@
 
     flex-grow: 1;
   }
+
+  #profile {
+    border-radius: 50%;
+    background-color: rgb(0, 0, 0);
+    overflow: hidden;
+    aspect-ratio: 1;
+    margin: 2em 4em;
+    filter: drop-shadow(10px 10px 4px #00000081);
+    }
 
   #footer {
     padding: 1em;

@@ -34,7 +34,7 @@
     margin: 0;
     padding: 0;
     min-height: 100%;
-    background-color: rgb(0, 0, 0);
+    background-color: #222222;
   }
 
   :global(a) {
@@ -47,17 +47,22 @@
 
   #layout {
     background-image: linear-gradient(120deg, #00657e 0%, #2b2b2b 100%);
-    margin: 0;
     width: 100%;
     display: flex;
+    height: fit-content;
+    margin: 1em;
 
     @media (min-width: 800px) {
       width: 50em;
     }
 
+    @media (max-width: 800px) {
+      margin:0;
+    }
+
     & #links {
       padding: 0.5em 0em;
-      margin: 0em 1em;
+      margin: 1em 1em;
       max-width: 100%;
       background-color: #222222;
       border-radius: 0.2em;
@@ -88,7 +93,6 @@
 
     .content {
       padding: 2em;
-      flex-grow: 1;
       flex-direction: column;
       display: flex;
 
