@@ -2,10 +2,15 @@
 
 I keep track of my progress on learning programming languages here.
 
-General books on programming languages:
+## General
 
-- On types and programming languages: <https://www.amazon.com/Types-Programming-Languages-MIT-Press/dp/0262162091>
-- More low-level on compilers and grammars: <https://shop.elsevier.com/books/programming-language-pragmatics/scott/978-0-12-410409-9>
+General books on programming language design:
+
+- [Types and Programming Languages](https://www.amazon.com/Types-Programming-Languages-MIT-Press/dp/0262162091)
+- [Programming Language Pragmatics](https://shop.elsevier.com/books/programming-language-pragmatics/scott/978-0-12-410409-9)
+
+
+## Per-language
 
 From most-loved to most-detested:
 

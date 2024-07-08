@@ -16,7 +16,7 @@ Monads wrap and handle values within a context. A monad is like a container for 
 - core to the algorithm and has computational value
 - you declare what happens when an operation fails
 
-Strictly speaking, a monad is a type constructor which takes an underlying type and puts it into a specific computational context. There are different types of context, defined as different monads. For example, in Rust there are the following monads
+Strictly speaking, a monad is a type constructor which takes an underlying type and puts it into a specific computational context. There are different types of context, defined as different monads. For example, in Rust there are the following monads:
 
 - `Result`: a generic output type for general computations representing operations that may yield a result corresponding to a fixed set of failures. This is the same as adding exceptions that may be thrown to the output type in Java. Rust also does have exceptions as in JavaScript, but they are called `panic`s in Rust. The need for the documentation of a lot of run-time errors is eliminated, when `Result` is used.
 - `Option`: a generic type for dealing with nullable data. It replaces explicit "non-null" checks (that may be forgotten) with (explicitly exhaustive) pattern matching. Turning a type `A` into an `Option<A>` is the same as writing `A | null` in TypeScript.

@@ -29,10 +29,10 @@ Think about types as specifying _lower bounds_ and _upper bounds_ to problems.
 
 ## Different levels of typing
 
-There is distinction between the following types of languages
+There is distinction between the following types of languages:
 
 1. **Weakly-typed** languages: make conversions between unrelated types implicitly;
-2. **strongly-typed** languages: don't allow implicit conversions between unrelated types.
+2. **Strongly-typed** languages: don't allow implicit conversions between unrelated types.
 
 ## Primitive data-types
 
@@ -116,7 +116,7 @@ Languages such as C++ impose fewer constraints on the program, which makes them 
 
 ## Algebraic Data Types (ADTs)
 
-A special feature of Rust is algebraic data types which could also be found in Haskell
+A special feature of Rust is algebraic data types which could also be found in Haskell.
 
 ### Products
 
@@ -131,7 +131,7 @@ struct Cell {
 }
 ```
 
-In R, data-frames are lists of products. In JavaScript, JSON objects are also a form of products.C++ has structs as well. JavaScript and C++ have classes which, in some sense, are a kind of product since they bundle different items in one single entity.
+In R, data-frames are lists of products. In JavaScript, JSON objects are also a form of products. C++ has structs as well. JavaScript and C++ have classes which, in some sense, are a kind of product since they bundle different items in one single entity.
 
 ### Sums
 
@@ -151,7 +151,7 @@ enum CellState {
 
 ### Combining
 
-By combining sum types (`enums`) and product types (`structs`), we can model cell states and behaviors comprehensively. In Rust, we can implement a method for checking the cell state. This means function programming is compatible with object-oriented programming.
+By combining sum types (`enums`) and product types (`structs`), we can model cell states and behaviors comprehensively. In Rust, we can implement a method for checking the cell state. This means functional programming is compatible with object-oriented programming.
 
 ```rust
 impl Cell {
