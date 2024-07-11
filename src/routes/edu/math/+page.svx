@@ -1,0 +1,5 @@
+# Mathematics
+
+Topics I find interesting in mathematics.
+
+- [Homotopy theory](https://homotopytypetheory.org/book/)

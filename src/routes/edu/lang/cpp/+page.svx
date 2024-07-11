@@ -1,12 +1,90 @@
 # C++
 
-I started working on C++ out of necessity. This is still very incomplete.
+See
 
-1. [Functional programming in C++](./01-fp)
-2. [Memory management in C++](./02-memory)
-3. [Pointers in C++](./03-pointers/)
-4. [Object-oriented programming in C++](./04-oop)
-5. [Concurrency in C++](./05-concurrency)
-6. [Interfaces in C++](./06-interfaces)
-7. [Polymorphism in C++](./07-polymorphism/)
-8. [Standard template library in C++](./08-stl)
+- [C++ Crash Course](https://www.amazon.com.be/-/en/Josh-Lospinoso/dp/1593278888)
+- [references in Rust](../rs/05-references/)
+
+## References vs pointers
+
+References are compile-time aliases for variables. Pointers are run-time addresses to data. Both are necessary for self-referencing data-structures.
+
+C has both but does not have the exclusive borrowing constraints for references as in Rust. There may be mutable and immutable references at the same time to some data in C.
+
+## Null pointer
+
+In most mainstream programming languages, there is a **null pointer**. This is a stand-in value for anything missing, and can be assigned to any pointer.
+
+However, it can lead to a lot of problems. In C++, the problems arising from using the null pointer are all undefined behavior, which means that anything could happen.
+
+```cpp
+#include <cstddef>
+
+struct Foo {
+  int val;
+};
+    
+int main()  {
+    Foo* foo = NULL; 
+    // set to null pointer
+    foo->val = 44; 
+    // set val of foo to 44
+    return 0;
+}
+```
+
+In this example, the null pointer `NULL` is assigned and later a field of this object is accessed. However, since it is null, it does not point to a valid `Foo` object. This will result in a run-time failure:
+
+> Address boundary error
+
+
+## Single threading in C++
+
+It is very easy to write an increasing counter in C++.
+
+```cpp
+int counter = 0;
+
+for (int i = 0; i < 10; ++i) {
+    ++counter;
+}
+```
+
+What if we want to update counter in parallel? Then we need need to synchronize access somehow. If we cannot synchronize access, data races will occur and the value of the counter will be undetermined.
+
+## Multi-threading in C++
+
+In C++, it is also necessary to use a special type, a mutex, to synchronize access. In C++ however, this mutex is independent of the rest of the program as you can see:
+
+```cpp
+int counter = 0;
+std::mutex mtx;
+ 
+void incrementCounter() {
+    mtx.lock();
+    ++counter;
+    mtx.unlock();
+}
+ 
+std::thread threads[10];
+for (int i = 0; i < 10; ++i) {
+    threads[i] = std::thread(incrementCounter);
+}
+```
+
+You can try this out for yourself on [play](https://onlinegdb.com/3w8ifDn6h)
+
+The lock and unlock operation have to be timed right before and after the access of the counter. This is a source of errors because it is possible to make a typo and forget to lock or unlock at the right time.
+
+
+## C++ Standard Template Library (STL)
+
+
+Collection of useful data structures and algorithms in C++.
+
+See
+
+- [Wikipedia](https://en.wikipedia.org/wiki/Standard_Template_Library)
+- [Geeks for geeks](https://www.geeksforgeeks.org/the-c-standard-template-library-stl/)
+
+It is not available by default on the Arduino and a special version of STL has to be downloaded.

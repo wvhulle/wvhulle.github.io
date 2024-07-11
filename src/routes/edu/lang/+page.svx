@@ -10,7 +10,7 @@ General books on programming language design:
 - [Programming Language Pragmatics](https://shop.elsevier.com/books/programming-language-pragmatics/scott/978-0-12-410409-9)
 
 
-## Per-language
+## Languages
 
 From most-loved to most-detested:
 
@@ -19,4 +19,3 @@ From most-loved to most-detested:
 3. [TypeScript](./ts)
 4. [Python](./py)
 5. [C++](./cpp)
-6. [R](./r)

@@ -51,4 +51,4 @@ It is important to keep in mind that arrays and functions are objects in JavaScr
 
 TypeScript's conditional types are reminiscent of dependent typing because a type choice is made based on another type (although not on runtime values).
 
-Dependent types are an advanced feature of programming languages, usually only found in languages like [Agda](../../agda) or Coq. These languages are part of the family of proof assistants. In a proof assistant you can express constraints such as "an array of exactly `n` elements," with `n` being a compile-time constant or even a value computed at runtime, something not possible with TypeScript's static type system. See [dependent types](../../agda/02-dependent/).
+Dependent types are an advanced feature of programming languages, usually only found in languages like [Agda](../../agda) or Coq. These languages are part of the family of proof assistants. In a proof assistant you can express constraints such as "an array of exactly `n` elements," with `n` being a compile-time constant or even a value computed at runtime, something not possible with TypeScript's static type system. See [Agda](../../agda).

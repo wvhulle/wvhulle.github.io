@@ -2,6 +2,13 @@
 
 Agda is a language that used in formal proof verification for mathematics and computer science.
 
-1. [Introduction to Agda](./01-basic)
-2. [Dependent types in Agda](./02-dependent)
-3. [Proofs in Agda](./03-proofs)
+## Basic
+
+- [Learn You an Agda](http://learnyouanagda.liamoc.net/pages/peano.html)
+- [Tutorials](https://agda.readthedocs.io/en/v2.6.0.1/getting-started/tutorial-list.html)
+
+## Advanced
+
+- [Verified Functional Programming in Agda](https://dl.acm.org/doi/book/10.1145/2841316)
+- [Group theory](https://alexarice.github.io/posts/strict-group-theory.html)
+

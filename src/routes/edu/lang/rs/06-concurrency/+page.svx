@@ -2,7 +2,7 @@
 
 ## Multi-threading in Rust
 
-We can translate the [C++ program](../../cpp/05-concurrency/) in Rust.
+We can translate the [C++ program](../../cpp) in Rust.
 
 We will decompose the solution to this problem in multiple steps.
 

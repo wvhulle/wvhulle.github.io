@@ -1,5 +1,0 @@
-# Functional programming in C++
-
-Work in progress.
-
-See <https://www.manning.com/books/functional-programming-in-c-plus-plus>

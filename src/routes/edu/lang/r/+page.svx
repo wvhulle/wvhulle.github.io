@@ -1,4 +1,0 @@
-# Programming in R
-
-1. [Data frames in R](./01-df)
-2. [Functional programming in R](./02-fp)

@@ -1,4 +1,0 @@
-# Object-oriented programming in C++
-
-Work in progress.
-    

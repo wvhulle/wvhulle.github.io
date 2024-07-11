@@ -1,5 +1,0 @@
-# Interfaces in C++
-
-I discussed interfaces in Python [here](../../py/03-interfaces)
-
-Work in progress.
