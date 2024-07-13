@@ -1,0 +1,21 @@
+# Deep Learning
+
+## Basic
+
+- Mathematical but accessible book on the basics of deep Learning: [Deep Learning](https://www.amazon.com/Deep-Learning-Adaptive-Computation-Machine/dp/0262035618/)
+
+## Advanced
+
+Work in progress.
+
+- [Probabilistic Machine Learning](https://mitpress.mit.edu/9780262046824/probabilistic-machine-learning/)  by Kevin Murphy
+- [Geometry of Deep Learning: A Signal Processing Perspective](https://www.amazon.com/dp/981166045X)
+
+## Applications
+
+- Commonly used library: [PyTorch](https://pytorch.org/).
+- Discriminative AI:
+    - [Deep Learning for Coders with fastai and PyTorch](https://www.amazon.com/Deep-Learning-Coders-fastai-PyTorch/dp/1492045527/ref=monarch_sidesheet)
+- Generative AI: 
+    - Very easy accessible book: [Generative Deep Learning](https://www.amazon.com/Generative-Deep-Learning-Teaching-Machines/dp/1098134184/)
+    - Introductory video on building transformers for text generation: [Let's build GPT: from scratch, in code, spelled out](https://www.youtube.com/watch?v=kCc8FmEb1nY&t=1811s)

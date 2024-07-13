@@ -1,0 +1,9 @@
+# Abstract/mathematical TypeScript
+
+As mentioned in [ Reconciling type theory and Typescript type system ](https://www.reddit.com/r/ProgrammingLanguages/comments/165w7sp/reconciling_type_theory_and_typescript_type_system/), TypeScript inside
+
+> just a productivity tool for industry programming and that’s fine
+
+Nevertheless, people have implemented concepts from pure mathematics such as:
+
+- Monads are container types that are also used in Haskell and Rust. They represent a domain-specific computation step. The Effect library adds error monads to TypeScript. See [Why Effect](https://effect.website/docs/why-effect)

@@ -126,7 +126,7 @@ Throughout the whole process you have give appropriate names to everything. The 
 
 ### The dependency inversion principle
 
-> "Depend upon abstractions, [not] concretes.
+> "Depend upon abstractions, [not] concretes."
 
 High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details. Details should depend on abstractions.
 
@@ -162,4 +162,4 @@ Related:
 
 - JavaScript: mixins
 - Haskell: type classes
-- Rust: [traits](../../rs/08-composition/)
+- Rust: impl blocks, sometimes used with [composition of structs](../../rs/08-composition/)

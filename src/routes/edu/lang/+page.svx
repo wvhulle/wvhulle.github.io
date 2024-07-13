@@ -6,16 +6,14 @@ I keep track of my progress on learning programming languages here.
 
 General books on programming language design:
 
-- [Types and Programming Languages](https://www.amazon.com/Types-Programming-Languages-MIT-Press/dp/0262162091)
-- [Programming Language Pragmatics](https://shop.elsevier.com/books/programming-language-pragmatics/scott/978-0-12-410409-9)
+- Book on compilers: [Programming Language Pragmatics](https://shop.elsevier.com/books/programming-language-pragmatics/scott/978-0-12-410409-9)
+- More theoretical book: [Types and Programming Languages](https://www.amazon.com/Types-Programming-Languages-MIT-Press/dp/0262162091)
 
 
 ## Languages
 
-From most-loved to most-detested:
-
 1. [Rust](./rs)
 2. [Agda](./agda)
-3. [TypeScript](./ts)
+3. [JavaScript and TypeScript](./ts)
 4. [Python](./py)
-5. [C++](./cpp)
+5. [C and C++](./cpp)

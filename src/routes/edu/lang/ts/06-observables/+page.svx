@@ -3,6 +3,15 @@
 ## History of reactive programming
 
 
+
+Based on the [blog post](https://dev.to/this-is-learning/the-evolution-of-signals-in-javascript-8ob), I wrote a short historical overview of reactive programming. Reactive programming seems to come in two flavours:
+
+- observables
+- signals
+
+A resource that explains the difference well can be found in [video](https://www.youtube.com/watch?v=1TSLEzNzGQM&list=LL&index=1).
+
+
 | Year | Month | Framework   | Version | Flavour    | Description                                                                                                            | Link                                                                                      |
 |------|-------|-------------|---------|------------|-----------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
 | 1970 |       | Smalltalk   |         | Observable | ValueHolder: a class that holds a mutable value and notifies its dependents whenever its value changes                |  [Link](http://www.bildungsgueter.de/Smalltalk/Pages/MVCTutorial/Pages/ValueHolderExample.htm)                                                                                         |
@@ -22,9 +31,6 @@
 | 2022 | 12    | Leptos      |         | Signals    | A framework for WebAssembly in Rust                                                                                    | [Link](https://github.com/leptos-rs/leptos)                                                       |
 | 2023 | 09    | Svelte      | 5       | Signals    | Switched from compile-time reactivity to run-time reactivity. Subscription happens inside effects.                     |                                                                                           |
 
-See [blog](https://dev.to/this-is-learning/the-evolution-of-signals-in-javascript-8ob)
-
-For implementation of signals vs. observables see [video](https://www.youtube.com/watch?v=1TSLEzNzGQM&list=LL&index=1).
 
 ## Personal contribution
 

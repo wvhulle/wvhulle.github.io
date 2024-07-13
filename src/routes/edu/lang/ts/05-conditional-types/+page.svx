@@ -22,6 +22,11 @@ Conditional types are the alternative to "if-then-else" on the type level. They 
 type Cond = A extends B ? C : D
 ```
 
+This means that:
+
+1. If A is structurally a sub-type of B, then the type of Cond is C.
+2. If A is not a sub-type of B, or in other words, it does not contain the information that B has, then the type of Cond is D.
+
 Conditional types, like most types introduced by TypeScript, are types that only exist at compile-time, pre-run-time. There is a general rule of thumb. If you need to run the program first, before you know some information, you cannot model it with conditional types. Conditional types need to be provided enough information before they can function as "if-then" expressions for types.
 
 ## Pattern matching
@@ -44,7 +49,17 @@ export type Replace<Type, From, To> = Type extends object
 	: Type
 ```
 
-It is important to keep in mind that arrays and functions are objects in JavaScript (and TypeScript). Complicated conditional types can be hard to-read.
+It is important to keep in mind that arrays and functions are objects in JavaScript (and TypeScript). 
+
+In the above recursive type definition, we start by:
+
+1. excluding arrays, which are objects.
+2. excluding functions which are objects, but not arrays
+3. including records which are objects, but not functions or arrays and recursively substituting there values
+4. including structural subtypes of `From` and replacing them with `To`.
+5. excluding all the rest from type transformations.
+
+Complicated conditional types can be hard to-read.
 
 
 ## Stronger alternatives
