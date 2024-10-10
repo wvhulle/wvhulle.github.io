@@ -162,4 +162,4 @@ Related:
 
 - JavaScript: mixins
 - Haskell: type classes
-- Rust: impl blocks, sometimes used with [composition of structs](../../rs/08-composition/)
+- Rust: impl blocks, sometimes used with [composition of structs](../../../rs/08-composition/)

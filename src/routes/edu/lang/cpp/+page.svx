@@ -3,7 +3,7 @@
 See
 
 - [C++ Crash Course](https://www.amazon.com.be/-/en/Josh-Lospinoso/dp/1593278888)
-- [references in Rust](../rs/05-references/)
+- [references in Rust](../../rs/05-references/)
 
 ## References vs pointers
 

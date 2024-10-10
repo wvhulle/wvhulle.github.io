@@ -4,13 +4,19 @@ Personal website of Willem Vanhulle, online at <https://wvhulle.github.io/>.
 
 ## Development
 
-Run `npm install`
+Install `pnpm`.
 
-Run `npm run dev`.
+```sh
+curl -fsSL https://get.pnpm.io/install.sh | sh -
+```
+
+Run `pnpm install`
+
+Run `pnpm run dev`.
 
 ## Build
 
-Run `npm run build` and run preview with `npm run preview`.
+Run `pnpm run build` and run preview with `pnpm run preview`.
 
 ## Deploy
 

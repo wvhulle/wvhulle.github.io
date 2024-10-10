@@ -1,5 +1,5 @@
 <script>
-  import "prism-themes/themes/prism-cb.css";
+  import "prism-themes/themes/prism-solarized-dark-atom.css";
 </script>
 
 <div id="layout">
@@ -34,11 +34,11 @@
     margin: 0;
     padding: 0;
     min-height: 100%;
-    background-color: #222222;
+    background-color: #272727;
   }
 
   :global(a) {
-    color: rgb(132, 228, 255);
+    color: rgb(197, 0, 0);
   }
 
   :global(img) {
@@ -46,7 +46,9 @@
   }
 
   #layout {
-    background-image: linear-gradient(120deg, #00657e 0%, #2b2b2b 100%);
+    border-radius: 1em;
+    background-image: linear-gradient(120deg, #000000 0%, #000000 100%);
+    // filter: drop-shadow(16px 16px 20px red);
     width: 100%;
     display: flex;
     height: fit-content;
@@ -61,10 +63,12 @@
     }
 
     & #links {
+    // filter: drop-shadow(16px 16px 20px red);
+
       padding: 0.5em 0em;
       margin: 1em 1em;
       max-width: 100%;
-      background-color: #222222;
+      background-color: #570000;
       border-radius: 0.2em;
       backdrop-filter: blur(0.3em);
       margin-bottom: 1em;

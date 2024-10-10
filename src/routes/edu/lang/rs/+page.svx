@@ -1,15 +1,7 @@
-# Basics of Rust
+# Rust
 
-started at *2023-11-12*
+My first language of choice is Rust.
 
-For a general introduction to Rust, see the [book](https://doc.rust-lang.org/book/)
+I wrote a series of introductory posts inside [basic](./basic).
 
-1. [Functional programming in Rust](./01-fp)
-2. [Types in Rust](./02-types)
-3. [Monads in Rust](./03-monads)
-4. [Ownership in Rust](./04-ownership)
-5. [References in Rust](./05-references)
-6. [Concurrency in Rust](./06-concurrency)
-7. [Asynchronous programming in Rust](./07-async)
-8. [Composition in Rust](./08-composition)
-9. [Design patterns in Rust](./09-dp)
+A series of intermediate posts will be written in [intermediate](intermediate).

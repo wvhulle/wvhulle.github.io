@@ -18,4 +18,4 @@ Strictly speaking, a monad is a type constructor which takes an underlying type 
 - Domain-specific versions of `Result`. These are versions ofr `Result` that correspond to safe computations within a certain field of programming:
     - `io::Result` for all safe operations that perform input/output.
 
-Using these monads in functions requires the use of pattern matching. Pattern matching in Rust is always be exhaustive. This means that pattern matching results in more transparent code with less bugs.
+Using these monads in functions requires the use of pattern matching. Pattern matching in Rust must always be exhaustive. This means that pattern matching results in more transparent code with less bugs.
