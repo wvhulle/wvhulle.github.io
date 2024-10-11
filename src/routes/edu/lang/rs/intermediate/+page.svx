@@ -63,6 +63,8 @@ Types of owning variables:
 This type of variables are not an owner of the data. We say "they don't capture ownership". Ownership entails responsibility to clean up. Non-owning variables are not responsible for cleaning up data. The advantage of non-owning variables is that you can share data without copying, so they can increase the speed of your program.
 
 They come in two types (see [question](https://stackoverflow.com/questions/62232753/what-are-the-differences-between-a-pointer-and-a-reference-in-rust)):
+- pointers
+- references
 
 
 #### Pointers
@@ -101,30 +103,102 @@ Types of references:
   - Python: alternative variable names for data.
 
 
-Questions:
-- Does using * on a reference transfer the ownership? Why does it not?
+## Dereferencing 
 
 
+The dereference operator `*` can appear on two sides of an assignment:
+
+- On the left of an assignment 
+  - can be used to update the value pointed to by a mutable reference if that value is declared mutable
+- On the right of an assignent: accesses the value behind a reference
+  - for references that point to copy types it will create a copy and assignment to the left 
+    - types such as integers
+  - for references that point to non-copy types, it will create a compile time error, since the ownership can not be moved through a reference
 
 ## Lifetimes
 
-- What are the lifetime parameter elision rules? See https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md
+Synonyms:
+- Which other programming languages support lifetimes?
 
-- What is the meaning of &'static T?
+Syntax:
+- `'a`
+
+Semantics:
+- The lifetime of a reference. The logical timeframe within your program that a reference is valid. 
+
+Usage:
+- Lifetimes can be elided or omitted? See https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md
 
 
-## Structs
+Recommendations
+- Give meaningful names to lifetimes
 
 
-- How is the Deref trait implemented for fields of structs?
+Quiz questions:
+- What is the meaning of `&'static T`?
 
+
+## Structs and fields
+
+Synonyms
+- classes
+- objects
+- records
+
+Syntax
+- `Struct`
+
+Semantics
+- A collection of related fields for one entity
+
+How to use fields:
+- Don't assign the field:
+  - `struct.field` will return a reference to the value of the field of the struct
+
+```rust
+fn main() {
+    let my_box = MyStruct { field: 42 };
+
+    // Explicitly dereferencing
+    println!("{}", (*my_box).field); // This will also print 42
+}
+```
+
+- Assign the field to a variable:
+  - When assigning to a reference, the struct is borrowed
+    - the struct can still be used afterwards
+  - When assigning to an owned variable, 
+    - the field is copy: the field is copied to the variable
+    - the field is not copy: the struct is partially moved and
+      - the struct becomes unusable after the assignment because it is then empty
+
+
+If you assign a nonfield to a variable without creating a reference, you will move outside of the struct
+
+```rust
+fn main() {
+    let my_struct = MyStruct { field: String::from("Hello") };
+
+    // Accessing the field directly (returns a reference to the field)
+    let field_ref: &String = &my_struct.field; // No move occurs here
+    println!("{}", field_ref); // Prints: Hello
+
+    // Trying to explicitly move the field out (will work)
+    let moved_field = my_struct.field; // This will work and move the String
+    println!("{}", moved_field); // Prints: Hello
+
+    // At this point, `my_struct` cannot be used to access `field` anymore
+    // println!("{}", my_struct.field); // This will cause a compile-time error
+}
+```
+
+## Defining methods
+
+
+Synonyms
+- methods
+Syntax
 - Impl blocks
-    - Why is it sometimes impossible to call a method with a signature (&self), assign it to something and then later try to use &self again?
-    - Which type parameters should be declared at the beginning of the block and which should go in method declarations?
-
-
-## Impl blocks
-
 
 
 ## Traits
@@ -136,37 +210,84 @@ Questions:
   - trait
 - semantics
   - Defines common behaviour between different types
-  
 
 
-When implementing traits the first keywords behind the impl block are the generic type parameters that apply to the type for which functions are being implemented. They are fixed from the creation of the type. Similarly for lifetime parameters. You should move type generic parameters to the declaration of the invididual functions if they only apply to a function.
-
-
-### Common traits
-
-Iterators:
-
-- What are some useful iterator combinators?
-
-
-
-### Associated types
-
-- What are associated types?
-  - For a given type Self, there can only be one implementation of a non-generic trait, which implies there can only be one concrete type per associated type of a non-generic trait
-
-- When should you use associated types
-  - easier to work with, since no type annotations have to be used to give concrete types to the trait and call a specific implementation of possibly multiple implementations
-  - good for example when implementing particular traits
-    - iterator trait (only one possible item type)
-    - future trait (there is only one possible output type)
-
-
-## Generic programming
+## Generic structs
 
 - Generic types are structs or traits with a placeholder type parameter that has to be specified before methods can be called
     - The compiler applies monomorphization to code contain generics. Isn't this inefficient?
     - Improvement: define inner non-generic functions (Gjengset)
+
+## Generic traits
+
+
+- Syntax
+
+```rust
+trait Trait<T> {
+    fn get_item(&self) -> T;
+}
+```
+
+- Semantics
+  - Generic traits are traits that have type parameters.
+- Usage
+  - In impl blocks first declare all the type parameters
+  - add trait contraints
+
+```rust
+impl<T> Trait<T> for Struct<T> {
+    fn get_item(&self) -> T {
+        self.item
+    }
+}
+```
+
+- Which type parameters should be declared at the beginning of the block and which should go in method declarations?
+  - You should move type generic parameters to the declaration of the invididual functions if they only apply to a function.
+
+
+
+
+### Non-generic associated type traits
+
+
+Syntax
+
+- To declare
+
+```rust
+trait Trait {
+    type Item;
+    fn get_item(&self) -> Self::Item;
+}
+```
+
+- To use 
+
+```rust
+fn get_item_from_trait<T: Trait>(t: T) -> T::Item {
+    t.get_item()
+}
+```
+
+Semantics
+- For a given type Self, there can only be one implementation of a non-generic trait, which implies there can only be one concrete type per associated type of a non-generic trait
+- The trait being implemented depends on a type parameter that is fixed accross all implementations
+
+
+Examples:
+
+- Iterators
+  - What are some useful iterator combinators?
+- Futures
+- Deref
+
+Disadvantages
+- Not all generic traits can be rewritten as traits with associated types, but sometimes it is possible and they become cleaner. 
+
+Benefits
+- easier to work with, since no type annotations have to be used to give concrete types to the trait and call a specific implementation of possibly multiple implementations
 
 ## Trait bounds
 
@@ -241,6 +362,7 @@ Structs or types can contain references. In that case they receive a lifetime pa
 Syntax:
 
 - Structs: lifetime parameters are written before the generic type arguments. 
+- Functions: lifetime parameters are written before the argument list 
 
 Semantics:
 
@@ -261,6 +383,13 @@ Examples:
 Quiz questions:
 
 - What is the difference between `T : 'static` and `&'static T`?
+
+
+## Lifetime bounds in methods
+
+
+- Why is it sometimes impossible to call a method with a signature (&self), assign the output to something and then later try to use &self again?
+
 
 ## Function traits
 
@@ -301,7 +430,7 @@ fn main() {
 ## Function pointers
 
 - Syntax
-    - declared with fn() → ()
+    - declared with `fn() -> ()`
     - not a trait
       - so not written with a capital letter.
       - cannot be used as a trait bound
@@ -345,7 +474,6 @@ When is it particularly useful?
 
 ## Closures
 
-See [https://huonw.github.io/blog/2015/05/finding-closure-in-rust/](https://huonw.github.io/blog/2015/05/finding-closure-in-rust/)
 
 - Alternative names
   - Lambda
@@ -354,66 +482,91 @@ See [https://huonw.github.io/blog/2015/05/finding-closure-in-rust/](https://huon
   - Creates an implicit struct to store captured data.
   - Has an implicit call method defined
 - Syntax
-  - Complete type cannot be written explicitly
-      - because its real type at compile time is a complicated struct
-      - This gives makes them part of the family of unnameable types (also called Voldemort types)
-      - A trait object object has to be used
-      
-      ```rust
-      fn returns_closure() -> Box<dyn Fn(i32) -> i32> {
-          Box::new(|x| x + 1)
-      }
-      ```
-      
-  - move keyword
-      - takes ownership of variables in the surrounding scope
-      - inside the closure the variables are used by reference
-      - does not make the closure FnOnce in itself
-- How can they be used?
-  - There are different kinds of closures based on the signature of their call method:
-      - Fn:
-          - the signature is call(&self),
-          - the body of the closure only may have
-              - immutable references to its containing scope
-              - values that were moved from the containing scope (and only use them by reference afterwards)
-          - can be called from anywhere, multiple times
-          - Must implement FnMut
-      - FnMut:
-          - the signature is (& mut self)
-          - the closure can have
-              - mutable references to its containing scope
-              - immutable references to its containing scope
-          - cannot consume or move out captured variables
-          - can be called more than once, but only once at a time, must implement FnOnce
-      - FnOnce
-          - signature is call(self)
-          - can only be called once
-          - Can move variables that are moved in out
-              - Other words:
-                  - consume captured variables
-                  - apply functions to them and call by value, not by reference
-              - This means that it is not Fn or FnMut, because those should be able to be called multiple times
-          - and mutate,
-          - implemented by every closure
+  - Complete type cannot be written explicitly   
+
+## Closure implementations
+
+How are they implemented? https://huonw.github.io/blog/2015/05/finding-closure-in-rust/
+
+- the body block of the closure is analyzed
+- variables in the body that refer to variables in the surrounding scope are Marked as captured
+- struct generated at compile time with as fields the references to the captured variables, it serves as the environment for the closure body
+  - the struct is invisible and out of reach for the programmer in normal Rust code
+  - This makes closures part of the family of unnameable types (also called Voldemort types)
+
+Disadvantages
+- The exact type of a closure struct cannot be written out to type an input or output argument 
+
+Solutions
+
+- A trait object object has to be used
+
+```rust
+fn returns_closure() -> Box<dyn Fn(i32) -> i32> {
+    Box::new(|x| x + 1)
+}
+```
+
+You can change the default behaviour to only create references to the surrounding environment. You can also move variables inside the struct representing the environment of the closure. This is done by using the move keyword.
+- takes ownership of variables in the surrounding scope
+- inside the closure the variables are used by reference
+  - does not make the closure FnOnce in itself
+
+
+## Variants of closures
+
+There are different kinds of closures based on the signature of their call method on the underlying struct:
+- Fn:
+    - the signature is call(&self),
+    - the body of the closure only may have
+        - immutable references to its containing scope
+        - values that were moved from the containing scope (and only use them by reference afterwards)
+    - can be called from anywhere, multiple times
+    - Must implement FnMut
+- FnMut:
+    - the signature is (& mut self)
+    - the closure can have
+        - mutable references to its containing scope
+        - immutable references to its containing scope
+    - cannot consume or move out captured variables
+    - can be called more than once, but only once at a time, must implement FnOnce
+- FnOnce
+    - signature is call(self)
+    - can only be called once
+    - Can move variables that are moved in out
+        - Other words:
+            - consume captured variables
+            - apply functions to them and call by value, not by reference
+        - This means that it is not Fn or FnMut, because those should be able to be called multiple times
+    - and mutate,
+    - implemented by every closure
   - Only implement copy clone send and sync when their contents do
+
 
 ## Type elision / erasure
 
-- Sometimes we
-    - don't know which instance of a trait we exactly need  as input or output of a function
-    - or it is too cumbersome to write out the full type
-        - iterator implementors
-        - future combinators (see next session)
-    - the actual type is hidden from the user
-        - Also called unnameable or Voldemort types
-- For local variables in functions we can use the wildcard `_`
+Sometimes
+- we don't know the type
+  - the particular instance of a trait we exactly need as input or output for a function signature
+  - the actual type is hidden from the user. These types are called unnameable or Voldemort types
+- we know the type, but the full type is too long to be readable
+  - iterator implementors
+  - future combinators (see next session)
 
 
-When the type cannot be inferred automatically by the compiler, we can use opaque types
-    - benefits
-        - hide specific types,
-        - cleaner API
-        - underlying concrete type can be an unnameable type
+solution:
+- For local variables 
+  - use the wildcard `_`
+- In type declarations for functions, traits or structs, 
+  - the type cannot be inferred by the compiler
+  - use opaque types
+
+   
+Benefits of opaque types
+- hide specific types,
+- cleaner API
+- underlying concrete type can be an unnameable type
+   
 
 ### Trait objects
 
