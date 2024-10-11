@@ -25,27 +25,50 @@ Examples of types:
 
 How to use types in Rust?
 
-The body of functions exists of blocks.
-A block is a sequence of 
-- assignments
-- expressions
+## Blocks
 
-The output variables of assignments in let expressions are owned by the surrounding block. The type of the variable becomes an "owned" type, owned by the surrounding block. 
+Synonyms
+- in C++: Resource Acquisition Is Initialization (RAII)
+- With blocks in Python and file handles
 
-The expression after the last semicolon in an inner block can assigned to a variable outside the blockis the return value of the block. This means that the owner of the last expression becomes the outer block.
+Syntax
+- Curly braces
+- sequence of 
+  - assignments: the output variables of assignments in let expressions are owned by the surrounding block. The type of the variable becomes an "owned" type, owned by the surrounding block. 
+  - expressions
 
-Rust has an extra layer of information on top of types.
+Semantics:
+- Manage allocations on the stack and the heap
+- At the end of a block all variables assigned within the block are de-allocated from the stack and the heap.
+  - The expression after the last semicolon in an inner block can assigned to a variable outside the blockis the return value of the block. 
+  - This means that the owner of the last expression becomes the outer block.
 
-- Types in can be divided into two categories:
+Examples:
+- body of functions exists of blocks.
+
+
+
+## Ownership
+
+Synonyms:
+- No other languages support ownership in the same way as Rust.
+
+Syntax:
+- Invisible when created
+- Visible in the error messages 
+  - when trying to use a variable that has been moved
+
+Semantics
+- extra layer of information on top of types. Types in can be divided into two categories:
   - owning types: types that are owned by the current block
   - non-owning types: types that are not owned by the current block
     - mutably borrowed by a reference
     - immutably borrowed by a reference
 
+Consequences:
+- Data in Rust can be owned by a scope
+- Owned data can be moved between scopes
 
-
-
-## Ownership
 
 ### Owning variables
 
@@ -125,14 +148,14 @@ Syntax:
 
 Semantics:
 - The lifetime of a reference. The logical timeframe within your program that a reference is valid. 
+- Cannot shrink or grow
 
 Usage:
 - Lifetimes can be elided or omitted? See https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md
-
+- When elided, the compiler will choose the shortest lifetime based on all the code paths.
 
 Recommendations
 - Give meaningful names to lifetimes
-
 
 Quiz questions:
 - What is the meaning of `&'static T`?
@@ -149,6 +172,7 @@ Syntax
 - `Struct`
 
 Semantics
+- defines a new type
 - A collection of related fields for one entity
 
 How to use fields:
@@ -203,25 +227,49 @@ Syntax
 
 ## Traits
 
+synonyms
+- typeclasses in Haskell
 
-- synonyms
-  - typeclasses in Haskell
-- syntax
-  - trait
-- semantics
-  - Defines common behaviour between different types
+syntax
+- trait
+
+semantics
+- Defines common behaviour between different types
 
 
 ## Generic structs
 
-- Generic types are structs or traits with a placeholder type parameter that has to be specified before methods can be called
-    - The compiler applies monomorphization to code contain generics. Isn't this inefficient?
+Synonyms
+- Generics in Python
+- Templates in C++
+
+Syntax
+- a placeholder type parameter that has to be specified before methods can be called
+
+Semantics
+- a struct that for which the fields have different types based on the type parameter
+
+Implementation
+- The compiler applies monomorphization to code contain generics. Isn't this inefficient?
     - Improvement: define inner non-generic functions (Gjengset)
+
+If you see a type parameter `T` then you know that 
+- `T` is a super set of `&T` and `&mut T`
+- `&T` is disjoint from `&mut T`
+
+
+```rust
+trait Trait {}
+impl<T> Trait for T {}
+impl<T> Trait for &T {} // ❌
+impl<T> Trait for &mut T {} // ❌
+```
 
 ## Generic traits
 
 
-- Syntax
+Syntax
+- traits that have type parameters.
 
 ```rust
 trait Trait<T> {
@@ -229,11 +277,18 @@ trait Trait<T> {
 }
 ```
 
-- Semantics
-  - Generic traits are traits that have type parameters.
-- Usage
-  - In impl blocks first declare all the type parameters
-  - add trait contraints
+- In impl blocks first declare all the type parameters
+
+
+Semantics
+- add trait contraints
+
+
+
+Examples
+
+- AsRef<T>
+- Custom traits
 
 ```rust
 impl<T> Trait<T> for Struct<T> {
@@ -242,6 +297,8 @@ impl<T> Trait<T> for Struct<T> {
     }
 }
 ```
+
+Important
 
 - Which type parameters should be declared at the beginning of the block and which should go in method declarations?
   - You should move type generic parameters to the declaration of the invididual functions if they only apply to a function.
@@ -291,11 +348,8 @@ Benefits
 
 ## Trait bounds
 
-### Reference traits
+Trait bounds can be applied to type parameters. They constrain the possible input types. At compile time the compiler will try to compute concrete types that satisfy the trait bounds. 
 
-Deref
-
-AsRef
 
 
 ### Multi-threading bounds
@@ -484,6 +538,28 @@ When is it particularly useful?
 - Syntax
   - Complete type cannot be written explicitly   
 
+## Closures and lifetimes
+
+Lifetime elision rules are different so the following does not compile 
+
+```rust
+fn main() {
+    let closure = |x: &i32| x; // ❌
+}
+```
+
+Beause it expands to
+
+```rust 
+fn main() {
+    // input and output each get their own distinct lifetimes
+    let closure = for<'a, 'b> |x: &'a i32| -> &'b i32 { x };
+    // note: the above line is not valid syntax, but we need it for illustrative purposes
+}
+```
+
+Two distinct lifetimes are created for the input and output type. For normal functions, only one lifetime is created.
+
 ## Closure implementations
 
 How are they implemented? https://huonw.github.io/blog/2015/05/finding-closure-in-rust/
@@ -587,6 +663,10 @@ First type of opaque types is a **trait object**:
     - cannot have generic methods
     - The return type isn't Self.
 
+### Lifetimes for trait objects
+
+https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md#6-boxed-trait-objects-dont-have-lifetimes
+
 ### DSTs
 
 Trait objects are part of the family of dynamically sized types (DST) 
@@ -614,25 +694,35 @@ Counterexamples? Most types are not DSTs because their size is known at compile 
 ### Impl trait
 
 The other type of opaque types is impl Trait.
-- syntax
-  - written `impl Trait` 
-  - sugar for hardcoding a specific type that can be inferred by the compiler
-- semantics
-    - No heap allocation
-    - No dynamic dispatch overhead
 
-Implementation of Return position impl A (RPIT) in Trait definitions
-    - the anonymous type in the impl A return type is a kind of associated type
+Synonyms
+- anonymous types
 
-Timeline
-- dec 2023: in traits
-- sep 2024: 
-  - new lifetime capturing rules for return position impl traits? https://blog.rust-lang.org/2024/09/05/impl-trait-capture-rules.html
-    - explicit capturing of specific or none of the lifetimes in the arguments
-    - consequences: 
-      - implementation can be changed 
-      - but signature does not have to be changed
+syntax
+- written `impl Trait` 
+- syntax sugar for hardcoding a specific type that can be inferred by the compiler
+- new lifetime capturing rules for return position impl traits? https://blog.rust-lang.org/2024/09/05/impl-trait-capture-rules.html
+  - explicit capturing of specific or none of the lifetimes in the arguments
+  - consequences: 
+    - implementation can be changed 
+    - but signature does not have to be changed
 
+semantics
+- No extra heap allocation
+- No dynamic dispatch overhead
+
+Implementation:
+- "return position impl Trait" (RPIT) in Trait definitions (allowed since dec 2023)
+  - the anonymous type in the impl T return type is a kind of associated type
+
+
+## Co-operative vs pre-emptive multitasking
+
+cooperative scheduling does not use "context switching"
+
+Context switching involves storing and restoring the state of an application (or thread). This is costly.
+
+https://stackoverflow.com/questions/46015648/cooperative-scheduling-vs-preemptive-scheduling
 
 ## Async-await
 
@@ -690,14 +780,13 @@ Applications
 
 - What are stackless coroutines?
 - How are they implemented in Rust? 
+  - State machines, just like state machines representing futures.
   - See
     - https://doc.rust-lang.org/beta/unstable-book/language-features/coroutines.html#coroutines-as-state-machines
     - https://tmandry.gitlab.io/blog/posts/optimizing-await-1/
-  - State machines, just like future state machines.
+  
 - benefits  
   - no need to create separate stacks per coroutine
-
-
 
 
 ## Relationships
@@ -707,19 +796,18 @@ If every function was a couroutine, you could put the different concepts in a ta
 The following diagram comes from https://without.boats/blog/coroutines-async-and-iter/
 
 
-```txt
-                  │   YIELDS            │   RETURNS       │   RESUMES
-    ──────────────┼─────────────────────┼─────────────────┼─────────────────
-                  │                     │                 │      
-        BASE CASE │   !                 │   Self::Output  │   ()
-                  │                     │                 │      
-           FUTURE │   ()                │   Self::Output  │   &mut Context
-                  │                     │                 │      
-         ITERATOR │   Self::Item        │   ()            │   ()   
-                  │                     │                 │      
-    ASYNCITERATOR │   Poll<Self::Item>  │   ()            │   &mut Context
-                  │                     │                 │      
-```
+|                | YIELDS               | RETURNS         | RESUMES         |
+|----------------|----------------------|-----------------|-----------------|
+|                |                      |                 |                 |
+| BASE CASE      | `!`                  | `Self::Output`  | `()`            |
+|                |                      |                 |                 |
+| FUTURE         | `()`                 | `Self::Output`  | `&mut Context`  |
+|                |                      |                 |                 |
+| ITERATOR       | `Self::Item`         | `()`            | `()`            |
+|                |                      |                 |                 |
+| ASYNCITERATOR  | `Poll<Self::Item>`   | `()`            | `&mut Context`  |
+|                |                      |                 |                 |
+
 
 Explanation of table
 
