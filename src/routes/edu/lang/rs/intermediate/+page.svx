@@ -4,6 +4,47 @@ https://dtolnay.github.io/rust-quiz/11
 
 https://www.reddit.com/r/rust/s/dgNuFoGZ3r
 
+
+## Types
+
+Each variable in Rust has a type.
+
+- What are the fundamental types in Rust?
+
+There are also some more exotic types in Rust:
+
+- General algebraic datatypes (GADTs)?
+  - product types: tuples, structs
+  - sum types: enums
+  - combinations: 
+    - enums with variants being structs
+    - structs with fields being enums
+
+Examples of types:
+- Zero sized types
+
+How to use types in Rust?
+
+The body of functions exists of blocks.
+A block is a sequence of 
+- assignments
+- expressions
+
+The output variables of assignments in let expressions are owned by the surrounding block. The type of the variable becomes an "owned" type, owned by the surrounding block. 
+
+The expression after the last semicolon in an inner block can assigned to a variable outside the blockis the return value of the block. This means that the owner of the last expression becomes the outer block.
+
+Rust has an extra layer of information on top of types.
+
+- Types in can be divided into two categories:
+  - owning types: types that are owned by the current block
+  - non-owning types: types that are not owned by the current block
+    - mutably borrowed by a reference
+    - immutably borrowed by a reference
+
+
+
+
 ## Ownership
 
 ### Owning variables
@@ -86,12 +127,6 @@ Questions:
 
 
 
-## Types
-
-- What are the fundamental types in Rust
-- What are zero sized types?
-
-
 ## Traits
 
 
@@ -130,7 +165,7 @@ Iterators:
 ## Generic programming
 
 - Generic types are structs or traits with a placeholder type parameter that has to be specified before methods can be called
-    - The compiler applies monomorphization to code contain generics. Isn’t this inefficient?
+    - The compiler applies monomorphization to code contain generics. Isn't this inefficient?
     - Improvement: define inner non-generic functions (Gjengset)
 
 ## Trait bounds
@@ -152,11 +187,11 @@ Send
 - automatically implemented by compiler based on some rules
 - examples
     - which types are send?
-        - Structs without references are Send + ‘static
-        - Structs with fields that are references with lower-bound lifetime parameter ‘a are Send + ’a
+        - Structs without references are Send + 'static
+        - Structs with fields that are references with lower-bound lifetime parameter 'a are Send + 'a
         - Cell
     - Not send
-        - *mut T
+        - `*mut T`
 Sync
 - definition: 
   - &T is Send.
@@ -164,7 +199,7 @@ Sync
   - safe to access immutably from several threads in parallel
 - Rules
   - Pointers are in one-to-one corresponds with pointers to pointers (&T = &TT). This implies that `T : Sync <=> &'_ T : Sync`.
-      - A consequence of this is that if `T: !Sync` then `&’_ T: !Sync`
+      - A consequence of this is that if `T: !Sync` then `&'_ T: !Sync`
   - Examples:
     - Arc
   - Counterexamples
@@ -183,9 +218,9 @@ Common combinations
     - may be accessed from any thread but only one at a time
 - !Send + !Sync, 
   - Semantics:
-    - which are the types that manipulate shared handles to !Sync types
+    - types that manipulate shared handles to !Sync types
   - Examples
-    - Rc<T> is such an example.
+    - `Rc<T>` is such an example.
     - Raw pointers
 
 Rare combination: 
@@ -195,9 +230,9 @@ Rare combination:
     - mutable access has to happen on the thread it was created on
     - transferring a &mut T to another thread is not possible since it would break the protections that !Send has
   - Examples
-    - MutexGuard of a T that is sync [https://users.rust-lang.org/t/example-of-a-type-that-is-not-send/59835/3](https://users.rust-lang.org/t/example-of-a-type-that-is-not-send/59835/3)
-      - a MutexGuard cannot be dropped in a different thread
-      - T : Sync ⇔ &'_ T : Sync
+    - MutexGuard of a T https://users.rust-lang.org/t/example-of-a-type-that-is-not-send/59835/3
+      - cannot be dropped in a different thread, so it is not Send
+      - If T is sync then it follows from `T : Sync ⇔ &'_ T : Sync` that a `MutexGuard<T>` is Sync
 
 ## Lifetime bounds
 
@@ -215,7 +250,7 @@ Semantics:
 
 Rules/corollary:
 
-- `&'a T` => `T: 'a`, since a reference to T of lifetime 'a cannot be valid for 'a if T itself is not valid for 'a
+- `&'a T => T: 'a`, since a reference to T of lifetime 'a cannot be valid for 'a if T itself is not valid for 'a
 
 Examples:
 
@@ -235,20 +270,20 @@ Semantics:
 - FnOnce
 
 Rules:
-- Fn => FnMut => FnOnce
+- `Fn => FnMut => FnOnce`
 
 
 ## Function items
 
 - syntax
-  - created with fn foo() {}
-  - fn(u32) -> i32 {fn_name} in error messages
+  - created with `fn foo() {}`
+  - `fn(u32) -> i32 {fn_name}` in error messages
 - semantics
   - stateless, pure
    - can be transferred to other threads since there is no risk of data races
   - references to immutable code in compiled binary
     - can easily be cloned or copied  
-    - can be optimized away => no pointer needed => zero sized
+    - can be optimized away `=>` no pointer needed `=>` zero sized
   - have unique unnameable types
 
 
@@ -305,7 +340,7 @@ fn main() {
 
 
 When is it particularly useful?
-- When using FFI with languages that don’t support closures
+- When using FFI with languages that don't support closures
 
 
 ## Closures
@@ -365,7 +400,7 @@ See [https://huonw.github.io/blog/2015/05/finding-closure-in-rust/](https://huon
 ## Type elision / erasure
 
 - Sometimes we
-    - don’t know which instance of a trait we exactly need  as input or output of a function
+    - don't know which instance of a trait we exactly need  as input or output of a function
     - or it is too cumbersome to write out the full type
         - iterator implementors
         - future combinators (see next session)
@@ -397,7 +432,7 @@ First type of opaque types is a **trait object**:
   - Method call is determined at runtime, less optimizations
 - How can it be created? Which traits can be used to create trait objects? The ones that are object safe.
     - cannot have generic methods
-    - The return type isn’t Self.
+    - The return type isn't Self.
 
 ### DSTs
 
@@ -419,7 +454,7 @@ Related concepts:
 
 Counterexamples? Most types are not DSTs because their size is known at compile time.
 - They implement the trait Sized
-- DSTs don’t implement Sized
+- DSTs don't implement Sized
 
 
 
@@ -445,26 +480,6 @@ Timeline
       - implementation can be changed 
       - but signature does not have to be changed
 
-## Coroutines
-
-Syntax
-- How can I write a coroutine
-Semantics
-- cooperative multitasking
-- What are coroutines https://doc.rust-lang.org/beta/unstable-book/language-features/coroutines.html
-
-
-Questions:
-- What is the difference between a coroutine and a generator
-- what is the difference with a green thread?
-- What is the difference between stackful and stackless coroutines?
-
-Applications
-- How can I write an iterator with a coroutine?
-
-### Couroutine implementations
-
-- How is a coroutine implemented in Rust https://doc.rust-lang.org/beta/unstable-book/language-features/coroutines.html#coroutines-as-state-machines
 
 ## Async-await
 
@@ -483,8 +498,7 @@ Applications
 - What's the best approach for handling structs with lifetimes in asynchronous or multithreaded code? Are there alternatives to avoiding them altogether?
  
 
-
-### Async APIs
+### Built-in async traits
 
 https://without.boats/blog/poll-next/
 
@@ -497,26 +511,47 @@ https://without.boats/blog/poll-next/
 - How are asynchronous function implemented?
 - What are futures?
 - How are references managed across await points in async functions? Where and how are they stored?
+- What is the meaning of the Pin type?
 - As with every impl Future output type in the new version of Rust, it will captures all lifetime constraints on the arguments. Up until now, a special hack was needed for this.
 
-## Tasks
 
-## Runtimes
+## Coroutines
 
-- How is an asynchronous runtime implemented? [https://tokio.rs/tokio/tutorial/async](https://tokio.rs/tokio/tutorial/async)
-- Which asynchronous runtime should I use?
+Syntax
+- How can I write a coroutine
+Semantics
+- cooperative multitasking
+- What are coroutines https://doc.rust-lang.org/beta/unstable-book/language-features/coroutines.html
 
-- Does an async runtime use many threads? Or does it create some kind of application level threads?
 
-## Complex asynchronous applications
+Questions:
+- What is the difference between a coroutine and a generator
+- what is the difference with a green thread?
+- What is the difference between stackful and stackless coroutines?
 
-- When should I pin futures and store them?
+Applications
+- How can I write an iterator with a coroutine?
+
+### Stackless couroutines
+
+
+- What are stackless coroutines?
+- How are they implemented in Rust? 
+  - See
+    - https://doc.rust-lang.org/beta/unstable-book/language-features/coroutines.html#coroutines-as-state-machines
+    - https://tmandry.gitlab.io/blog/posts/optimizing-await-1/
+  - State machines, just like future state machines.
+- benefits  
+  - no need to create separate stacks per coroutine
+
+
+
 
 ## Relationships
 
-- Are coroutines used to implement await syntax? [https://tmandry.gitlab.io/blog/posts/optimizing-await-1/](https://tmandry.gitlab.io/blog/posts/optimizing-await-1/)
+If every function was a couroutine, you could put the different concepts in a table.
 
-- What is the relationship between coroutines and asynchronous functions https://without.boats/blog/coroutines-async-and-iter/
+The following diagram comes from https://without.boats/blog/coroutines-async-and-iter/
 
 
 ```txt
@@ -532,6 +567,27 @@ https://without.boats/blog/poll-next/
     ASYNCITERATOR │   Poll<Self::Item>  │   ()            │   &mut Context
                   │                     │                 │      
 ```
+
+Explanation of table
+
+- normal functions: considered as coroutines, don't yield, so the never type is used for yield. They resume type is only relevant for coroutines that yield, so it is empty for normal functions.
+- futures: When a future is viewed as the state of a call to a coroutine, it's poll function is the function that resumes the coroutine. But to poll a future, you need pass the context which contains the waker. The waker is way to notify the async runtime, in case it is currently pending, that in the future the future is ready to be polled again.
+
+- The implementation of Rust async functions is very similar to the implementation of stackless coroutines.
+
+## Tasks
+
+## Runtimes
+
+- How is an asynchronous runtime implemented? [https://tokio.rs/tokio/tutorial/async](https://tokio.rs/tokio/tutorial/async)
+- Which asynchronous runtime should I use?
+
+- Does an async runtime use many threads? Or does it create some kind of application level threads?
+
+## Complex asynchronous applications
+
+- When should I pin futures and store them?
+
 
 ## Cutting edge
 

@@ -7,4 +7,4 @@ Existing literature:
 - Search for de acronyms SOLID and DRY.
 - More advanced specific patterns to Rust can be found on <https://rust-unofficial.github.io/patterns>
 
-For an example of a design pattern in JavaScript/TypeScript, see [observables](../../ts/06-observables/).
+For an example of a design pattern in JavaScript/TypeScript, see [observables](../../../ts/06-observables/).
