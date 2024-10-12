@@ -7,9 +7,8 @@ https://www.reddit.com/r/rust/s/dgNuFoGZ3r
 
 ## Types
 
-Each variable in Rust has a type.
-
-- What are the fundamental types in Rust?
+Types can be divided in 
+- 
 
 There are also some more exotic types in Rust:
 
@@ -23,68 +22,131 @@ There are also some more exotic types in Rust:
 Examples of types:
 - Zero sized types
 
-How to use types in Rust?
 
-## Blocks
+Related in other languages:
+- Fundamental types in Rust are similar to C++
 
-Synonyms
-- in C++: Resource Acquisition Is Initialization (RAII)
-- With blocks in Python and file handles
+
+## Scope allocation
+
+Semantics
+- Local variable assignments allocate data on the stack
+- The data remains allocated until the end of the scope
+- At the end of the scope of the variable, data is deallocated
 
 Syntax
-- Curly braces
-- sequence of 
-  - assignments: the output variables of assignments in let expressions are owned by the surrounding block. The type of the variable becomes an "owned" type, owned by the surrounding block. 
-  - expressions
+- A scope is delimited by curly braces
 
-Semantics:
-- Manage allocations on the stack and the heap
-- At the end of a block all variables assigned within the block are de-allocated from the stack and the heap.
-  - The expression after the last semicolon in an inner block can assigned to a variable outside the blockis the return value of the block. 
-  - This means that the owner of the last expression becomes the outer block.
+Examples
+- code that locks a mutex essentially includes the logic that the lock will be released when execution leaves the scope of the object
 
-Examples:
-- body of functions exists of blocks.
-
-
+Synonyms
+- With blocks in Python and file handles
+- in C++: Resource Acquisition Is Initialization (RAII)
 
 ## Ownership
 
 Synonyms:
-- No other languages support ownership in the same way as Rust.
+- Object lifetime
+
+Semantics
+- an extension of scope based resource management
+- inside blocks and expressions, there are two categories of variables, members and fields:
+  - owning types: 
+    - types that are owned by the current block
+    - Owning variables are bound to a scope
+    - may pass ownership to a different scope
+    - as long as they have the ownership, they are responsible for destroying or de-initializing the data they refer to a the end of the scope
+  - non-owning types: types that are not owned by the current block
+- ownership is also applied to nested data structures
+- The owner can be moved without moving his children
 
 Syntax:
 - Invisible when created
 - Visible in the error messages 
   - when trying to use a variable that has been moved
 
-Semantics
-- extra layer of information on top of types. Types in can be divided into two categories:
-  - owning types: types that are owned by the current block
-  - non-owning types: types that are not owned by the current block
-    - mutably borrowed by a reference
-    - immutably borrowed by a reference
-
 Consequences:
-- Data in Rust can be owned by a scope
-- Owned data can be moved between scopes
+- Every piece of data in Rust has an owner
+- The root owner is a code block
+- Ownership relationship forms disjoint trees
 
 
-### Owning variables
+## Root ownership 
 
-This type of variables become owner of the data as soon as the data is created through a declaration and an assignment. Owning variables are bound to a scope or expression and may pass ownership to a different scope, but as long as they have the ownership, they are responsible for destroying or de-initializing the data they refer to a the end of the scope.
+Semantics
+- The roots of the ownership tree are locally declared variables inside blocks. 
+- Declared local variables are owned by the surrounding block. 
+- Local variables are the top-most "owned" type
 
-Types of owning variables:
+Implementation
+- on the stack
 
-- normal local variables: Every programming language gives the ability to define names for data and allocate local variables on the stack for temporary storage.
-- owning **smart pointers**: A more advanced version of normal variables. These are explicitly allocated on the heap.
-  - Rust. The most basic example of a smart pointer in Rust is `Box`. This type gives a level of indirection by pointing to a location on the heap. A more complicated version is  `RefCell`, which enables some kind of locking so that no more than variable can modify the content at the same time. The multi-threaded version of `RefCell` is `Mutex`. A mutex is a programming concept that is frequently used to solve multi-threading problems. It is a synchronization primitive that can be used to protect shared data from being simultaneously accessed by multiple threads.
-  - C also has owning smart pointers such as mutexes.
+Syntax:
+- With `let`: locally declared variables
 
-### Non-owning variables
+Examples:
+- arrays
+- numbers
+- characters
 
-This type of variables are not an owner of the data. We say "they don't capture ownership". Ownership entails responsibility to clean up. Non-owning variables are not responsible for cleaning up data. The advantage of non-owning variables is that you can share data without copying, so they can increase the speed of your program.
+## Ownership indirection
 
+Semantics
+- local variables can own data on the heap
+- data on the heap can own other data on the heap
+- gives a level of indirection, 
+- ownership relationships between children of the ownership tree
+
+Examples
+- A vector points to and owns a buffer on the heap, it indirectly owns the value at each index.
+- A struct owns the values of each field
+- An enum variant owns the values of each field
+- **smart pointers**: container types that own data that is allocated on the heap.
+  - A `Box` 
+  - A more complicated version is  `RefCell`, which enables some kind of locking so that no more than variable can modify the content at the same time. 
+  - The multi-threaded version of `RefCell` is `Mutex`. A mutex is a programming concept that is frequently used to solve multi-threading problems. It is a synchronization primitive that can be used to protect shared data from being simultaneously accessed by multiple threads.
+  
+Related:
+- C also has owning smart pointers such as mutexes.
+
+## Moving ownership
+
+Semantics:
+- Transfer the ownership of allocated data to another place in the program
+- The original location of the ownership parent is deallocated
+
+Syntax:
+- Invisible
+
+Implementation
+- Moving data that is owner of some other data will not move all its children in memory
+- Only a Shallow copy is made
+
+Examples:
+- Moving through assignment
+- Moving through assignment of blocks: transfers ownership of the variable associated with the last expression to the outer block
+- Moving through capturing
+  - Capture by constructors
+  - Capture by functions
+
+Related:
+- In C++ a deep copy is made when assigning owning expressions
+
+### Non-owning data
+
+Semantics:
+- Data that points to data that is owned by another parent
+- "they don't capture ownership".
+- Since only the owner has to clean up, non-owning data is not responsible for cleaning up the data being pointed to
+
+Syntax
+- Usually with the `&` sign
+
+Advantages:
+- You can share data without copying, so they can increase the speed of your program.
+
+Examples:
 They come in two types (see [question](https://stackoverflow.com/questions/62232753/what-are-the-differences-between-a-pointer-and-a-reference-in-rust)):
 - pointers
 - references
@@ -287,7 +349,7 @@ Semantics
 
 Examples
 
-- AsRef<T>
+- `AsRef<T>`
 - Custom traits
 
 ```rust
