@@ -7,8 +7,6 @@ https://www.reddit.com/r/rust/s/dgNuFoGZ3r
 
 ## Types
 
-Types can be divided in 
-- 
 
 There are also some more exotic types in Rust:
 
@@ -26,6 +24,19 @@ Examples of types:
 Related in other languages:
 - Fundamental types in Rust are similar to C++
 
+## Basic operators
+
+Question:
+
+```rust
+fn main() {
+    let mut x = 4;
+    --x;
+    print!("{}{}", --x, --x);
+}
+```
+
+no unary increment or decrement operator in Rust
 
 ## Scope allocation
 
@@ -43,6 +54,45 @@ Examples
 Synonyms
 - With blocks in Python and file handles
 - in C++: Resource Acquisition Is Initialization (RAII)
+
+
+Question:
+What is the output of this Rust program?
+
+```rust
+use std::fmt::{self, Display};
+
+struct S;
+
+impl Display for S {
+    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        formatter.write_str("1")
+    }
+}
+
+impl Drop for S {
+    fn drop(&mut self) {
+        print!("2");
+    }
+}
+
+fn f() -> S {
+    S
+}
+
+fn main() {
+    let S = f();
+    print!("{}", S);
+}
+```
+
+This program prints 212.
+
+No value of type S gets dropped within the body of function f. The function f conjures an S and returns ownership of it to the caller of f; the caller determines when to drop the S of which it received ownership.
+
+On the first line of main, we call f() and perform an infallible match that binds no new variables. As no variables are declared on this line, there is no variable that could be the owner of the S returned by f() so that S is dropped at that point, printing 2. The S in let S = f() is a unit struct pattern (not a variable name) that matches a value of type S via destructuring but does not bind the value to any variable.
+
+The second line of main conjures a new S, prints it, and drops it at the semicolon.
 
 ## Ownership
 
@@ -133,6 +183,25 @@ Examples:
 Related:
 - In C++ a deep copy is made when assigning owning expressions
 
+
+```rust
+struct S;
+
+impl Drop for S {
+    fn drop(&mut self) {
+        print!("1");
+    }
+}
+
+fn main() {
+    let s = S;
+    let _ = s;
+    print!("2");
+}
+```
+
+In fact s does not get moved and the output is 21.
+
 ### Non-owning data
 
 Semantics:
@@ -175,7 +244,7 @@ Types of pointers:
 
 An alias for a piece of data, does not take up extra space, cannot be re-initialized. A reference can be dropped, which is usually done at the end of the scope. A reference is a *borrow*. Using references in Rust is called *borrowing* data.
 
-**Special for Rust**: A reference in Rust is any variable that implements the `Deref` trait (which is a kind of type class or interface). This means that it needs to have a *dereferencing* operation implemented. In Rust, references also have a life time (a time over which they are valid) and cannot capture ownership (they do not become responsible for cleaning up data). Life-times are annoted with the special syntax `&'a x` with a single quote. Rust has special borrow rules that distinguish immutable from mutable borrows, see below.
+**Special for Rust**: A reference in Rust is any variable that implements the `Deref` trait (which is a kind of type class or interface). This means that it needs to have a *dereferencing* operation implemented. Rust has special borrow rules that distinguish immutable from mutable borrows, see below.
 
 Types of references:
 
@@ -187,6 +256,10 @@ Types of references:
   - C: `char& r = c`, does not steal access.
   - Python: alternative variable names for data.
 
+
+## Borrowed variables
+
+Data for which exist borrows or references, is called borrowed data. Borrowed data can not be moved. In other words, the owner can not be changed. Since moves can happen at function boundaries, special care is needed when returning data that is borrowed or borrows.
 
 ## Dereferencing 
 
@@ -286,6 +359,31 @@ Synonyms
 Syntax
 - Impl blocks
 
+```rust
+struct S {
+    f: fn(),
+}
+
+impl S {
+    fn f(&self) {
+        print!("1");
+    }
+}
+
+fn main() {
+    let print2 = || print!("2");
+    S { f: print2 }.f();
+}
+```
+
+A call that looks like .f() always resolves to a method, in this case the inherent method S::f. To call the function pointer stored in field f, we would need to write parentheses around the field access: 
+
+```rust
+fn main() {
+    let print2 = || print!("2");
+    (S { f: print2 }.f)();
+}
+```
 
 ## Traits
 
@@ -298,6 +396,44 @@ syntax
 semantics
 - Defines common behaviour between different types
 
+
+```rust
+trait Trait {
+    fn f(&self);
+    fn g(&self);
+}
+
+struct S;
+
+impl S {
+    fn f(&self) {
+        print!("1");
+    }
+
+    fn g(&mut self) {
+        print!("1");
+    }
+}
+
+impl Trait for S {
+    fn f(&self) {
+        print!("2");
+    }
+
+    fn g(&self) {
+        print!("2");
+    }
+}
+
+fn main() {
+    S.f();
+    S.g();
+}
+```
+
+S.f() calls the inherent method f. If an inherent method and a trait method have the same name and receiver type, plain method call syntax will always prefer the inherent method. The caller would need to write `Trait::f(&S)` or `<S as Trait>::f(&S)` in order to call the trait method.
+
+On the other hand, S.g() calls the trait method g. Auto-ref during method resolution always prefers making something into & over making it into &mut where either one would work.
 
 ## Generic structs
 
@@ -407,6 +543,41 @@ Disadvantages
 
 Benefits
 - easier to work with, since no type annotations have to be used to give concrete types to the trait and call a specific implementation of possibly multiple implementations
+
+## Generic traits with associated types
+
+```rust
+struct S(i32);
+
+impl std::ops::BitAnd<S> for () {
+    type Output = ();
+
+    fn bitand(self, rhs: S) {
+        print!("{}", rhs.0);
+    }
+}
+
+fn main() {
+    let f = || ( () & S(1) );
+    let g = || { () & S(2) };
+    let h = || ( {} & S(3) );
+    let i = || { {} & S(4) };
+    f();
+    g();
+    h();
+    i();
+}
+```
+123
+
+```rust
+let i = || {
+    {}
+    &S(4)
+};
+```
+The combination of an inner and outer {}, makes the parser interpret the {} as an empty block statement followed by & as a reference. 
+
 
 ## Trait bounds
 
@@ -600,6 +771,9 @@ When is it particularly useful?
 - Syntax
   - Complete type cannot be written explicitly   
 
+
+
+
 ## Closures and lifetimes
 
 Lifetime elision rules are different so the following does not compile 
@@ -681,6 +855,45 @@ There are different kinds of closures based on the signature of their call metho
   - Only implement copy clone send and sync when their contents do
 
 
+```rust
+trait Trait {
+    fn f(&self);
+}
+
+impl<F: FnOnce() -> bool> Trait for F {
+    fn f(&self) {
+        print!("1");
+    }
+}
+
+impl Trait for () {
+    fn f(&self) {
+        print!("2");
+    }
+}
+
+fn main() {
+    let x = || { (return) || true; };
+    x().f();
+}
+```
+This will output 2. Why?
+1. We define a closure x `|| { (return) || true; }`
+2. `(return)` is of type `!` because it never completes
+3. `(return) || true` is of type `! || true` which evaluates to `bool || true`
+4. `bool || true;` evaluates to `()`
+5. `f` is implemented for `()` to output `2`.
+
+```rust
+
+fn main() {
+    let x = || { return || true; };
+    x().f();
+}
+```
+Will output 1 since a call to x returns another closure that returns a bool.
+
+
 ## Type elision / erasure
 
 Sometimes
@@ -725,6 +938,42 @@ First type of opaque types is a **trait object**:
     - cannot have generic methods
     - The return type isn't Self.
 
+Question
+What is the output of this Rust program?
+```rust
+trait Base {
+    fn method(&self) {
+        print!("1");
+    }
+}
+
+trait Derived: Base {
+    fn method(&self) {
+        print!("2");
+    }
+}
+
+struct BothTraits;
+impl Base for BothTraits {}
+impl Derived for BothTraits {}
+
+fn dynamic_dispatch(x: &dyn Base) {
+    x.method();
+}
+
+fn static_dispatch<T: Base>(x: T) {
+    x.method();
+}
+
+fn main() {
+    dynamic_dispatch(&BothTraits);
+    static_dispatch(BothTraits);
+}
+```
+
+- Dynamic dispatch: The forwarding is done by reading from a table of function pointers contained within the trait object. Expanded to `<dyn Base as Base>::method`. Since the argument was obtained by converting a BothTraits to dyn Base, the automatically generated implementation detail will wind up forwarding to `<BothTraits as Base>::method` which prints 1.
+- Static dispatch: Type inference within generic functions in Rust happens independently of any concrete instantiation of the generic function i.e. before we know what T may be, other than the fact that it implements Base. By the time that T is decided, it has already been determined that x.method() is calling `<T as Base>::method` or `<BothTraits as Base>::method` which prints 1.
+
 ### Lifetimes for trait objects
 
 https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md#6-boxed-trait-objects-dont-have-lifetimes
@@ -750,8 +999,6 @@ Related concepts:
 Counterexamples? Most types are not DSTs because their size is known at compile time.
 - They implement the trait Sized
 - DSTs don't implement Sized
-
-
 
 ### Impl trait
 
@@ -786,6 +1033,36 @@ Context switching involves storing and restoring the state of an application (or
 
 https://stackoverflow.com/questions/46015648/cooperative-scheduling-vs-preemptive-scheduling
 
+## Coroutines
+
+Syntax
+- How can I write a coroutine
+Semantics
+- cooperative multitasking
+- What are coroutines https://doc.rust-lang.org/beta/unstable-book/language-features/coroutines.html
+
+
+Questions:
+- What is the difference between a coroutine and a generator
+- what is the difference with a green thread?
+- What is the difference between stackful and stackless coroutines?
+
+Applications
+- How can I write an iterator with a coroutine?
+
+### Stackless couroutines
+
+
+- What are stackless coroutines?
+- How are they implemented in Rust? 
+  - State machines, just like state machines representing futures.
+  - See
+    - https://doc.rust-lang.org/beta/unstable-book/language-features/coroutines.html#coroutines-as-state-machines
+    - https://tmandry.gitlab.io/blog/posts/optimizing-await-1/
+  
+- benefits  
+  - no need to create separate stacks per coroutine
+
 ## Async-await
 
 - Syntax  
@@ -818,37 +1095,6 @@ https://without.boats/blog/poll-next/
 - How are references managed across await points in async functions? Where and how are they stored?
 - What is the meaning of the Pin type?
 - As with every impl Future output type in the new version of Rust, it will captures all lifetime constraints on the arguments. Up until now, a special hack was needed for this.
-
-
-## Coroutines
-
-Syntax
-- How can I write a coroutine
-Semantics
-- cooperative multitasking
-- What are coroutines https://doc.rust-lang.org/beta/unstable-book/language-features/coroutines.html
-
-
-Questions:
-- What is the difference between a coroutine and a generator
-- what is the difference with a green thread?
-- What is the difference between stackful and stackless coroutines?
-
-Applications
-- How can I write an iterator with a coroutine?
-
-### Stackless couroutines
-
-
-- What are stackless coroutines?
-- How are they implemented in Rust? 
-  - State machines, just like state machines representing futures.
-  - See
-    - https://doc.rust-lang.org/beta/unstable-book/language-features/coroutines.html#coroutines-as-state-machines
-    - https://tmandry.gitlab.io/blog/posts/optimizing-await-1/
-  
-- benefits  
-  - no need to create separate stacks per coroutine
 
 
 ## Relationships
