@@ -576,7 +576,7 @@ let i = || {
     &S(4)
 };
 ```
-The combination of an inner and outer {}, makes the parser interpret the {} as an empty block statement followed by & as a reference. 
+The combination of an inner and outer `{}`, makes the parser interpret the `{}` as an empty block statement followed by & as a reference. 
 
 
 ## Trait bounds
