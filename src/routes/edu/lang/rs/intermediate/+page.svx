@@ -160,6 +160,13 @@ Examples
 Related:
 - C also has owning smart pointers such as mutexes.
 
+## Sharing ownership
+
+By default all variables have a single owner. If you want, you can create data that has multiple owners through `Rc` and `Arc`
+Instances of this type can be cloned, when no instances remain, the reference count becomes zero and the data is de-allocated. This is called *reference counting*. Reference counting is the default way to share data in standard garbage-collected dynamic languages.
+
+
+
 ## Moving ownership
 
 Semantics:
@@ -202,68 +209,38 @@ fn main() {
 
 In fact s does not get moved and the output is 21.
 
-### Non-owning data
+## References
 
-Semantics:
-- Data that points to data that is owned by another parent
-- "they don't capture ownership".
-- Since only the owner has to clean up, non-owning data is not responsible for cleaning up the data being pointed to
 
-Syntax
-- Usually with the `&` sign
+Synonyms
+- a *borrow*. Using references in Rust is called *borrowing* data. 
+
+Semantics
+- An alias of a piece of data that does not capture ownership, not responsible for cleaning up
+- Can be dropped manually or at the end of the scope. 
+
+Implementation:
+- an address on the stack (local reference variables) or the heap (smart pointers)
+- may contain extra data such as length or size 
+- The address of a reference can be printed with `println!("{:p}", &1);`.
 
 Advantages:
 - You can share data without copying, so they can increase the speed of your program.
 
-Examples:
-They come in two types (see [question](https://stackoverflow.com/questions/62232753/what-are-the-differences-between-a-pointer-and-a-reference-in-rust)):
-- pointers
-- references
 
+## Referents
 
-#### Pointers
+The referent is the data at the location pointed to by a reference. We say that the referent is **being borrowed** by its references.
 
-A pointer is an address that points to a different point in memory. A pointer takes up extra space, on top of the data at the destination. The declaration of a pointer entails the allocation of some empty space in memory which makes it a run-time feature (see [question](https://stackoverflow.com/questions/4995899/difference-between-pointer-and-reference-in-c)). It may be created on the stack or the heap and usually takes the space of the size of a register on the CPU, which may be 32 or 64 bit.
+Referents cannot be moved out. 
 
-**Special for Rust**: Raw pointers are like references but do not have a lifetime. They do not have any kind of access control or compile-time borrowing rules imposed.
-
-Types of pointers:
-
-- raw pointers: This type of pointer is usually created on the stack. Such pointers may be pointing to an invalid memory region, memory that contains invalid or no data.
-  - mutable: This type of pointers can be used to update the data at the target address.
-    - Rust: A mutable raw pointer in Rust is written `*mut`. It is used mostly in unsafe code, code that works with raw pointers.  Rust has a special `unsafe` environment to work with raw pointers.
-    - C: `char* p = &c`. C also has the famous `NULL` pointer which leads to many problems, since every pointer is mutable by default and can be the `NULL` pointer.
-  - immutable:  This type of pointer cannot be used to update the data at the target address.
-    - Rust: immutable pointers are declared with `*const`.
-- (non-owning) **smart pointers**: created on the heap, may not point to invalid memory.
-  - Rust: The data `Arc` gives the ability to share ownership with multiple pointers. New pointers can be created by cloning the `Arc`. When no pointers remain that point to the data anymore, the reference count becomes zero and the data is de-allocated. This is called *reference counting*. Reference counting is the default way to share data in standard garbage-collected dynamic languages.
-  - C++: Also has a kind of smart pointers. See for example the analogue of `Arc` called `shared_ptr` (see [smart pointers in c++](https://www.geeksforgeeks.org/smart-pointers-cpp/)).
-
-
-#### References as aliases
-
-An alias for a piece of data, does not take up extra space, cannot be re-initialized. A reference can be dropped, which is usually done at the end of the scope. A reference is a *borrow*. Using references in Rust is called *borrowing* data.
-
-**Special for Rust**: A reference in Rust is any variable that implements the `Deref` trait (which is a kind of type class or interface). This means that it needs to have a *dereferencing* operation implemented. Rust has special borrow rules that distinguish immutable from mutable borrows, see below.
-
-Types of references:
-
-- immutable: used when we want to read data but not change it, checked at compile-time, so has the best performance.
-  - Rust:  An immutable reference does not steal acces, so this allows for sharing of data in a larger programs between different components. After a reference is created, you can follow it by writing the dereference operator `*`. The address of a reference can be printed with `println!("{:p}", &1);`.
-  - C: `const char& r = c`, does not steal access.
-- mutable: exclusive access to data, written as
-  - Rust: You can create an immutable reference by prefixing a variable with `&`: `let a = &b`, steals the access to some data while the mutable reference is valid.
-  - C: `char& r = c`, does not steal access.
-  - Python: alternative variable names for data.
-
-
-## Borrowed variables
-
-Data for which exist borrows or references, is called borrowed data. Borrowed data can not be moved. In other words, the owner can not be changed. Since moves can happen at function boundaries, special care is needed when returning data that is borrowed or borrows.
 
 ## Dereferencing 
 
+Semantics
+A reference in Rust is any variable that implements the `Deref` trait (which is a kind of type class or interface). This means that it needs to have a *dereferencing* operation implemented.
 
+Syntax
 The dereference operator `*` can appear on two sides of an assignment:
 
 - On the left of an assignment 
@@ -275,9 +252,6 @@ The dereference operator `*` can appear on two sides of an assignment:
 
 ## Lifetimes
 
-Synonyms:
-- Which other programming languages support lifetimes?
-
 Syntax:
 - `'a`
 
@@ -288,13 +262,112 @@ Semantics:
 Usage:
 - Lifetimes can be elided or omitted? See https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md
 - When elided, the compiler will choose the shortest lifetime based on all the code paths.
-
-Recommendations
-- Give meaningful names to lifetimes
+- Should be given meaningful names
 
 Quiz questions:
 - What is the meaning of `&'static T`?
 
+Related:
+- Which other programming languages support lifetimes?
+
+
+## Immutable references 
+
+Syntax: `&`
+
+Semantics:
+- make an alias for existing immutable data
+- allows creation of multiple immutable references to the same data
+- all data owned by the aliased referent becomes read-only
+
+Advantages
+- allows for sharing of data in a larger programs between different components. 
+
+https://dtolnay.github.io/rust-quiz/30
+
+```rust
+use std::rc::Rc;
+
+struct A;
+
+fn p<X>(x: X) {
+    match std::mem::size_of::<X>() {
+        0 => print!("0"),
+        _ => print!("1"),
+    }
+}
+
+fn main() {
+    let a = &A;
+    p(a);
+    p(a.clone());
+    
+    let b = &();
+    p(b);
+    p(b.clone());
+    
+    let c = Rc::new(());
+    p(Rc::clone(&c));
+    p(c.clone());
+}
+```
+
+111011
+
+https://dtolnay.github.io/rust-quiz/6
+```rust
+use std::mem;
+
+fn main() {
+    let a;
+    let a = a = true;
+    print!("{}", mem::size_of_val(&a));
+}
+```
+
+```rust
+let a;
+let b = a = true;
+print!("{}", mem::size_of_val(&b));
+```
+
+```rust
+let a = true;
+let b = ();
+print!("{}", mem::size_of_val(&b));
+```
+
+
+
+
+## Mutable references
+
+Semantics
+- Aliases mutable data 
+- Data can be modified through the created reference only
+- Data that is owned by the referent can only be accessed through the mutable reference
+- owning parents of the referent cannot be accessed
+
+Syntax:
+- `let mutable_reference = &mut v`
+
+## Pointers
+
+Raw pointers are like references but do not have a lifetime or rules around borrowing.
+
+Semantics
+- a kind of reference that may point to invalid memory
+  
+Syntax
+- mutable: `*mut`
+- immutable: `*const`.
+  
+Disadvantages:
+- Dereferencing of raw pointers has to happen in an unsafe environment
+
+See:
+- [question](https://stackoverflow.com/questions/4995899/difference-between-pointer-and-reference-in-c)
+- [question](https://stackoverflow.com/questions/62232753/what-are-the-differences-between-a-pointer-and-a-reference-in-rust)
 
 ## Structs and fields
 
@@ -435,6 +508,45 @@ S.f() calls the inherent method f. If an inherent method and a trait method have
 
 On the other hand, S.g() calls the trait method g. Auto-ref during method resolution always prefers making something into & over making it into &mut where either one would work.
 
+### Question
+
+https://dtolnay.github.io/rust-quiz/14
+
+```rust 
+trait Trait: Sized {
+    fn is_reference(self) -> bool;
+}
+
+impl<'a, T> Trait for &'a T {
+    fn is_reference(self) -> bool {
+        true
+    }
+}
+
+fn main() {
+    match 0.is_reference() {
+        true => print!("1"),
+        false => print!("0"),
+    }
+
+    match '?'.is_reference() {
+        true => print!("1"),
+        false => {
+            impl Trait for char {
+                fn is_reference(self) -> bool {
+                    false
+                }
+            }
+            print!("0")
+        }
+    }
+}
+```
+
+```
+10
+```
+
 ## Generic structs
 
 Synonyms
@@ -568,7 +680,10 @@ fn main() {
     i();
 }
 ```
-123
+
+Answer:
+
+The output will be 123
 
 ```rust
 let i = || {
@@ -893,6 +1008,35 @@ fn main() {
 ```
 Will output 1 since a call to x returns another closure that returns a bool.
 
+https://dtolnay.github.io/rust-quiz/33
+```rust
+use std::ops::RangeFull;
+
+trait Trait {
+    fn method(&self) -> fn();
+}
+
+impl Trait for RangeFull {
+    fn method(&self) -> fn() {
+        print!("1");
+        || print!("3")
+    }
+}
+
+impl<F: FnOnce() -> T, T> Trait for F {
+    fn method(&self) -> fn() {
+        print!("2");
+        || print!("4")
+    }
+}
+
+fn main() {
+    (|| .. .method())();
+}
+```
+
+As (|| ..).method(), which is an invocation of our impl of Trait on `FnOnce() -> T` where T is inferred to be RangeFull. In this case main would print 24.
+
 
 ## Type elision / erasure
 
@@ -1027,77 +1171,212 @@ Implementation:
 
 ## Co-operative vs pre-emptive multitasking
 
-cooperative scheduling does not use "context switching"
+When a CPU has to accomodate for multiple threads (or more general tasks), it needs to have a way to switch between different tasks. This is called **context switching**.
 
-Context switching involves storing and restoring the state of an application (or thread). This is costly.
+- cooperative multitasking
+  - process themselves say when they can't make progress
+  - in practice context switching happens on yield points
+- pre-emptive multitasking
+  - context switching happens by force on arbitrary points 
+  - could be useful when dealing with listeners in the UI for responsiveness if no yield points
 
-https://stackoverflow.com/questions/46015648/cooperative-scheduling-vs-preemptive-scheduling
+See https://stackoverflow.com/questions/46015648/cooperative-scheduling-vs-preemptive-scheduling
+
 
 ## Coroutines
 
+Synonyms:
+- Generators
+
+Semantics
+- has a signature like a function and a closure
+- can capture variables by reference or by value like closure
+- can be suspended during execution
+- can be resumed before final return
+
+
 Syntax
 - How can I write a coroutine
-Semantics
-- cooperative multitasking
-- What are coroutines https://doc.rust-lang.org/beta/unstable-book/language-features/coroutines.html
 
+```rust
+#![feature(coroutines, coroutine_trait, stmt_expr_attributes)]
 
-Questions:
-- What is the difference between a coroutine and a generator
-- what is the difference with a green thread?
-- What is the difference between stackful and stackless coroutines?
+use std::ops::Coroutine;
+use std::pin::Pin;
 
-Applications
-- How can I write an iterator with a coroutine?
+fn main() {
+    let mut coroutine = #[coroutine] || {
+        println!("2");
+        yield;
+        println!("4");
+    };
 
-### Stackless couroutines
+    println!("1");
+    Pin::new(&mut coroutine).resume(());
+    println!("3");
+    Pin::new(&mut coroutine).resume(());
+    println!("5");
+}
+```
 
+A **generator** is a simple kind of coroutine:
+- Used to generate values for a list
+- does not receive information when resumed. Coroutines in general may receive information when they are resumed.
+- not tied to an event loop
 
-- What are stackless coroutines?
-- How are they implemented in Rust? 
-  - State machines, just like state machines representing futures.
-  - See
-    - https://doc.rust-lang.org/beta/unstable-book/language-features/coroutines.html#coroutines-as-state-machines
-    - https://tmandry.gitlab.io/blog/posts/optimizing-await-1/
+Advantages
+- Can be used to write concurrent code
+  -  more efficient code that is cooperative, yields control to the caller if an external event did not happen
+- Can be used to write iterators
+
+Benefits
+- expensive threads can be replaced by coroutines: 
+  - smaller and more efficient context switching
+- might be an easier way to write iterators
+- can be used to implement async
+- Optimizing utilizing computational resources (registers, caches, cores, ...)
+- Not necessarily but possibly parallel
+
+See
+- https://doc.rust-lang.org/beta/unstable-book/language-features/coroutines.html
+
+## Types of coroutines
+
+There are to types of implementations for coroutines:
+- stackful
+  - as functions are called as part of the coroutine, their frames are pushed on the stack
+  - each coroutine has its own stack
+  - more control over the execution state 
+    - easier to handle deeply nested function calls
+  - more memory heavy
+    - context switching is slower
+- stackless
   
-- benefits  
-  - no need to create separate stacks per coroutine
+  - only store resumption point in an enum with necessary variables
+  - more memory efficient and faster
+  - more complex to implement for nested calls
+  - impossible to display stack in a debugger
+
+See
+- https://langdev.stackexchange.com/questions/697/what-are-the-benefits-of-stackful-vs-stackless-coroutines
+- https://without.boats/blog/why-async-rust/
+
+## Stackless coroutines
+
+- How are they implemented in Rust? 
+
+```rust
+pub trait Coroutine<R = ()> {
+    type Yield;
+    type Return;
+    fn resume(self: Pin<&mut Self>, resume: R) -> CoroutineState<Self::Yield, Self::Return>;
+}
+```
+The `Coroutine` trait is implemented on an enum.
+Enum variants represent states of a state machines.
+At every yield, the captured variables have to be referenced.
+
+```rust
+enum __Coroutine {
+    Start(&'static str),
+    Yield1(&'static str),
+    Done,
+}
+```
+
+The resume method progresses the states of the state machine:
+
+```rust
+impl Coroutine for __Coroutine {
+    type Yield = i32;
+    type Return = &'static str;
+
+    fn resume(mut self: Pin<&mut Self>, resume: ()) -> CoroutineState<i32, &'static str> {
+        use std::mem;
+        match mem::replace(&mut *self, __Coroutine::Done) {
+            __Coroutine::Start(s) => {
+                *self = __Coroutine::Yield1(s);
+                CoroutineState::Yielded(1)
+            }
+
+            __Coroutine::Yield1(s) => {
+                *self = __Coroutine::Done;
+                CoroutineState::Complete(s)
+            }
+
+            __Coroutine::Done => {
+                panic!("coroutine resumed after completion")
+            }
+        }
+    }
+}
+```
+
+Then we need to pin the coroutine, since it contains references and shouldn't be moved. 
+
+```rust
+Pin::new(&mut coroutine).resume(());
+Pin::new(&mut coroutine).resume(());
+```
+
+- What is the meaning of the Pin type?
+
+Disadvantage  
+- unstable Rust language feature
+
+See
+- https://doc.rust-lang.org/beta/unstable-book/language-features/coroutines.html#coroutines-as-state-machines
+- https://tmandry.gitlab.io/blog/posts/optimizing-await-1/
+  
 
 ## Async-await
 
-- Syntax  
-  - Desugars to impl future
-  - when async function signatures is used in a trait it is syntax sugar for an RPIT
-  - Which bounds are added to the impl Future output type?
-- Semantics
-  - Concurrent programming
-  - Optimizing utilizing computational resources (registers, caches, cores, ...)
-  - Not necessarily parallel
-- Use cases
-  - What are the benefits of asynchronous code?
+Semantics
+- A computational model to deal efficiently with external events
+  
+Syntax  
 
+```rust
+use zenoh::prelude::r#async::*;
 
-- What's the best approach for handling structs with lifetimes in asynchronous or multithreaded code? Are there alternatives to avoiding them altogether?
+#[tokio::main]
+async fn main() {
+    let session = zenoh::open(config::default()).res().await.unwrap();
+    session.put("key/expression", "value").res().await.unwrap();
+    session.close().res().await.unwrap();
+}
+```
+
+Advantages
+- All the advantages from stackless coroutines such a more efficient multit-tasking
+- Respond efficiently to network events
+
+Disadvantages
+- Cannot be mixed easily with synchronous code, colors functions
+- Bounds have to be added explicitly to a desugared function signature using `impl Future`
  
+See
+- https://docs.rs/zenoh/latest/zenoh/
 
-### Built-in async traits
+## Common async code patterns 
 
-https://without.boats/blog/poll-next/
+- How to create an asynchronous iterator?
 
-- What are some practical applications of asynchronous iterators?
+See
+- https://blog.yoshuawuyts.com/async-iterator-trait/
+- https://github.com/Kobzol/async-iterator-examples/tree/main
 
 ### Async implementations
 
-[why-async-rust](https://without.boats/blog/why-async-rust/)
+- `async fn` function declarations desugar to `impl Future` (RPIT)
+- every `Future` is a stackless coroutine
+- The `impl Future` captures all the lifetime variables, unless opted out
 
-- How are asynchronous function implemented?
-- What are futures?
-- How are references managed across await points in async functions? Where and how are they stored?
-- What is the meaning of the Pin type?
-- As with every impl Future output type in the new version of Rust, it will captures all lifetime constraints on the arguments. Up until now, a special hack was needed for this.
+- Similarly to coroutines, inside a future
+  - Local references or variables which are valid across await points are stored in a struct
+  - A future can be send only if the internal data is send.
 
-
-## Relationships
+## Aynchronous functions as coroutines
 
 If every function was a couroutine, you could put the different concepts in a table.
 
@@ -1122,11 +1401,16 @@ Explanation of table
 - normal functions: considered as coroutines, don't yield, so the never type is used for yield. They resume type is only relevant for coroutines that yield, so it is empty for normal functions.
 - futures: When a future is viewed as the state of a call to a coroutine, it's poll function is the function that resumes the coroutine. But to poll a future, you need pass the context which contains the waker. The waker is way to notify the async runtime, in case it is currently pending, that in the future the future is ready to be polled again.
 
-- The implementation of Rust async functions is very similar to the implementation of stackless coroutines.
+## History of async
 
-## Tasks
+2013: Green threads are threads managed by a runtime in user-space and can be pre-emptive or cooperative. They make it possible to continue executing multiple tasks in parallel. 
+2015: native threads: better for compatibility, less overhead
+2016: Tokio, `Future` trait
+2018: async/await syntax
 
-## Runtimes
+[why-async-rust](https://without.boats/blog/why-async-rust/)
+
+## Async runtimes
 
 - How is an asynchronous runtime implemented? [https://tokio.rs/tokio/tutorial/async](https://tokio.rs/tokio/tutorial/async)
 - Which asynchronous runtime should I use?
@@ -1136,7 +1420,7 @@ Explanation of table
 ## Complex asynchronous applications
 
 - When should I pin futures and store them?
-
+- What's the best approach for handling structs with lifetimes in asynchronous or multithreaded code? Are there alternatives to avoiding them altogether?
 
 ## Cutting edge
 
