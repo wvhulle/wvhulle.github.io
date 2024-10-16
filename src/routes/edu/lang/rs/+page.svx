@@ -1,7 +1,0 @@
-# Rust
-
-My first language of choice is Rust.
-
-I wrote a series of introductory posts inside [basic](./basic).
-
-A series of intermediate posts will be written in [intermediate](intermediate).

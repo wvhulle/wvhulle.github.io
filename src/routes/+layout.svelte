@@ -1,16 +1,12 @@
 <script>
-  import "prism-themes/themes/prism-solarized-dark-atom.css";
+  import "prism-themes/themes/prism-coldark-dark.css";
 </script>
 
 <div id="layout">
   <div id="links" class="">
-    <a href="/" class="link">Home</a>
+    <a href="/" class="link">About</a>
 
-    <a href="/projects" class="link">Projects</a>
-
-    <a href="/edu" class="link">Educational</a>
-
-    <a href="/about" class="link">About</a>
+    <a href="/posts" class="link">Posts</a>
   </div>
   <div class="content">
     <slot />
@@ -20,11 +16,6 @@
 <style lang="scss">
   :global(*) {
     color: white;
-  }
-
-  * {
-    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
-      sans-serif;
   }
 
   :global(html, body) {
@@ -37,8 +28,19 @@
     background-color: #272727;
   }
 
+  :global(h1, h2, h3, h4),
+  a {
+    font-family: sans-serif;
+    font-weight: 800;
+  }
+
+  :global(p, li, a) {
+    font-family: sans-serif;
+  }
+
   :global(a) {
-    color: rgb(197, 0, 0);
+    color: rgb(164, 246, 255);
+    text-decoration: underline;
   }
 
   :global(img) {
@@ -48,34 +50,33 @@
   #layout {
     border-radius: 1em;
     background-image: linear-gradient(120deg, #000000 0%, #000000 100%);
-    // filter: drop-shadow(16px 16px 20px red);
     width: 100%;
     display: flex;
     height: fit-content;
-    margin: 1em;
+    
+    overflow: clip;
+    filter: drop-shadow(20px 20px 40px rgba(0, 0, 0, 0.269));
 
     @media (min-width: 800px) {
+      margin: 3em;
       width: 50em;
     }
 
     @media (max-width: 800px) {
-      margin:0;
+      border-radius: 0;
+      margin: 0;
     }
 
     & #links {
-    // filter: drop-shadow(16px 16px 20px red);
-
       padding: 0.5em 0em;
-      margin: 1em 1em;
+      margin: 0em 0em;
       max-width: 100%;
-      background-color: #570000;
-      border-radius: 0.2em;
-      backdrop-filter: blur(0.3em);
-      margin-bottom: 1em;
+      background-color: #111b27;
+      margin-bottom: 0em;
       display: flex;
       flex-direction: row;
       position: sticky;
-      top: 0.5em;
+      top: 0em;
       gap: 0em 0em;
       place-content: center;
       justify-content: space-evenly;
@@ -84,10 +85,9 @@
 
       & .link {
         text-decoration: none;
-        font-weight: 400;
-        font-size: larger;
+        font-weight: 800;
+        font-size: 2em;
         color: inherit;
-
         &:hover {
           text-decoration: underline;
         }
@@ -103,12 +103,9 @@
       @media (max-width: 800px) {
         padding: 1em;
       }
-      
     }
 
     flex-direction: column;
     position: relative;
   }
-
-
 </style>

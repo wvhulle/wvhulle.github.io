@@ -1,7 +1,0 @@
-# Educational
-
-I collect topics of interest to myself and maybe of interest to others.
-
-- [Linux](./linux)
-- [Programming languages](./lang)
-- [Mathematics](./math)

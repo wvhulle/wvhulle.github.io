@@ -1,5 +1,0 @@
-# Object-oriented programming in TypeScript
-
-Work in progress.
-
-See <https://www.typescriptlang.org/docs/handbook/2/classes.html>

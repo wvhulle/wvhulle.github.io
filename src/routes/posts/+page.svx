@@ -1,0 +1,47 @@
+# Posts
+
+Work-in-progress.
+
+## The type system of Rust 
+_Ghent, 2024-10-24_
+
+### Structural rules
+
+a structural rule is an inference rule of a sequent calculus that does not refer to any logical connective but instead operates on the sequents directly
+
+What are the structural rules 
+
+- Exchange: two members on the same side may be swapped
+- Weaking: a hypothesis or conclusion may be extended with additional members
+- Contraction: two equal members on the same side may be replaced by a single member
+
+
+### Sub-structural type system
+
+One ore more of the structural rules are absent
+
+### Affine type system
+
+Does have exchange, weaking but not contraction. 
+
+https://without.boats/blog/ownership/
+
+Every variable is used at most once. Why?
+
+https://www.reddit.com/r/rust/comments/eaf5ko/what_logic_does_rusts_rules_correspond_to/
+
+```
+————————————   ————————————
+ x:T |- x:T     x:T |- x:T
+———————————————————————————
+ x:T, x:T |- (x,x) : (T,T)
+——————————————————————————— <- contraction!!
+   x:T |- (x,x) : (T,T)
+  ———————————————————————
+   λx.(x,x) : T -> (T,T)
+```
+
+
+https://www.youtube.com/watch?v=1GjSfyijaxo
+
+### Region-based memory allocation

@@ -1,5 +1,0 @@
-# Generic programming in TypeScript
-
-Work in progress.
-
-See <https://www.typescriptlang.org/docs/handbook/2/generics.html>

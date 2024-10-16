@@ -5,25 +5,32 @@
 <div id="header">
   <div id="left">
     <h1>Willem Vanhulle</h1>
-    <h2 class="">Software engineer</h2>
+    <h2 class="">Ghent, Belgium</h2>
+    <h2 class="">Rust Developer</h2>
 
-    <h3 class="">Ghent, Belgium</h3>
+    <h3 class="">
+      <a href="https://www.linkedin.com/in/willem-vanhulle-2657aa180/">
+        LinkedIn
+      </a>,
+
+      <a href="mailto:willemvanhulle@gmail.com">
+        E-mail
+      </a>
+    </h3>
+
+    <h3 class="">
+      
+    </h3>
   </div>
 
   <div id="profile">
-  <img src="lab.jpg" alt="Willem in the lab" />
+    <img src="lab.jpg" alt="Willem in the lab" />
   </div>
 </div>
 
 <div id="body">
-  
-  <p>
-  </p>
-
-  
+  <p></p>
 </div>
-
-
 
 <style lang="scss">
   #header {
@@ -37,21 +44,27 @@
     padding: auto;
   }
 
-  h1 {
-    font-weight: 700;
-    font-size: 2em;
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    margin: 0;
-    line-height: 1em;
+  h1,
+  h2,
+  h3,
+  a {
+    margin: 0 0em;
     text-align: right;
   }
 
-  h2,h3 {
-    font-weight: 400;
-    text-align: right;
+  h1 {
+    font-size: 2em;
+  }
 
-    padding: 0.5em 0;
-    margin: 0;
+  h2,
+  h3 {
+
+   
+    font-weight: 400;
+  }
+
+  h3 {
+    font-style: italic;
   }
 
   #body {
@@ -65,12 +78,6 @@
     aspect-ratio: 1;
   }
 
-  #spacer {
-    display: flex;
-
-    flex-grow: 1;
-  }
-
   #profile {
     border-radius: 50%;
     background-color: rgb(0, 0, 0);
@@ -78,12 +85,5 @@
     aspect-ratio: 1;
     margin: 2em 4em;
     filter: drop-shadow(10px 10px 4px #00000081);
-    }
-
-  #footer {
-    padding: 1em;
-    align-self: flex-end;
-    font-size: 0.7em;
-    font-style: italic;
   }
 </style>
