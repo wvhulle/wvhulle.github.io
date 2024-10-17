@@ -30,9 +30,50 @@ There are two kinds of types:
 
 Avoid all heap allocations as much as possible.
 
+### Str and String
+
+#### Question
+
+What is the difference between `str` and `String`?
+
+#### Answer
+
+- `str`: immutable sequence of UTF-8 bytes of dynamic length somewhere in memory
+  - size is unknown, so can only be used in a program behind pointer
+- `String`: heap allocated, can be mutable, similar to `Vec`
+  - dereferences to `&str`
+
+### Ranges and tuples
+
+#### Question
+
+```rust
+fn main() {
+    let (.., x, y) = (0, 1, ..);
+    print!("{}", b"066"[y][x]);
+}
+```
+
+#### Short answer
+
+```
+54
+```
+
+#### Long answer
+
+1. On the right-hand side (0, 1, ..) is a tuple with three elements, the third one having type RangeFull
+2. On the left-hand side matches a tuple with 2 or more elements, binding the second-last one to x and the last one to y.
+3. `b"066"[..][1]`
+4. the byte b'6' of type u8. When printed, we see the decimal representation of the byte value of the ASCII digit 6, which is the number 54.
+
 ## Basic operators
 
-Question:
+### Prefix decrement
+
+#### Question
+
+What is the output of the following program?
 
 ```rust
 fn main() {
@@ -42,9 +83,34 @@ fn main() {
 }
 ```
 
-no unary increment or decrement operator in Rust
+#### Short answer
 
-Why? To simplify parsing and reasoning.
+```
+4
+```
+
+
+
+#### Detailed answer
+
+Rust does not have a unary increment or decrement operator.
+
+
+### Postfix decrement
+
+```rust
+fn main() {
+    let mut a = 5;
+    let mut b = 3;
+    print!("{}", a-- - --b);
+}
+```
+
+#### Short answer
+
+#### Long answer
+
+`a - (-(-(-(-b))))`
 
 ## Scope allocation
 
@@ -99,18 +165,20 @@ fn main() {
 }
 ```
 
-#### Short answer
+#### Answer
 
-This program prints 212.
+```
+212
+```
 
+#### Detailed answer
 
-#### Long answer
+No value of type S gets dropped within the body of function f. 
 
-No value of type S gets dropped within the body of function f. The function f conjures an S and returns ownership of it to the caller of f; the caller determines when to drop the S of which it received ownership.
-
-On the first line of main, we call f() and perform an infallible match that binds no new variables. As no variables are declared on this line, there is no variable that could be the owner of the S returned by f() so that S is dropped at that point, printing 2. The S in let S = f() is a unit struct pattern (not a variable name) that matches a value of type S via destructuring but does not bind the value to any variable.
-
-The second line of main conjures a new S, prints it, and drops it at the semicolon.
+1. The function f conjures an S and returns ownership of it to the caller of f; the caller determines when to drop the S of which it received ownership.
+2. The S in let S = f() is a unit struct pattern (not a variable name) that matches a value of type S via destructuring but does not bind the value to any variable. 
+3. As no variables are declared on this line, there is no variable that could be the owner of the S returned by f() so that S is dropped at that point, printing 2. 
+4. The second line of main conjures a new S, prints it, and drops it at the semicolon.
 
 ## Ownership
 
@@ -245,6 +313,19 @@ fn main() {
 }
 ```
 
+#### Answer
+
+output is 
+
+```
+21
+```
+
+#### Detailed answer
+
+The pattern `let _ = s` is a special pattern that does not move or consume `s`. `_` is a way to ignore a value without triggering a move.
+
+
 ## Ownership indirection
 
 Semantics
@@ -332,12 +413,6 @@ Related:
 
 
 
-#### Short answer
-
-The output is 21.
- 
-#### Long answer
-In fact s does not get moved and
 
 ## References
 
@@ -430,6 +505,7 @@ let a;
 let b = a = true;
 print!("{}", mem::size_of_val(&b));
 ```
+The value of an assignment is `()`, so we can rewrite the program as:
 
 ```rust
 let a = true;
@@ -437,6 +513,7 @@ let b = ();
 print!("{}", mem::size_of_val(&b));
 ```
 
+The `size_of_val` gives the size of the referent.
 
 
 
@@ -468,7 +545,8 @@ impl<T> Trait for &mut T {} // ❌
 
 ## Pointers
 
-Raw pointers are like references but do not have a lifetime or rules around borrowing.
+
+Raw pointers in Rust are like references but do not have a lifetime or rules around borrowing.
 
 Semantics
 - a kind of reference that may point to invalid memory
@@ -481,8 +559,8 @@ Disadvantages:
 - Dereferencing of raw pointers has to happen in an unsafe environment
 
 See:
-- [question](https://stackoverflow.com/questions/4995899/difference-between-pointer-and-reference-in-c)
-- [question](https://stackoverflow.com/questions/62232753/what-are-the-differences-between-a-pointer-and-a-reference-in-rust)
+- [pointers vs. references in C](https://stackoverflow.com/questions/4995899/difference-between-pointer-and-reference-in-c)
+- [pointers vs. references in Rust](https://stackoverflow.com/questions/62232753/what-are-the-differences-between-a-pointer-and-a-reference-in-rust)
 
 ## Structs and fields
 
@@ -498,26 +576,31 @@ Semantics
 - defines a new type
 - A collection of related fields for one entity
 
-How to use fields:
-- Don't assign the field:
-  - `struct.field` will return a reference to the value of the field of the struct
+## Referencing fields
+
+In general for a given struct `struct`, the notation `struct.field` will return a reference to the value of the field `field` of the struct. 
+Implicitly, the `struct.` access is replaced by a `(*struct).`.
+
+So the following are equivalent:
 
 ```rust
 fn main() {
     let my_box = MyStruct { field: 42 };
-
+    // Implicit dereferencing
+    println!("{}", my_box.field); // This will also print 42
     // Explicitly dereferencing
     println!("{}", (*my_box).field); // This will also print 42
 }
 ```
 
-- Assign the field to a variable:
-  - When assigning to a reference, the struct is borrowed
-    - the struct can still be used afterwards
-  - When assigning to an owned variable, 
-    - the field is copy: the field is copied to the variable
-    - the field is not copy: the struct is partially moved and
-      - the struct becomes unusable after the assignment because it is then empty
+You can assign a reference to a struct and a field access to a variable. In that case, the struct is borrowed and it can still be used afterwards
+ 
+## Assigning fields
+
+You can also assign a field directly to a variable
+- the field is copy: the field is copied to the variable
+- the field is not copy: the struct is partially moved and
+  - the struct becomes unusable after the assignment because it is then empty
 
 
 If you assign a nonfield to a variable without creating a reference, you will move outside of the struct
@@ -714,7 +797,46 @@ fn main() {
 
 #### Long answer
 
-The method `is_reference` is not defined for integers, so the integer is automatically converted to a reference. The method exists for a reference, so it prints `1`. The nested `impl` block is visible everywhere, so `?` is printed as `0`. 
+1. no implementation of Trait for an integer type that we could call directly. Method resolution inserts an auto-ref, effectively evaluating `(&0).is_reference`
+2. Trait impls anywhere in a program are always in scope
+
+
+### Method resolution
+
+https://dtolnay.github.io/rust-quiz/15
+
+#### Question
+
+```rust
+trait Trait {
+    fn f(&self);
+}
+
+impl Trait for u32 {
+    fn f(&self) {
+        print!("1");
+    }
+}
+
+impl<'a> Trait for &'a i32 {
+    fn f(&self) {
+        print!("2");
+    }
+}
+
+fn main() {
+    let x = &0;
+    x.f();
+}
+```
+#### Short answer
+
+```
+1
+```
+#### Long answer
+
+`x` must be of type `&Self` for some type `Self` that implements `Trait`. We find that inferring `0: u32` satisfies both the constraint that `u32` is an integer as well as `u32` implements `Trait`, so the method call ends up calling `<u32 as Trait>::f(x)`.
 
 ## Generic structs
 
@@ -893,23 +1015,23 @@ Send
 - examples
     - which types are send?
         - Structs without references are Send + 'static
-        - Structs with fields that are references with lower-bound lifetime parameter 'a are Send + 'a
-        - Cell
+        - Structs with fields that are references with lower-bound lifetime parameter `'a` are `Send + 'a`
+        - `Cell`
     - Not send
         - `*mut T`
 Sync
 - definition: 
-  - &T is Send.
+  - `&T` is Send.
 - semantics
   - safe to access immutably from several threads in parallel
 - Rules
-  - Pointers are in one-to-one corresponds with pointers to pointers (&T = &TT). This implies that `T : Sync <=> &'_ T : Sync`.
+  - Pointers are in one-to-one corresponds with pointers to pointers (`&T = &TT`). This implies that `T : Sync <=> &'_ T : Sync`.
       - A consequence of this is that if `T: !Sync` then `&'_ T: !Sync`
   - Examples:
-    - Arc
+    - `Arc`
   - Counterexamples
-    - Rc is a reference pointing to an unsynchronized mutable handle Cell so not sync
-    - RefCell.
+    - `Rc` is a reference pointing to an unsynchronized mutable handle `Cell` so not sync
+    - `RefCell`.
 
   
 ### Combinations
@@ -917,27 +1039,35 @@ Sync
 https://stackoverflow.com/questions/68704717/is-the-sync-trait-a-strict-subset-of-the-send-trait-what-implements-sync-withou
 
 Common combinations
-- Send + !Sync: 
+- `Send + !Sync`: 
   - original !Sync type
   - Semantics:
     - may be accessed from any thread but only one at a time
-- !Send + !Sync, 
-  - Semantics:
-    - types that manipulate shared handles to !Sync types
   - Examples
-    - `Rc<T>` is such an example.
+    - `Cell`
+      - set inner value
+      - swap inner value
+      - copy inner value
+    - `RefCell`
+      - removes compile-time borrow checks
+      - may panic
+- `!Send + !Sync`, 
+  - Semantics:
+    - types that manipulate shared handles to `!Sync` types
+  - Examples
+    - `Rc<T>`
     - Raw pointers
 
 Rare combination: 
-- !Send + Sync:
+- `!Send + Sync`:
   - Semantics
     - may be accessed immutably from any thread and multiple in parallel
     - mutable access has to happen on the thread it was created on
     - transferring a &mut T to another thread is not possible since it would break the protections that !Send has
   - Examples
-    - MutexGuard of a T https://users.rust-lang.org/t/example-of-a-type-that-is-not-send/59835/3
+    - `MutexGuard` of a `T` https://users.rust-lang.org/t/example-of-a-type-that-is-not-send/59835/3
       - cannot be dropped in a different thread, so it is not Send
-      - If T is sync then it follows from `T : Sync ⇔ &'_ T : Sync` that a `MutexGuard<T>` is Sync
+      - If `T` is sync then it follows from `T : Sync ⇔ &'_ T : Sync` that a `MutexGuard<T>` is Sync
 
 ## Lifetime bounds
 
@@ -960,14 +1090,17 @@ Rules/corollary:
 
 Examples:
 
-- `T: 'static`:
+- `T: 'static` can be one of the following options
   - `T` does not contain any lifetimes
   - `T` is an owned variable
 
-Quiz questions:
+### Questions
 
 - What is the difference between `T : 'static` and `&'static T`?
 
+- What is the difference between `let s = &'static "bla"` and `let s = "bla".to_string()`
+  - `let s = &'static "bla"` is hardcoded in the binary, cannot be declared mutable,  cannot be moved
+  - `let s = "bla".to_string()` is allocated on the heap, can be declared mutable
 
 ## Lifetime bounds in methods
 
@@ -998,7 +1131,18 @@ Rules:
     - can easily be cloned or copied  
     - can be optimized away `=>` no pointer needed `=>` zero sized
   - have unique unnameable types
+  - implement all the function traits
 
+Every function (or every distinct instantiation of a generic function) has its own unique type. Even if they have the same signature.
+- `fn(u32) -> i32 {fn_name}` in error messages
+
+Type itself encodes the information of what function will be called. At runtime no function pointers are needed.
+
+### Size of function items
+
+#### Question
+
+Predict the output of
 
 ```rust
 fn my_function(x: i32) -> i32 {
@@ -1007,8 +1151,14 @@ fn my_function(x: i32) -> i32 {
 
 fn main() {
     let f = my_function; // f is a function item (ZST)
-    println!("Size of f: {}", std::mem::size_of_val(&f)); // Output: 0
+    println!("Size of f: {}", std::mem::size_of_val(&f));
 }
+```
+
+#### Answer
+
+```
+0
 ```
 
 ## Function pointers
@@ -1054,7 +1204,83 @@ fn main() {
 
 When is it particularly useful?
 - When using FFI with languages that don't support closures
+### Size of function pointers
 
+https://dtolnay.github.io/rust-quiz/34
+
+#### Question
+
+What is the output of?
+
+```rust
+fn d<T>(_f: T) {
+    match std::mem::size_of::<T>() {
+        0 => print!("0"),
+        1 => print!("1"),
+        _ => print!("2"),
+    }
+}
+
+fn a<T>(f: fn(T)) {
+    d(f);
+}
+
+fn main() {
+    a(a::<u8>);
+    d(a::<u8>);
+}
+```
+
+#### Short answer
+
+```
+20
+```
+
+#### Long answer
+
+The first call in main coerces `a::<u8>` from a function to a function pointer (`fn(fn(u8)) {a::<u8>}` to `fn(fn(u8))`) prior to calling d, so its size would be 8 on a system with 64-bit function pointers
+The second call in main does not involve function pointers; d is directly called with T being the inexpressible type of `a::<u8>`, which is zero-sized.
+
+### Function pointer fields
+
+
+#### Question
+
+```rust
+struct S {
+    f: fn(),
+}
+
+impl S {
+    fn f(&self) {
+        print!("1");
+    }
+}
+
+fn main() {
+    let print2 = || print!("2");
+    S { f: print2 }.f();
+}
+```
+
+#### Short answer
+
+```
+1
+```
+
+
+#### Long answer
+
+A call that looks like .f() always resolves to a method, in this case the inherent method S::f. To call the function pointer stored in field f, we would need to write parentheses around the field access: 
+
+```rust
+fn main() {
+    let print2 = || print!("2");
+    (S { f: print2 }.f)();
+}
+```
 
 ## Closures
 
@@ -1282,6 +1508,52 @@ This code is parsed as
 1. `(|| ..).method()`
 2. this an invocation of our impl of Trait on `FnOnce() -> T` where T is inferred to be RangeFull. 
 
+## Iterators
+
+
+### Into iter vs. iter
+
+#### Question
+
+What is the difference between `into_iter` and `iter`?
+
+#### Answer
+
+The iterator returned by into_iter may yield any of T, &T or &mut T, depending on the context.
+
+The iterator returned by iter will yield &T, by convention.
+
+### Lazy map
+
+https://dtolnay.github.io/rust-quiz/26
+
+#### Question
+
+```rust
+fn main() {
+    let input = vec![1, 2, 3];
+
+    let parity = input
+        .iter()
+        .map(|x| {
+            print!("{}", x);
+            x % 2
+        });
+
+    for p in parity {
+        print!("{}", p);
+    }
+}
+```
+
+#### Short answer
+```
+112031
+```
+
+#### Long answer
+
+The closure provided as an argument to map is only invoked as values are consumed from the resulting iterator. The closure is not applied eagerly to the entire input stream up front.
 ## Type elision / erasure
 
 Sometimes
@@ -1369,6 +1641,47 @@ fn main() {
 
 ### Lifetimes for trait objects
 
+a trait object's lifetime bound is inferred from context
+
+Examples
+
+```rust
+use std::cell::Ref;
+
+trait Trait {}
+
+// elided
+type T1 = Box<dyn Trait>;
+// expanded, Box<T> has no lifetime bound on T, so inferred as 'static
+type T2 = Box<dyn Trait + 'static>;
+
+// elided
+impl dyn Trait {}
+// expanded
+impl dyn Trait + 'static {}
+
+// elided
+type T3<'a> = &'a dyn Trait;
+// expanded, &'a T requires T: 'a, so inferred as 'a
+type T4<'a> = &'a (dyn Trait + 'a);
+
+// elided
+type T5<'a> = Ref<'a, dyn Trait>;
+// expanded, Ref<'a, T> requires T: 'a, so inferred as 'a
+type T6<'a> = Ref<'a, dyn Trait + 'a>;
+
+trait GenericTrait<'a>: 'a {}
+
+// elided
+type T7<'a> = Box<dyn GenericTrait<'a>>;
+// expanded
+type T8<'a> = Box<dyn GenericTrait<'a> + 'a>;
+
+// elided
+impl<'a> dyn GenericTrait<'a> {}
+// expanded
+impl<'a> dyn GenericTrait<'a> + 'a {}
+```
 https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md#6-boxed-trait-objects-dont-have-lifetimes
 
 ### DSTs
@@ -1393,6 +1706,14 @@ Counterexamples? Most types are not DSTs because their size is known at compile 
 - They implement the trait Sized
 - DSTs don't implement Sized
 
+### Examples of DSTs
+
+Examples
+- slices: fat pointer has address and length  
+  - str
+- trait objects:
+  - dyn Trait
+
 ### Impl trait
 
 The other type of opaque types is impl Trait.
@@ -1403,12 +1724,6 @@ Synonyms
 syntax
 - written `impl Trait` 
 - syntax sugar for hardcoding a specific type that can be inferred by the compiler
-- new lifetime capturing rules for return position impl traits? https://blog.rust-lang.org/2024/09/05/impl-trait-capture-rules.html
-  - explicit capturing of specific or none of the lifetimes in the arguments
-  - consequences: 
-    - implementation can be changed 
-    - but signature does not have to be changed
-
 semantics
 - No extra heap allocation
 - No dynamic dispatch overhead
@@ -1417,6 +1732,60 @@ Implementation:
 - "return position impl Trait" (RPIT) in Trait definitions (allowed since dec 2023)
   - the anonymous type in the impl T return type is a kind of associated type
 
+
+
+
+## New lifetime capture rules
+
+- new lifetime capturing rules for return position impl traits
+
+
+Rust 2021: the following compiles because `impl` does not capture `s`
+```rust
+fn indices<'s, T>(
+    slice: &'s [T],
+) -> impl Iterator<Item = usize> {
+    0 .. slice.len()
+}
+```
+
+I Rust 2024: `impl` will capture lifetime parameter `'s`.
+```rust
+fn main() {
+    let mut data = vec![1, 2, 3];
+    let i = indices(&data);
+    data.push(4); // <-- Error!
+    i.next(); // <-- assumed to access `&data`
+}
+```
+
+- use bound": `impl Trait + use<'x, T>`, for example, would indicate that 
+  - the hidden type is allowed to use `'x` and `T`
+  - but not any other generic parameters in scope
+
+To exempt from lifetime parameter capture, use 
+
+```rust
+fn indices<'s, T>(
+    slice: &'s [T],
+) -> impl Iterator<Item = usize> + use<> {
+    //                             -----
+    //             Return type does not use `'s` or `T`
+    0 .. slice.len()
+}
+```
+
+Advantages
+
+- explicit capturing of specific or none of the lifetimes in the arguments
+- consequences: 
+  - implementation can be changed 
+  - but signature does not have to be changed
+
+
+
+
+See  https://blog.rust-lang.org/2024/09/05/impl-trait-capture-rules.html
 
 ## Co-operative vs pre-emptive multitasking
 
@@ -1561,14 +1930,7 @@ impl Coroutine for __Coroutine {
 }
 ```
 
-Then we need to pin the coroutine, since it contains references and shouldn't be moved. 
 
-```rust
-Pin::new(&mut coroutine).resume(());
-Pin::new(&mut coroutine).resume(());
-```
-
-- What is the meaning of the Pin type?
 
 Disadvantage  
 - unstable Rust language feature
@@ -1577,7 +1939,20 @@ See
 - https://doc.rust-lang.org/beta/unstable-book/language-features/coroutines.html#coroutines-as-state-machines
 - https://tmandry.gitlab.io/blog/posts/optimizing-await-1/
   
+## Pinning
 
+In general the enum `__Coroutine` might contain self-references. 
+
+To make progress in the coroutine, we need to make sure the coroutine is not moved, otherwise the self-reference may become invalid.
+
+So we need to pin the coroutine, since it contains references and shouldn't be moved. 
+
+```rust
+Pin::new(&mut coroutine).resume(());
+Pin::new(&mut coroutine).resume(());
+```
+
+Managed automatically by run-times such as Tokio.
 ## Async-await
 
 Semantics
@@ -1625,6 +2000,17 @@ See
   - Local references or variables which are valid across await points are stored in a struct
   - A future can be send only if the internal data is send.
 
+## Async in traits
+
+In traits, you might encounter the Rust compiler message:
+
+```
+use of async fn in public traits is discouraged as auto trait bounds cannot be specified
+```
+
+without any Send bound, you'll have issues in using this trait (generically) in contexts where you need to run the async function in a multi-threaded runtime and/or spawn it as a task in such a runtime
+
+https://users.rust-lang.org/t/async-in-public-trait/108400
 ## Aynchronous functions as coroutines
 
 If every function was a couroutine, you could put the different concepts in a table.
@@ -1652,26 +2038,35 @@ Explanation of table
 
 ## History of async
 
-2013: Green threads are threads managed by a runtime in user-space and can be pre-emptive or cooperative. They make it possible to continue executing multiple tasks in parallel. 
-2015: native threads: better for compatibility, less overhead
-2016: Tokio, `Future` trait
-2018: async/await syntax
+- 2009: Mozilla sponsors Rust
+- 2013: Green threads are threads managed by a runtime in user-space and can be pre-emptive or cooperative. They make it possible to continue executing multiple tasks in parallel. 
+- 2015: native threads: better for compatibility, less overhead
+- 2016: Tokio, `Future` trait
+- 2018: async/await syntax
 
 [why-async-rust](https://without.boats/blog/why-async-rust/)
 
-## Async runtimes
+## Implementation of async runtimes
 
-- How is an asynchronous runtime implemented? [https://tokio.rs/tokio/tutorial/async](https://tokio.rs/tokio/tutorial/async)
+- How is an asynchronous runtime implemented?
+  - Event loop 
+  - switch tasks
+  
+See for a mini implementation example https://tokio.rs/tokio/tutorial/async
+
+- How many threads does an async runtime manage?
+  - As many as there are CPU cores.
 - Which asynchronous runtime should I use?
 
-- Does an async runtime use many threads? Or does it create some kind of application level threads?
 
-## Complex asynchronous applications
+## Common issues in async applications
 
-- When should I pin futures and store them?
-- What's the best approach for handling structs with lifetimes in asynchronous or multithreaded code? Are there alternatives to avoiding them altogether?
+- When does it make sense to store pending futures?
+  - You should leave this task to the runtime.
+- Do lifetimes follow the same rules in async code?
+  - Yes, but async function have to be desugared and the resulting opaque output future should be given the right lifetime bounds 
 
 ## Cutting edge
 
-- Async closures [https://blog.rust-lang.org/inside-rust/2024/08/09/async-closures-call-for-testing.html](https://blog.rust-lang.org/inside-rust/2024/08/09/async-closures-call-for-testing.html)
+- Async closures https://blog.rust-lang.org/inside-rust/2024/08/09/async-closures-call-for-testing.html
 - async drop
