@@ -4,7 +4,7 @@
 
 <div id="layout">
   <div id="links" class="">
-    <a href="/" class="link">About</a>
+    <a href="/" class="link">Home</a>
 
     <a href="/posts" class="link">Posts</a>
   </div>
