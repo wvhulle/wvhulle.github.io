@@ -1,6 +1,7 @@
 ---
 title: Functional async programming
 sub_title: Mostly in Rust
+date: 2025-03-18
 author: Willem Vanhulle
 theme:
   name: catppuccin-latte

@@ -1,26 +1,56 @@
 :root {
-    --background: #fafafa;
+    --background: #daf3ffe1;
+    --sidebar-bg: #b9e9ffe1;
     --text: #222;
-    --accent: #3e64ff;
+    --accent: #0366d6;
 }
 
 body {
-    font-family: "Fira Code", monospace;
+    font-family: "Inter";
     background-color: var(--background);
     color: var(--text);
-    max-width: 800px;
-    margin: auto;
-    line-height: 1.6;
-    padding: 40px;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
 }
 
-header, footer {
-    text-align: center;
-    margin-bottom: 50px;
+aside#sidebar {
+    width: 250px;
+    padding: 20px;
+    background-color: var(--sidebar-bg);
+    overflow-y: auto;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    align-self: flex-start;
+    border-right: 1px solid #e0e0e0;
+}
+
+aside#sidebar h2 {
+    margin-top: 0;
+    font-weight: 700;
+    font-size: 1.3em;
+    color: var(--accent);
+}
+
+main {
+    flex-grow: 1;
+    padding: 40px 60px;
+    display: flex;
+    flex-direction: column;
+}
+
+#home img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 20px;
 }
 
 nav a {
-    margin: 0 10px;
     color: var(--accent);
     text-decoration: none;
 }
@@ -29,38 +59,113 @@ nav a:hover {
     text-decoration: underline;
 }
 
-h1, h2 {
-    font-weight: 500;
+.bio {
+    margin-top: 20px;
+    line-height: 1.5;
 }
 
-#intro {
-    margin-bottom: 50px;
-}
-
-#posts ul {
-    list-style-type: none;
+#sidebar ul {
+    list-style: none;
     padding: 0;
 }
 
-#posts li {
+#sidebar li {
     margin-bottom: 10px;
 }
 
-#posts a {
-    color: var(--accent);
+#sidebar a {
+    color: var(--text);
     text-decoration: none;
 }
 
-#posts a:hover {
+#sidebar a:hover {
+    color: var(--accent);
+}
+
+button#home-button {
+    font-size: 1.5em;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    text-align: left;
+}
+
+button#home-button:hover {
     text-decoration: underline;
 }
 
-pre, code {
-    font-family: "Fira Code", monospace;
-    font-size: 0.95em;
+footer {
+    padding: 10px 0;
+    text-align: center;
+    background-color: transparent;
+    font-size: 0.85em;
+    margin-top: auto;
 }
 
-footer {
-    margin-top: 60px;
-    font-size: 0.9em;
+article {
+    max-width: 800px;
+    margin-bottom: 40px;
+    overflow: visible;
+    padding: 1em;
+}
+
+#post-content {
+    overflow: auto;
+}
+
+
+#post-body {
+    background-color: red;
+}
+
+/* Headers with higher contrast */
+h1, h2, h3, h4, h5 {
+    margin-bottom: 0.5em;
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: 2.4em;
+    font-weight: 700;
+    color: #111;
+}
+
+h2 {
+    font-size: 2em;
+ 
+    font-weight: 600;
+    color: #333;
+}
+
+h3 {
+    font-size: 1.6em;
+    font-style: italic;
+    font-weight: 600;
+    color: #444;
+}
+
+h4 {
+    font-size: 1.4em;
+    font-weight: 500;
+    color: #555;
+}
+
+p, li {
+    font-size: 1em;
+    line-height: 1.7;
+    color: #333;
+}
+
+
+
+code {
+    font-family: "Fira Code", monospace;
+    
+}
+
+pre {
+    border: 1px solid black;
+    box-shadow: 0.5em 0.5em 0.5em var(--sidebar-bg);
+
 }

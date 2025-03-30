@@ -1,76 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Willem Vanhulle – Software Engineer</title>
 
-    <!-- Fira Code Font -->
+    <!-- Inter Font for body and headers -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap">
+
+    <!-- Fira Code Font for code blocks -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap">
 
+    <!-- Highlight.js Stylesheet (lighter theme) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/intellij-light.css">
+
     <!-- Highlight.js Stylesheet -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.css">
 
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <header>
-        <h1>Willem Vanhulle</h1>
-        <p>Software Engineer | Rust, TypeScript, Python Expert</p>
-        <nav>
-            <a href="mailto:willemvanhulle@pm.me">willemvanhulle@pm.me</a>
-            <a href="https://github.com/wvhulle" target="_blank">GitHub</a>
-            <a href="/Software_Engineer_Willem_Vanhulle.pdf">Download CV</a>
-        </nav>
-    </header>
+    <aside id="sidebar">
+        <button id="home-button">
+            Home
+        </button>
+
+        <ul id="post-list"></ul>
+
+    </aside>
 
     <main>
-        <section id="intro">
-            <h2>Hi, I'm Willem.</h2>
-            <p>I build reliable software in Rust, TypeScript, and Python. Experienced in distributed systems, embedded robotics, reactive UIs, and mentorship.</p>
+        <section id="home">
+            <img src="willem.jpg" alt="Willem Vanhulle">
+            <h2>Willem Vanhulle</h2>
+            <p><strong>Software Engineer</strong><br>Rust | TypeScript | Python</p>
+            <nav>
+                <a href="mailto:willemvanhulle@pm.me">Email</a> |
+                <a href="https://github.com/wvhulle">GitHub</a> |
+                <a href="/cv.pdf">CV</a>
+            </nav>
+            <p class="bio">
+                I build robust, high-performance software for distributed systems, embedded robotics, and reactive user
+                interfaces. Passionate mentor and systems programming advocate.
+            </p>
+
+            <p class="bio">
+                Founder of <a href="https://sysghent.be">SysGhent</a>, a group for systems programmers around Ghent,
+                Belgium.
+            </p>
         </section>
 
-        <section id="posts">
-            <h2>Blog Posts</h2>
-            <ul id="post-list"></ul>
-            <article id="post-content"></article>
-        </section>
+
+        <article id="post-content" hidden></article>
+
+
+
     </main>
 
-    <footer>
-        <p>© 2025 Willem Vanhulle | <a href="https://sysghent.be">Systems Programming Ghent</a></p>
-    </footer>
+
 
     <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    
 
     <!-- Blog Logic -->
     <script>
-        const posts = [
-            { title: "Example Post", date: "2025-03-28", file: "streams.md" },
-            { title: "Another Post", date: "2025-03-25", file: "another_post.md" }
-        ];
+        const posts = [ "streams.md"];
 
         const postList = document.getElementById('post-list');
         const postContent = document.getElementById('post-content');
+        const homeSection = document.getElementById('home');
+        const homeButton = document.getElementById('home-button');
 
-        posts.forEach(post => {
-            const li = document.createElement('li');
-            li.innerHTML = `<a href="#" data-file="${post.file}">${post.date} - ${post.title}</a>`;
-            postList.appendChild(li);
-        });
+        async function loadPostList() {
+            for (const post_md_file of posts) {
+                const response = await fetch(`posts/${post_md_file}`);
+                const text = await response.text();
+                const [, frontMatter] = text.match(/---\n([\s\S]*?)\n---/) || [];
+                const metadata = jsyaml.load(frontMatter);
+
+                const li = document.createElement('li');
+                li.innerHTML = `<a href="#" data-file="${post_md_file}">${metadata.title}</a>`;
+                postList.appendChild(li);
+            }
+        }
 
         postList.addEventListener('click', async (e) => {
             e.preventDefault();
             if (e.target.tagName === 'A') {
                 const response = await fetch(`posts/${e.target.dataset.file}`);
-                const md = await response.text();
-                postContent.innerHTML = marked.parse(md);
+                const text = await response.text();
+                const [, frontMatter, mdContent] = text.match(/---\n([\s\S]*?)\n---\n([\s\S]*)/) || [];
+                const metadata = jsyaml.load(frontMatter);
+
+                const date = metadata.date?.toLocaleDateString();
+
+                postContent.innerHTML = `
+                    <div class="post-header">
+                        <h1>${metadata.title}</h1>
+                        ${metadata.sub_title ? `<h3>${metadata.sub_title}</h3>` : ''}
+                        <p class="meta">${metadata.author || 'Willem Vanhulle'}${date ? ' | ' + date : ''}</p>
+                    </div>
+                    <div class="post-body">
+                    ${marked.parse(mdContent)}
+                    </div>
+                `;
                 hljs.highlightAll();
+
+                homeSection.hidden = true;
+                postContent.hidden = false;
             }
         });
+
+        homeButton.addEventListener('click', () => {
+            postContent.hidden = true;
+            homeSection.hidden = false;
+        });
+
+        loadPostList();
     </script>
 </body>
+
 </html>
