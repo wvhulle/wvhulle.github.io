@@ -1,3 +1,4 @@
+/* Global Variables */
 :root {
     --background: #daf3ff;
     --sidebar-bg: #b9e9ff;
@@ -6,63 +7,84 @@
     --shadow: rgba(0, 0, 0, 0.1);
 }
 
-/* Everything */
+/* Reset and Base Styles */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
 
+/* Global Body Styling */
 body {
     font-family: "Inter", sans-serif;
     background-color: var(--background);
     color: var(--text);
-    display: flex;
+}
+
+/* Desktop Sidebar: Fixed on the left */
+aside#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    background-color: var(--sidebar-bg);
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    border-right: 1px solid #ccc;
+}
+
+/* Sidebar Buttons and Links */
+button#home-button {
+    font-size: 1.5em;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--accent);
+    margin-bottom: 1em;
+}
+
+button#home-button:hover {
+    text-decoration: underline;
+}
+
+#sidebar ul {
+    list-style: none;
+    padding: 0;
     margin: 0;
-    min-height: 100vh;
 }
 
-code {
-    font-family: "Fira Code";
-    
+#sidebar li {
+    margin-bottom: 10px;
 }
 
-pre, table {
-    border: 1px solid black;
-    box-shadow: 0.5em 0.5em 0.5em var(--sidebar-bg);
-
+#sidebar a {
+    color: var(--text);
+    text-decoration: none;
 }
 
-
-table {
-    border-collapse: collapse;
-    
-    background:white;
+#sidebar a:hover {
+    color: var(--accent);
 }
 
-
-
-td, th {
-    border: 0.1em solid black;
-    padding: 0.3em;
-}
-
-
-/* Everything besides the sidebar */
+/* Main Content: Leave space for fixed sidebar */
 main {
-    flex-grow: 1;
-    padding: 40px 60px;
+    margin-left: 250px;
+    padding: 2em;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
 }
 
-
-#post-content,#home {
+/* Start (Home) and Blog Pages */
+#start_page, #blog_page {
     max-width: 800px;
-    padding-bottom: 2em;
+    margin: 0 auto;
 }
 
-
-
-/* Homepage with biography style */
-
-#home img {
+/* Homepage (Start Page) Styling */
+#start_page img {
     width: 180px;
     height: 180px;
     object-fit: cover;
@@ -84,62 +106,104 @@ nav a:hover {
     line-height: 1.5;
 }
 
-
-/* Post list */
-aside#sidebar {
-    width: 250px;
-    padding: 20px;
-    background-color: var(--sidebar-bg);
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    overflow-y: auto;
-    border-right: 1px solid #ccc;
-}
-
-button#home-button {
-    font-size: 1.5em;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    color: var(--accent);
-}
-
-button#home-button:hover {
-    text-decoration: underline;
-}
-
-
-
-#sidebar ul {
-    list-style: none;
-    padding: 0;
-}
-
-#sidebar li {
-    margin-bottom: 10px;
-}
-
-#sidebar a {
-    color: var(--text);
+/* Back-to-Top Link for Blog Page */
+.back-to-top {
+    display: block;
+    position:sticky;
+    top:0;
+    padding: 0.5em;
     text-decoration: none;
-}
-
-#sidebar a:hover {
+    background-color: var(--sidebar-bg);
     color: var(--accent);
+    font-size: 0.9em;
+    margin-bottom: 1em;
 }
 
+/* Code and Table Styling */
+code {
+    font-family: "Fira Code", monospace;
+}
 
-/* Post content */
+pre, table {
+    border: 1px solid black;
+    box-shadow: 0.5em 0.5em 0.5em var(--sidebar-bg);
+}
 
+table {
+    border-collapse: collapse;
+    background: white;
+}
+
+td, th {
+    border: 0.1em solid black;
+    padding: 0.3em;
+}
+
+/* Header Typography */
 h1, h2, h3 {
     line-height: 1.2;
     margin-bottom: 0.5em;
 }
 
-h1 { font-size: 2.4em; color: #111; }
-h2 { font-size: 2em; color: #333; }
-h3 { font-size: 1.6em; font-style: italic; color: #444; }
+h1 { 
+    font-size: 2.4em; 
+    color: #111; 
+}
 
+h2 { 
+    font-size: 2em; 
+    color: #333; 
+}
 
+h3 { 
+    font-size: 1.6em; 
+    font-style: italic; 
+    color: #444; 
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    /* Switch to vertical layout */
+    body {
+        display: block;
+    }
+    
+    /* Sidebar becomes a top bar */
+    aside#sidebar {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 10px;
+        border-right: none;
+        border-bottom: 1px solid #ccc;
+        overflow: visible;
+    }
+    
+    /* Remove left margin on main content */
+    main {
+        margin-left: 0;
+        padding: 1em;
+    }
+    
+    /* Adjust homepage image */
+    #start_page img {
+        width: 120px;
+        height: 120px;
+    }
+    
+    /* Sidebar list items adjust */
+    #sidebar ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+    
+    #sidebar li {
+        margin-bottom: 0;
+    }
+    
+    #sidebar a {
+        font-size: 0.9em;
+    }
+}
