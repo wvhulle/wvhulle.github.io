@@ -26,11 +26,13 @@ async function renderPostList() {
 async function showPost(file) {
     const { metadata, md } = await fetchMarkdown(file);
 
+    const date = metadata.date?.toLocaleDateString()
+
     postContent.innerHTML = `
         <div class="post-header">
             <h1>${metadata.title}</h1>
             ${metadata.sub_title ? `<h3>${metadata.sub_title}</h3>` : ''}
-            <p class="meta">${metadata.author || 'Willem Vanhulle'}${metadata.date ? ' | ' + metadata.date : ''}</p>
+            <p class="meta">${metadata.author || 'Willem Vanhulle'}${ date ? ' | ' + date : ''}</p>
         </div>
         <div class="post-body">${marked.parse(md)}</div>
     `;
