@@ -1,6 +1,0 @@
-# Posts
-
-Overview of talks
-
-- Ghent, 2024-10-24: The type system of Rust 
-

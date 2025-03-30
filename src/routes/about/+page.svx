@@ -1,8 +1,0 @@
-# About
-
-I'm a Belgian software engineer, currently employed at OTIV in Ghent, Belgium. OTIV is a company that writes software to control railway vehicles and make them safer.
-
-In my spare time I love to dance, learn foreign languages, write code and teach math. 
-
-## Contact
-

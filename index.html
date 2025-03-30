@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Willem Vanhulle – Software Engineer</title>
+
+    <!-- Fira Code Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap">
+
+    <!-- Highlight.js Stylesheet -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github-dark.css">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Willem Vanhulle</h1>
+        <p>Software Engineer | Rust, TypeScript, Python Expert</p>
+        <nav>
+            <a href="mailto:willemvanhulle@pm.me">willemvanhulle@pm.me</a>
+            <a href="https://github.com/wvhulle" target="_blank">GitHub</a>
+            <a href="/Software_Engineer_Willem_Vanhulle.pdf">Download CV</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="intro">
+            <h2>Hi, I'm Willem.</h2>
+            <p>I build reliable software in Rust, TypeScript, and Python. Experienced in distributed systems, embedded robotics, reactive UIs, and mentorship.</p>
+        </section>
+
+        <section id="posts">
+            <h2>Blog Posts</h2>
+            <ul id="post-list"></ul>
+            <article id="post-content"></article>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Willem Vanhulle | <a href="https://sysghent.be">Systems Programming Ghent</a></p>
+    </footer>
+
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    
+
+    <!-- Blog Logic -->
+    <script>
+        const posts = [
+            { title: "Example Post", date: "2025-03-28", file: "streams.md" },
+            { title: "Another Post", date: "2025-03-25", file: "another_post.md" }
+        ];
+
+        const postList = document.getElementById('post-list');
+        const postContent = document.getElementById('post-content');
+
+        posts.forEach(post => {
+            const li = document.createElement('li');
+            li.innerHTML = `<a href="#" data-file="${post.file}">${post.date} - ${post.title}</a>`;
+            postList.appendChild(li);
+        });
+
+        postList.addEventListener('click', async (e) => {
+            e.preventDefault();
+            if (e.target.tagName === 'A') {
+                const response = await fetch(`posts/${e.target.dataset.file}`);
+                const md = await response.text();
+                postContent.innerHTML = marked.parse(md);
+                hljs.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>
