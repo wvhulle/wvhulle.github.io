@@ -9,6 +9,9 @@
     --left-margin: 2em;
 }
 
+* {
+    box-sizing: border-box;
+}
 
 html,
 body {
@@ -23,6 +26,7 @@ body {
     position: fixed;
     width: 100%;
     height: 100%;
+
 }
 
 /* ===== */
@@ -43,7 +47,8 @@ th {
 }
 
 code {
-    font-family: "Fira Code", monospace;
+    font-family: "Fira Code";
+
 }
 
 h1,
@@ -129,8 +134,7 @@ a:hover {
 #content_background {
     width: 100%;
     height: 100%;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    overflow-y: auto;
     background-color: var(--content_background);
 }
 
@@ -189,7 +193,11 @@ table {
 
 table {
     border-collapse: collapse;
+    display: block;
+    width: fit-content;
+    max-width: 100%;
     background: white;
+    overflow-x: auto;
 }
 
 td,
@@ -206,7 +214,7 @@ th {
 
     body {
         flex-direction: column;
-
+        font-size: 2em;
     }
 
     /* ========================= */
@@ -229,30 +237,46 @@ th {
     #sidebar ul {
         flex-direction: row;
         flex-wrap: nowrap;
-        gap: 0.5em;
+        gap: 1em;
     }
 
     #sidebar li {
         text-wrap: nowrap;
-        font-size: 0.7em;
+
         margin: 0;
     }
 
     /* ============ */
     /* Wide content */
     /* ============ */
+
+
+
+
     main {
         margin-left: 0;
         margin-right: 0;
 
+        padding: 1em;
+    }
+
+    #start_page {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
 
     }
 
-
     #start_page img {
+        display: block;
+        margin: auto;
         width: 50vw;
         height: 50vw;
     }
 
 
+}
+
+[hidden] {
+    display: none !important;
 }

@@ -36,6 +36,7 @@ async function renderPostList() {
 }
 
 async function showPost(file) {
+    console.log(`Showing post ${file}`)
     const { metadata, md } = await fetchMarkdown(file);
 
     const date = metadata.date?.toLocaleDateString()
@@ -50,6 +51,7 @@ async function showPost(file) {
     `;
     hljs.highlightAll();
 
+    console.log(`Hiding home section`)
     homeSection.hidden = true;
     blog_page.hidden = false;
 
@@ -66,8 +68,8 @@ postList.onclick = e => {
 renderPostList();
 
 homeButton.onclick = () => {
+    console.log(`Home button clicked`);
     homeSection.hidden = false;
     blog_page.hidden = true;
-    postList.hidden = false;
 
 };
