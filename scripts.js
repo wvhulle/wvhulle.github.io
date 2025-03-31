@@ -1,4 +1,4 @@
-const posts = ["streams.md", "streams copy.md"];
+const posts = ["streams.md"];
 
 const postList = document.getElementById('post-list');
 const blog_page = document.getElementById('blog_page');
@@ -8,13 +8,25 @@ const homeButton = document.getElementById('home-button');
 const sidebar = document.getElementById('sidebar');
 
 async function fetchMarkdown(file) {
-    const res = await fetch(`posts/${file}`);
-    const text = await res.text();
-    const [, frontMatter, md] = text.match(/---\n([\s\S]+?)\n---\n([\s\S]*)/) || [];
-    return { metadata: jsyaml.load(frontMatter), md };
+    const relative_url = `posts/${file}`;
+    try {
+        const res = await fetch(relative_url);
+        try {
+            const text = await res.text();
+            const [, frontMatter, md] = text.match(/---\n([\s\S]+?)\n---\n([\s\S]*)/) || [];
+            return { metadata: jsyaml.load(frontMatter), md };
+        } catch (e) {
+            console.error(`A request response wasreturned from ${relative_url} does not contain any text.`);
+        }
+
+    } catch (e) {
+        console.error(`Not found file available at ${relative_url}. Make sure that the markdown file names in the scripts.js are correct.`);
+    }
+
 }
 
 async function renderPostList() {
+
     for (const file of posts) {
         const { metadata } = await fetchMarkdown(file);
         const li = document.createElement('li');
@@ -32,7 +44,7 @@ async function showPost(file) {
         <div class="post-header">
             <h1>${metadata.title}</h1>
             ${metadata.sub_title ? `<h3>${metadata.sub_title}</h3>` : ''}
-            <p class="meta">${metadata.author || 'Willem Vanhulle'}${ date ? ' | ' + date : ''}</p>
+            <p class="meta">${metadata.author || 'Willem Vanhulle'}${date ? ' | ' + date : ''}</p>
         </div>
         <div class="post-body">${marked.parse(md)}</div>
     `;
