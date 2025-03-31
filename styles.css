@@ -38,6 +38,10 @@ th {
     color: var(--text_body_color);
 }
 
+#meta {
+    font-size: 0.8em;
+}
+
 code {
     font-family: "Fira Code", monospace;
 }
@@ -67,7 +71,9 @@ h3 {
 
 
 
-/* Desktop Sidebar: Fixed on the left */
+/* ======= */
+/* Sidebar */
+/* ======= */
 aside#sidebar {
     display: flex;
     flex-direction: column;
@@ -82,7 +88,7 @@ aside#sidebar {
     border-right: var(--border);
 }
 
-/* Sidebar Buttons and Links */
+
 li#home-button {
     background: none;
     border: none;
@@ -140,22 +146,24 @@ main {
 }
 
 
-nav a {
-    color: var(--accent);
 
-}
 
 /* =============== */
 /* Content styling */
 /* =============== */
 
 #start_page img {
-    padding-left: 1em;
-    padding-right: 1em;
+    box-shadow: 0.5em 0.5em 0.5em var(--navigation_background);
     width: 12em;
     height: 12em;
     object-fit: cover;
-    border-radius: 50%;
+
+    border: var(--border);
+    border-radius: 100%;
+}
+
+main a {
+    color: var(--accent);
 
 }
 
@@ -239,6 +247,7 @@ th {
 
 
     }
+
 
     #start_page img {
         width: 50vw;

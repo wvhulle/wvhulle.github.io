@@ -44,7 +44,7 @@ async function showPost(file) {
         <div class="post-header">
             <h1>${metadata.title}</h1>
             ${metadata.sub_title ? `<h3>${metadata.sub_title}</h3>` : ''}
-            <p class="meta">${metadata.author || 'Willem Vanhulle'}${date ? ' | ' + date : ''}</p>
+            <p id="meta">${metadata.author || 'Willem Vanhulle'}${date ? ' | ' + date : ''}</p>
         </div>
         <div class="post-body">${marked.parse(md)}</div>
     `;
