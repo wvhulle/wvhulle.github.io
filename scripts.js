@@ -1,4 +1,4 @@
-const posts = ["streams.md"];
+const posts = ["streams.md", "streams copy.md"];
 
 const postList = document.getElementById('post-list');
 const blog_page = document.getElementById('blog_page');
@@ -49,11 +49,13 @@ postList.onclick = e => {
     if (e.target.matches('a[data-file]')) showPost(e.target.dataset.file);
 };
 
+
+
+renderPostList();
+
 homeButton.onclick = () => {
     homeSection.hidden = false;
     blog_page.hidden = true;
     postList.hidden = false;
 
 };
-
-renderPostList();

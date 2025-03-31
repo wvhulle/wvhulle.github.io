@@ -9,7 +9,6 @@
 
 /* Reset and Base Styles */
 html, body {
-    height: 100%;
     margin: 0;
     padding: 0;
     
@@ -20,11 +19,20 @@ body {
     font-family: "Inter", sans-serif;
     background-color: var(--background);
     color: var(--text);
+    display:flex;
+    flex-direction: row;
+    position:fixed;
+    width: 100%;
+    height: 100%;
 }
 
 /* Desktop Sidebar: Fixed on the left */
 aside#sidebar {
     position: fixed;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5em;
     top: 0;
     left: 0;
     width: 250px;
@@ -37,28 +45,29 @@ aside#sidebar {
 }
 
 /* Sidebar Buttons and Links */
-button#home-button {
-    font-size: 1.5em;
+li#home-button {
     background: none;
     border: none;
     cursor: pointer;
     padding: 0;
     color: var(--accent);
-    margin-bottom: 1em;
+
 }
 
-button#home-button:hover {
+li#home-button:hover {
     text-decoration: underline;
 }
 
 #sidebar ul {
+    display: flex;
+    flex-direction: column;
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 0em;
 }
 
 #sidebar li {
-    margin-bottom: 10px;
+    margin-bottom: 0.8em;
 }
 
 #sidebar a {
@@ -76,13 +85,17 @@ main {
     padding: 2em;
     display: flex;
     flex-direction: column;
+    max-height: 100%;
+    max-width: 100%;
+    overflow-y:scroll;
+    overflow-x:hidden;
 }
 
-/* Start (Home) and Blog Pages */
-#start_page, #blog_page {
-   max-width: 100%;
-    margin: 0 auto;
+#blog_page {
+    width: 100%;
 }
+
+
 
 /* Homepage (Start Page) Styling */
 #start_page img {
@@ -109,31 +122,17 @@ nav a:hover {
     line-height: 1.5;
 }
 
-/* Back-to-Top Link for Blog Page */
-.back-to-top {
-    display: block;
-    position:sticky;
-    top:0;
-    padding: 0.5em;
-    text-decoration: none;
-    background-color: var(--sidebar-bg);
-    color: var(--accent);
-    font-size: 0.9em;
-    margin-bottom: 1em;
-}
 
-#post-content {
-    max-width: 100%;
-}
+
 
 /* Code and Table Styling */
 code {
-    max-width: 100%;
+  
     font-family: "Fira Code", monospace;
 }
 
 pre, table {
-    max-width: 100%;
+ 
     border: 1px solid black;
     box-shadow: 0.5em 0.5em 0.5em var(--sidebar-bg);
 }
@@ -173,30 +172,52 @@ h3 {
 }
 
 /* Mobile Responsiveness */
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
     /* Switch to vertical layout */
     body {
-        display: block;
+        flex-direction: column;
+
     }
+
+        /* Remove left margin on main content */
+        main {
+            margin-left: 0;
+            margin-right:0;
+    
+          
+        }
     
     /* Sidebar becomes a top bar */
     aside#sidebar {
-        position: static;
+        
+        flex-direction: row;
         width: 100%;
-        height: auto;
-        padding: 10px;
+        height:fit-content;
+        padding: 0.5em;
         border-right: none;
         border-bottom: 1px solid #ccc;
-        overflow: visible;
+        flex-wrap: nowrap;
+        overflow-x:scroll;
+    }
+
+    #sidebar ul {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 10px;
+    }
+
+    #sidebar li {
+        text-wrap: nowrap;
+        margin: 0;
+    }
+
+  
+    
+    #sidebar a {
+        font-size: 0.9em;
     }
     
-    /* Remove left margin on main content */
-    main {
-        margin-left: 0;
-        padding: 1em;
-        max-width: 100vw;
-      
-    }
+
     
     /* Adjust homepage image */
     #start_page img {
@@ -205,18 +226,7 @@ h3 {
     }
     
     /* Sidebar list items adjust */
-    #sidebar ul {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-bottom: 10px;
-    }
+ 
     
-    #sidebar li {
-        margin-bottom: 0;
-    }
-    
-    #sidebar a {
-        font-size: 0.9em;
-    }
+  
 }
