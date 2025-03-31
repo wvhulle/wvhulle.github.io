@@ -1,0 +1,96 @@
+@import "./colors_borders.css";
+
+#content_background {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    background-color: var(--content_background);
+}
+
+main {
+    margin-left: 0em;
+    padding: 1.5em;
+    max-width: 40em;
+
+}
+
+#blog_page {
+    width: 100%;
+}
+
+#start_page img {
+    box-shadow: 0.5em 0.5em 0.5em var(--navigation_background);
+    width: 12em;
+    height: 12em;
+    object-fit: cover;
+
+    border: var(--border);
+    border-radius: 100%;
+}
+
+main a {
+    color: var(--accent);
+
+}
+
+hr {
+    border: var(--border);
+
+}
+
+.bio {
+
+    line-height: 1.5;
+}
+
+
+
+pre,
+table {
+
+    border: var(--border);
+    box-shadow: 0.5em 0.5em 0.5em var(--navigation_background);
+}
+
+table {
+    border-collapse: collapse;
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    background: white;
+    overflow-x: auto;
+}
+
+td,
+th {
+    border: var(--border);
+    padding: 0.3em;
+}
+
+@media (max-width: 1000px) {
+    main {
+        margin-left: 0;
+        margin-right: 0;
+
+
+    }
+
+    #start_page {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+    }
+
+    #start_page img {
+        display: block;
+        margin: auto;
+        width: 50vw;
+        height: 50vw;
+    }
+}
+
+/* Hack to make flex listen to hidden */
+[hidden] {
+    display: none !important;
+}

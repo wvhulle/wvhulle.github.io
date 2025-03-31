@@ -1,0 +1,42 @@
+@import "./colors_borders.css";
+
+a,
+p,
+li,
+td,
+th {
+    font-family: "Inter", sans-serif;
+    color: var(--text_body_color);
+}
+
+#meta {
+    font-size: 0.8em;
+}
+
+code {
+    font-family: "Fira Code";
+
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: "Poiret One";
+
+    line-height: 1.2;
+    margin-bottom: 0.5em;
+}
+
+h1 {
+    font-size: 2.4em;
+}
+
+h2 {
+    font-size: 2em;
+}
+
+h3 {
+    font-size: 1.6em;
+    font-style: italic;
+}

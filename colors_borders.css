@@ -1,0 +1,8 @@
+:root {
+    --content_background: #daf3ff;
+    --navigation_background: #b9e9ff;
+    --border: 0.05em solid black;
+    --text_body_color: #222;
+    --accent: #0366d6;
+    --focus: #0099da;
+}

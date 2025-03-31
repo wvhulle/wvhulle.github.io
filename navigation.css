@@ -1,0 +1,79 @@
+@import "./colors_borders.css";
+
+aside#sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5em;
+    max-width: 250px;
+    width: fit-content;
+    height: 100vh;
+    background-color: var(--navigation_background);
+    padding: 1em;
+    overflow-y: scroll;
+    border-right: var(--border);
+}
+
+
+li#home-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: var(--accent);
+
+}
+
+li#home-button:hover {
+    text-decoration: underline;
+}
+
+#sidebar ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding: 0;
+    margin: 0em;
+}
+
+#sidebar li {
+    margin-bottom: 0.8em;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--focus);
+}
+
+@media (max-width: 1000px) {
+
+
+    aside#sidebar {
+
+        flex-direction: row;
+        min-width: 100%;
+        max-width: 100%;
+        ;
+        height: fit-content;
+        padding: 0.5em;
+        border-right: none;
+        border-bottom: var(--border);
+        flex-wrap: nowrap;
+        overflow-x: scroll;
+    }
+
+    #sidebar ul {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 1em;
+    }
+
+    #sidebar li {
+        text-wrap: nowrap;
+
+        margin: 0;
+    }
+}
