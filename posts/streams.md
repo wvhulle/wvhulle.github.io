@@ -9,31 +9,39 @@ options:
   end_slide_shorthand: true
 ---
 
+## Introduction
 
-## Imperative async programming
+Start with a simple example that shows:
 
-A typical binary
+- What is streaming data?
+- How does an imperative approach look?
+- How does a functional approach look?
+- What are the disadvantages/advantages of each?
+
+---
+
+### A simple example: connecting channels
+
+We start with a simple example.
+
+When dealing with _streaming data_ it is easy to use an imperative approach.
 
 ```rust
-async fn main() -> () {
-  let (_, in_receiver) = watch::channel(1);
-  let (out_sender, _) = broadcast::channel(123);
-  let forward_task = spawn(async move {
-      loop {
-          let result = in_receiver.changed().await;
-          if let Err(e) = result { 
+let (_, in_receiver) = watch::channel(1);
+let (out_sender, _) = broadcast::channel(123);
+let forward_task = spawn(async move {
+    loop {
+        let result = in_receiver.changed().await;
+        if let Err(e) = result { 
             warn!("Receiver closed ...{}", e);
             break 
-          };
-          let input = *in_receiver.borrow();
-          let output = get_output(input);
-          debug!("Sending ...: {:?}", output);
-          out_sender.send(output);
-      }
-  });
-  ...
-  forward_task.abort();
-}
+        };
+        let input = *in_receiver.borrow();
+        let output = get_output(input);
+        debug!("Sending ...: {:?}", output);
+        out_sender.send(output);
+    }
+});
 ```
 
 Questions a maintainer might ask:
@@ -46,24 +54,20 @@ Questions a maintainer might ask:
 
 ---
 
-## Functional async programming
+### Functional rewrite of example
 
 ```rust
-async fn main() {
-  let in_receiver = WatchStream::new(in_receiver);
-  let out_sender = BroadcastSink::new(out_sender);
+let in_receiver = WatchStream::new(in_receiver);
+let out_sender = BroadcastSink::new(out_sender);
 
-  let forward_task = spawn(
-      in_receiver
-        .map(Result::ok)
-        .filter_map(ready)
-        .map(get_output)
-        .map(Ok)
-        .forward(out_sender)
-  )
-  ...
-  forward_task.abort();
-}
+let forward_task = spawn(
+    in_receiver
+    .map(Result::ok)
+    .filter_map(ready)
+    .map(get_output)
+    .map(Ok)
+    .forward(out_sender)
+)
 ```
 
 Changes:
@@ -87,15 +91,13 @@ Possible complaints:
 
 ---
 
-## Benefits of streams/sinks
+### Benefits of streams/sinks
 
 Streams model things like streaming video naturally.
 
-## Easier to maintain
-
 Implementing UI is easier, because you can
 
-- listen directly to updates on input streams 
+- listen directly to updates on input streams
 - only act on changes
 
 Operators on `Streams` are similar to `Iterator`
@@ -109,8 +111,6 @@ All the benefits of functional/declarative code
 - No discussion about what is input or output
 - Better interoperability (`impl Stream`)
 
-## Less important benefits of streams
-
 Lower tendency to off-load to new threads/tasks
 
 - Result in less spawns and join handles
@@ -122,9 +122,21 @@ No reliance on external channel implementations on core libraries.
 
 ---
 
-## How to work with streams
+## Basic usage of existing streams
 
-## Basics
+To be able to quickly get started:
+
+- Iterating streams
+- Flushing streams
+- Mapping streams
+- Filtering streams
+- Boolean operators on streams
+
+For more see [docs](https://docs.rs/futures/latest/futures/prelude/stream/trait.StreamExt.html).
+
+---
+
+### Iterating streams
 
 A stream is an async iterator: `next` returns a `Future<Output = Option<_>>`
 
@@ -139,7 +151,33 @@ When `.next().await` is `None` the `Stream` has ended.
 
 Most streams are **not `Clone`**. Separate the `Stream` trait from the transport-specific clone / subscribe functions.
 
-## Mapping
+Also: enumerate, skip_while, peekable, collect ...
+
+---
+
+### Directly using streams
+
+What to do with a stream?
+
+- Use `futures::StreamExt::for_each` to act on each item.
+- Redirect into a channel sender.
+
+You can forward a stream into a sink.
+
+The `futures::Sink` trait is the opposite of `Stream`. Member methods:
+
+- async ready: can we start sending?
+- start send item: prepare an item to be flushed
+- async flush: send all cached items
+- async close: close the sink
+
+A stream can be **sent into a sink** with `futures::SinkExt::forward`.
+
+The opposite for `map` for sinks is `with`.
+
+---
+
+### Mapping streams
 
 Most important combinator or operator.
 
@@ -161,11 +199,7 @@ let stream = stream.then(|x| async move { x + 3 });
 
 ---
 
-## Operators
-
-Operators take a stream, some data and return a new stream.
-
-## Filter
+### Filtering streams
 
 ```rust
 use std::future::ready;
@@ -177,9 +211,7 @@ let events = stream.filter(|x| ready(x % 2 == 0));
 
 Notice the `ready` function. It maps sync values into async values / futures **which are `Unpin`**.
 
-## Filtermap
-
-Filter out None values.
+The `filter_map` function can also filters out `None` values.
 
 ```rust
 let stream = stream::iter(1..=10);
@@ -188,22 +220,19 @@ let events = stream.filter_map(|x| async move {
 });
 ```
 
-## Other common operators
+---
 
-- Analogues for all boolean operators from `Iterator`: any, all, 
-- Other well-known operators (return modified streams): enumerate, skip_while, peekable, collect ...
+### Boolean operators
 
-For more see [docs](https://docs.rs/futures/latest/futures/prelude/stream/trait.StreamExt.html).
+TODO: discuss analogues for all boolean operators from `Iterator`: any, all, ...
 
 ---
 
-## Merging streams
+### Simple merging streams
 
 A user of streams does not just want to redirect or map streams.
 
 We also want to **combine streams**.
-
-## Basic
 
 Binary:  
 
@@ -215,9 +244,97 @@ Iterator or vector:
 - homogenous `futures::stream::select_all`
 - vector of streams, sequentially exchaustive `futures::StreamExt::flatten`
 
-## Advanced
+See later for more advanced types of merging.
 
-Or make your own.
+---
+
+## Streams from scratch
+
+We will see:
+
+- Creating streams imperatively
+- Creating streams declaratively
+- Creating streams through custom combinators
+
+---
+
+### Imperative streams (stable)
+
+We need a macro.
+
+Use crate `async-stream`.
+
+```rust
+use async_stream::stream;
+
+use futures_util::pin_mut;
+use futures_util::stream::StreamExt;
+
+let s = stream! {
+    for i in 0..3 {
+        yield i;
+    }
+};
+
+pin_mut!(s); 
+
+while let Some(value) = s.next().await {
+    println!("got {}", value);
+}
+```
+
+Notice that the stream returned by this macro is not pinned yet.
+
+### Imperative streams (nightly)
+
+On Rust 2024, there are generators. Async generators can be used to write declarative streams.
+
+```rust
+fn create_my_generator() -> impl AsyncIterator<Item = i32> {
+    async gen {
+      yield 1;
+      yield 2;
+      yield 3;
+    }
+}
+
+
+let mut my_generator = create_my_generator();
+assert_eq!(my_generator.next(), Some(1));
+```
+
+Generators are a type of coroutines, see later.
+
+---
+
+### Declarative streams
+
+Use crate `futures`
+
+```rust
+use futures::{stream, StreamExt};
+
+let stream = stream::unfold(0, |state| async move {
+    if state <= 2 {
+        let next_state = state + 1;
+        let yielded = state * 2;
+        Some((yielded, next_state))
+    } else {
+        None
+    }
+});
+
+let result = stream.collect::<Vec<i32>>().await;
+assert_eq!(result, vec![0, 2, 4]);
+```
+
+---
+
+### Creation through custom combinators
+
+You can build your own stream combinators.
+
+Such **combinators** may take several input streams and produce a single output stream.
 
 ```rust
 let stream_a = stream::iter([1,2]);
@@ -239,74 +356,11 @@ The input streams need to have the same type, so `MergedStream` has to
 
 ---
 
-## Ways to construct streams
-
-## Declarative
-
-Use crate `futures`
-
-```rust
-use futures::{stream, StreamExt};
-
-let stream = stream::unfold(0, |state| async move {
-    if state <= 2 {
-        let next_state = state + 1;
-        let yielded = state * 2;
-        Some((yielded, next_state))
-    } else {
-        None
-    }
-});
-
-let result = stream.collect::<Vec<i32>>().await;
-assert_eq!(result, vec![0, 2, 4]);
-```
-
-## Imperative
-
-Use crate `async-stream` 
-
-```rust
-fn double<S: Stream<Item = u32>>(input: S)
-    -> impl Stream<Item = u32>
-{
-    stream! {
-        for await value in input {
-            yield value * 2;
-        }
-    }
-}
-```
+## Intermezzo: encountered problems
 
 ---
 
-## Consumption of streams
-
-## Common ways
-
-What to do with a stream?
-
-- Use `futures::StreamExt::for_each` to act on each item.
-- Redirect into a channel sender.
-
-## Sending in sink
-
-The `futures::Sink` trait is the opposite of `Stream`. Member methods:
-
-- async ready: can we start sending?
-- start send item: prepare an item to be flushed
-- async flush: send all cached items
-- async close: close the sink
-
-A stream can be **sent into a sink** with `futures::SinkExt::forward`.
-
-The opposite for `map` for sinks is `with`.
-
----
-
-## Main problems
-
-## Missing from stable standard library
+### Missing from stable standard library
 
 The `Stream` trait is not in official stable Rust standard library.
 
@@ -326,9 +380,9 @@ Semi-official `futures::StreamExt` provides them.
 Not all structs from third-party crates implement `Stream`.
 
 Solutions:
-- For Tokio channel users: use semi-official crate `tokio-stream` or 
-- implement `Stream` yourself.
 
+- For Tokio channel users: use semi-official crate `tokio-stream` or
+- implement `Stream` yourself.
 
 ## Lack of sink implementors
 
@@ -338,10 +392,9 @@ Sinks are not as commonly used as streams:
   - For example, a binary sink in Tokio implements the trait `AsyncWrite`
 - It is less common for third-party crates to export structs that implement `Sink`.
 
-
 Solutions:
 
-- Tokio channel users: use `tokio_util::sync::PollSender` or 
+- Tokio channel users: use `tokio_util::sync::PollSender` or
 - implement the `Sink` trait yourself.
 
 ---
@@ -400,97 +453,33 @@ Real problem: `async {}` blocks are always marked `!Unpin`.
 
 The `ready` functions returns an `Option<T>` that implements `Future`.
 
-## Not happy?
-
-Make your own `StreamExt` and implement `filter` as function that returns `IntoFuture`.
-
----
-
-## More annoyances
-
 `StreamExt::forward` takes a `TryStream` and returns future of `Result`.
 
-
-
----
-
-## Understanding streams better
-
-Streams are an extension of coroutines.
-
-
-## Coroutines
-
-Normal functions just take input and return output.
-
-**Coroutines** are functions that can be suspended.
-
-Before a coroutine is suspended it **yields a value**.
-
-## Creating a coroutine
-
-Most coroutines are made with generators.
-
-<!-- column_layout: [1, 1] -->
-
-<!-- column: 0 -->
-
-JavaScript:
-
-```javascript
-function* coroutine() {
-  yield 1;
-  yield 2;
-  yield 3;
-}
-
-
-const gen = coroutine();
-console.log(gen.next()); // { value: 1, done: false }
-```
-
-
-<!-- column: 1 -->
-
-Rust:
-
-```rust
-fn coroutine() -> impl Iterator<Item = i32> {
-    gen {
-      yield 1;
-      yield 2;
-      yield 3;
-    }
-}
-
-let mut gen = coroutine();
-assert_eq!(gen.next(), Some(1));
-```
-
+You can also make your own `StreamExt` with helper methods and signatures that you need.
 
 ---
 
-## Streams
+## Streams as coroutines
 
-Coroutines that yield a future instead of a value are also called async iterators or `Stream`s (in Rust).
+More theoretical chapter.
 
-## Definition
+- What is Poll and Pin?
+- What is a future?
+- What is a stream?
+- What is a coroutine?
+- What is the relationship between streams and coroutines?
 
-Definition from `futures`:
+---
 
-```rust
-pub trait Stream {
-    type Item;
+### `Poll` and `Pin`
 
-    // Required method
-    fn poll_next(
-        self: Pin<&mut Self>,
-        cx: &mut Context<'_>,
-    ) -> Poll<Option<Self::Item>>;
-}
-```
+TODO
 
-## Reminder: futures
+---
+
+### Future trait
+
+The future trait is a simplistic version of the stream trait.
 
 The simplest future possible:
 
@@ -508,10 +497,36 @@ impl<T> Future for Ready<T> {
 
 ---
 
-## Streams as a type of coroutine
+### Stream trait
 
-## Classification
+Coroutines that yield a future instead of a value are also called async iterators or `Stream`s (in Rust).
 
+Definition from `futures`:
+
+```rust
+pub trait Stream {
+    type Item;
+
+    fn poll_next(
+        self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+    ) -> Poll<Option<Self::Item>>;
+}
+```
+
+---
+
+### Coroutines
+
+Normal functions just take input and return output.
+
+**Coroutines** are functions that can be suspended.
+
+Before a coroutine is suspended it **yields a value**.
+
+---
+
+### Streams as a type of coroutine
 
 We can classify all coroutines in a table:
 
@@ -523,29 +538,23 @@ We can classify all coroutines in a table:
 
 Table inspired by [Post](https://without.boats/blog/poll-next/).
 
-
 Streams have the benefits from futures:
 
 - They do not have to be ready.
 - May be suspended and resumed at any time.
 
-
-## Disadvantages
-
 Streams have the disadvantages of futures:
 
 - They might be self-referential and unmovable, in Rust = `!Unpin`.
-- They are not `Clone`. 
- 
-Cloneability is accomplished with channels.
+- They are not `Clone`.
 
+Cloneability is accomplished with channels.
 
 ---
 
-## Coroutines as a type of function
+### Coroutines as a type of function
 
 Coroutines are part of a bigger classification of functions.
-
 
 |             | _TAKES_ | _CAPTURES_ | _YIELDS_      | _RESUMES_ | _RETURNS_     |
 | ----------- | ------- | ---------- | ------------- | --------- | ------------- |
@@ -561,10 +570,19 @@ Coroutines are part of a bigger classification of functions.
 
 **Important**: the `Coroutine` trait in Rust is unstable.
 
+---
+
+## Advanced stream creation
+
+We will now look on how to create useful stream combinators that help to write functional/declarative async code.
+
+- Simplest stream from future.
+- General approach for combinators
+- Example of intermediate stream combinator
 
 ---
 
-## Streams from futures
+### Stupid example: Future -> Stream
 
 Every future can be converted into a stream.
 
@@ -595,102 +613,53 @@ Streams are just things that
 
 ---
 
-##  Declarative stream creation
+### Simple example: `futures::Map`
 
-The most optimal way to create streams. 
+One of the simplest stream combinators is in the semi-standard library `futures`.
 
-How does it work?
+It is used to map a stream to a new stream by mapping each value.
+
+```rust
+pub struct Map<St, F> {
+    #[pin]
+    stream: St,
+    f: F,
+}
+
+impl<St, F> Stream for Map<St, F>
+where
+    St: Stream,
+    F: FnMut1<St::Item>,
+{
+    type Item = F::Output;
+
+    fn poll_next(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+        let mut this = self.project();
+        let res = ready!(this.stream.as_mut().poll_next(cx));
+        Poll::Ready(res.map(|x| this.f.call_mut(x)))
+    }
+}
+```
+
+The `#[pin]` attribute implements a method `Pin<&mut Map> -> Pin<&mut St>`.
+
+It **projects** the pinned mutable reference to a pinned reference to the inner stream.
+
+Not necessary to use this macro. You can also use `Box::pin`.
+
+<https://docs.rs/futures/latest/futures/stream/struct.Map.html>
+
+---
+
+### General approach for declarative combinators
+
+Steps:
 
 - Convert high-level functional description into a stream state object
 - Generate `poll_next` method implementation
 
-Common versions of this are `map` and `filter` operators.
-
-See the beginning of this presentation.
-
 ---
 
-## Custom declarative stream combinator
+### Intermediate example: select_all
 
-An example on how to create a custom stream combinator.
-
-We have to know how `Pin` and `Poll` interact.
-
-Determine the state of the output stream.
-
-Determine how state should be updated.
-
-
-```rust
-pub struct SelectAll<St> {
-    inner: FuturesUnordered<StreamFuture<St>>,
-}
-
-impl<St: Stream + Unpin> Stream for SelectAll<St> {
-    type Item = St::Item;
-
-    fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
-        loop {
-            match ready!(self.inner.poll_next_unpin(cx)) {
-                Some((Some(item), remaining)) => {
-                    self.push(remaining);
-                    return Poll::Ready(Some(item));
-                }
-                Some((None, _)) => {}
-                None => return Poll::Ready(None),
-            }
-        }
-    }
-}
-```
-
----
-
-## Imperative stream creation
-
-Helpers to:
-
-- Convert high-level imperative description into a stream state object
-- Generate `poll_next` method implementation
-
-Usage:
-
-```rust
-let mut stream = create_stream();
-assert_eq!(stream.next().await, Some(1));
-```
-
-## Stable Rust
-
-```rust
-fn create_stream(addr: SocketAddr)
-    -> impl Stream<Item = io::Result<TcpStream>>
-{
-    try_stream! {
-        let mut listener = TcpListener::bind(addr).await?;
-
-        loop {
-            let (stream, addr) = listener.accept().await?;
-            println!("received on {:?}", addr);
-            yield stream;
-        }
-    }
-}
-```
-
-## Nightly Rust
-
-Called `AsyncIterator`.
-
-```rust
-fn create_stream() -> impl AsyncIterator<Item = i32> {
-    async gen {
-      yield 1;
-      sleep(Duration::from_secs(1)).await;
-      yield 2;
-      yield 3;
-    }
-}
-```
-
-
+TODO
