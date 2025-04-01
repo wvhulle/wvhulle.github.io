@@ -23,6 +23,8 @@ async function fetchMarkdown(file) {
         console.error(`Not found file available at ${relative_url}. Make sure that the markdown file names in the scripts.js are correct.`);
     }
 
+
+
 }
 
 async function renderPostList() {
