@@ -50,12 +50,13 @@ options:
    1. [Coroutine as a concept](#coroutine-as-a-concept)
    2. [Coroutines in nightly Rust](#coroutines-in-nightly-rust)
    3. [Streams as a type of coroutine](#streams-as-a-type-of-coroutine)
-   4. [General functions](#general-functions)
+   4. [Synchronous vs. asynchronous things](#synchronous-vs-asynchronous-things)
 7. [Advanced stream creation](#advanced-stream-creation)
    1. [Stupid example: `Future -> Stream`](#stupid-example-future---stream)
    2. [How is `futures::Map` implemented?](#how-is-futuresmap-implemented)
-   3. [General approach for declarative combinators](#general-approach-for-declarative-combinators)
-   4. [Special merging of streams](#special-merging-of-streams)
+   3. [Aggregated declarative stream combinators](#aggregated-declarative-stream-combinators)
+   4. [Aggregation examples: flattening nested streams](#aggregation-examples-flattening-nested-streams)
+   5. [Aggregation examples: monitoring streams](#aggregation-examples-monitoring-streams)
 
 
 ---
@@ -928,11 +929,11 @@ We can classify everything seen in this presentation up until now:
 
 Remark: `GEN` stands for Rust `gen` blocks. In general, in other languages, generators can also return values.
 
-Table inspired by [Post](https://without.boats/blog/poll-next/).
+Table inspired by [post by without.boats](https://without.boats/blog/poll-next/).
 
 ---
 
-### General functions
+### Synchronous vs. asynchronous things
 
 Coroutines are part of a bigger classification of functions.
 
@@ -1036,17 +1037,26 @@ You can also declare a field of type `Pin<Box<<Stream>>` and forget about the ma
 
 ---
 
-### General approach for declarative combinators
+### Aggregated declarative stream combinators
 
-Steps:
+Usually when you create an aggregate stream, you have to follow these steps:
 
-- Convert high-level functional description into a stream state object
-- Generate `poll_next` method implementation
+1. Convert high-level functional description into a stream state object
+2. Come up with a method that updates the stream state
+3. Implement the `Stream::poll_next` method using 
+  - First **project the pins** that you need into mutable references
+  - Reconstruct pins from the mutable references of the parts
+  - Pass-through to the `poll_next` or `poll` methods of underlying futures
+  - call the previously mutable state update method
+
+Often you can put most of your logic in the state update method.
+
+Do not forget to store the waker in case the underlying input data types are not only based on futures. The waker needs to be stored near a place where the IO-bound operation completes. (Most of the time this is not needed.)
 
 ---
 
 
-### Special merging of streams
+### Aggregation examples: flattening nested streams
 
 
 The `futures` crate provides flatten functions for `Stream<Item: Stream>`:
@@ -1054,7 +1064,23 @@ The `futures` crate provides flatten functions for `Stream<Item: Stream>`:
 - sequentially `futures::StreamExt::flatten`
 - concurrently `futures::StreamExt::flatten_unordered(None)`
 
-It's possible to implement your own:
+When you are looking for these functions, you are probably doing something nasty. There will often be a simpler approach to the underlying problem.
 
-- `forgetful_flatten` (TODO: discuss implementation)
-- `merge_check_initialized`
+You can also implement your own aggregated streams.
+
+One type of stream aggregator that I couldn't find is a `forgetful` nested Stream.
+
+I implemented my own with `forgetful_flatten`, it rolls out nested streams and drops previous stream when a new stream arrives on the outer stream.
+
+
+---
+
+### Aggregation examples: monitoring streams
+
+The `tokio_stream` crate provides [`StreamMap`](https://docs.rs/tokio-stream/latest/tokio_stream/struct.StreamMap.html)
+
+However, I need some more logic and created `merge_check_initialized`.
+
+It monitors whether the required streams have yielded an initial value yet
+
+TODO: discuss implementation

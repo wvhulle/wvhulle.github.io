@@ -57,21 +57,38 @@ async function showPost(file) {
     homeSection.hidden = true;
     blog_page.hidden = false;
 
+    await create_anchor_tags();
+}
+
+async function create_anchor_tags() {
+    const anchors = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    for (const anchor of anchors) {
+        const id = anchor.innerText.replace(/\s+/g, '-').toLowerCase().replace(/[^a-z0-9\-_]+/g, '');
+        anchor.id = id;
+        anchor.innerHTML += `<a href="#${id}" class="anchor"></a>`;
+    }
+}
+
+
+
+async function main() {
+    await renderPostList();
+
+    homeButton.onclick = () => {
+        console.log(`Home button clicked`);
+        homeSection.hidden = false;
+        blog_page.hidden = true;
+
+    };
+
+    postList.onclick = e => {
+        e.preventDefault();
+        if (e.target.matches('a[data-file]')) showPost(e.target.dataset.file);
+    };
+
+
+
 
 }
 
-postList.onclick = e => {
-    e.preventDefault();
-    if (e.target.matches('a[data-file]')) showPost(e.target.dataset.file);
-};
-
-
-
-renderPostList();
-
-homeButton.onclick = () => {
-    console.log(`Home button clicked`);
-    homeSection.hidden = false;
-    blog_page.hidden = true;
-
-};
+main();
