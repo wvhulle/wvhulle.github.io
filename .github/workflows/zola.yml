@@ -3,7 +3,7 @@ name: Build with Zola and Deploy to GitHub Pages
 on: [push, pull_request]
 
 jobs:
-  build:
+  build_drafts:
     runs-on: ubuntu-latest
     if: github.ref != 'refs/heads/main'
     steps:
