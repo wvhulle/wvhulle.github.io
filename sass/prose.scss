@@ -1,0 +1,66 @@
+* {
+    color: black;
+}
+
+h1 {
+    font-size: 2.4em;
+}
+
+h2 {
+    font-size: 2em;
+}
+
+h3 {
+    font-size: 1.6em;
+    font-style: italic;
+}
+
+
+a {
+    text-decoration: underline;
+    text-decoration-color: var(--tertiary);
+
+}
+
+
+a:hover {
+    color: var(--tertiary);
+}
+
+article {
+    place-self: left;
+    margin-left: 0em;
+    padding: 1.5em;
+    max-width: 40em;
+    width: 100%;
+}
+
+
+
+hr {
+    border: var(--border);
+
+}
+
+pre,
+table {
+    border: var(--border);
+
+    box-shadow: 0.5em 0.5em 0.5em var(--secondary);
+    overflow-x: auto;
+}
+
+table {
+    border-collapse: collapse;
+    display: block;
+    width: fit-content;
+    max-width: 100%;
+    background: white;
+    overflow-x: auto;
+}
+
+td,
+th {
+    border: var(--border);
+    padding: 0.6em;
+}

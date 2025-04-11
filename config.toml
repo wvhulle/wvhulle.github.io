@@ -11,7 +11,6 @@ taxonomies = [{ name = "tags", description = "Tags" }]
 [markdown]
 
 # Navigation
-insert_anchor_links = "right"
 bottom_footnotes = true
 
 # Prose
@@ -20,5 +19,5 @@ render_emoji = true
 
 # Code
 highlight_code = true
-highlight_theme = "ayu-light"
+highlight_theme = "demain"
 error_on_missing_highlight = true

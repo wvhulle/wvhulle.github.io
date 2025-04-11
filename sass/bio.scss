@@ -1,0 +1,33 @@
+.bio {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    place-self: center;
+    max-width: 40em;
+
+    & img {
+        margin: 1em;
+        box-shadow: 0.5em 0.5em 0.5em var(--secondary);
+        width: 12em;
+        height: 12em;
+        object-fit: cover;
+        border: var(--border);
+        border-radius: 100%;
+    }
+
+    & h1,
+    & h2,
+    & h3,
+    & h4 {
+        font-family: "Poiret One";
+        text-align: center;
+    }
+
+
+    & p {
+        text-align: center;
+        line-height: 1.7;
+    }
+
+}

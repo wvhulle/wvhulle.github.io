@@ -1,0 +1,16 @@
+code {
+    font-family: "Fira Code";
+}
+
+p code,
+li code {
+    background-color: var(--secondary);
+    padding: 0em 0.2em;
+    border: var(--border)
+}
+
+
+pre {
+    background-color: white !important;
+    padding: 1em;
+}

@@ -14,11 +14,6 @@
             {{ page.title }}
         </h1>
 
-        <p class="post_date">{{ page.date }}</p>
-
-
-        {%- if page.taxonomies and page.taxonomies.tags -%}
-
         <ul class="tags">
             {%- for tag in page.taxonomies.tags -%}
             <li>
@@ -28,14 +23,21 @@
 
         </ul>
 
+        <p class="post_date">{{ page.date }}</p>
+
+
+        {%- if page.taxonomies and page.taxonomies.tags -%}
+
+
+
         {%- else -%}
         <h4>Uncategorised</h4>
 
         {%- endif -%}
 
-        <h3 class="subtitle">
+        <p class="subtitle">
             {{ page.description }}
-        </h3>
+        <p>
 
 
 

@@ -1,6 +1,6 @@
-@import "./colors_borders.css";
+@import "./vars.css";
 
-aside#sidebar {
+aside {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -8,36 +8,31 @@ aside#sidebar {
     max-width: 250px;
     width: fit-content;
     height: 100vh;
-    background-color: var(--navigation_background);
+    background-color: var(--secondary);
     padding: 1em;
     overflow-y: scroll;
     border-right: var(--border);
+
+
+
+    & ul {
+        display: flex;
+        flex-direction: column;
+        list-style: none;
+        padding: 0;
+        margin: 0em;
+
+        & li {
+            margin-bottom: 0.8em;
+
+
+
+        }
+    }
 }
 
 
 
-
-
-#sidebar ul {
-    display: flex;
-    flex-direction: column;
-    list-style: none;
-    padding: 0;
-    margin: 0em;
-}
-
-#sidebar li {
-    margin-bottom: 0.8em;
-}
-
-a {
-    text-decoration: none;
-}
-
-a:hover {
-    color: var(--focus);
-    text-decoration: underline;
-}
 
 @media (max-width: 1000px) {
 
@@ -67,4 +62,10 @@ a:hover {
 
         margin: 0;
     }
+}
+
+
+
+#meta {
+    font-size: 0.8em;
 }
