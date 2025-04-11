@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Senior backend Rust software engineer -- Willem Vanhulle</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poiret+One&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+</head>
+
+<body>
+    <aside id="sidebar">
+
+        <ul id="post-list">
+            <li id="home-button">
+                <a href="/">
+                    Home
+                </a>
+
+            </li>
+
+            
+            
+            <li class="post-item">
+                <a href="https:&#x2F;&#x2F;wvhulle.github.io&#x2F;blog&#x2F;streams&#x2F;">
+                    Declarative async
+                </a>
+            </li>
+            
+        </ul>
+
+    </aside>
+
+
+
+    <main>
+
+        
+
+<article>
+
+    <header>
+
+
+        <h1 class="title">
+            Declarative async
+        </h1>
+
+        <ul class="tags"><li>
+                functional
+            </li><li>
+                asynchronous
+            </li><li>
+                declarative
+            </li></ul>
+
+        <p class="post_date">2025-03-18</p><p class="subtitle">
+            A step-wise introduction on how to use a functional&#x2F;declarative approach to asynchronous&#x2F;concurrent programming in Rust with streams and sinks.
+        <p>
+
+
+
+
+    </header>
+
+
+    
+    <ul class="post_top_headers">
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://wvhulle.github.io/blog/streams/#introduction">Introduction</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#connecting-channels">Connecting channels</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#imperative-aync">Imperative aync: +&#x2F;-</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#declarative-async">Declarative async: +&#x2F;-</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://wvhulle.github.io/blog/streams/#basic-usage-of-existing-streams">Basic usage of existing streams</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#iterating-streams">Iterating streams</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#consuming-streams-with-for-each">Consuming streams with for_each</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#mapping-streams">Mapping streams</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#simple-modifications-of-a-stream-useful-in-tests">Simple modifications of a stream (useful in tests)</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#filtering-streams">Filtering streams</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#filter-map">Filter map</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#boolean-operators">Boolean operators</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://wvhulle.github.io/blog/streams/#intermediate-usage-of-streams">Intermediate usage of streams</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#requirements-to-merge-streams">Requirements to merge streams</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#merge-two-homogenous-streams">Merge two homogenous streams</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#merge-an-iterable-of-streams">Merge an iterable of streams</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#merging-a-keyed-iterable-of-streams">Merging a keyed iterable of streams</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#inhomogenous-stream-merging">Inhomogenous stream merging</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#the-problem-of-splitting-streams">The problem of splitting streams</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#creating-a-clone-receiver-and-stream-from-arbitrary-streams">Creating a Clone receiver (and stream) from arbitrary streams</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#dual-of-streams-sinks">Dual of streams: Sinks</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#flushing-a-stream-into-a-sink">Flushing a Stream into a Sink</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://wvhulle.github.io/blog/streams/#streams-from-scratch">Streams from scratch</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#iterators-from-imperative-generators">Iterators from imperative generators</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#stable-stream-generators-imperative">Stable stream generators (imperative)</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#nightly-stream-generators">Nightly stream generators</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#simple-declarative-streams">Simple declarative streams</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#intermediate-declarative-streams">Intermediate declarative streams</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://wvhulle.github.io/blog/streams/#review-of-low-level-move-prevention">Review of low-level move-prevention</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#immoveable-unpin">Immoveable &#x2F; Unpin</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#pin-as-an-unpin-consumer">Pin as an Unpin consumer</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#interpeting-pin-as-a-barrier">Interpeting Pin as a barrier</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#future-trait">Future trait</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#examples-of-unpin-types">Examples of !Unpin types</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#immoveable-async-blocks">Immoveable async blocks</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#streams-as-a-kind-of-futures">Streams as a kind of futures</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://wvhulle.github.io/blog/streams/#streams-and-coroutines">Streams and coroutines</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#coroutine-as-a-concept">Coroutine as a concept</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#coroutines-in-nightly-rust">Coroutines in nightly Rust</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#example-of-rust-coroutin">Example of Rust coroutin</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#streams-as-a-type-of-coroutine">Streams as a type of coroutine</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#synchronous-vs-asynchronous-things">Synchronous vs. asynchronous things</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://wvhulle.github.io/blog/streams/#advanced-stream-creation">Advanced stream creation</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#stupid-example-future-stream">Stupid example: Future -&gt; Stream</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#how-is-futures-map-implemented">How is futures::Map implemented?</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#aggregated-declarative-stream-combinators">Aggregated declarative stream combinators</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#aggregation-examples-flattening-nested-streams">Aggregation examples: flattening nested streams</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://wvhulle.github.io/blog/streams/#aggregation-examples-monitoring-streams">Aggregation examples: monitoring streams</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+    </ul>
+    
+
+
+    <h2 id="introduction"><a class="zola-anchor" href="#introduction" aria-label="Anchor link for: introduction">Introduction</a></h2>
+<p>Start with a simple example that shows:</p>
+<ul>
+<li>How does an imperative approach look?</li>
+<li>How does a functional approach look?</li>
+<li>What are the disadvantages/advantages of each?</li>
+</ul>
+<!-- end_slide -->
+<h3 id="connecting-channels"><a class="zola-anchor" href="#connecting-channels" aria-label="Anchor link for: connecting-channels">Connecting channels</a></h3>
+<p>In user applications we might have to connect two channels. (Don’t think about whether this is a good idea.)</p>
+<p>Imperative version (with variable assignments):</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">let </span><span>(</span><span style="color:#3e999f;">_</span><span>, in_receiver) </span><span style="color:#3e999f;">= </span><span>watch::channel(</span><span style="color:#f07219;">1</span><span>);
+</span><span style="color:#8959a8;">let </span><span>(out_sender, </span><span style="color:#3e999f;">_</span><span>) </span><span style="color:#3e999f;">= </span><span>broadcast::channel(</span><span style="color:#f07219;">123</span><span>);
+</span><span style="color:#8959a8;">let</span><span> forward_task </span><span style="color:#3e999f;">= </span><span style="color:#4271ae;">spawn</span><span>(async </span><span style="color:#8959a8;">move </span><span>{
+</span><span>    </span><span style="color:#8959a8;">loop </span><span>{
+</span><span>        </span><span style="color:#8959a8;">let</span><span> result </span><span style="color:#3e999f;">=</span><span> in_receiver.</span><span style="color:#4271ae;">changed</span><span>().await;
+</span><span>        </span><span style="color:#8959a8;">if let </span><span style="color:#c99e00;">Err</span><span>(e) </span><span style="color:#3e999f;">=</span><span> result { </span><span style="color:#8959a8;">break </span><span>};
+</span><span>        </span><span style="color:#8959a8;">let</span><span> input </span><span style="color:#3e999f;">= *</span><span>in_receiver.</span><span style="color:#4271ae;">borrow</span><span>();
+</span><span>        </span><span style="color:#8959a8;">let</span><span> output </span><span style="color:#3e999f;">= </span><span style="color:#4271ae;">get_output</span><span>(input);
+</span><span>        out_sender.</span><span style="color:#4271ae;">send</span><span>(output);
+</span><span>    }
+</span><span>});
+</span></code></pre>
+<p>Declarative version (using streams and sinks):</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">let</span><span> in_receiver </span><span style="color:#3e999f;">= </span><span>WatchStream::new(in_receiver);
+</span><span style="color:#8959a8;">let</span><span> out_sender </span><span style="color:#3e999f;">= </span><span>BroadcastSink::new(out_sender);
+</span><span>
+</span><span style="color:#8959a8;">let</span><span> forward_task </span><span style="color:#3e999f;">= </span><span style="color:#4271ae;">spawn</span><span>(
+</span><span>    in_receiver
+</span><span>    .</span><span style="color:#4271ae;">map</span><span>(</span><span style="color:#c99e00;">Result</span><span>::ok)
+</span><span>    .</span><span style="color:#4271ae;">filter_map</span><span>(ready)
+</span><span>    .</span><span style="color:#4271ae;">map</span><span>(get_output)
+</span><span>    .</span><span style="color:#4271ae;">map</span><span>(</span><span style="color:#c99e00;">Ok</span><span>)
+</span><span>    .</span><span style="color:#4271ae;">forward</span><span>(out_sender)
+</span><span>)
+</span></code></pre>
+<!-- end_slide -->
+<h3 id="imperative-aync"><a class="zola-anchor" href="#imperative-aync" aria-label="Anchor link for: imperative-aync">Imperative aync: +/-</a></h3>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">let </span><span>(</span><span style="color:#3e999f;">_</span><span>, in_receiver) </span><span style="color:#3e999f;">= </span><span>watch::channel(</span><span style="color:#f07219;">1</span><span>);
+</span><span style="color:#8959a8;">let </span><span>(out_sender, </span><span style="color:#3e999f;">_</span><span>) </span><span style="color:#3e999f;">= </span><span>broadcast::channel(</span><span style="color:#f07219;">123</span><span>);
+</span><span style="color:#8959a8;">let</span><span> forward_task </span><span style="color:#3e999f;">= </span><span style="color:#4271ae;">spawn</span><span>(async </span><span style="color:#8959a8;">move </span><span>{
+</span><span>    </span><span style="color:#8959a8;">loop </span><span>{
+</span><span>        </span><span style="color:#8959a8;">let</span><span> result </span><span style="color:#3e999f;">=</span><span> in_receiver.</span><span style="color:#4271ae;">changed</span><span>().await;
+</span><span>        </span><span style="color:#8959a8;">if let </span><span style="color:#c99e00;">Err</span><span>(e) </span><span style="color:#3e999f;">=</span><span> result { </span><span style="color:#8959a8;">break</span><span>; };
+</span><span>        </span><span style="color:#8959a8;">let</span><span> input </span><span style="color:#3e999f;">= *</span><span>in_receiver.</span><span style="color:#4271ae;">borrow</span><span>();
+</span><span>        </span><span style="color:#8959a8;">let</span><span> output </span><span style="color:#3e999f;">= </span><span style="color:#4271ae;">get_output</span><span>(input);
+</span><span>        out_sender.</span><span style="color:#4271ae;">send</span><span>(output);
+</span><span>    }
+</span><span>});
+</span></code></pre>
+<p>Advantages:</p>
+<ul>
+<li>Imperative code is more mainstream.</li>
+<li>No need to know much about futures, poll or pin.</li>
+</ul>
+<p>Disadvantages:</p>
+<ul>
+<li>Seemingly arbitrary channel configuration</li>
+<li>More characters, more chances of typos</li>
+<li>Manual declaration and naming of intermediate state</li>
+<li>Non-linear source code execution because of control flow keywords: <code>break</code>, <code>continue</code>, …</li>
+</ul>
+<!-- end_slide -->
+<h3 id="declarative-async"><a class="zola-anchor" href="#declarative-async" aria-label="Anchor link for: declarative-async">Declarative async: +/-</a></h3>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">let</span><span> in_receiver </span><span style="color:#3e999f;">= </span><span>WatchStream::new(in_receiver);
+</span><span style="color:#8959a8;">let</span><span> out_sender </span><span style="color:#3e999f;">= </span><span>BroadcastSink::new(out_sender);
+</span><span>
+</span><span style="color:#8959a8;">let</span><span> forward_task </span><span style="color:#3e999f;">= </span><span style="color:#4271ae;">spawn</span><span>(
+</span><span>    in_receiver
+</span><span>    .</span><span style="color:#4271ae;">map</span><span>(</span><span style="color:#c99e00;">Result</span><span>::ok)
+</span><span>    .</span><span style="color:#4271ae;">filter_map</span><span>(ready)
+</span><span>    .</span><span style="color:#4271ae;">map</span><span>(get_output)
+</span><span>    .</span><span style="color:#4271ae;">map</span><span>(</span><span style="color:#c99e00;">Ok</span><span>)
+</span><span>    .</span><span style="color:#4271ae;">forward</span><span>(out_sender)
+</span><span>)
+</span></code></pre>
+<p>Advantages:</p>
+<ul>
+<li>Moving / streaming data modeled naturally by streams</li>
+<li>Operators on <code>Streams</code> are similar to <code>Iterator</code>, easy to remember</li>
+<li>No discussions about the naming of intermediate variables</li>
+<li>Better interoperability, less reliance on external channel implementations on core libraries. (<code>impl Stream</code>)</li>
+<li>No explicit control flow statements like <code>break</code>, <code>continue</code>, <code>return</code>.</li>
+</ul>
+<p>Disadvantages:</p>
+<ul>
+<li>We need to know about <code>ready</code> to convert into a future</li>
+<li>I need to use <code>Ok</code> to convert <code>Stream</code> into <code>TryStream</code></li>
+<li>Extra dependency on <code>tokio-stream</code> for stream wrappers</li>
+<li><code>tokio</code> channels do not implement <code>Stream</code> out-of-the-box</li>
+<li>We needed to know about <code>Sink</code> and implement it.</li>
+<li>Need to know the basics of futures.</li>
+<li>Need dependency on <code>futures</code></li>
+</ul>
+<!-- end_slide -->
+<h2 id="basic-usage-of-existing-streams"><a class="zola-anchor" href="#basic-usage-of-existing-streams" aria-label="Anchor link for: basic-usage-of-existing-streams">Basic usage of existing streams</a></h2>
+<p>To be able to quickly get started:</p>
+<ul>
+<li>Iterating streams</li>
+<li>Consuming streams</li>
+<li>Splitting streams</li>
+<li>Mapping streams</li>
+<li>Filtering streams</li>
+<li>Boolean operators on streams</li>
+</ul>
+<p>For more see <a href="https://docs.rs/futures/latest/futures/prelude/stream/trait.StreamExt.html">docs</a>.</p>
+<p>Very similar to familiar methods on <code>Iterator</code>.</p>
+<!-- end_slide -->
+<h3 id="iterating-streams"><a class="zola-anchor" href="#iterating-streams" aria-label="Anchor link for: iterating-streams">Iterating streams</a></h3>
+<p>A stream is an async iterator: <code>next</code> returns a <code>Future&lt;Output = Option&lt;_&gt;&gt;</code></p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">let</span><span> stream </span><span style="color:#3e999f;">= </span><span>UserStream::new();
+</span><span>assert_eq!(stream.</span><span style="color:#4271ae;">next</span><span>().await, </span><span style="color:#c99e00;">Some</span><span>(</span><span style="color:#3e999f;">_</span><span>));
+</span></code></pre>
+<p>Important distinction with iterators:</p>
+<ul>
+<li>An iterator that ends is a <code>FusedIterator</code> continues to yield <code>None</code> after completion</li>
+<li>A fused stream that ends is a <code>FusedStream</code> that has a method <code>is_terminated</code>. <code>None</code> does not mean the <code>Stream</code> has ended.</li>
+</ul>
+<p>Most common streams are <code>FusedStream</code> or convert standard <code>Stream</code>s into <code>FusedStream</code> with <code>stream.fuse()</code>.</p>
+<!-- end_slide -->
+<h3 id="consuming-streams-with-for-each"><a class="zola-anchor" href="#consuming-streams-with-for-each" aria-label="Anchor link for: consuming-streams-with-for-each">Consuming streams with <code>for_each</code></a></h3>
+<p>Use <code>futures::StreamExt::for_each</code> to act on each item.</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">let mut</span><span> x </span><span style="color:#3e999f;">= </span><span style="color:#f07219;">0</span><span>;
+</span><span>
+</span><span>{
+</span><span>    </span><span style="color:#8959a8;">let</span><span> fut </span><span style="color:#3e999f;">= </span><span>stream::repeat(</span><span style="color:#f07219;">1</span><span>).</span><span style="color:#4271ae;">take</span><span>(</span><span style="color:#f07219;">3</span><span>).</span><span style="color:#4271ae;">for_each</span><span>(|</span><span style="color:#f07219;">item</span><span>| {
+</span><span>        x </span><span style="color:#3e999f;">+=</span><span> item;
+</span><span>        future::ready(())
+</span><span>    });
+</span><span>    fut.await;
+</span><span>}
+</span><span>
+</span><span>assert_eq!(x, </span><span style="color:#f07219;">3</span><span>);
+</span></code></pre>
+<!-- end_slide -->
+<h3 id="mapping-streams"><a class="zola-anchor" href="#mapping-streams" aria-label="Anchor link for: mapping-streams">Mapping streams</a></h3>
+<p>Most important operator.</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">use </span><span>futures::{stream, StreamExt};
+</span><span>
+</span><span style="color:#8959a8;">let</span><span> stream </span><span style="color:#3e999f;">= </span><span>stream::iter(</span><span style="color:#f07219;">1</span><span style="color:#3e999f;">..=</span><span style="color:#f07219;">3</span><span>);
+</span><span style="color:#8959a8;">let</span><span> stream </span><span style="color:#3e999f;">=</span><span> stream.</span><span style="color:#4271ae;">map</span><span>(|</span><span style="color:#f07219;">x</span><span>| x </span><span style="color:#3e999f;">+ </span><span style="color:#f07219;">3</span><span>);
+</span></code></pre>
+<p>If the closure is asynchronous, use <code>then</code> (as in <code>Future::then</code>).</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">let</span><span> stream </span><span style="color:#3e999f;">= </span><span>stream::iter(</span><span style="color:#f07219;">1</span><span style="color:#3e999f;">..=</span><span style="color:#f07219;">3</span><span>);
+</span><span style="color:#8959a8;">let</span><span> stream </span><span style="color:#3e999f;">=</span><span> stream.</span><span style="color:#4271ae;">then</span><span>(|</span><span style="color:#f07219;">x</span><span>| async </span><span style="color:#8959a8;">move </span><span>{ </span><span style="color:#4271ae;">convert</span><span>(x).await });
+</span></code></pre>
+<p>The futures will not overlap in execution.</p>
+<p>Feel free to use async closures <code>async |_| {}</code> or <code>AsyncFn</code> in recent Rust versions.</p>
+<p>I prefer to stick to the good-old <code>async move {}</code> blocks.</p>
+<p><strong>Important</strong>: In previous major version releases of <code>futures</code>, <code>then</code> and <code>map</code> were a single function. The crate <code>futures-preview</code> is an old fork such an old version. Avoid it’s documentation to prevent confusion. (Everything you need for the rest of this presentation is available in the recent official release of <code>futures</code>.)</p>
+<!-- end_slide -->
+<h3 id="simple-modifications-of-a-stream-useful-in-tests"><a class="zola-anchor" href="#simple-modifications-of-a-stream-useful-in-tests" aria-label="Anchor link for: simple-modifications-of-a-stream-useful-in-tests">Simple modifications of a stream (useful in tests)</a></h3>
+<p>Common functions, similar to <code>Iterator</code>:</p>
+<ul>
+<li>skip_while</li>
+<li>peekable</li>
+<li>take</li>
+</ul>
+<p>Example:</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">let</span><span> stream </span><span style="color:#3e999f;">= </span><span>stream::iter(vec![</span><span style="color:#839c00;">&#39;a&#39;</span><span>, </span><span style="color:#839c00;">&#39;b&#39;</span><span>, </span><span style="color:#839c00;">&#39;c&#39;</span><span>]);
+</span><span>
+</span><span style="color:#8959a8;">let mut</span><span> stream </span><span style="color:#3e999f;">=</span><span> stream.</span><span style="color:#4271ae;">enumerate</span><span>();
+</span><span>
+</span><span>assert_eq!(stream.</span><span style="color:#4271ae;">next</span><span>().await, </span><span style="color:#c99e00;">Some</span><span>((</span><span style="color:#f07219;">0</span><span>, </span><span style="color:#839c00;">&#39;a&#39;</span><span>)));
+</span><span>assert_eq!(stream.</span><span style="color:#4271ae;">next</span><span>().await, </span><span style="color:#c99e00;">Some</span><span>((</span><span style="color:#f07219;">1</span><span>, </span><span style="color:#839c00;">&#39;b&#39;</span><span>)));
+</span><span>assert_eq!(stream.</span><span style="color:#4271ae;">next</span><span>().await, </span><span style="color:#c99e00;">Some</span><span>((</span><span style="color:#f07219;">2</span><span>, </span><span style="color:#839c00;">&#39;c&#39;</span><span>)));
+</span><span>assert_eq!(stream.</span><span style="color:#4271ae;">next</span><span>().await, </span><span style="color:#c99e00;">None</span><span>);
+</span></code></pre>
+<!-- end_slide -->
+<h3 id="filtering-streams"><a class="zola-anchor" href="#filtering-streams" aria-label="Anchor link for: filtering-streams">Filtering streams</a></h3>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">use </span><span>std::future::ready;
+</span><span style="color:#8959a8;">use </span><span>futures::{stream, StreamExt};
+</span><span>
+</span><span style="color:#8959a8;">let</span><span> stream </span><span style="color:#3e999f;">= </span><span>stream::iter(</span><span style="color:#f07219;">1</span><span style="color:#3e999f;">..=</span><span style="color:#f07219;">10</span><span>);
+</span><span style="color:#8959a8;">let</span><span> events </span><span style="color:#3e999f;">=</span><span> stream.</span><span style="color:#4271ae;">filter</span><span>(|</span><span style="color:#f07219;">x</span><span>| </span><span style="color:#4271ae;">ready</span><span>(x </span><span style="color:#3e999f;">% </span><span style="color:#f07219;">2 </span><span style="color:#3e999f;">== </span><span style="color:#f07219;">0</span><span>));
+</span></code></pre>
+<p>Notice the <code>ready</code> function. It maps sync values into async values / futures <strong>which are <code>Unpin</code></strong>.</p>
+<p>Because the closure is <code>Unpin</code>, the resulting  <code>Stream</code> called <code>events</code> is also <code>Upin</code>.</p>
+<h4 id="misleading-messages-compiler"><a class="zola-anchor" href="#misleading-messages-compiler" aria-label="Anchor link for: misleading-messages-compiler">Misleading messages compiler</a></h4>
+<p>Remark: the following would be an <code>Unpin</code> stream:</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span>stream.</span><span style="color:#4271ae;">filter</span><span>(|</span><span style="color:#f07219;">x</span><span>| async </span><span style="color:#8959a8;">move </span><span>{ x </span><span style="color:#3e999f;">% </span><span style="color:#f07219;">2 </span><span style="color:#3e999f;">== </span><span style="color:#f07219;">0</span><span>});
+</span></code></pre>
+<p>The compiler messages will lead you to pinning on the heap and you will do something like this:</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span>stream.</span><span style="color:#4271ae;">filter</span><span>(|</span><span style="color:#f07219;">x</span><span>| </span><span style="color:#c99e00;">Box</span><span>::pin(async </span><span style="color:#8959a8;">move </span><span>{ x </span><span style="color:#3e999f;">% </span><span style="color:#f07219;">2 </span><span style="color:#3e999f;">== </span><span style="color:#f07219;">0</span><span>}));
+</span><span style="color:#c99e00;">Box</span><span>::pin(stream.</span><span style="color:#4271ae;">filter</span><span>(|</span><span style="color:#f07219;">x</span><span>| async </span><span style="color:#8959a8;">move </span><span>{ x </span><span style="color:#3e999f;">% </span><span style="color:#f07219;">2 </span><span style="color:#3e999f;">== </span><span style="color:#f07219;">0</span><span>}));
+</span><span>stream.</span><span style="color:#4271ae;">filter</span><span>(|</span><span style="color:#f07219;">x</span><span>| async </span><span style="color:#8959a8;">move </span><span>{ x </span><span style="color:#3e999f;">% </span><span style="color:#f07219;">2 </span><span style="color:#3e999f;">== </span><span style="color:#f07219;">0</span><span>}).</span><span style="color:#4271ae;">boxed</span><span>();
+</span></code></pre>
+<p>However, this is not necessary and involves <strong>unnecessary heap allocations</strong>. Use the <code>std::future::ready</code> function from above instead.</p>
+<!-- end_slide -->
+<h3 id="filter-map"><a class="zola-anchor" href="#filter-map" aria-label="Anchor link for: filter-map">Filter map</a></h3>
+<p>The <code>filter_map</code> operator:</p>
+<ul>
+<li>takes a stream and a closure that returns an option</li>
+<li>removes <code>None</code> values, shortening the output stream</li>
+</ul>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">let</span><span> stream </span><span style="color:#3e999f;">= </span><span>stream::iter(</span><span style="color:#f07219;">1</span><span style="color:#3e999f;">..=</span><span style="color:#f07219;">10</span><span>);
+</span><span style="color:#8959a8;">let</span><span> events </span><span style="color:#3e999f;">=</span><span> stream.</span><span style="color:#4271ae;">filter_map</span><span>(|</span><span style="color:#f07219;">x</span><span>| async </span><span style="color:#8959a8;">move </span><span>{
+</span><span>    </span><span style="color:#8959a8;">if</span><span> x </span><span style="color:#3e999f;">% </span><span style="color:#f07219;">2 </span><span style="color:#3e999f;">== </span><span style="color:#f07219;">0 </span><span>{ </span><span style="color:#c99e00;">Some</span><span>(x </span><span style="color:#3e999f;">+ </span><span style="color:#f07219;">1</span><span>) } </span><span style="color:#8959a8;">else </span><span>{ </span><span style="color:#c99e00;">None </span><span>}
+</span><span>});
+</span></code></pre>
+<!-- end_slide -->
+<h3 id="boolean-operators"><a class="zola-anchor" href="#boolean-operators" aria-label="Anchor link for: boolean-operators">Boolean operators</a></h3>
+<p>There are also analogues for all boolean operators from <code>Iterator</code>: any, all, …</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">let</span><span> number_stream </span><span style="color:#3e999f;">= </span><span>stream::iter(</span><span style="color:#f07219;">0</span><span style="color:#3e999f;">..</span><span style="color:#f07219;">10</span><span>);
+</span><span style="color:#8959a8;">let</span><span> less_then_twenty </span><span style="color:#3e999f;">=</span><span> number_stream.</span><span style="color:#4271ae;">all</span><span>(|</span><span style="color:#f07219;">i</span><span>| async </span><span style="color:#8959a8;">move </span><span>{ i </span><span style="color:#3e999f;">&lt; </span><span style="color:#f07219;">20 </span><span>});
+</span><span>assert_eq!(less_then_twenty.await, </span><span style="color:#f07219;">true</span><span>);
+</span></code></pre>
+<!-- end_slide -->
+<h2 id="intermediate-usage-of-streams"><a class="zola-anchor" href="#intermediate-usage-of-streams" aria-label="Anchor link for: intermediate-usage-of-streams">Intermediate usage of streams</a></h2>
+<p>We will see:</p>
+<ul>
+<li>Merging</li>
+<li>Splitting</li>
+<li>Flushing</li>
+</ul>
+<!-- end_slide -->
+<h3 id="requirements-to-merge-streams"><a class="zola-anchor" href="#requirements-to-merge-streams" aria-label="Anchor link for: requirements-to-merge-streams">Requirements to merge streams</a></h3>
+<p>We also want to <strong>combine streams</strong>.</p>
+<p>The input streams need to be of the same type.</p>
+<p>This may be annoying whent you:</p>
+<ul>
+<li>build software with streams from different third-party crates</li>
+<li>use different streams with different backend / transport.</li>
+</ul>
+<p>Solution: use a <code>&amp;dyn Stream</code> <strong>behind a pointer</strong> such as <code>Box</code> (heap-allocation).</p>
+<p>References to streams in local variables on the stack are also possible, but then you do not have ownership. Ownership is typically needed.</p>
+<!-- end_slide -->
+<h3 id="merge-two-homogenous-streams"><a class="zola-anchor" href="#merge-two-homogenous-streams" aria-label="Anchor link for: merge-two-homogenous-streams">Merge two homogenous streams</a></h3>
+<p>A user of streams does not just want to redirect or map streams.</p>
+<p>Merge two homogenous streams with <code>tokio_stream::StreamExt::merge</code>. Disadvantage: dependency on <code>tokio-stream</code>.</p>
+<!-- end_slide -->
+<h3 id="merge-an-iterable-of-streams"><a class="zola-anchor" href="#merge-an-iterable-of-streams" aria-label="Anchor link for: merge-an-iterable-of-streams">Merge an iterable of streams</a></h3>
+<p>Merge normal iterator of streams into one stream with <code>futures::stream::select_all</code>.</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">let</span><span> stream_a </span><span style="color:#3e999f;">= </span><span>stream::repeat(</span><span style="color:#f07219;">1</span><span>);
+</span><span style="color:#8959a8;">let</span><span> stream_b </span><span style="color:#3e999f;">= </span><span>stream::repeat(</span><span style="color:#f07219;">2</span><span>);
+</span><span>
+</span><span style="color:#8959a8;">let</span><span> merged_tagged </span><span style="color:#3e999f;">= </span><span>stream::select_all([stream_a, stream_b]);
+</span></code></pre>
+<p>See <a href="https://docs.rs/futures/latest/futures/stream/fn.select_all.html">docs</a>.</p>
+<!-- end_slide -->
+<h3 id="merging-a-keyed-iterable-of-streams"><a class="zola-anchor" href="#merging-a-keyed-iterable-of-streams" aria-label="Anchor link for: merging-a-keyed-iterable-of-streams">Merging a keyed iterable of streams</a></h3>
+<p>To keep track of the origin of the values in the merged stream, do this:</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">let</span><span> stream_a </span><span style="color:#3e999f;">= </span><span>stream::repeat(</span><span style="color:#f07219;">1</span><span>).</span><span style="color:#4271ae;">map</span><span>(|</span><span style="color:#f07219;">n</span><span>| (</span><span style="color:#839c00;">&#39;a&#39;</span><span>, </span><span style="color:#f07219;">1</span><span>));
+</span><span style="color:#8959a8;">let</span><span> stream_b </span><span style="color:#3e999f;">= </span><span>stream::repeat(</span><span style="color:#f07219;">2</span><span>).</span><span style="color:#4271ae;">map</span><span>(|</span><span style="color:#f07219;">n</span><span>| (</span><span style="color:#839c00;">&#39;b&#39;</span><span>, </span><span style="color:#f07219;">2</span><span>));
+</span><span>
+</span><span style="color:#8959a8;">let</span><span> merged_tagged </span><span style="color:#3e999f;">= </span><span>stream::select_all([stream_a, stream_b]);
+</span></code></pre>
+<p>Remark: in this simple case you are be better off just using <code>tokio_stream::MergeMap</code>.</p>
+<!-- end_slide -->
+<h3 id="inhomogenous-stream-merging"><a class="zola-anchor" href="#inhomogenous-stream-merging" aria-label="Anchor link for: inhomogenous-stream-merging">Inhomogenous stream merging</a></h3>
+<p>Merge two inhomogenous streams with <code>futures::StreamExt::zip</code> into a stream of tuples.</p>
+<p>Or use trait objects and streams of type <code>Stream&lt;Item: Box&lt;dyn Trait&gt;&gt;</code>.</p>
+<p>See later for more advanced types of merging.</p>
+<!-- end_slide -->
+<h3 id="the-problem-of-splitting-streams"><a class="zola-anchor" href="#the-problem-of-splitting-streams" aria-label="Anchor link for: the-problem-of-splitting-streams">The problem of splitting streams</a></h3>
+<p>What if you need to use the same output of a stream in several places and the items are <code>Clone</code>?</p>
+<p>Most streams are <strong>not <code>Clone</code></strong>, even if the items are <code>Clone</code>.</p>
+<p>The <code>Stream</code> trait is very basic and does not say how to clone.</p>
+<p>You can hack together a loop and some manual cloning.</p>
+<!-- end_slide -->
+<h4 id="making-stream-clone-by-hand-advanced"><a class="zola-anchor" href="#making-stream-clone-by-hand-advanced" aria-label="Anchor link for: making-stream-clone-by-hand-advanced">Making <code>Stream: Clone</code> by hand (advanced)</a></h4>
+<p>In the end something will have to:</p>
+<ul>
+<li>listen on the input stream to be split</li>
+<li>save the last received value for who is not awaiting yet.</li>
+<li>notify consumers of the split streams for new values</li>
+</ul>
+<p>If you know how to implement the <code>poll</code> functions, you can try to do it yourself.</p>
+<p>However, you have to  keep track of all consumers and whether they have seen the latest value yet.</p>
+<!-- end_slide -->
+<h4 id="turning-channel-receivers-into-clone-stream-wrappers"><a class="zola-anchor" href="#turning-channel-receivers-into-clone-stream-wrappers" aria-label="Anchor link for: turning-channel-receivers-into-clone-stream-wrappers">Turning channel receivers into <code>Clone</code> stream wrappers</a></h4>
+<p>If implementing <code>poll</code> sounds like over-kill you can use a channel.</p>
+<p>The simplest solution is to use the <strong>backend of the input stream</strong> which may have <code>resubscribe</code> functions.</p>
+<p>If the receiver is not clone you can spawn threads/tasks that take input, clone the input and send it.</p>
+<!-- end_slide -->
+<h3 id="creating-a-clone-receiver-and-stream-from-arbitrary-streams"><a class="zola-anchor" href="#creating-a-clone-receiver-and-stream-from-arbitrary-streams" aria-label="Anchor link for: creating-a-clone-receiver-and-stream-from-arbitrary-streams">Creating a <code>Clone</code> receiver (and stream) from arbitrary streams</a></h3>
+<p>A very simple approach to cloning streams is just cloning the receiver on the backend:</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">struct </span><span>CloneableStream&lt;Item&gt;(sync::Receiver)
+</span><span>
+</span><span style="color:#8959a8;">impl</span><span>&lt;Item&gt; CloneableStream&lt;Item&gt; {
+</span><span>    </span><span style="color:#8959a8;">fn </span><span style="color:#4271ae;">create</span><span>(</span><span style="color:#f07219;">receiver</span><span>: sync::Receiver) -&gt; (TaskHandle, </span><span style="color:#8959a8;">Self</span><span>) {
+</span><span>        </span><span style="color:#8959a8;">let </span><span>(tx, rx) </span><span style="color:#3e999f;">= </span><span style="color:#4271ae;">channel</span><span>();
+</span><span>        </span><span style="color:#8959a8;">let</span><span> task_handle </span><span style="color:#3e999f;">= </span><span style="color:#4271ae;">spawn</span><span>(async </span><span style="color:#8959a8;">move </span><span>{
+</span><span>            </span><span style="color:#8959a8;">loop </span><span>{
+</span><span>                </span><span style="color:#8959a8;">let</span><span> input </span><span style="color:#3e999f;">=</span><span> receiver.</span><span style="color:#4271ae;">rcv</span><span>().await.</span><span style="color:#4271ae;">unwrap</span><span>();
+</span><span>                tx.</span><span style="color:#4271ae;">send</span><span>(input).</span><span style="color:#4271ae;">unwrap</span><span>();
+</span><span>            }
+</span><span>        });
+</span><span>        (task_handle, </span><span style="color:#8959a8;">Self</span><span>(rx))
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#8959a8;">fn </span><span style="color:#4271ae;">stream</span><span>(</span><span style="color:#f07219;">self</span><span>) -&gt; impl Stream {}
+</span><span>}
+</span><span>
+</span><span style="color:#8959a8;">impl</span><span>&lt;Item&gt; Clone </span><span style="color:#8959a8;">for </span><span>CloneableStream&lt;Item&gt; {}
+</span></code></pre>
+<p>Let’s say we have a channel receiver or stream <code>rx</code>, then we can create a <code>Clone</code> receiver.</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span>
+</span><span style="color:#8959a8;">let </span><span>(</span><span style="color:#3e999f;">_</span><span>, cloneable_stream) </span><span style="color:#3e999f;">= </span><span>CloneableStream::create(rx);
+</span><span style="color:#8959a8;">let</span><span> new_stream </span><span style="color:#3e999f;">=</span><span> cloneable_stream.</span><span style="color:#4271ae;">clone</span><span>().</span><span style="color:#4271ae;">stream</span><span>().</span><span style="color:#4271ae;">map</span><span>(|_| {});
+</span><span style="color:#8959a8;">let</span><span> clone_stream </span><span style="color:#3e999f;">=</span><span> cloneable_stream.</span><span style="color:#4271ae;">clone</span><span>();
+</span></code></pre>
+<!-- end_slide -->
+<h3 id="dual-of-streams-sinks"><a class="zola-anchor" href="#dual-of-streams-sinks" aria-label="Anchor link for: dual-of-streams-sinks">Dual of streams: <code>Sink</code>s</a></h3>
+<p>You can forward a stream into a sink.</p>
+<p>The <code>futures::Sink</code> trait is the opposite of <code>Stream</code>.</p>
+<table><thead><tr><th>stage</th><th>name</th><th>method</th><th>meaning</th><th>remark</th></tr></thead><tbody>
+<tr><td>creation</td><td>new</td><td></td><td>Initial state</td><td></td></tr>
+<tr><td>send</td><td>ready</td><td><code>ready().await</code></td><td>Wait until cache ready</td><td>may be full</td></tr>
+<tr><td>send</td><td>start send</td><td><code>start_send(item)</code></td><td>Load into cache</td><td>not actual send</td></tr>
+<tr><td>send</td><td>flush</td><td><code>flush().await</code></td><td>Send items from cache</td><td></td></tr>
+<tr><td>close</td><td>close</td><td><code>close().await</code></td><td>Close the <code>Sink</code></td><td>not automatic</td></tr>
+</tbody></table>
+<p>The opposite for <code>map</code> for sinks is <code>with</code>.</p>
+<p>If a <code>Sink</code> becomes full easily, you can allocate a buffer with <code>buffer()</code>.</p>
+<!-- end_slide -->
+<h3 id="flushing-a-stream-into-a-sink"><a class="zola-anchor" href="#flushing-a-stream-into-a-sink" aria-label="Anchor link for: flushing-a-stream-into-a-sink">Flushing a <code>Stream</code> into a <code>Sink</code></a></h3>
+<p>A stream can be <strong>sent into a sink</strong> with <code>futures::SinkExt::forward</code>.</p>
+<p>If you don’t want to close the <code>Sink</code> after stream returned <code>None</code>, use <code>send_all</code>.</p>
+<p>Third-party crates rarely have <code>impl</code> for <code>futures::Sink</code>.</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">let </span><span>(output,</span><span style="color:#3e999f;">_</span><span>) </span><span style="color:#3e999f;">= </span><span>tokio::sync::mpsc::channel();
+</span><span style="color:#8959a8;">let</span><span> output </span><span style="color:#3e999f;">= </span><span>tokio_util::PollSender::new(output);
+</span><span>
+</span><span style="color:#8959a8;">let</span><span> input </span><span style="color:#3e999f;">= </span><span>stream::repeat(</span><span style="color:#f07219;">1</span><span>).</span><span style="color:#4271ae;">map</span><span>(</span><span style="color:#c99e00;">Ok</span><span>);
+</span><span>input.</span><span style="color:#4271ae;">forward</span><span>(tx).await.</span><span style="color:#4271ae;">unwrap</span><span>();
+</span></code></pre>
+<p>Important:</p>
+<ul>
+<li><code>StreamExt::forward</code> takes a <code>TryStream</code> (items are <code>Result</code>)</li>
+<li>returns future of <code>Result</code> (need to ignore error).</li>
+</ul>
+<p>When you have one input stream and know <code>n</code> output sinks <strong>at compile-time</strong>, you can use <code>fanout</code>.</p>
+<p>Otherwise you will have to do book-keeping yourself and spawn helper threads/tasks.</p>
+<!-- end_slide -->
+<h2 id="streams-from-scratch"><a class="zola-anchor" href="#streams-from-scratch" aria-label="Anchor link for: streams-from-scratch">Streams from scratch</a></h2>
+<p>We will see:</p>
+<ul>
+<li>Creating streams imperatively</li>
+<li>Creating streams declaratively</li>
+<li>Creating streams through custom combinators</li>
+</ul>
+<!-- end_slide -->
+<h3 id="iterators-from-imperative-generators"><a class="zola-anchor" href="#iterators-from-imperative-generators" aria-label="Anchor link for: iterators-from-imperative-generators">Iterators from imperative generators</a></h3>
+<p>In computer science, functions that may return more than one value are called <strong>generators</strong>.</p>
+<p>(They are common in JavaScript and Python.)</p>
+<p>On Rust 2024, generators are part of the core language through <code>gen</code> blocks.</p>
+<p>They <strong>return an invisible iterator</strong> of type <code>impl Iterator</code>.</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span>gen {
+</span><span>    </span><span style="font-style:italic;color:#c82829;">yield </span><span style="color:#f07219;">1</span><span>;
+</span><span>    </span><span style="font-style:italic;color:#c82829;">yield </span><span style="color:#f07219;">2</span><span>;
+</span><span>    </span><span style="font-style:italic;color:#c82829;">yield </span><span style="color:#f07219;">3</span><span>;
+</span><span>}
+</span></code></pre>
+<p>Generators are a kind of <strong>imperative iterator construction</strong>.</p>
+<p>Generators are a type of coroutines, see later.</p>
+<!-- end_slide -->
+<h3 id="stable-stream-generators-imperative"><a class="zola-anchor" href="#stable-stream-generators-imperative" aria-label="Anchor link for: stable-stream-generators-imperative">Stable stream generators (imperative)</a></h3>
+<p>We need a macro, because <code>gen</code> blocks are <strong>not in edition 2021 or stable yet</strong>.</p>
+<p>Use crate <code>async-stream</code>.</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">use </span><span>async_stream::stream;
+</span><span>
+</span><span style="color:#8959a8;">use </span><span>futures_util::pin_mut;
+</span><span style="color:#8959a8;">use </span><span>futures_util::stream::StreamExt;
+</span><span>
+</span><span style="color:#8959a8;">let</span><span> s </span><span style="color:#3e999f;">= </span><span>stream! {
+</span><span>    </span><span style="color:#8959a8;">for</span><span> i </span><span style="color:#3e999f;">in </span><span style="color:#f07219;">0</span><span style="color:#3e999f;">..</span><span style="color:#f07219;">3 </span><span>{
+</span><span>        </span><span style="font-style:italic;color:#c82829;">yield</span><span> i;
+</span><span>    }
+</span><span>};
+</span><span>
+</span><span>pin_mut!(s); 
+</span><span>
+</span><span style="color:#8959a8;">while let </span><span style="color:#c99e00;">Some</span><span>(value) </span><span style="color:#3e999f;">=</span><span> s.</span><span style="color:#4271ae;">next</span><span>().await {
+</span><span>    println!(</span><span style="color:#839c00;">&quot;got </span><span>{}</span><span style="color:#839c00;">&quot;</span><span>, value);
+</span><span>}
+</span></code></pre>
+<p>Notice that the stream returned by this macro is not pinned yet.</p>
+<p>Streams generated by async generators  such as <code>async_stream::stream!</code> suffer from the same limitations as <code>async {}</code> blocks and most futures. They are <code>!Unpin</code>.</p>
+<!-- end_slide -->
+<h3 id="nightly-stream-generators"><a class="zola-anchor" href="#nightly-stream-generators" aria-label="Anchor link for: nightly-stream-generators">Nightly stream generators</a></h3>
+<p>Writing <code>async</code> in front of the <code>gen</code> keyword turns the output into a <code>Stream</code>, under the <strong>new official name <code>AsyncIterator</code></strong>.</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">fn </span><span style="color:#4271ae;">create_my_generator</span><span>() -&gt; impl AsyncIterator&lt;Item = </span><span style="color:#8959a8;">i32</span><span>&gt; {
+</span><span>    async gen {
+</span><span>      </span><span style="font-style:italic;color:#c82829;">yield </span><span style="color:#f07219;">1</span><span>;
+</span><span>      </span><span style="font-style:italic;color:#c82829;">yield </span><span style="color:#f07219;">2</span><span>;
+</span><span>      </span><span style="font-style:italic;color:#c82829;">yield </span><span style="color:#f07219;">3</span><span>;
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#8959a8;">let mut</span><span> my_generator </span><span style="color:#3e999f;">= </span><span style="color:#4271ae;">create_my_generator</span><span>();
+</span><span>assert_eq!(my_generator.</span><span style="color:#4271ae;">next</span><span>(), </span><span style="color:#c99e00;">Some</span><span>(</span><span style="color:#f07219;">1</span><span>));
+</span></code></pre>
+<!-- end_slide -->
+<h3 id="simple-declarative-streams"><a class="zola-anchor" href="#simple-declarative-streams" aria-label="Anchor link for: simple-declarative-streams">Simple declarative streams</a></h3>
+<p>You can use one of the methods</p>
+<ul>
+<li><code>stream::once()</code>: stream of length 1</li>
+<li><code>stream::iter()</code>: stream from iterable</li>
+<li><code>stream::repeat()</code>: stream of identical values</li>
+</ul>
+<!-- end_slide -->
+<h3 id="intermediate-declarative-streams"><a class="zola-anchor" href="#intermediate-declarative-streams" aria-label="Anchor link for: intermediate-declarative-streams">Intermediate declarative streams</a></h3>
+<p>You can use an initial state, and a closure with <code>unfold</code>.</p>
+<p>The initial state is mapped to an <code>Stream::Item</code> and new unfold <code>State</code>.</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">use </span><span>futures::{stream, StreamExt};
+</span><span>
+</span><span style="color:#8959a8;">let</span><span> stream </span><span style="color:#3e999f;">= </span><span>stream::unfold(</span><span style="color:#f07219;">0</span><span>, |</span><span style="color:#f07219;">state</span><span>| async </span><span style="color:#8959a8;">move </span><span>{
+</span><span>    </span><span style="color:#8959a8;">if</span><span> state </span><span style="color:#3e999f;">&lt;= </span><span style="color:#f07219;">2 </span><span>{
+</span><span>        </span><span style="color:#8959a8;">let</span><span> next_state </span><span style="color:#3e999f;">=</span><span> state </span><span style="color:#3e999f;">+ </span><span style="color:#f07219;">1</span><span>;
+</span><span>        </span><span style="color:#8959a8;">let</span><span> yielded </span><span style="color:#3e999f;">=</span><span> state </span><span style="color:#3e999f;">* </span><span style="color:#f07219;">2</span><span>;
+</span><span>        </span><span style="color:#c99e00;">Some</span><span>((yielded, next_state))
+</span><span>    } </span><span style="color:#8959a8;">else </span><span>{
+</span><span>        </span><span style="color:#c99e00;">None
+</span><span>    }
+</span><span>});
+</span><span>
+</span><span style="color:#8959a8;">let</span><span> result </span><span style="color:#3e999f;">=</span><span> stream.collect::&lt;</span><span style="color:#c99e00;">Vec</span><span>&lt;</span><span style="color:#8959a8;">i32</span><span>&gt;&gt;().await;
+</span><span>assert_eq!(result, vec![</span><span style="color:#f07219;">0</span><span>, </span><span style="color:#f07219;">2</span><span>, </span><span style="color:#f07219;">4</span><span>]);
+</span></code></pre>
+<!-- end_slide -->
+<h2 id="review-of-low-level-move-prevention"><a class="zola-anchor" href="#review-of-low-level-move-prevention" aria-label="Anchor link for: review-of-low-level-move-prevention">Review of low-level move-prevention</a></h2>
+<p>This chapter reviews the low-level basics of asynchronous programming in Rust.</p>
+<ul>
+<li>What is <code>Unpin</code>?</li>
+<li>What is the role of <code>Pin</code>?</li>
+<li>What is a future low-level?</li>
+<li>Example of <code>!Unpin</code> type</li>
+<li>What is a stream low-level?</li>
+</ul>
+<p>If you really want to know what <code>await</code> is, you can continue reading this chapter.</p>
+<!-- end_slide -->
+<h3 id="immoveable-unpin"><a class="zola-anchor" href="#immoveable-unpin" aria-label="Anchor link for: immoveable-unpin">Immoveable / <code>Unpin</code></a></h3>
+<p>Rust has <strong>move semantics</strong>. Assigning variables likely moves the content.</p>
+<p>Self-referencing data types are dangerous to move. A move will invalidate the content without updating self-references.</p>
+<p>The solution in Rust is to not update references, but mark self-referencing types as <strong>not <code>Unpin</code></strong> / <code>!Unpin</code>.</p>
+<p>(The double negation makes it a bit hard to understand.)</p>
+<p>My interpretation of <code>Unpin</code> types:</p>
+<blockquote>
+<p>All types for which the compiler can see that it is safe to move by <strong>quickly looking at fields</strong>.</p>
+</blockquote>
+<p>Or in other words:</p>
+<blockquote>
+<p>Immoveable = <code>!Unpin</code>
+Moveable = <code>Unpin</code></p>
+</blockquote>
+<p>Remark: <code>Unpin</code> cannot be implemented manually, it’s an auto-trait reserved for the compiler (on stable).</p>
+<!-- end_slide -->
+<h3 id="pin-as-an-unpin-consumer"><a class="zola-anchor" href="#pin-as-an-unpin-consumer" aria-label="Anchor link for: pin-as-an-unpin-consumer"><code>Pin</code> as an <code>Unpin</code> consumer</a></h3>
+<p><code>Pin</code> is nothing but a wrapper with no intrinsic value.</p>
+<p>However, the most important safe functions of <code>Pin</code> require <code>item: Unpin</code></p>
+<ul>
+<li><code>Pin::new(item)</code>: pin a move-able object by telling the compiler not to move it</li>
+<li><code>Pin::get_mut(self)</code>: get mutable access to the object but no ownership</li>
+</ul>
+<p>Edit access / mutable reference is dangerous when <code>Type: !Unpin</code> because you could still move the content with <code>std::mem::replace</code>.</p>
+<p>Pin has <code>unsafe</code> counterparts to the above which do not have checks for <code>Unpin</code>.</p>
+<p>Beware of the destructor in <code>Drop</code> for pinned types. It is still called.</p>
+<!-- end_slide -->
+<h3 id="interpeting-pin-as-a-barrier"><a class="zola-anchor" href="#interpeting-pin-as-a-barrier" aria-label="Anchor link for: interpeting-pin-as-a-barrier">Interpeting <code>Pin</code> as a barrier</a></h3>
+<p>The <code>Pin</code> type is a <strong>barrier that protects us from moving types</strong> that are <code>!Unpin</code> (types explicitly marked as not <code>Unpin</code> by the compiler).</p>
+<table><thead><tr><th><em>Metaphor</em></th><th><em>Type state</em></th><th><em>Ownership event</em></th></tr></thead><tbody>
+<tr><td><em>undressed</em></td><td><code>Type</code></td><td>moveable  / free</td></tr>
+<tr><td><em>dress-up</em></td><td><code>Pin::new(Type)</code></td><td>give up ownership</td></tr>
+<tr><td><em>dressed-up</em></td><td><code>Pin&lt;Type&gt;</code></td><td>stuck in memory</td></tr>
+<tr><td><em>dress-down</em></td><td><code>Pin::new(Type).get_mut()</code></td><td>acquire edit access</td></tr>
+</tbody></table>
+<p>This means that <code>Pin</code>:</p>
+<ul>
+<li>is nothing more than a barrier.</li>
+<li>does not have physical or type meaning on itself.</li>
+</ul>
+<p><code>Pin</code> only has meaning when you interact with it through it’s methods <code>new</code> and <code>get_mut</code>.</p>
+<p>Why so complicated?</p>
+<p>I don’t see a simpler alternative. Updating references manually would have a large overhead …</p>
+<!-- end_slide -->
+<h3 id="future-trait"><a class="zola-anchor" href="#future-trait" aria-label="Anchor link for: future-trait">Future trait</a></h3>
+<p>The future trait is a simplistic version of the stream trait.</p>
+<p>Every synchronous / primitive data type value can be turned into a future.</p>
+<p>A future that makes a value nullable and just returns the non-null part immediately on <code>await</code>-ing / polling.</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">pub struct </span><span>Ready&lt;T&gt;(</span><span style="color:#c99e00;">Option</span><span>&lt;T&gt;);
+</span><span>
+</span><span style="color:#8959a8;">impl</span><span>&lt;T&gt; Future </span><span style="color:#8959a8;">for </span><span>Ready&lt;T&gt; {
+</span><span>    </span><span style="color:#8959a8;">type </span><span>Output </span><span style="color:#3e999f;">=</span><span> T;
+</span><span>
+</span><span>    </span><span style="color:#8959a8;">fn </span><span style="color:#4271ae;">poll</span><span>(</span><span style="color:#8959a8;">mut </span><span style="color:#f07219;">self</span><span>: Pin&lt;</span><span style="color:#3e999f;">&amp;</span><span style="color:#8959a8;">mut Self</span><span>&gt;, </span><span style="color:#f07219;">_cx</span><span>: </span><span style="color:#3e999f;">&amp;</span><span style="color:#8959a8;">mut </span><span>Context&lt;&#39;</span><span style="color:#3e999f;">_</span><span>&gt;) -&gt; Poll&lt;T&gt; {
+</span><span>        Poll::Ready(</span><span style="color:#c82728;">self</span><span>.</span><span style="color:#f07219;">0.</span><span style="color:#4271ae;">take</span><span>().</span><span style="color:#4271ae;">expect</span><span>(</span><span style="color:#839c00;">&quot;Ready polled after completion&quot;</span><span>))
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>Usage:</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">let</span><span> a </span><span style="color:#3e999f;">= </span><span style="color:#f07219;">1</span><span>;
+</span><span style="color:#8959a8;">let</span><span> fut </span><span style="color:#3e999f;">= </span><span>Ready::new(a);
+</span><span style="color:#8e908c;">// or
+</span><span style="color:#8959a8;">let</span><span> fut </span><span style="color:#3e999f;">= </span><span style="color:#4271ae;">ready</span><span>(a);
+</span><span>
+</span><span style="color:#8e908c;">// will terminate immediately
+</span><span style="color:#8959a8;">let</span><span> b </span><span style="color:#3e999f;">=</span><span> fut.await;
+</span><span>
+</span><span>assert_eq!(a,b);
+</span></code></pre>
+<p>Remark: <code>.await</code> automatically converts everything in a future with <code>IntoFuture</code>.</p>
+<!-- end_slide -->
+<h3 id="examples-of-unpin-types"><a class="zola-anchor" href="#examples-of-unpin-types" aria-label="Anchor link for: examples-of-unpin-types">Examples of <code>!Unpin</code> types</a></h3>
+<p>There a couple of examples of common types that are not safe to move:</p>
+<ul>
+<li>(async) generators, for example <code>async_stream::stream! {}</code> streams</li>
+<li>futures returned by <code>async {}</code> blocks (the compiler is lazy)</li>
+<li>self-referencing data structures such as trees</li>
+</ul>
+<p>Why are <code>async {}</code> futures unsafe to move and <code>Future</code> does not have this requirement?</p>
+<p>When a future with <strong>self-referencing variables</strong> has been polled and was supended, it should not be moved by anyone anymore to prevent invalidation.</p>
+<!-- end_slide -->
+<h3 id="immoveable-async-blocks"><a class="zola-anchor" href="#immoveable-async-blocks" aria-label="Anchor link for: immoveable-async-blocks">Immoveable async blocks</a></h3>
+<p>Local variables in <code>async {}</code> blocks may reference each-other ahead of an <code>await</code> point.</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span>async {
+</span><span>    </span><span style="color:#8959a8;">let</span><span> a </span><span style="color:#3e999f;">= </span><span style="color:#f07219;">1</span><span>;
+</span><span>    </span><span style="color:#8959a8;">let</span><span> r </span><span style="color:#3e999f;">= &amp;</span><span>a;
+</span><span>    </span><span style="color:#4271ae;">sleep</span><span>().await;
+</span><span>    println!(</span><span style="color:#839c00;">&quot;After wake-up r = </span><span>{r}</span><span style="color:#839c00;">&quot;</span><span>);
+</span><span>}
+</span></code></pre>
+<p>This block is converted into an <code>enum</code> with a code-generated transition function.</p>
+<p>Each variant of the <code>enum</code> is a phase in the <code>async</code> block, before or after an <code>await</code> point.</p>
+<p>Each phase contains all local variables in the phase.</p>
+<p>If the local variables reference eachother,</p>
+<ul>
+<li>the type of this variant of the <code>enum</code> is self-referencing (unmoveable) or <code>!Unpin</code></li>
+<li>the <code>enum</code> itself is unmoveable</li>
+<li>the <code>impl Future</code> does not convey the message that the underlying <code>enum</code> is unmoveable.</li>
+<li>we always need to use <code>impl Future + Unpin</code> when using this future in an executor.</li>
+</ul>
+<!-- end_slide -->
+<h3 id="streams-as-a-kind-of-futures"><a class="zola-anchor" href="#streams-as-a-kind-of-futures" aria-label="Anchor link for: streams-as-a-kind-of-futures">Streams as a kind of futures</a></h3>
+<p>Streams are simply a future. But</p>
+<ul>
+<li>their return type is a future of an option</li>
+<li>the name of the <code>poll</code> method is different</li>
+</ul>
+<p>Otherwise, streams are identical to futures.</p>
+<p>The semi-official definition in <code>futures::Stream</code> is a trait:</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">pub trait </span><span>Stream {
+</span><span>    </span><span style="color:#8959a8;">type </span><span>Item;
+</span><span>
+</span><span>    </span><span style="color:#8959a8;">fn </span><span style="color:#4271ae;">poll_next</span><span>(
+</span><span>        </span><span style="color:#f07219;">self</span><span>: Pin&lt;</span><span style="color:#3e999f;">&amp;</span><span style="color:#8959a8;">mut Self</span><span>&gt;,
+</span><span>        </span><span style="color:#f07219;">cx</span><span>: </span><span style="color:#3e999f;">&amp;</span><span style="color:#8959a8;">mut </span><span>Context&lt;&#39;</span><span style="color:#3e999f;">_</span><span>&gt;,
+</span><span>    ) -&gt; Poll&lt;</span><span style="color:#c99e00;">Option</span><span>&lt;</span><span style="color:#8959a8;">Self::</span><span>Item&gt;&gt;;
+</span><span>}
+</span></code></pre>
+<!-- end_slide -->
+<h2 id="streams-and-coroutines"><a class="zola-anchor" href="#streams-and-coroutines" aria-label="Anchor link for: streams-and-coroutines">Streams and coroutines</a></h2>
+<p>More theoretical chapter.</p>
+<ul>
+<li>What is a coroutine?</li>
+<li>What is the relationship between streams and coroutines?</li>
+</ul>
+<!-- end_slide -->
+<h3 id="coroutine-as-a-concept"><a class="zola-anchor" href="#coroutine-as-a-concept" aria-label="Anchor link for: coroutine-as-a-concept">Coroutine as a concept</a></h3>
+<p>Normal functions just take input and return output (immediately).</p>
+<p><strong>Coroutines</strong> are functions that can be suspended.</p>
+<ol>
+<li>Upon being suspended a coroutine <strong>yields a value</strong>.</li>
+<li>Then the caller can continue with other functions.</li>
+<li>Later the caller may decide to resume the suspended coroutine with resumption data input</li>
+<li>If the coroutine ends, it returns (not yield) a final value</li>
+</ol>
+<p><strong>Important</strong>: the <code>Coroutine</code> trait in Rust is unstable.</p>
+<!-- end_slide -->
+<h3 id="coroutines-in-nightly-rust"><a class="zola-anchor" href="#coroutines-in-nightly-rust" aria-label="Anchor link for: coroutines-in-nightly-rust">Coroutines in nightly Rust</a></h3>
+<p>The trait definition is a super-set of <code>Future</code>:</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">pub trait </span><span>Coroutine&lt;R = ()&gt; {
+</span><span>    </span><span style="color:#8959a8;">type </span><span>Yield;
+</span><span>    </span><span style="color:#8959a8;">type </span><span>Return;
+</span><span>
+</span><span>    </span><span style="color:#8959a8;">fn </span><span style="color:#4271ae;">resume</span><span>(
+</span><span>        </span><span style="color:#f07219;">self</span><span>: Pin&lt;</span><span style="color:#3e999f;">&amp;</span><span style="color:#8959a8;">mut Self</span><span>&gt;,
+</span><span>        </span><span style="color:#f07219;">arg</span><span>: R,
+</span><span>    ) -&gt; CoroutineState&lt;</span><span style="color:#8959a8;">Self::</span><span>Yield, </span><span style="color:#8959a8;">Self::</span><span>Return&gt;;
+</span><span>}
+</span></code></pre>
+<p>Notice the <code>R</code> stands for <code>Resume</code>, is a type generic and is different from <code>Coroutine::Return</code>.</p>
+<p>This means that one same type may behave as different coroutines depending on the resume input, but can only have one <code>Return</code> type.</p>
+<!-- end_slide -->
+<h3 id="example-of-rust-coroutin"><a class="zola-anchor" href="#example-of-rust-coroutin" aria-label="Anchor link for: example-of-rust-coroutin">Example of Rust coroutin</a></h3>
+<p>The following coroutine (in nightly Rust) has resume data type <code>R = ()</code>:</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">let mut</span><span> coroutine </span><span style="color:#3e999f;">= </span><span>#[</span><span style="color:#c82728;">coroutine</span><span>] </span><span style="color:#3e999f;">|| </span><span>{
+</span><span>    </span><span style="font-style:italic;color:#c82829;">yield </span><span style="color:#f07219;">1</span><span>;
+</span><span>    </span><span style="color:#839c00;">&quot;foo&quot;
+</span><span>};
+</span><span>
+</span><span style="color:#8959a8;">match </span><span>Pin::new(</span><span style="color:#3e999f;">&amp;</span><span style="color:#8959a8;">mut</span><span> coroutine).</span><span style="color:#4271ae;">resume</span><span>(()) {
+</span><span>    CoroutineState::Yielded(</span><span style="color:#f07219;">1</span><span>) </span><span style="color:#3e999f;">=&gt; </span><span>{}
+</span><span>    </span><span style="color:#3e999f;">_ =&gt; </span><span>panic!(</span><span style="color:#839c00;">&quot;unexpected return from resume&quot;</span><span>),
+</span><span>}
+</span><span style="color:#8959a8;">match </span><span>Pin::new(</span><span style="color:#3e999f;">&amp;</span><span style="color:#8959a8;">mut</span><span> coroutine).</span><span style="color:#4271ae;">resume</span><span>(()) {
+</span><span>    CoroutineState::Complete(</span><span style="color:#839c00;">&quot;foo&quot;</span><span>) </span><span style="color:#3e999f;">=&gt; </span><span>{}
+</span><span>    </span><span style="color:#3e999f;">_ =&gt; </span><span>panic!(</span><span style="color:#839c00;">&quot;unexpected return from resume&quot;</span><span>),
+</span><span>}
+</span></code></pre>
+<!-- end_slide -->
+<h3 id="streams-as-a-type-of-coroutine"><a class="zola-anchor" href="#streams-as-a-type-of-coroutine" aria-label="Anchor link for: streams-as-a-type-of-coroutine">Streams as a type of coroutine</a></h3>
+<p>We can classify everything seen in this presentation up until now:</p>
+<table><thead><tr><th></th><th><em>YIELDS</em></th><th><em>RESUMES</em></th><th><em>RETURNS</em></th></tr></thead><tbody>
+<tr><td>ITERATOR</td><td>option</td><td>!</td><td>!</td></tr>
+<tr><td>FUTURE</td><td>()</td><td>waker</td><td>future output</td></tr>
+<tr><td>STREAM</td><td>future option</td><td>waker</td><td>!</td></tr>
+</tbody></table>
+<p>Remark: <code>GEN</code> stands for Rust <code>gen</code> blocks. In general, in other languages, generators can also return values.</p>
+<p>Table inspired by <a href="https://without.boats/blog/poll-next/">post by without.boats</a>.</p>
+<!-- end_slide -->
+<h3 id="synchronous-vs-asynchronous-things"><a class="zola-anchor" href="#synchronous-vs-asynchronous-things" aria-label="Anchor link for: synchronous-vs-asynchronous-things">Synchronous vs. asynchronous things</a></h3>
+<p>Coroutines are part of a bigger classification of functions.</p>
+<p>Synchronous functions:</p>
+<table><thead><tr><th></th><th><em>TAKES</em></th><th><em>CAPTURES</em></th><th><em>YIELDS</em></th><th><em>RESUMES</em></th><th><em>RETURNS</em></th></tr></thead><tbody>
+<tr><td>Imperative <code>loop {}</code></td><td>!</td><td>!</td><td>!</td><td>!</td><td>!</td></tr>
+<tr><td>Blocks <code>{}</code></td><td>!</td><td>captured</td><td>!</td><td>!</td><td>output</td></tr>
+<tr><td>Function items <code>fn</code></td><td>input</td><td>!</td><td>!</td><td>!</td><td>output</td></tr>
+<tr><td>Closures <code>Fn</code></td><td>input</td><td>captured</td><td>!</td><td>!</td><td>output</td></tr>
+<tr><td><code>Iterator</code></td><td>!</td><td>!</td><td>option</td><td>!</td><td>!</td></tr>
+<tr><td><code>#[coroutine]</code></td><td>input</td><td>!</td><td>item</td><td>any</td><td>any</td></tr>
+</tbody></table>
+<p>Asynchronous functions:</p>
+<table><thead><tr><th></th><th><em>TAKES</em></th><th><em>CAPTURES</em></th><th><em>YIELDS</em></th><th><em>RESUMES</em></th><th><em>RETURNS</em></th></tr></thead><tbody>
+<tr><td><code>Future</code></td><td>!</td><td>!</td><td>()</td><td>waker</td><td>future output</td></tr>
+<tr><td><code>async {}</code></td><td>!</td><td><code>'static</code></td><td>()</td><td>waker</td><td>future output</td></tr>
+<tr><td>Closures <code>AsyncFn</code></td><td>input</td><td>captured</td><td>!</td><td>!</td><td>future output</td></tr>
+<tr><td><code>Stream</code></td><td>!</td><td>!</td><td>future option</td><td>waker</td><td>!</td></tr>
+</tbody></table>
+<!-- end_slide -->
+<h2 id="advanced-stream-creation"><a class="zola-anchor" href="#advanced-stream-creation" aria-label="Anchor link for: advanced-stream-creation">Advanced stream creation</a></h2>
+<p>We will now look on how to create useful stream combinators that help to write functional/declarative async code.</p>
+<ul>
+<li>Simplest stream from future.</li>
+<li>General approach for combinators</li>
+<li>Example of stream combinator</li>
+</ul>
+<!-- end_slide -->
+<h3 id="stupid-example-future-stream"><a class="zola-anchor" href="#stupid-example-future-stream" aria-label="Anchor link for: stupid-example-future-stream">Stupid example: <code>Future -&gt; Stream</code></a></h3>
+<p>Every future can be converted into a stream by return <code>Some(Fut::Output)</code> once:</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">pub struct </span><span>Once&lt;Fut&gt; {
+</span><span>    </span><span style="color:#c82728;">future</span><span>: </span><span style="color:#c99e00;">Option</span><span>&lt;Fut&gt;
+</span><span>}
+</span><span>
+</span><span style="color:#8959a8;">impl</span><span>&lt;Fut: Future&gt; Stream </span><span style="color:#8959a8;">for </span><span>Once&lt;Fut&gt; {
+</span><span>  </span><span style="color:#8959a8;">type </span><span>Item </span><span style="color:#3e999f;">= </span><span>Fut::Output;
+</span><span>
+</span><span>  </span><span style="color:#8959a8;">fn </span><span style="color:#4271ae;">poll_next</span><span>(</span><span style="color:#f07219;">self</span><span>: Pin&lt;</span><span style="color:#3e999f;">&amp;</span><span style="color:#8959a8;">mut Self</span><span>&gt;, </span><span style="color:#f07219;">cx</span><span>: </span><span style="color:#3e999f;">&amp;</span><span style="color:#8959a8;">mut </span><span>Context&lt;&#39;</span><span style="color:#3e999f;">_</span><span>&gt;) -&gt; Poll&lt;</span><span style="color:#c99e00;">Option</span><span>&lt;</span><span style="color:#8959a8;">Self::</span><span>Item&gt;&gt; {
+</span><span>      </span><span style="color:#8959a8;">let mut</span><span> this </span><span style="color:#3e999f;">= </span><span style="color:#c82728;">self</span><span>.</span><span style="color:#4271ae;">project</span><span>();
+</span><span>      </span><span style="color:#8959a8;">let</span><span> v </span><span style="color:#3e999f;">= </span><span style="color:#8959a8;">match</span><span> this.future.</span><span style="color:#4271ae;">as_mut</span><span>().</span><span style="color:#4271ae;">as_pin_mut</span><span>() {
+</span><span>          </span><span style="color:#c99e00;">Some</span><span>(fut) </span><span style="color:#3e999f;">=&gt; </span><span>ready!(fut.</span><span style="color:#4271ae;">poll</span><span>(cx)),
+</span><span>          </span><span style="color:#c99e00;">None </span><span style="color:#3e999f;">=&gt; </span><span style="color:#8959a8;">return </span><span>Poll::Ready(</span><span style="color:#c99e00;">None</span><span>),
+</span><span>      };
+</span><span>      this.future.</span><span style="color:#4271ae;">set</span><span>(</span><span style="color:#c99e00;">None</span><span>);
+</span><span>      Poll::Ready(</span><span style="color:#c99e00;">Some</span><span>(v))
+</span><span>  }
+</span><span>}
+</span></code></pre>
+<!-- end_slide -->
+<h3 id="how-is-futures-map-implemented"><a class="zola-anchor" href="#how-is-futures-map-implemented" aria-label="Anchor link for: how-is-futures-map-implemented">How is <code>futures::Map</code> implemented?</a></h3>
+<p>One of the simplest stream combinators is in the semi-standard library <code>futures</code>.</p>
+<p>It is used to map a stream to a new stream by mapping each value.</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">pub struct </span><span>Map&lt;St, F&gt; {
+</span><span>    #[</span><span style="color:#c82728;">pin</span><span>]
+</span><span>    </span><span style="color:#c82728;">stream</span><span>: St,
+</span><span>    </span><span style="color:#c82728;">f</span><span>: F,
+</span><span>}
+</span><span>
+</span><span style="color:#8959a8;">impl</span><span>&lt;St, F&gt; Stream </span><span style="color:#8959a8;">for </span><span>Map&lt;St, F&gt;
+</span><span style="color:#8959a8;">where
+</span><span>    St: Stream,
+</span><span>    F: FnMut1&lt;</span><span style="color:#8959a8;">St::</span><span>Item&gt;,
+</span><span>{
+</span><span>    </span><span style="color:#8959a8;">type </span><span>Item </span><span style="color:#3e999f;">= </span><span>F::Output;
+</span><span>
+</span><span>    </span><span style="color:#8959a8;">fn </span><span style="color:#4271ae;">poll_next</span><span>(</span><span style="color:#f07219;">self</span><span>: Pin&lt;</span><span style="color:#3e999f;">&amp;</span><span style="color:#8959a8;">mut Self</span><span>&gt;, </span><span style="color:#f07219;">cx</span><span>: </span><span style="color:#3e999f;">&amp;</span><span style="color:#8959a8;">mut </span><span>Context&lt;&#39;</span><span style="color:#3e999f;">_</span><span>&gt;) -&gt; Poll&lt;</span><span style="color:#c99e00;">Option</span><span>&lt;</span><span style="color:#8959a8;">Self::</span><span>Item&gt;&gt; {
+</span><span>        </span><span style="color:#8959a8;">let mut</span><span> this </span><span style="color:#3e999f;">= </span><span style="color:#c82728;">self</span><span>.</span><span style="color:#4271ae;">project</span><span>();
+</span><span>        </span><span style="color:#8959a8;">let</span><span> res </span><span style="color:#3e999f;">= </span><span>ready!(this.stream.</span><span style="color:#4271ae;">as_mut</span><span>().</span><span style="color:#4271ae;">poll_next</span><span>(cx));
+</span><span>        Poll::Ready(res.</span><span style="color:#4271ae;">map</span><span>(|</span><span style="color:#f07219;">x</span><span>| this.f.</span><span style="color:#4271ae;">call_mut</span><span>(x)))
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>The <code>#[pin]</code> attribute implements a method <code>Pin&lt;&amp;mut Map&gt; -&gt; Pin&lt;&amp;mut St&gt;</code>.</p>
+<p>It <strong>projects</strong> the pinned mutable reference to a pinned reference to the inner stream.</p>
+<p>This macro uses <code>unsafe</code> and assumes the writer knows which fields are realy <code>Unpin</code> / safe-to-move. <strong>Not recommended.</strong></p>
+<p>You can also declare a field of type <code>Pin&lt;Box&lt;&lt;Stream&gt;&gt;</code> and forget about the macro.</p>
+<p><a href="https://docs.rs/futures/latest/futures/stream/struct.Map.html">https://docs.rs/futures/latest/futures/stream/struct.Map.html</a></p>
+<!-- end_slide -->
+<h3 id="aggregated-declarative-stream-combinators"><a class="zola-anchor" href="#aggregated-declarative-stream-combinators" aria-label="Anchor link for: aggregated-declarative-stream-combinators">Aggregated declarative stream combinators</a></h3>
+<p>Usually when you create an aggregate stream, you have to follow these steps:</p>
+<ol>
+<li>Convert high-level functional description into a stream state object</li>
+<li>Come up with a method that updates the stream state</li>
+<li>Implement the <code>Stream::poll_next</code> method using</li>
+</ol>
+<ul>
+<li>First <strong>project the pins</strong> that you need into mutable references</li>
+<li>Reconstruct pins from the mutable references of the parts</li>
+<li>Pass-through to the <code>poll_next</code> or <code>poll</code> methods of underlying futures</li>
+<li>call the previously mutable state update method</li>
+</ul>
+<p>Often you can put most of your logic in the state update method.</p>
+<p>Do not forget to store the waker in case the underlying input data types are not only based on futures. The waker needs to be stored near a place where the IO-bound operation completes. (Most of the time this is not needed.)</p>
+<!-- end_slide -->
+<h3 id="aggregation-examples-flattening-nested-streams"><a class="zola-anchor" href="#aggregation-examples-flattening-nested-streams" aria-label="Anchor link for: aggregation-examples-flattening-nested-streams">Aggregation examples: flattening nested streams</a></h3>
+<p>The <code>futures</code> crate provides flatten functions for <code>Stream&lt;Item: Stream&gt;</code>:</p>
+<ul>
+<li>sequentially <code>futures::StreamExt::flatten</code></li>
+<li>concurrently <code>futures::StreamExt::flatten_unordered(None)</code></li>
+</ul>
+<p>When you are looking for these functions, you are probably doing something nasty. There will often be a simpler approach to the underlying problem.</p>
+<p>You can also implement your own aggregated streams.</p>
+<p>One type of stream aggregator that I couldn’t find is a <code>forgetful</code> nested Stream.</p>
+<p>I implemented my own with <code>forgetful_flatten</code>, it rolls out nested streams and drops previous stream when a new stream arrives on the outer stream.</p>
+<!-- end_slide -->
+<h3 id="aggregation-examples-monitoring-streams"><a class="zola-anchor" href="#aggregation-examples-monitoring-streams" aria-label="Anchor link for: aggregation-examples-monitoring-streams">Aggregation examples: monitoring streams</a></h3>
+<p>The <code>tokio_stream</code> crate provides <a href="https://docs.rs/tokio-stream/latest/tokio_stream/struct.StreamMap.html"><code>StreamMap</code></a></p>
+<p>However, I need some more logic and created <code>merge_check_initialized</code>.</p>
+<p>It monitors whether the required streams have yielded an initial value yet</p>
+<p>TODO: discuss implementation</p>
+
+
+</article>
+
+
+
+    </main>
+
+
+
+</body>
+
+</html>

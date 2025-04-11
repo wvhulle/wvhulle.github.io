@@ -1,0 +1,747 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title></title>
+    <link rel="self" type="application/atom+xml" href="https://wvhulle.github.io/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://wvhulle.github.io"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2025-03-18T00:00:00+00:00</updated>
+    <id>https://wvhulle.github.io/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Declarative async</title>
+        <published>2025-03-18T00:00:00+00:00</published>
+        <updated>2025-03-18T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Willem Vanhulle
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://wvhulle.github.io/blog/streams/"/>
+        <id>https://wvhulle.github.io/blog/streams/</id>
+        
+        <content type="html" xml:base="https://wvhulle.github.io/blog/streams/">&lt;h2 id=&quot;introduction&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#introduction&quot; aria-label=&quot;Anchor link for: introduction&quot;&gt;Introduction&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;Start with a simple example that shows:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;How does an imperative approach look?&lt;&#x2F;li&gt;
+&lt;li&gt;How does a functional approach look?&lt;&#x2F;li&gt;
+&lt;li&gt;What are the disadvantages&#x2F;advantages of each?&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;connecting-channels&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#connecting-channels&quot; aria-label=&quot;Anchor link for: connecting-channels&quot;&gt;Connecting channels&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;In user applications we might have to connect two channels. (Don’t think about whether this is a good idea.)&lt;&#x2F;p&gt;
+&lt;p&gt;Imperative version (with variable assignments):&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;_&lt;&#x2F;span&gt;&lt;span&gt;, in_receiver) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;watch::channel(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;(out_sender, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;_&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;broadcast::channel(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;123&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; forward_task &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;spawn&lt;&#x2F;span&gt;&lt;span&gt;(async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;move &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;loop &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; result &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; in_receiver.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;changed&lt;&#x2F;span&gt;&lt;span&gt;().await;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;if let &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Err&lt;&#x2F;span&gt;&lt;span&gt;(e) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; result { &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;break &lt;&#x2F;span&gt;&lt;span&gt;};
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; input &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= *&lt;&#x2F;span&gt;&lt;span&gt;in_receiver.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;borrow&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; output &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;get_output&lt;&#x2F;span&gt;&lt;span&gt;(input);
+&lt;&#x2F;span&gt;&lt;span&gt;        out_sender.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;send&lt;&#x2F;span&gt;&lt;span&gt;(output);
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;});
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Declarative version (using streams and sinks):&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; in_receiver &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;WatchStream::new(in_receiver);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; out_sender &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;BroadcastSink::new(out_sender);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; forward_task &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;spawn&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;    in_receiver
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Result&lt;&#x2F;span&gt;&lt;span&gt;::ok)
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;filter_map&lt;&#x2F;span&gt;&lt;span&gt;(ready)
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(get_output)
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Ok&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;forward&lt;&#x2F;span&gt;&lt;span&gt;(out_sender)
+&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;imperative-aync&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#imperative-aync&quot; aria-label=&quot;Anchor link for: imperative-aync&quot;&gt;Imperative aync: +&#x2F;-&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;_&lt;&#x2F;span&gt;&lt;span&gt;, in_receiver) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;watch::channel(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;(out_sender, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;_&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;broadcast::channel(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;123&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; forward_task &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;spawn&lt;&#x2F;span&gt;&lt;span&gt;(async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;move &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;loop &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; result &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; in_receiver.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;changed&lt;&#x2F;span&gt;&lt;span&gt;().await;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;if let &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Err&lt;&#x2F;span&gt;&lt;span&gt;(e) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; result { &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;break&lt;&#x2F;span&gt;&lt;span&gt;; };
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; input &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= *&lt;&#x2F;span&gt;&lt;span&gt;in_receiver.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;borrow&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; output &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;get_output&lt;&#x2F;span&gt;&lt;span&gt;(input);
+&lt;&#x2F;span&gt;&lt;span&gt;        out_sender.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;send&lt;&#x2F;span&gt;&lt;span&gt;(output);
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;});
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Advantages:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Imperative code is more mainstream.&lt;&#x2F;li&gt;
+&lt;li&gt;No need to know much about futures, poll or pin.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Disadvantages:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Seemingly arbitrary channel configuration&lt;&#x2F;li&gt;
+&lt;li&gt;More characters, more chances of typos&lt;&#x2F;li&gt;
+&lt;li&gt;Manual declaration and naming of intermediate state&lt;&#x2F;li&gt;
+&lt;li&gt;Non-linear source code execution because of control flow keywords: &lt;code&gt;break&lt;&#x2F;code&gt;, &lt;code&gt;continue&lt;&#x2F;code&gt;, …&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;declarative-async&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#declarative-async&quot; aria-label=&quot;Anchor link for: declarative-async&quot;&gt;Declarative async: +&#x2F;-&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; in_receiver &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;WatchStream::new(in_receiver);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; out_sender &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;BroadcastSink::new(out_sender);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; forward_task &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;spawn&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;    in_receiver
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Result&lt;&#x2F;span&gt;&lt;span&gt;::ok)
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;filter_map&lt;&#x2F;span&gt;&lt;span&gt;(ready)
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(get_output)
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Ok&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;    .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;forward&lt;&#x2F;span&gt;&lt;span&gt;(out_sender)
+&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Advantages:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Moving &#x2F; streaming data modeled naturally by streams&lt;&#x2F;li&gt;
+&lt;li&gt;Operators on &lt;code&gt;Streams&lt;&#x2F;code&gt; are similar to &lt;code&gt;Iterator&lt;&#x2F;code&gt;, easy to remember&lt;&#x2F;li&gt;
+&lt;li&gt;No discussions about the naming of intermediate variables&lt;&#x2F;li&gt;
+&lt;li&gt;Better interoperability, less reliance on external channel implementations on core libraries. (&lt;code&gt;impl Stream&lt;&#x2F;code&gt;)&lt;&#x2F;li&gt;
+&lt;li&gt;No explicit control flow statements like &lt;code&gt;break&lt;&#x2F;code&gt;, &lt;code&gt;continue&lt;&#x2F;code&gt;, &lt;code&gt;return&lt;&#x2F;code&gt;.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Disadvantages:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;We need to know about &lt;code&gt;ready&lt;&#x2F;code&gt; to convert into a future&lt;&#x2F;li&gt;
+&lt;li&gt;I need to use &lt;code&gt;Ok&lt;&#x2F;code&gt; to convert &lt;code&gt;Stream&lt;&#x2F;code&gt; into &lt;code&gt;TryStream&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;Extra dependency on &lt;code&gt;tokio-stream&lt;&#x2F;code&gt; for stream wrappers&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;tokio&lt;&#x2F;code&gt; channels do not implement &lt;code&gt;Stream&lt;&#x2F;code&gt; out-of-the-box&lt;&#x2F;li&gt;
+&lt;li&gt;We needed to know about &lt;code&gt;Sink&lt;&#x2F;code&gt; and implement it.&lt;&#x2F;li&gt;
+&lt;li&gt;Need to know the basics of futures.&lt;&#x2F;li&gt;
+&lt;li&gt;Need dependency on &lt;code&gt;futures&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;!-- end_slide --&gt;
+&lt;h2 id=&quot;basic-usage-of-existing-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#basic-usage-of-existing-streams&quot; aria-label=&quot;Anchor link for: basic-usage-of-existing-streams&quot;&gt;Basic usage of existing streams&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;To be able to quickly get started:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Iterating streams&lt;&#x2F;li&gt;
+&lt;li&gt;Consuming streams&lt;&#x2F;li&gt;
+&lt;li&gt;Splitting streams&lt;&#x2F;li&gt;
+&lt;li&gt;Mapping streams&lt;&#x2F;li&gt;
+&lt;li&gt;Filtering streams&lt;&#x2F;li&gt;
+&lt;li&gt;Boolean operators on streams&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;For more see &lt;a href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;futures&#x2F;latest&#x2F;futures&#x2F;prelude&#x2F;stream&#x2F;trait.StreamExt.html&quot;&gt;docs&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Very similar to familiar methods on &lt;code&gt;Iterator&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;iterating-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#iterating-streams&quot; aria-label=&quot;Anchor link for: iterating-streams&quot;&gt;Iterating streams&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;A stream is an async iterator: &lt;code&gt;next&lt;&#x2F;code&gt; returns a &lt;code&gt;Future&amp;lt;Output = Option&amp;lt;_&amp;gt;&amp;gt;&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; stream &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;UserStream::new();
+&lt;&#x2F;span&gt;&lt;span&gt;assert_eq!(stream.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;next&lt;&#x2F;span&gt;&lt;span&gt;().await, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Some&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;_&lt;&#x2F;span&gt;&lt;span&gt;));
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Important distinction with iterators:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;An iterator that ends is a &lt;code&gt;FusedIterator&lt;&#x2F;code&gt; continues to yield &lt;code&gt;None&lt;&#x2F;code&gt; after completion&lt;&#x2F;li&gt;
+&lt;li&gt;A fused stream that ends is a &lt;code&gt;FusedStream&lt;&#x2F;code&gt; that has a method &lt;code&gt;is_terminated&lt;&#x2F;code&gt;. &lt;code&gt;None&lt;&#x2F;code&gt; does not mean the &lt;code&gt;Stream&lt;&#x2F;code&gt; has ended.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Most common streams are &lt;code&gt;FusedStream&lt;&#x2F;code&gt; or convert standard &lt;code&gt;Stream&lt;&#x2F;code&gt;s into &lt;code&gt;FusedStream&lt;&#x2F;code&gt; with &lt;code&gt;stream.fuse()&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;consuming-streams-with-for-each&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#consuming-streams-with-for-each&quot; aria-label=&quot;Anchor link for: consuming-streams-with-for-each&quot;&gt;Consuming streams with &lt;code&gt;for_each&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Use &lt;code&gt;futures::StreamExt::for_each&lt;&#x2F;code&gt; to act on each item.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; fut &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;stream::repeat(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;take&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;3&lt;&#x2F;span&gt;&lt;span&gt;).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;for_each&lt;&#x2F;span&gt;&lt;span&gt;(|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;item&lt;&#x2F;span&gt;&lt;span&gt;| {
+&lt;&#x2F;span&gt;&lt;span&gt;        x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;+=&lt;&#x2F;span&gt;&lt;span&gt; item;
+&lt;&#x2F;span&gt;&lt;span&gt;        future::ready(())
+&lt;&#x2F;span&gt;&lt;span&gt;    });
+&lt;&#x2F;span&gt;&lt;span&gt;    fut.await;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;assert_eq!(x, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;3&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;mapping-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#mapping-streams&quot; aria-label=&quot;Anchor link for: mapping-streams&quot;&gt;Mapping streams&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Most important operator.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;futures::{stream, StreamExt};
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; stream &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;stream::iter(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;..=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;3&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; stream &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; stream.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span&gt;| x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;+ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;3&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;If the closure is asynchronous, use &lt;code&gt;then&lt;&#x2F;code&gt; (as in &lt;code&gt;Future::then&lt;&#x2F;code&gt;).&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; stream &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;stream::iter(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;..=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;3&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; stream &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; stream.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;then&lt;&#x2F;span&gt;&lt;span&gt;(|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span&gt;| async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;move &lt;&#x2F;span&gt;&lt;span&gt;{ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;convert&lt;&#x2F;span&gt;&lt;span&gt;(x).await });
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The futures will not overlap in execution.&lt;&#x2F;p&gt;
+&lt;p&gt;Feel free to use async closures &lt;code&gt;async |_| {}&lt;&#x2F;code&gt; or &lt;code&gt;AsyncFn&lt;&#x2F;code&gt; in recent Rust versions.&lt;&#x2F;p&gt;
+&lt;p&gt;I prefer to stick to the good-old &lt;code&gt;async move {}&lt;&#x2F;code&gt; blocks.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Important&lt;&#x2F;strong&gt;: In previous major version releases of &lt;code&gt;futures&lt;&#x2F;code&gt;, &lt;code&gt;then&lt;&#x2F;code&gt; and &lt;code&gt;map&lt;&#x2F;code&gt; were a single function. The crate &lt;code&gt;futures-preview&lt;&#x2F;code&gt; is an old fork such an old version. Avoid it’s documentation to prevent confusion. (Everything you need for the rest of this presentation is available in the recent official release of &lt;code&gt;futures&lt;&#x2F;code&gt;.)&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;simple-modifications-of-a-stream-useful-in-tests&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#simple-modifications-of-a-stream-useful-in-tests&quot; aria-label=&quot;Anchor link for: simple-modifications-of-a-stream-useful-in-tests&quot;&gt;Simple modifications of a stream (useful in tests)&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Common functions, similar to &lt;code&gt;Iterator&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;skip_while&lt;&#x2F;li&gt;
+&lt;li&gt;peekable&lt;&#x2F;li&gt;
+&lt;li&gt;take&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Example:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; stream &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;stream::iter(vec![&lt;&#x2F;span&gt;&lt;span style=&quot;color:#839c00;&quot;&gt;&amp;#39;a&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#839c00;&quot;&gt;&amp;#39;b&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#839c00;&quot;&gt;&amp;#39;c&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;]);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; stream &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; stream.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;enumerate&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;assert_eq!(stream.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;next&lt;&#x2F;span&gt;&lt;span&gt;().await, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Some&lt;&#x2F;span&gt;&lt;span&gt;((&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#839c00;&quot;&gt;&amp;#39;a&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;)));
+&lt;&#x2F;span&gt;&lt;span&gt;assert_eq!(stream.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;next&lt;&#x2F;span&gt;&lt;span&gt;().await, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Some&lt;&#x2F;span&gt;&lt;span&gt;((&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#839c00;&quot;&gt;&amp;#39;b&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;)));
+&lt;&#x2F;span&gt;&lt;span&gt;assert_eq!(stream.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;next&lt;&#x2F;span&gt;&lt;span&gt;().await, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Some&lt;&#x2F;span&gt;&lt;span&gt;((&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#839c00;&quot;&gt;&amp;#39;c&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;)));
+&lt;&#x2F;span&gt;&lt;span&gt;assert_eq!(stream.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;next&lt;&#x2F;span&gt;&lt;span&gt;().await, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;None&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;filtering-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#filtering-streams&quot; aria-label=&quot;Anchor link for: filtering-streams&quot;&gt;Filtering streams&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;std::future::ready;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;futures::{stream, StreamExt};
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; stream &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;stream::iter(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;..=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;10&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; events &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; stream.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;filter&lt;&#x2F;span&gt;&lt;span&gt;(|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;ready&lt;&#x2F;span&gt;&lt;span&gt;(x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;2 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;));
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Notice the &lt;code&gt;ready&lt;&#x2F;code&gt; function. It maps sync values into async values &#x2F; futures &lt;strong&gt;which are &lt;code&gt;Unpin&lt;&#x2F;code&gt;&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Because the closure is &lt;code&gt;Unpin&lt;&#x2F;code&gt;, the resulting  &lt;code&gt;Stream&lt;&#x2F;code&gt; called &lt;code&gt;events&lt;&#x2F;code&gt; is also &lt;code&gt;Upin&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;h4 id=&quot;misleading-messages-compiler&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#misleading-messages-compiler&quot; aria-label=&quot;Anchor link for: misleading-messages-compiler&quot;&gt;Misleading messages compiler&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;p&gt;Remark: the following would be an &lt;code&gt;Unpin&lt;&#x2F;code&gt; stream:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span&gt;stream.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;filter&lt;&#x2F;span&gt;&lt;span&gt;(|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span&gt;| async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;move &lt;&#x2F;span&gt;&lt;span&gt;{ x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;2 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;});
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The compiler messages will lead you to pinning on the heap and you will do something like this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span&gt;stream.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;filter&lt;&#x2F;span&gt;&lt;span&gt;(|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span&gt;| &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Box&lt;&#x2F;span&gt;&lt;span&gt;::pin(async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;move &lt;&#x2F;span&gt;&lt;span&gt;{ x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;2 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;}));
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Box&lt;&#x2F;span&gt;&lt;span&gt;::pin(stream.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;filter&lt;&#x2F;span&gt;&lt;span&gt;(|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span&gt;| async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;move &lt;&#x2F;span&gt;&lt;span&gt;{ x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;2 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;}));
+&lt;&#x2F;span&gt;&lt;span&gt;stream.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;filter&lt;&#x2F;span&gt;&lt;span&gt;(|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span&gt;| async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;move &lt;&#x2F;span&gt;&lt;span&gt;{ x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;2 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;}).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;boxed&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;However, this is not necessary and involves &lt;strong&gt;unnecessary heap allocations&lt;&#x2F;strong&gt;. Use the &lt;code&gt;std::future::ready&lt;&#x2F;code&gt; function from above instead.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;filter-map&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#filter-map&quot; aria-label=&quot;Anchor link for: filter-map&quot;&gt;Filter map&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The &lt;code&gt;filter_map&lt;&#x2F;code&gt; operator:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;takes a stream and a closure that returns an option&lt;&#x2F;li&gt;
+&lt;li&gt;removes &lt;code&gt;None&lt;&#x2F;code&gt; values, shortening the output stream&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; stream &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;stream::iter(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;..=&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;10&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; events &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; stream.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;filter_map&lt;&#x2F;span&gt;&lt;span&gt;(|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span&gt;| async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;move &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;if&lt;&#x2F;span&gt;&lt;span&gt; x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;% &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;2 &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;== &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;0 &lt;&#x2F;span&gt;&lt;span&gt;{ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Some&lt;&#x2F;span&gt;&lt;span&gt;(x &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;+ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;) } &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;else &lt;&#x2F;span&gt;&lt;span&gt;{ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;None &lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;});
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;boolean-operators&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#boolean-operators&quot; aria-label=&quot;Anchor link for: boolean-operators&quot;&gt;Boolean operators&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;There are also analogues for all boolean operators from &lt;code&gt;Iterator&lt;&#x2F;code&gt;: any, all, …&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; number_stream &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;stream::iter(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;..&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;10&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; less_then_twenty &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; number_stream.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;all&lt;&#x2F;span&gt;&lt;span&gt;(|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;i&lt;&#x2F;span&gt;&lt;span&gt;| async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;move &lt;&#x2F;span&gt;&lt;span&gt;{ i &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;&amp;lt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;20 &lt;&#x2F;span&gt;&lt;span&gt;});
+&lt;&#x2F;span&gt;&lt;span&gt;assert_eq!(less_then_twenty.await, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;true&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;!-- end_slide --&gt;
+&lt;h2 id=&quot;intermediate-usage-of-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#intermediate-usage-of-streams&quot; aria-label=&quot;Anchor link for: intermediate-usage-of-streams&quot;&gt;Intermediate usage of streams&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;We will see:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Merging&lt;&#x2F;li&gt;
+&lt;li&gt;Splitting&lt;&#x2F;li&gt;
+&lt;li&gt;Flushing&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;requirements-to-merge-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#requirements-to-merge-streams&quot; aria-label=&quot;Anchor link for: requirements-to-merge-streams&quot;&gt;Requirements to merge streams&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;We also want to &lt;strong&gt;combine streams&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;The input streams need to be of the same type.&lt;&#x2F;p&gt;
+&lt;p&gt;This may be annoying whent you:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;build software with streams from different third-party crates&lt;&#x2F;li&gt;
+&lt;li&gt;use different streams with different backend &#x2F; transport.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Solution: use a &lt;code&gt;&amp;amp;dyn Stream&lt;&#x2F;code&gt; &lt;strong&gt;behind a pointer&lt;&#x2F;strong&gt; such as &lt;code&gt;Box&lt;&#x2F;code&gt; (heap-allocation).&lt;&#x2F;p&gt;
+&lt;p&gt;References to streams in local variables on the stack are also possible, but then you do not have ownership. Ownership is typically needed.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;merge-two-homogenous-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#merge-two-homogenous-streams&quot; aria-label=&quot;Anchor link for: merge-two-homogenous-streams&quot;&gt;Merge two homogenous streams&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;A user of streams does not just want to redirect or map streams.&lt;&#x2F;p&gt;
+&lt;p&gt;Merge two homogenous streams with &lt;code&gt;tokio_stream::StreamExt::merge&lt;&#x2F;code&gt;. Disadvantage: dependency on &lt;code&gt;tokio-stream&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;merge-an-iterable-of-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#merge-an-iterable-of-streams&quot; aria-label=&quot;Anchor link for: merge-an-iterable-of-streams&quot;&gt;Merge an iterable of streams&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Merge normal iterator of streams into one stream with &lt;code&gt;futures::stream::select_all&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; stream_a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;stream::repeat(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; stream_b &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;stream::repeat(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; merged_tagged &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;stream::select_all([stream_a, stream_b]);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;See &lt;a href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;futures&#x2F;latest&#x2F;futures&#x2F;stream&#x2F;fn.select_all.html&quot;&gt;docs&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;merging-a-keyed-iterable-of-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#merging-a-keyed-iterable-of-streams&quot; aria-label=&quot;Anchor link for: merging-a-keyed-iterable-of-streams&quot;&gt;Merging a keyed iterable of streams&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;To keep track of the origin of the values in the merged stream, do this:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; stream_a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;stream::repeat(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;n&lt;&#x2F;span&gt;&lt;span&gt;| (&lt;&#x2F;span&gt;&lt;span style=&quot;color:#839c00;&quot;&gt;&amp;#39;a&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;));
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; stream_b &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;stream::repeat(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;n&lt;&#x2F;span&gt;&lt;span&gt;| (&lt;&#x2F;span&gt;&lt;span style=&quot;color:#839c00;&quot;&gt;&amp;#39;b&amp;#39;&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;));
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; merged_tagged &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;stream::select_all([stream_a, stream_b]);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Remark: in this simple case you are be better off just using &lt;code&gt;tokio_stream::MergeMap&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;inhomogenous-stream-merging&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#inhomogenous-stream-merging&quot; aria-label=&quot;Anchor link for: inhomogenous-stream-merging&quot;&gt;Inhomogenous stream merging&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Merge two inhomogenous streams with &lt;code&gt;futures::StreamExt::zip&lt;&#x2F;code&gt; into a stream of tuples.&lt;&#x2F;p&gt;
+&lt;p&gt;Or use trait objects and streams of type &lt;code&gt;Stream&amp;lt;Item: Box&amp;lt;dyn Trait&amp;gt;&amp;gt;&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;See later for more advanced types of merging.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;the-problem-of-splitting-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#the-problem-of-splitting-streams&quot; aria-label=&quot;Anchor link for: the-problem-of-splitting-streams&quot;&gt;The problem of splitting streams&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;What if you need to use the same output of a stream in several places and the items are &lt;code&gt;Clone&lt;&#x2F;code&gt;?&lt;&#x2F;p&gt;
+&lt;p&gt;Most streams are &lt;strong&gt;not &lt;code&gt;Clone&lt;&#x2F;code&gt;&lt;&#x2F;strong&gt;, even if the items are &lt;code&gt;Clone&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;The &lt;code&gt;Stream&lt;&#x2F;code&gt; trait is very basic and does not say how to clone.&lt;&#x2F;p&gt;
+&lt;p&gt;You can hack together a loop and some manual cloning.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h4 id=&quot;making-stream-clone-by-hand-advanced&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#making-stream-clone-by-hand-advanced&quot; aria-label=&quot;Anchor link for: making-stream-clone-by-hand-advanced&quot;&gt;Making &lt;code&gt;Stream: Clone&lt;&#x2F;code&gt; by hand (advanced)&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;p&gt;In the end something will have to:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;listen on the input stream to be split&lt;&#x2F;li&gt;
+&lt;li&gt;save the last received value for who is not awaiting yet.&lt;&#x2F;li&gt;
+&lt;li&gt;notify consumers of the split streams for new values&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;If you know how to implement the &lt;code&gt;poll&lt;&#x2F;code&gt; functions, you can try to do it yourself.&lt;&#x2F;p&gt;
+&lt;p&gt;However, you have to  keep track of all consumers and whether they have seen the latest value yet.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h4 id=&quot;turning-channel-receivers-into-clone-stream-wrappers&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#turning-channel-receivers-into-clone-stream-wrappers&quot; aria-label=&quot;Anchor link for: turning-channel-receivers-into-clone-stream-wrappers&quot;&gt;Turning channel receivers into &lt;code&gt;Clone&lt;&#x2F;code&gt; stream wrappers&lt;&#x2F;a&gt;&lt;&#x2F;h4&gt;
+&lt;p&gt;If implementing &lt;code&gt;poll&lt;&#x2F;code&gt; sounds like over-kill you can use a channel.&lt;&#x2F;p&gt;
+&lt;p&gt;The simplest solution is to use the &lt;strong&gt;backend of the input stream&lt;&#x2F;strong&gt; which may have &lt;code&gt;resubscribe&lt;&#x2F;code&gt; functions.&lt;&#x2F;p&gt;
+&lt;p&gt;If the receiver is not clone you can spawn threads&#x2F;tasks that take input, clone the input and send it.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;creating-a-clone-receiver-and-stream-from-arbitrary-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#creating-a-clone-receiver-and-stream-from-arbitrary-streams&quot; aria-label=&quot;Anchor link for: creating-a-clone-receiver-and-stream-from-arbitrary-streams&quot;&gt;Creating a &lt;code&gt;Clone&lt;&#x2F;code&gt; receiver (and stream) from arbitrary streams&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;A very simple approach to cloning streams is just cloning the receiver on the backend:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;struct &lt;&#x2F;span&gt;&lt;span&gt;CloneableStream&amp;lt;Item&amp;gt;(sync::Receiver)
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;impl&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;Item&amp;gt; CloneableStream&amp;lt;Item&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;create&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;receiver&lt;&#x2F;span&gt;&lt;span&gt;: sync::Receiver) -&amp;gt; (TaskHandle, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;Self&lt;&#x2F;span&gt;&lt;span&gt;) {
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;(tx, rx) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;channel&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; task_handle &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;spawn&lt;&#x2F;span&gt;&lt;span&gt;(async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;move &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;            &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;loop &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;                &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; input &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; receiver.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;rcv&lt;&#x2F;span&gt;&lt;span&gt;().await.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;unwrap&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;                tx.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;send&lt;&#x2F;span&gt;&lt;span&gt;(input).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;unwrap&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;            }
+&lt;&#x2F;span&gt;&lt;span&gt;        });
+&lt;&#x2F;span&gt;&lt;span&gt;        (task_handle, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;Self&lt;&#x2F;span&gt;&lt;span&gt;(rx))
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;stream&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;) -&amp;gt; impl Stream {}
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;impl&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;Item&amp;gt; Clone &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;CloneableStream&amp;lt;Item&amp;gt; {}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Let’s say we have a channel receiver or stream &lt;code&gt;rx&lt;&#x2F;code&gt;, then we can create a &lt;code&gt;Clone&lt;&#x2F;code&gt; receiver.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;_&lt;&#x2F;span&gt;&lt;span&gt;, cloneable_stream) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;CloneableStream::create(rx);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; new_stream &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; cloneable_stream.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;clone&lt;&#x2F;span&gt;&lt;span&gt;().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;stream&lt;&#x2F;span&gt;&lt;span&gt;().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(|_| {});
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; clone_stream &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; cloneable_stream.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;clone&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;dual-of-streams-sinks&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#dual-of-streams-sinks&quot; aria-label=&quot;Anchor link for: dual-of-streams-sinks&quot;&gt;Dual of streams: &lt;code&gt;Sink&lt;&#x2F;code&gt;s&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;You can forward a stream into a sink.&lt;&#x2F;p&gt;
+&lt;p&gt;The &lt;code&gt;futures::Sink&lt;&#x2F;code&gt; trait is the opposite of &lt;code&gt;Stream&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;stage&lt;&#x2F;th&gt;&lt;th&gt;name&lt;&#x2F;th&gt;&lt;th&gt;method&lt;&#x2F;th&gt;&lt;th&gt;meaning&lt;&#x2F;th&gt;&lt;th&gt;remark&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;creation&lt;&#x2F;td&gt;&lt;td&gt;new&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;Initial state&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;send&lt;&#x2F;td&gt;&lt;td&gt;ready&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;ready().await&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;Wait until cache ready&lt;&#x2F;td&gt;&lt;td&gt;may be full&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;send&lt;&#x2F;td&gt;&lt;td&gt;start send&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;start_send(item)&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;Load into cache&lt;&#x2F;td&gt;&lt;td&gt;not actual send&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;send&lt;&#x2F;td&gt;&lt;td&gt;flush&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;flush().await&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;Send items from cache&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;close&lt;&#x2F;td&gt;&lt;td&gt;close&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;close().await&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;Close the &lt;code&gt;Sink&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;not automatic&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;The opposite for &lt;code&gt;map&lt;&#x2F;code&gt; for sinks is &lt;code&gt;with&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;If a &lt;code&gt;Sink&lt;&#x2F;code&gt; becomes full easily, you can allocate a buffer with &lt;code&gt;buffer()&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;flushing-a-stream-into-a-sink&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#flushing-a-stream-into-a-sink&quot; aria-label=&quot;Anchor link for: flushing-a-stream-into-a-sink&quot;&gt;Flushing a &lt;code&gt;Stream&lt;&#x2F;code&gt; into a &lt;code&gt;Sink&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;A stream can be &lt;strong&gt;sent into a sink&lt;&#x2F;strong&gt; with &lt;code&gt;futures::SinkExt::forward&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;If you don’t want to close the &lt;code&gt;Sink&lt;&#x2F;code&gt; after stream returned &lt;code&gt;None&lt;&#x2F;code&gt;, use &lt;code&gt;send_all&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Third-party crates rarely have &lt;code&gt;impl&lt;&#x2F;code&gt; for &lt;code&gt;futures::Sink&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let &lt;&#x2F;span&gt;&lt;span&gt;(output,&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;_&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;tokio::sync::mpsc::channel();
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; output &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;tokio_util::PollSender::new(output);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; input &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;stream::repeat(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Ok&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;input.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;forward&lt;&#x2F;span&gt;&lt;span&gt;(tx).await.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;unwrap&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Important:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;StreamExt::forward&lt;&#x2F;code&gt; takes a &lt;code&gt;TryStream&lt;&#x2F;code&gt; (items are &lt;code&gt;Result&lt;&#x2F;code&gt;)&lt;&#x2F;li&gt;
+&lt;li&gt;returns future of &lt;code&gt;Result&lt;&#x2F;code&gt; (need to ignore error).&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;When you have one input stream and know &lt;code&gt;n&lt;&#x2F;code&gt; output sinks &lt;strong&gt;at compile-time&lt;&#x2F;strong&gt;, you can use &lt;code&gt;fanout&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Otherwise you will have to do book-keeping yourself and spawn helper threads&#x2F;tasks.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h2 id=&quot;streams-from-scratch&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#streams-from-scratch&quot; aria-label=&quot;Anchor link for: streams-from-scratch&quot;&gt;Streams from scratch&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;We will see:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Creating streams imperatively&lt;&#x2F;li&gt;
+&lt;li&gt;Creating streams declaratively&lt;&#x2F;li&gt;
+&lt;li&gt;Creating streams through custom combinators&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;iterators-from-imperative-generators&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#iterators-from-imperative-generators&quot; aria-label=&quot;Anchor link for: iterators-from-imperative-generators&quot;&gt;Iterators from imperative generators&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;In computer science, functions that may return more than one value are called &lt;strong&gt;generators&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;(They are common in JavaScript and Python.)&lt;&#x2F;p&gt;
+&lt;p&gt;On Rust 2024, generators are part of the core language through &lt;code&gt;gen&lt;&#x2F;code&gt; blocks.&lt;&#x2F;p&gt;
+&lt;p&gt;They &lt;strong&gt;return an invisible iterator&lt;&#x2F;strong&gt; of type &lt;code&gt;impl Iterator&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span&gt;gen {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#c82829;&quot;&gt;yield &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#c82829;&quot;&gt;yield &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#c82829;&quot;&gt;yield &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;3&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Generators are a kind of &lt;strong&gt;imperative iterator construction&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Generators are a type of coroutines, see later.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;stable-stream-generators-imperative&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#stable-stream-generators-imperative&quot; aria-label=&quot;Anchor link for: stable-stream-generators-imperative&quot;&gt;Stable stream generators (imperative)&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;We need a macro, because &lt;code&gt;gen&lt;&#x2F;code&gt; blocks are &lt;strong&gt;not in edition 2021 or stable yet&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Use crate &lt;code&gt;async-stream&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;async_stream::stream;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;futures_util::pin_mut;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;futures_util::stream::StreamExt;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; s &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;stream! {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;for&lt;&#x2F;span&gt;&lt;span&gt; i &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;in &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;..&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;3 &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#c82829;&quot;&gt;yield&lt;&#x2F;span&gt;&lt;span&gt; i;
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;};
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;pin_mut!(s); 
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;while let &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Some&lt;&#x2F;span&gt;&lt;span&gt;(value) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; s.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;next&lt;&#x2F;span&gt;&lt;span&gt;().await {
+&lt;&#x2F;span&gt;&lt;span&gt;    println!(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#839c00;&quot;&gt;&amp;quot;got &lt;&#x2F;span&gt;&lt;span&gt;{}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#839c00;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;, value);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Notice that the stream returned by this macro is not pinned yet.&lt;&#x2F;p&gt;
+&lt;p&gt;Streams generated by async generators  such as &lt;code&gt;async_stream::stream!&lt;&#x2F;code&gt; suffer from the same limitations as &lt;code&gt;async {}&lt;&#x2F;code&gt; blocks and most futures. They are &lt;code&gt;!Unpin&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;nightly-stream-generators&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#nightly-stream-generators&quot; aria-label=&quot;Anchor link for: nightly-stream-generators&quot;&gt;Nightly stream generators&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Writing &lt;code&gt;async&lt;&#x2F;code&gt; in front of the &lt;code&gt;gen&lt;&#x2F;code&gt; keyword turns the output into a &lt;code&gt;Stream&lt;&#x2F;code&gt;, under the &lt;strong&gt;new official name &lt;code&gt;AsyncIterator&lt;&#x2F;code&gt;&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;create_my_generator&lt;&#x2F;span&gt;&lt;span&gt;() -&amp;gt; impl AsyncIterator&amp;lt;Item = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;i32&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;    async gen {
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#c82829;&quot;&gt;yield &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#c82829;&quot;&gt;yield &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#c82829;&quot;&gt;yield &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;3&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; my_generator &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;create_my_generator&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;assert_eq!(my_generator.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;next&lt;&#x2F;span&gt;&lt;span&gt;(), &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Some&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;));
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;simple-declarative-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#simple-declarative-streams&quot; aria-label=&quot;Anchor link for: simple-declarative-streams&quot;&gt;Simple declarative streams&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;You can use one of the methods&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;stream::once()&lt;&#x2F;code&gt;: stream of length 1&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;stream::iter()&lt;&#x2F;code&gt;: stream from iterable&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;stream::repeat()&lt;&#x2F;code&gt;: stream of identical values&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;intermediate-declarative-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#intermediate-declarative-streams&quot; aria-label=&quot;Anchor link for: intermediate-declarative-streams&quot;&gt;Intermediate declarative streams&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;You can use an initial state, and a closure with &lt;code&gt;unfold&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;The initial state is mapped to an &lt;code&gt;Stream::Item&lt;&#x2F;code&gt; and new unfold &lt;code&gt;State&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;use &lt;&#x2F;span&gt;&lt;span&gt;futures::{stream, StreamExt};
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; stream &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;stream::unfold(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, |&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;state&lt;&#x2F;span&gt;&lt;span&gt;| async &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;move &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;if&lt;&#x2F;span&gt;&lt;span&gt; state &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;&amp;lt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;2 &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; next_state &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; state &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;+ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; yielded &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; state &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Some&lt;&#x2F;span&gt;&lt;span&gt;((yielded, next_state))
+&lt;&#x2F;span&gt;&lt;span&gt;    } &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;else &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;None
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;});
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; result &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; stream.collect::&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Vec&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;i32&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;&amp;gt;().await;
+&lt;&#x2F;span&gt;&lt;span&gt;assert_eq!(result, vec![&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;4&lt;&#x2F;span&gt;&lt;span&gt;]);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;!-- end_slide --&gt;
+&lt;h2 id=&quot;review-of-low-level-move-prevention&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#review-of-low-level-move-prevention&quot; aria-label=&quot;Anchor link for: review-of-low-level-move-prevention&quot;&gt;Review of low-level move-prevention&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;This chapter reviews the low-level basics of asynchronous programming in Rust.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;What is &lt;code&gt;Unpin&lt;&#x2F;code&gt;?&lt;&#x2F;li&gt;
+&lt;li&gt;What is the role of &lt;code&gt;Pin&lt;&#x2F;code&gt;?&lt;&#x2F;li&gt;
+&lt;li&gt;What is a future low-level?&lt;&#x2F;li&gt;
+&lt;li&gt;Example of &lt;code&gt;!Unpin&lt;&#x2F;code&gt; type&lt;&#x2F;li&gt;
+&lt;li&gt;What is a stream low-level?&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;If you really want to know what &lt;code&gt;await&lt;&#x2F;code&gt; is, you can continue reading this chapter.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;immoveable-unpin&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#immoveable-unpin&quot; aria-label=&quot;Anchor link for: immoveable-unpin&quot;&gt;Immoveable &#x2F; &lt;code&gt;Unpin&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Rust has &lt;strong&gt;move semantics&lt;&#x2F;strong&gt;. Assigning variables likely moves the content.&lt;&#x2F;p&gt;
+&lt;p&gt;Self-referencing data types are dangerous to move. A move will invalidate the content without updating self-references.&lt;&#x2F;p&gt;
+&lt;p&gt;The solution in Rust is to not update references, but mark self-referencing types as &lt;strong&gt;not &lt;code&gt;Unpin&lt;&#x2F;code&gt;&lt;&#x2F;strong&gt; &#x2F; &lt;code&gt;!Unpin&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;(The double negation makes it a bit hard to understand.)&lt;&#x2F;p&gt;
+&lt;p&gt;My interpretation of &lt;code&gt;Unpin&lt;&#x2F;code&gt; types:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;All types for which the compiler can see that it is safe to move by &lt;strong&gt;quickly looking at fields&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;Or in other words:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Immoveable = &lt;code&gt;!Unpin&lt;&#x2F;code&gt;
+Moveable = &lt;code&gt;Unpin&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;Remark: &lt;code&gt;Unpin&lt;&#x2F;code&gt; cannot be implemented manually, it’s an auto-trait reserved for the compiler (on stable).&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;pin-as-an-unpin-consumer&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#pin-as-an-unpin-consumer&quot; aria-label=&quot;Anchor link for: pin-as-an-unpin-consumer&quot;&gt;&lt;code&gt;Pin&lt;&#x2F;code&gt; as an &lt;code&gt;Unpin&lt;&#x2F;code&gt; consumer&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;code&gt;Pin&lt;&#x2F;code&gt; is nothing but a wrapper with no intrinsic value.&lt;&#x2F;p&gt;
+&lt;p&gt;However, the most important safe functions of &lt;code&gt;Pin&lt;&#x2F;code&gt; require &lt;code&gt;item: Unpin&lt;&#x2F;code&gt;&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Pin::new(item)&lt;&#x2F;code&gt;: pin a move-able object by telling the compiler not to move it&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;Pin::get_mut(self)&lt;&#x2F;code&gt;: get mutable access to the object but no ownership&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Edit access &#x2F; mutable reference is dangerous when &lt;code&gt;Type: !Unpin&lt;&#x2F;code&gt; because you could still move the content with &lt;code&gt;std::mem::replace&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Pin has &lt;code&gt;unsafe&lt;&#x2F;code&gt; counterparts to the above which do not have checks for &lt;code&gt;Unpin&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Beware of the destructor in &lt;code&gt;Drop&lt;&#x2F;code&gt; for pinned types. It is still called.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;interpeting-pin-as-a-barrier&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#interpeting-pin-as-a-barrier&quot; aria-label=&quot;Anchor link for: interpeting-pin-as-a-barrier&quot;&gt;Interpeting &lt;code&gt;Pin&lt;&#x2F;code&gt; as a barrier&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The &lt;code&gt;Pin&lt;&#x2F;code&gt; type is a &lt;strong&gt;barrier that protects us from moving types&lt;&#x2F;strong&gt; that are &lt;code&gt;!Unpin&lt;&#x2F;code&gt; (types explicitly marked as not &lt;code&gt;Unpin&lt;&#x2F;code&gt; by the compiler).&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;em&gt;Metaphor&lt;&#x2F;em&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;em&gt;Type state&lt;&#x2F;em&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;em&gt;Ownership event&lt;&#x2F;em&gt;&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;&lt;em&gt;undressed&lt;&#x2F;em&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;Type&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;moveable  &#x2F; free&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;em&gt;dress-up&lt;&#x2F;em&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;Pin::new(Type)&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;give up ownership&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;em&gt;dressed-up&lt;&#x2F;em&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;Pin&amp;lt;Type&amp;gt;&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;stuck in memory&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;em&gt;dress-down&lt;&#x2F;em&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;Pin::new(Type).get_mut()&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;acquire edit access&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;This means that &lt;code&gt;Pin&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;is nothing more than a barrier.&lt;&#x2F;li&gt;
+&lt;li&gt;does not have physical or type meaning on itself.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;code&gt;Pin&lt;&#x2F;code&gt; only has meaning when you interact with it through it’s methods &lt;code&gt;new&lt;&#x2F;code&gt; and &lt;code&gt;get_mut&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Why so complicated?&lt;&#x2F;p&gt;
+&lt;p&gt;I don’t see a simpler alternative. Updating references manually would have a large overhead …&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;future-trait&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#future-trait&quot; aria-label=&quot;Anchor link for: future-trait&quot;&gt;Future trait&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The future trait is a simplistic version of the stream trait.&lt;&#x2F;p&gt;
+&lt;p&gt;Every synchronous &#x2F; primitive data type value can be turned into a future.&lt;&#x2F;p&gt;
+&lt;p&gt;A future that makes a value nullable and just returns the non-null part immediately on &lt;code&gt;await&lt;&#x2F;code&gt;-ing &#x2F; polling.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;pub struct &lt;&#x2F;span&gt;&lt;span&gt;Ready&amp;lt;T&amp;gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Option&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;T&amp;gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;impl&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;T&amp;gt; Future &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;Ready&amp;lt;T&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;type &lt;&#x2F;span&gt;&lt;span&gt;Output &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; T;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;poll&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;mut &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;: Pin&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;mut Self&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;_cx&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;mut &lt;&#x2F;span&gt;&lt;span&gt;Context&amp;lt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;_&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;) -&amp;gt; Poll&amp;lt;T&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;        Poll::Ready(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c82728;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;0.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;take&lt;&#x2F;span&gt;&lt;span&gt;().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;expect&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#839c00;&quot;&gt;&amp;quot;Ready polled after completion&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;))
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Usage:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; fut &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;Ready::new(a);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8e908c;&quot;&gt;&#x2F;&#x2F; or
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; fut &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;ready&lt;&#x2F;span&gt;&lt;span&gt;(a);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8e908c;&quot;&gt;&#x2F;&#x2F; will terminate immediately
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; b &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&lt;&#x2F;span&gt;&lt;span&gt; fut.await;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;assert_eq!(a,b);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Remark: &lt;code&gt;.await&lt;&#x2F;code&gt; automatically converts everything in a future with &lt;code&gt;IntoFuture&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;examples-of-unpin-types&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#examples-of-unpin-types&quot; aria-label=&quot;Anchor link for: examples-of-unpin-types&quot;&gt;Examples of &lt;code&gt;!Unpin&lt;&#x2F;code&gt; types&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;There a couple of examples of common types that are not safe to move:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;(async) generators, for example &lt;code&gt;async_stream::stream! {}&lt;&#x2F;code&gt; streams&lt;&#x2F;li&gt;
+&lt;li&gt;futures returned by &lt;code&gt;async {}&lt;&#x2F;code&gt; blocks (the compiler is lazy)&lt;&#x2F;li&gt;
+&lt;li&gt;self-referencing data structures such as trees&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Why are &lt;code&gt;async {}&lt;&#x2F;code&gt; futures unsafe to move and &lt;code&gt;Future&lt;&#x2F;code&gt; does not have this requirement?&lt;&#x2F;p&gt;
+&lt;p&gt;When a future with &lt;strong&gt;self-referencing variables&lt;&#x2F;strong&gt; has been polled and was supended, it should not be moved by anyone anymore to prevent invalidation.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;immoveable-async-blocks&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#immoveable-async-blocks&quot; aria-label=&quot;Anchor link for: immoveable-async-blocks&quot;&gt;Immoveable async blocks&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Local variables in &lt;code&gt;async {}&lt;&#x2F;code&gt; blocks may reference each-other ahead of an &lt;code&gt;await&lt;&#x2F;code&gt; point.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span&gt;async {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; a &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; r &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &amp;amp;&lt;&#x2F;span&gt;&lt;span&gt;a;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;sleep&lt;&#x2F;span&gt;&lt;span&gt;().await;
+&lt;&#x2F;span&gt;&lt;span&gt;    println!(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#839c00;&quot;&gt;&amp;quot;After wake-up r = &lt;&#x2F;span&gt;&lt;span&gt;{r}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#839c00;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This block is converted into an &lt;code&gt;enum&lt;&#x2F;code&gt; with a code-generated transition function.&lt;&#x2F;p&gt;
+&lt;p&gt;Each variant of the &lt;code&gt;enum&lt;&#x2F;code&gt; is a phase in the &lt;code&gt;async&lt;&#x2F;code&gt; block, before or after an &lt;code&gt;await&lt;&#x2F;code&gt; point.&lt;&#x2F;p&gt;
+&lt;p&gt;Each phase contains all local variables in the phase.&lt;&#x2F;p&gt;
+&lt;p&gt;If the local variables reference eachother,&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;the type of this variant of the &lt;code&gt;enum&lt;&#x2F;code&gt; is self-referencing (unmoveable) or &lt;code&gt;!Unpin&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;the &lt;code&gt;enum&lt;&#x2F;code&gt; itself is unmoveable&lt;&#x2F;li&gt;
+&lt;li&gt;the &lt;code&gt;impl Future&lt;&#x2F;code&gt; does not convey the message that the underlying &lt;code&gt;enum&lt;&#x2F;code&gt; is unmoveable.&lt;&#x2F;li&gt;
+&lt;li&gt;we always need to use &lt;code&gt;impl Future + Unpin&lt;&#x2F;code&gt; when using this future in an executor.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;streams-as-a-kind-of-futures&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#streams-as-a-kind-of-futures&quot; aria-label=&quot;Anchor link for: streams-as-a-kind-of-futures&quot;&gt;Streams as a kind of futures&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Streams are simply a future. But&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;their return type is a future of an option&lt;&#x2F;li&gt;
+&lt;li&gt;the name of the &lt;code&gt;poll&lt;&#x2F;code&gt; method is different&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Otherwise, streams are identical to futures.&lt;&#x2F;p&gt;
+&lt;p&gt;The semi-official definition in &lt;code&gt;futures::Stream&lt;&#x2F;code&gt; is a trait:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;pub trait &lt;&#x2F;span&gt;&lt;span&gt;Stream {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;type &lt;&#x2F;span&gt;&lt;span&gt;Item;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;poll_next&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;: Pin&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;mut Self&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;cx&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;mut &lt;&#x2F;span&gt;&lt;span&gt;Context&amp;lt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;_&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    ) -&amp;gt; Poll&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Option&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;Self::&lt;&#x2F;span&gt;&lt;span&gt;Item&amp;gt;&amp;gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;!-- end_slide --&gt;
+&lt;h2 id=&quot;streams-and-coroutines&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#streams-and-coroutines&quot; aria-label=&quot;Anchor link for: streams-and-coroutines&quot;&gt;Streams and coroutines&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;More theoretical chapter.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;What is a coroutine?&lt;&#x2F;li&gt;
+&lt;li&gt;What is the relationship between streams and coroutines?&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;coroutine-as-a-concept&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#coroutine-as-a-concept&quot; aria-label=&quot;Anchor link for: coroutine-as-a-concept&quot;&gt;Coroutine as a concept&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Normal functions just take input and return output (immediately).&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Coroutines&lt;&#x2F;strong&gt; are functions that can be suspended.&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Upon being suspended a coroutine &lt;strong&gt;yields a value&lt;&#x2F;strong&gt;.&lt;&#x2F;li&gt;
+&lt;li&gt;Then the caller can continue with other functions.&lt;&#x2F;li&gt;
+&lt;li&gt;Later the caller may decide to resume the suspended coroutine with resumption data input&lt;&#x2F;li&gt;
+&lt;li&gt;If the coroutine ends, it returns (not yield) a final value&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;&lt;strong&gt;Important&lt;&#x2F;strong&gt;: the &lt;code&gt;Coroutine&lt;&#x2F;code&gt; trait in Rust is unstable.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;coroutines-in-nightly-rust&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#coroutines-in-nightly-rust&quot; aria-label=&quot;Anchor link for: coroutines-in-nightly-rust&quot;&gt;Coroutines in nightly Rust&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The trait definition is a super-set of &lt;code&gt;Future&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;pub trait &lt;&#x2F;span&gt;&lt;span&gt;Coroutine&amp;lt;R = ()&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;type &lt;&#x2F;span&gt;&lt;span&gt;Yield;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;type &lt;&#x2F;span&gt;&lt;span&gt;Return;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;resume&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;: Pin&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;mut Self&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;arg&lt;&#x2F;span&gt;&lt;span&gt;: R,
+&lt;&#x2F;span&gt;&lt;span&gt;    ) -&amp;gt; CoroutineState&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;Self::&lt;&#x2F;span&gt;&lt;span&gt;Yield, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;Self::&lt;&#x2F;span&gt;&lt;span&gt;Return&amp;gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Notice the &lt;code&gt;R&lt;&#x2F;code&gt; stands for &lt;code&gt;Resume&lt;&#x2F;code&gt;, is a type generic and is different from &lt;code&gt;Coroutine::Return&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;This means that one same type may behave as different coroutines depending on the resume input, but can only have one &lt;code&gt;Return&lt;&#x2F;code&gt; type.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;example-of-rust-coroutin&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#example-of-rust-coroutin&quot; aria-label=&quot;Anchor link for: example-of-rust-coroutin&quot;&gt;Example of Rust coroutin&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The following coroutine (in nightly Rust) has resume data type &lt;code&gt;R = ()&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; coroutine &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;#[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c82728;&quot;&gt;coroutine&lt;&#x2F;span&gt;&lt;span&gt;] &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;|| &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#c82829;&quot;&gt;yield &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#839c00;&quot;&gt;&amp;quot;foo&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;};
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;match &lt;&#x2F;span&gt;&lt;span&gt;Pin::new(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; coroutine).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;resume&lt;&#x2F;span&gt;&lt;span&gt;(()) {
+&lt;&#x2F;span&gt;&lt;span&gt;    CoroutineState::Yielded(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{}
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;_ =&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;panic!(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#839c00;&quot;&gt;&amp;quot;unexpected return from resume&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;),
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;match &lt;&#x2F;span&gt;&lt;span&gt;Pin::new(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;mut&lt;&#x2F;span&gt;&lt;span&gt; coroutine).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;resume&lt;&#x2F;span&gt;&lt;span&gt;(()) {
+&lt;&#x2F;span&gt;&lt;span&gt;    CoroutineState::Complete(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#839c00;&quot;&gt;&amp;quot;foo&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;{}
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;_ =&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;panic!(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#839c00;&quot;&gt;&amp;quot;unexpected return from resume&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;),
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;streams-as-a-type-of-coroutine&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#streams-as-a-type-of-coroutine&quot; aria-label=&quot;Anchor link for: streams-as-a-type-of-coroutine&quot;&gt;Streams as a type of coroutine&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;We can classify everything seen in this presentation up until now:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;em&gt;YIELDS&lt;&#x2F;em&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;em&gt;RESUMES&lt;&#x2F;em&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;em&gt;RETURNS&lt;&#x2F;em&gt;&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;ITERATOR&lt;&#x2F;td&gt;&lt;td&gt;option&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;FUTURE&lt;&#x2F;td&gt;&lt;td&gt;()&lt;&#x2F;td&gt;&lt;td&gt;waker&lt;&#x2F;td&gt;&lt;td&gt;future output&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;STREAM&lt;&#x2F;td&gt;&lt;td&gt;future option&lt;&#x2F;td&gt;&lt;td&gt;waker&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;Remark: &lt;code&gt;GEN&lt;&#x2F;code&gt; stands for Rust &lt;code&gt;gen&lt;&#x2F;code&gt; blocks. In general, in other languages, generators can also return values.&lt;&#x2F;p&gt;
+&lt;p&gt;Table inspired by &lt;a href=&quot;https:&#x2F;&#x2F;without.boats&#x2F;blog&#x2F;poll-next&#x2F;&quot;&gt;post by without.boats&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;synchronous-vs-asynchronous-things&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#synchronous-vs-asynchronous-things&quot; aria-label=&quot;Anchor link for: synchronous-vs-asynchronous-things&quot;&gt;Synchronous vs. asynchronous things&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Coroutines are part of a bigger classification of functions.&lt;&#x2F;p&gt;
+&lt;p&gt;Synchronous functions:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;em&gt;TAKES&lt;&#x2F;em&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;em&gt;CAPTURES&lt;&#x2F;em&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;em&gt;YIELDS&lt;&#x2F;em&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;em&gt;RESUMES&lt;&#x2F;em&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;em&gt;RETURNS&lt;&#x2F;em&gt;&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;Imperative &lt;code&gt;loop {}&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Blocks &lt;code&gt;{}&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;captured&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;output&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Function items &lt;code&gt;fn&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;input&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;output&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Closures &lt;code&gt;Fn&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;input&lt;&#x2F;td&gt;&lt;td&gt;captured&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;output&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;code&gt;Iterator&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;option&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;code&gt;#[coroutine]&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;input&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;item&lt;&#x2F;td&gt;&lt;td&gt;any&lt;&#x2F;td&gt;&lt;td&gt;any&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;Asynchronous functions:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;em&gt;TAKES&lt;&#x2F;em&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;em&gt;CAPTURES&lt;&#x2F;em&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;em&gt;YIELDS&lt;&#x2F;em&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;em&gt;RESUMES&lt;&#x2F;em&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;em&gt;RETURNS&lt;&#x2F;em&gt;&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;&lt;code&gt;Future&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;()&lt;&#x2F;td&gt;&lt;td&gt;waker&lt;&#x2F;td&gt;&lt;td&gt;future output&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;code&gt;async {}&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;&#x27;static&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;()&lt;&#x2F;td&gt;&lt;td&gt;waker&lt;&#x2F;td&gt;&lt;td&gt;future output&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Closures &lt;code&gt;AsyncFn&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;input&lt;&#x2F;td&gt;&lt;td&gt;captured&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;future output&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;code&gt;Stream&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;td&gt;future option&lt;&#x2F;td&gt;&lt;td&gt;waker&lt;&#x2F;td&gt;&lt;td&gt;!&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;!-- end_slide --&gt;
+&lt;h2 id=&quot;advanced-stream-creation&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#advanced-stream-creation&quot; aria-label=&quot;Anchor link for: advanced-stream-creation&quot;&gt;Advanced stream creation&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;We will now look on how to create useful stream combinators that help to write functional&#x2F;declarative async code.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Simplest stream from future.&lt;&#x2F;li&gt;
+&lt;li&gt;General approach for combinators&lt;&#x2F;li&gt;
+&lt;li&gt;Example of stream combinator&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;stupid-example-future-stream&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#stupid-example-future-stream&quot; aria-label=&quot;Anchor link for: stupid-example-future-stream&quot;&gt;Stupid example: &lt;code&gt;Future -&amp;gt; Stream&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Every future can be converted into a stream by return &lt;code&gt;Some(Fut::Output)&lt;&#x2F;code&gt; once:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;pub struct &lt;&#x2F;span&gt;&lt;span&gt;Once&amp;lt;Fut&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c82728;&quot;&gt;future&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Option&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;Fut&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;impl&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;Fut: Future&amp;gt; Stream &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;Once&amp;lt;Fut&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;type &lt;&#x2F;span&gt;&lt;span&gt;Item &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;Fut::Output;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;poll_next&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;: Pin&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;mut Self&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;cx&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;mut &lt;&#x2F;span&gt;&lt;span&gt;Context&amp;lt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;_&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;) -&amp;gt; Poll&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Option&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;Self::&lt;&#x2F;span&gt;&lt;span&gt;Item&amp;gt;&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; this &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c82728;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;project&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;      &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; v &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;match&lt;&#x2F;span&gt;&lt;span&gt; this.future.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;as_mut&lt;&#x2F;span&gt;&lt;span&gt;().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;as_pin_mut&lt;&#x2F;span&gt;&lt;span&gt;() {
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Some&lt;&#x2F;span&gt;&lt;span&gt;(fut) &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span&gt;ready!(fut.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;poll&lt;&#x2F;span&gt;&lt;span&gt;(cx)),
+&lt;&#x2F;span&gt;&lt;span&gt;          &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;None &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;=&amp;gt; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;Poll::Ready(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;None&lt;&#x2F;span&gt;&lt;span&gt;),
+&lt;&#x2F;span&gt;&lt;span&gt;      };
+&lt;&#x2F;span&gt;&lt;span&gt;      this.future.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;set&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;None&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;      Poll::Ready(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Some&lt;&#x2F;span&gt;&lt;span&gt;(v))
+&lt;&#x2F;span&gt;&lt;span&gt;  }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;how-is-futures-map-implemented&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#how-is-futures-map-implemented&quot; aria-label=&quot;Anchor link for: how-is-futures-map-implemented&quot;&gt;How is &lt;code&gt;futures::Map&lt;&#x2F;code&gt; implemented?&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;One of the simplest stream combinators is in the semi-standard library &lt;code&gt;futures&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;It is used to map a stream to a new stream by mapping each value.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#f9f9f9;color:#111111;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;pub struct &lt;&#x2F;span&gt;&lt;span&gt;Map&amp;lt;St, F&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;    #[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c82728;&quot;&gt;pin&lt;&#x2F;span&gt;&lt;span&gt;]
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c82728;&quot;&gt;stream&lt;&#x2F;span&gt;&lt;span&gt;: St,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c82728;&quot;&gt;f&lt;&#x2F;span&gt;&lt;span&gt;: F,
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;impl&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;St, F&amp;gt; Stream &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;for &lt;&#x2F;span&gt;&lt;span&gt;Map&amp;lt;St, F&amp;gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;where
+&lt;&#x2F;span&gt;&lt;span&gt;    St: Stream,
+&lt;&#x2F;span&gt;&lt;span&gt;    F: FnMut1&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;St::&lt;&#x2F;span&gt;&lt;span&gt;Item&amp;gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;type &lt;&#x2F;span&gt;&lt;span&gt;Item &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;F::Output;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;fn &lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;poll_next&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;: Pin&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;mut Self&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;cx&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;&amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;mut &lt;&#x2F;span&gt;&lt;span&gt;Context&amp;lt;&amp;#39;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;_&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;) -&amp;gt; Poll&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c99e00;&quot;&gt;Option&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;Self::&lt;&#x2F;span&gt;&lt;span&gt;Item&amp;gt;&amp;gt; {
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; this &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c82728;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;project&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#8959a8;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; res &lt;&#x2F;span&gt;&lt;span style=&quot;color:#3e999f;&quot;&gt;= &lt;&#x2F;span&gt;&lt;span&gt;ready!(this.stream.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;as_mut&lt;&#x2F;span&gt;&lt;span&gt;().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;poll_next&lt;&#x2F;span&gt;&lt;span&gt;(cx));
+&lt;&#x2F;span&gt;&lt;span&gt;        Poll::Ready(res.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#f07219;&quot;&gt;x&lt;&#x2F;span&gt;&lt;span&gt;| this.f.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#4271ae;&quot;&gt;call_mut&lt;&#x2F;span&gt;&lt;span&gt;(x)))
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The &lt;code&gt;#[pin]&lt;&#x2F;code&gt; attribute implements a method &lt;code&gt;Pin&amp;lt;&amp;amp;mut Map&amp;gt; -&amp;gt; Pin&amp;lt;&amp;amp;mut St&amp;gt;&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;It &lt;strong&gt;projects&lt;&#x2F;strong&gt; the pinned mutable reference to a pinned reference to the inner stream.&lt;&#x2F;p&gt;
+&lt;p&gt;This macro uses &lt;code&gt;unsafe&lt;&#x2F;code&gt; and assumes the writer knows which fields are realy &lt;code&gt;Unpin&lt;&#x2F;code&gt; &#x2F; safe-to-move. &lt;strong&gt;Not recommended.&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;You can also declare a field of type &lt;code&gt;Pin&amp;lt;Box&amp;lt;&amp;lt;Stream&amp;gt;&amp;gt;&lt;&#x2F;code&gt; and forget about the macro.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;futures&#x2F;latest&#x2F;futures&#x2F;stream&#x2F;struct.Map.html&quot;&gt;https:&#x2F;&#x2F;docs.rs&#x2F;futures&#x2F;latest&#x2F;futures&#x2F;stream&#x2F;struct.Map.html&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;aggregated-declarative-stream-combinators&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#aggregated-declarative-stream-combinators&quot; aria-label=&quot;Anchor link for: aggregated-declarative-stream-combinators&quot;&gt;Aggregated declarative stream combinators&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Usually when you create an aggregate stream, you have to follow these steps:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Convert high-level functional description into a stream state object&lt;&#x2F;li&gt;
+&lt;li&gt;Come up with a method that updates the stream state&lt;&#x2F;li&gt;
+&lt;li&gt;Implement the &lt;code&gt;Stream::poll_next&lt;&#x2F;code&gt; method using&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;ul&gt;
+&lt;li&gt;First &lt;strong&gt;project the pins&lt;&#x2F;strong&gt; that you need into mutable references&lt;&#x2F;li&gt;
+&lt;li&gt;Reconstruct pins from the mutable references of the parts&lt;&#x2F;li&gt;
+&lt;li&gt;Pass-through to the &lt;code&gt;poll_next&lt;&#x2F;code&gt; or &lt;code&gt;poll&lt;&#x2F;code&gt; methods of underlying futures&lt;&#x2F;li&gt;
+&lt;li&gt;call the previously mutable state update method&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Often you can put most of your logic in the state update method.&lt;&#x2F;p&gt;
+&lt;p&gt;Do not forget to store the waker in case the underlying input data types are not only based on futures. The waker needs to be stored near a place where the IO-bound operation completes. (Most of the time this is not needed.)&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;aggregation-examples-flattening-nested-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#aggregation-examples-flattening-nested-streams&quot; aria-label=&quot;Anchor link for: aggregation-examples-flattening-nested-streams&quot;&gt;Aggregation examples: flattening nested streams&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The &lt;code&gt;futures&lt;&#x2F;code&gt; crate provides flatten functions for &lt;code&gt;Stream&amp;lt;Item: Stream&amp;gt;&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;sequentially &lt;code&gt;futures::StreamExt::flatten&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;concurrently &lt;code&gt;futures::StreamExt::flatten_unordered(None)&lt;&#x2F;code&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;When you are looking for these functions, you are probably doing something nasty. There will often be a simpler approach to the underlying problem.&lt;&#x2F;p&gt;
+&lt;p&gt;You can also implement your own aggregated streams.&lt;&#x2F;p&gt;
+&lt;p&gt;One type of stream aggregator that I couldn’t find is a &lt;code&gt;forgetful&lt;&#x2F;code&gt; nested Stream.&lt;&#x2F;p&gt;
+&lt;p&gt;I implemented my own with &lt;code&gt;forgetful_flatten&lt;&#x2F;code&gt;, it rolls out nested streams and drops previous stream when a new stream arrives on the outer stream.&lt;&#x2F;p&gt;
+&lt;!-- end_slide --&gt;
+&lt;h3 id=&quot;aggregation-examples-monitoring-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#aggregation-examples-monitoring-streams&quot; aria-label=&quot;Anchor link for: aggregation-examples-monitoring-streams&quot;&gt;Aggregation examples: monitoring streams&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The &lt;code&gt;tokio_stream&lt;&#x2F;code&gt; crate provides &lt;a href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;tokio-stream&#x2F;latest&#x2F;tokio_stream&#x2F;struct.StreamMap.html&quot;&gt;&lt;code&gt;StreamMap&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;However, I need some more logic and created &lt;code&gt;merge_check_initialized&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;It monitors whether the required streams have yielded an initial value yet&lt;&#x2F;p&gt;
+&lt;p&gt;TODO: discuss implementation&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

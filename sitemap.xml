@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://wvhulle.github.io/</loc>
+    </url>
+    <url>
+        <loc>https://wvhulle.github.io/blog/</loc>
+    </url>
+    <url>
+        <loc>https://wvhulle.github.io/blog/streams/</loc>
+        <lastmod>2025-03-18</lastmod>
+    </url>
+    <url>
+        <loc>https://wvhulle.github.io/tags/</loc>
+    </url>
+    <url>
+        <loc>https://wvhulle.github.io/tags/asynchronous/</loc>
+    </url>
+    <url>
+        <loc>https://wvhulle.github.io/tags/declarative/</loc>
+    </url>
+    <url>
+        <loc>https://wvhulle.github.io/tags/functional/</loc>
+    </url>
+</urlset>
