@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+
+
+
+{% block content %}
+
+<article>
+
+    <header>
+
+
+        <h1 class="title">
+            {{ page.title }}
+        </h1>
+
+        <p class="post_date">{{ page.date }}</p>
+
+
+        {%- if page.taxonomies and page.taxonomies.tags -%}
+
+        <ul class="tags">
+            {%- for tag in page.taxonomies.tags -%}
+            <li>
+                {{ tag }}
+            </li>
+            {%- endfor -%}
+
+        </ul>
+
+        {%- else -%}
+        <h4>Uncategorised</h4>
+
+        {%- endif -%}
+
+        <h3 class="subtitle">
+            {{ page.description }}
+        </h3>
+
+
+
+
+    </header>
+
+
+    {% if page.toc %}
+    <ul class="post_top_headers">
+        {% for h1 in page.toc %}
+        <li>
+
+
+            {% if h1.children %}
+            <details>
+
+                <summary>
+                    <a href="{{ h1.permalink | safe }}">{{ h1.title }}</a>
+                </summary>
+                <ul>
+                    {% for h2 in h1.children %}
+                    <li>
+                        <a href="{{ h2.permalink | safe }}">{{ h2.title }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </details>
+            {% else %}
+            <a href="{{ h1.permalink | safe }}">{{ h1.title }}</a>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+
+    {{ page.content | safe }}
+
+</article>
+
+{% endblock content %}

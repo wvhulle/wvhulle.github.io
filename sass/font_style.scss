@@ -1,5 +1,6 @@
 @import "./colors_borders.css";
 
+h1,h2,h3,h4,h5,h6,
 a,
 p,
 li,
@@ -18,10 +19,7 @@ code {
 
 }
 
-h1,
-h2,
-h3,
-h4 {
+header h1, header h2, header h3 {
     font-family: "Poiret One";
 
     line-height: 1.2;
