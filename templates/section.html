@@ -1,0 +1,19 @@
+{% extends "page.html" %}
+
+
+
+
+{% block content %}
+
+
+
+{% for post in section.pages %}
+<h2><a href="{{ post.permalink }}">{{ post.title }} ({{ post.date }})</a></h2>
+{% endfor %}
+
+
+
+
+
+
+{% endblock content %}

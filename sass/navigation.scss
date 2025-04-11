@@ -15,18 +15,8 @@ aside#sidebar {
 }
 
 
-li#home-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    color: var(--accent);
 
-}
 
-li#home-button:hover {
-    text-decoration: underline;
-}
 
 #sidebar ul {
     display: flex;
@@ -46,6 +36,7 @@ a {
 
 a:hover {
     color: var(--focus);
+    text-decoration: underline;
 }
 
 @media (max-width: 1000px) {

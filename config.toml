@@ -1,0 +1,24 @@
+base_url = "https://wvhulle.github.io"
+author = "Willem Vanhulle"
+
+
+compile_sass = true
+build_search_index = true
+generate_feeds = true
+
+taxonomies = [{ name = "tags", description = "Tags" }]
+
+[markdown]
+
+# Navigation
+insert_anchor_links = "right"
+bottom_footnotes = true
+
+# Prose
+smart_punctuation = true
+render_emoji = true
+
+# Code
+highlight_code = true
+highlight_theme = "ayu-light"
+error_on_missing_highlight = true
