@@ -1,7 +1,6 @@
 name: Build with Zola and Deploy to GitHub Pages
 
-on: push
-pull_request:
+on: [push, pull_request]
 
 jobs:
   build:
@@ -10,7 +9,7 @@ jobs:
     steps:
       - name: Checkout main
         uses: actions/checkout@v4
-      - name: Build static site with Zola 
+      - name: Build static site with Zola
         uses: shalzz/zola-deploy-action@v0.20.0
         env:
           BUILD_ONLY: true
