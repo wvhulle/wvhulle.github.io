@@ -1,6 +1,7 @@
 +++
 title = "Functional asynchronous Rust"
 description = "Declarative/functional asynchronous programming in Rust with streams and sinks."
+weight = 1
 [taxonomies]
 tags = ["functional", "asynchronous", "declarative", "Rust", "stream", "sink"]
 +++
@@ -400,7 +401,6 @@ let merged_tagged = stream::select_all([stream_a, stream_b]);
 This is essentially just a homogeneous merge with `select_all` preceded by tagging each individual item with an identifier for the source stream.
 
 **Remark**: in this simple case you might want to consider a simple custom combinator (see other posts on how to build one) or the one provided by `tokio_stream::MergeMap`.
-
 
 
 ### Inhomogenous stream merging

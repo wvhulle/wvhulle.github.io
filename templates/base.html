@@ -39,8 +39,8 @@
                 <a href="/blog">{{ section.title }}</a>
 
                 <ul class="section_page_list">
-                    {% set sorted = section.pages | sort(attribute ="date") | reverse %}
-                    {% for page in sorted %}
+
+                    {% for page in section.pages %}
                     <li class="section_page_link">
                         <a href="{{ page.permalink }}">
                             {{ page.title }}

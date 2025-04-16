@@ -1,6 +1,7 @@
 +++
 title = "Async generators"
 description = "Simple ways to generate streams or asynchronous iterators."
+weight = 2
 [taxonomies]
 tags = [ "stream", "async iterator", "generator", "functional", "Rust", "declarative", "operators"]
 +++

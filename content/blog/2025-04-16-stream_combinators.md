@@ -1,6 +1,7 @@
 +++
 title = "Building stream combinators"
 description = "How to add functionality to asynchronous Rust by building your own stream combinators."
+weight = 4
 [taxonomies]
 tags = ["combinators", "functional", "Rust",  "operators"]
 +++
