@@ -98,7 +98,8 @@ ul.tags {
 
     display: flex;
     flex-direction: row;
-    gap: 0.5em;
+    flex-wrap: wrap;
+    gap: 0 0.5em;
     list-style: none;
     padding: 0;
     margin: 0;

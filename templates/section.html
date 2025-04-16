@@ -24,7 +24,9 @@
             </tr>
         </thead>
         <tbody>
-            {% for post in section.pages %}
+            {% set sorted = section.pages | sort(attribute ="date") | reverse %}
+
+            {% for post in sorted %}
             <tr>
                 <td>{{ post.date }}</td>
                 <td><a href="{{ post.permalink }}">{{ post.title }}</a></td>
