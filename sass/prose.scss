@@ -20,13 +20,13 @@ h3 {
 
 a {
     text-decoration: underline;
-    text-decoration-color: var(--tertiary);
-
+    text-decoration-color: var(--emphasis_accent);
+    word-wrap: break-word;
 }
 
 
 a:hover {
-    color: var(--tertiary);
+    color: var(--emphasis_accent);
 }
 
 article {
@@ -48,7 +48,7 @@ pre,
 table {
     border: var(--border);
 
-    box-shadow: 0.5em 0.5em 0.5em var(--secondary);
+    box-shadow: 0.5em 0.5em 0.5em var(--background_accent);
     overflow-x: auto;
 }
 
@@ -57,7 +57,7 @@ table {
     display: block;
     width: fit-content;
     max-width: 100%;
-    background: var(--code);
+    background: var(--code_background);
     overflow-x: auto;
 }
 

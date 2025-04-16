@@ -1,54 +1,54 @@
 @import "./vars.css";
 
 
-
-body {
-    flex-direction: row;
-}
-
-
-main {
-    flex-direction: column;
-}
-
-aside {
-    flex-direction: column;
-
-    align-items: center;
-    padding: 2em;
-    max-width: 250px;
-    width: fit-content;
-    height: 100vh;
-
-    border-right: var(--border);
-
-    & img {
-        margin-top: 2em;
-        height: 4em;
+@media screen and (min-width: 800px) {
+    body {
+        flex-direction: row;
     }
 
-    & ul {
-        padding: 1.5em;
-        display: flex;
+
+    main {
+        flex-direction: column;
+    }
+
+    aside {
         flex-direction: column;
 
+        align-items: center;
+        padding: 2em;
+        max-width: 250px;
+        width: fit-content;
+        height: 100vh;
 
-        & li {
+        border-right: var(--border);
 
+        & img {
+            margin-top: 2em;
+            height: 4em;
+        }
+
+        & ul {
+            padding: 1.5em;
+            display: flex;
             flex-direction: column;
 
-            & a {}
 
-            & ul {
+            & li {
 
+                flex-direction: column;
 
                 & a {}
+
+                & ul {
+
+                    & a {}
+                }
             }
+
+
         }
 
 
+
     }
-
-
-
 }

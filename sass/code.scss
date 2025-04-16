@@ -7,14 +7,14 @@ code {
 
 p code,
 li code {
-    // background-color: var(--secondary);
     padding: 0 0.2em;
-    background-color: var(--code);
-    border: var(--border)
+    background-color: var(--code_background);
+    border: var(--border);
+    word-wrap: break-word;
 }
 
 
 pre {
-    background-color: var(--code) !important;
+    background-color: var(--code_background) !important;
     padding: 1em;
 }

@@ -1,8 +1,8 @@
 :root {
-    --code: #fcfeff;
-    --primary: #ecfaff;
-    --secondary: #b9e9ff;
-    --border: 0.05em solid var(--tertiary);
-    --tertiary: #0099da;
-    --vertical-breakpoint: 1000px;
+    --code_background: #fcfeff;
+    --prose_background: #ecfaff;
+    --background_accent: #b9e9ff;
+    --border: 0.05em solid var(--emphasis_accent);
+    --emphasis_accent: #0099da;
+    --text-width: 600px;
 }
