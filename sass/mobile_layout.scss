@@ -45,7 +45,7 @@ body {
                 margin: 0;
 
                 & ul {
-
+                            display: none;
                     flex-wrap: nowrap;
                     gap: 1em;
                     flex-direction: row;
