@@ -3,8 +3,8 @@
 
 
 
-{% block content %}
 
+{% block content %}
 <article>
 
     <header>
@@ -14,6 +14,8 @@
             {{ page.title }}
         </h1>
 
+
+
         <ul class="tags">
             {%- for tag in page.taxonomies.tags -%}
             <li><a href="{{ get_taxonomy_url(kind='tags', name=tag) }}">{{ tag }}</a></li>
@@ -21,7 +23,7 @@
 
         </ul>
 
-        <p class="post_date">{{ page.date | date(format="%Y-%m-%d") }}</p>
+        <p class="post_date">{{ page.date | date(format="%A, %Y-%m-%d") }}</p>
 
 
         {%- if page.taxonomies and page.taxonomies.tags -%}
@@ -73,6 +75,8 @@
 
 
     {{ page.content | safe }}
+
+
 
 </article>
 

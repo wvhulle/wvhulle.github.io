@@ -57,7 +57,7 @@ table {
     display: block;
     width: fit-content;
     max-width: 100%;
-    background: white;
+    background: var(--code);
     overflow-x: auto;
 }
 
@@ -104,4 +104,8 @@ ul.post_top_headers {
     list-style: none;
     padding: 0;
     margin: 0;
+}
+
+.post_date {
+    font-style: italic;
 }

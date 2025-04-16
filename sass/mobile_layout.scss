@@ -15,24 +15,28 @@ body {
         justify-content: center;
         flex-direction: row;
         min-width: 100%;
-        max-width: 100%;
         height: fit-content;
-        padding: 0.7em;
+
         border-right: none;
         border-bottom: var(--border);
         flex-wrap: nowrap;
-        overflow-x: scroll;
+        align-items: center;
         margin: 0;
 
-        &>ul {
+        & img {
+            display: none;
+        }
+
+        & ul {
             flex-direction: row;
             flex-wrap: nowrap;
             gap: 1em;
             margin: 0;
-            padding: 0;
+            padding: 0.7em;
+            max-width: 100%;
+            overflow-x: scroll;
 
-
-            &>li {
+            & li {
                 text-wrap: nowrap;
                 display: flex;
                 padding: 0;
@@ -40,18 +44,18 @@ body {
                 gap: 0.5em;
                 margin: 0;
 
-                &>ul {
+                & ul {
+
                     flex-wrap: nowrap;
                     gap: 1em;
                     flex-direction: row;
-                    padding: 0;
-                    margin: 0;
+                    align-items: end;
 
+                    & li {
+                        flex-wrap: nowrap;
+                        text-wrap: nowrap;
 
-
-                    &>li {
-                        margin: 0;
-                        padding: 0;
+                        padding-bottom: 0.2em;
                     }
                 }
             }
