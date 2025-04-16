@@ -43,31 +43,39 @@ aside {
     display: flex;
     gap: 0.5em;
     background-color: var(--secondary);
+    padding: 0;
+    margin: 0;
 
-    &>ul {
+
+
+    & ul {
         display: flex;
         list-style: none;
-        padding: 0;
+
         gap: 1.5em;
         margin: 0em;
 
-        &>li {
+
+        & li {
 
             display: flex;
             gap: 1em;
 
-            &>a {}
+            & a {}
 
-            &>ul {
+            & ul {
                 padding: 0;
                 margin: 0;
                 display: flex;
                 gap: 0.5em;
                 list-style: none;
+                font-size: 0.8em;
 
 
+                & a {}
 
-                &>a {}
+
+                & li {}
             }
         }
 
