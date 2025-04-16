@@ -5,11 +5,16 @@
 
 {% block content %}
 
+<h1>{{ section.title }}</h1>
 
 
-{% for post in section.pages %}
-<h2><a href="{{ post.permalink }}">{{ post.title }} ({{ post.date }})</a></h2>
-{% endfor %}
+{{ section.content | safe}}
+
+<ul>
+    {% for post in section.pages %}
+    <li><a href="{{ post.permalink }}">{{ post.title }} ({{ post.date }})</a></li>
+    {% endfor %}
+</ul>
 
 
 

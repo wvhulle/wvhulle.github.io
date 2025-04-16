@@ -16,14 +16,12 @@
 
         <ul class="tags">
             {%- for tag in page.taxonomies.tags -%}
-            <li>
-                {{ tag }}
-            </li>
+            <li><a href="{{ get_taxonomy_url(kind='tags', name=tag) }}">{{ tag }}</a></li>
             {%- endfor -%}
 
         </ul>
 
-        <p class="post_date">{{ page.date }}</p>
+        <p class="post_date">{{ page.date | date(format="%Y-%m-%d") }}</p>
 
 
         {%- if page.taxonomies and page.taxonomies.tags -%}
