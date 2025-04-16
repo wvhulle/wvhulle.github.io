@@ -9,6 +9,12 @@
 
     main {
         flex-direction: column;
+
+
+        & article {
+            padding: 3em;
+            max-width: var(--text-width);
+        }
     }
 
     aside {
@@ -16,8 +22,7 @@
 
         align-items: center;
         padding: 2em;
-        max-width: 250px;
-        width: fit-content;
+        width: 250px;
         height: 100vh;
 
         border-right: var(--border);
@@ -37,12 +42,7 @@
 
                 flex-direction: column;
 
-                & a {}
 
-                & ul {
-
-                    & a {}
-                }
             }
 
 

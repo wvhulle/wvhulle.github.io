@@ -7,12 +7,14 @@
     max-width: 40em;
 
     & img {
-        margin: 1em;
+        margin-top: 0.5em;
+        margin-bottom: 2em;
         box-shadow: 0.5em 0.5em 0.5em var(--background_accent);
         width: 12em;
         height: 12em;
         border: var(--border);
         border-radius: 0%;
+
     }
 
     & h1,

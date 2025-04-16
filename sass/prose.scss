@@ -88,6 +88,12 @@ h1 {
     margin-bottom: 0;
 }
 
+blockquote {
+    font-style: italic;
+}
+
+
+
 ul.tags {
 
     display: flex;
@@ -101,11 +107,42 @@ ul.tags {
 }
 
 ul.post_top_headers {
-    list-style: none;
+
     padding: 0;
     margin: 0;
+    list-style-type: decimal;
+
 }
+
+ul {
+    list-style-position: outside;
+
+
+    padding-left: 1em;
+
+    & li {
+        margin: 0.4em;
+    }
+
+
+}
+
 
 .post_date {
     font-style: italic;
+}
+
+details {
+
+
+
+    & summary {
+        list-style: outside;
+    }
+
+    & summary::marker {
+        width: 2em;
+        height: 2em;
+        color: transparent;
+    }
 }

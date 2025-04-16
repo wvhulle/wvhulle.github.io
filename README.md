@@ -9,4 +9,4 @@ To preview, install `zola`.
 zola serve
 ```
 
-Templating with [Tera](https://keats.github.io/tera/docs/). 
+Templating in [./templates](./templates/) with [Tera](https://keats.github.io/tera/docs/). 

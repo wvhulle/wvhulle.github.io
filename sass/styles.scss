@@ -85,9 +85,7 @@ body {
         overflow-y: auto;
         background-color: var(--prose_background);
 
-        & article {
-            max-width: var(--text-width);
-        }
+
     }
 }
 
