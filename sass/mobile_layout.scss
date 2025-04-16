@@ -47,17 +47,7 @@ body {
                 & ul {
                 visibility: hidden;
                             display: none;
-                    flex-wrap: nowrap;
-                    gap: 1em;
-                    flex-direction: row;
-                    align-items: end;
-
-                    & li {
-                        flex-wrap: nowrap;
-                        text-wrap: nowrap;
-
-                        padding-bottom: 0.2em;
-                    }
+                    
                 }
             }
         }
