@@ -1,0 +1,51 @@
+@import "./vars.css";
+
+
+
+body {
+    flex-direction: row;
+}
+
+
+main {
+    flex-direction: column;
+}
+
+aside {
+    flex-direction: column;
+
+    align-items: center;
+    padding: 2em;
+    max-width: 250px;
+    width: fit-content;
+    height: 100vh;
+
+    border-right: var(--border);
+
+
+
+    &>ul {
+
+        display: flex;
+        flex-direction: column;
+
+
+        &>li {
+
+            flex-direction: column;
+
+            &>a {}
+
+            &>ul {
+
+
+                &>a {}
+            }
+        }
+
+
+    }
+
+
+
+}

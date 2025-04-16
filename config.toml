@@ -5,7 +5,7 @@ author = "Willem Vanhulle"
 compile_sass = true
 build_search_index = true
 generate_feeds = true
-
+feed_filenames = ["atom.xml"]
 taxonomies = [{ name = "tags", description = "Tags" }]
 
 [markdown]
