@@ -428,7 +428,7 @@ What if you need to use the same output of a stream in several places? You can d
 In case you go for the last approach, there are a couple of crates available on [crates.io](crates.io) that turn a stream with cloneable items into a cloneable stream with the same items:
 
 
-- [my implementation](https://github.com/wvhulle/forked_stream): more tests, no Tokio dependency.
+- [clone-stream](https://github.com/wvhulle/clone-stream): more tests, no Tokio dependency.
 - [fork_stream](https://crates.io/crates/fork_stream), slightly more complicated with a Waker queue.
 - [shared_stream](https://docs.rs/shared_stream/latest/shared_stream/): using `unsafe`, no tests.
 
@@ -437,7 +437,7 @@ Using my implementation would look like:
 
 ```rust
 use futures::{FutureExt, StreamExt, stream};
-use forked_stream::ForkStream;
+use clone_stream::ForkStream;
 
 let uncloneable_stream = stream::iter(0..10);
 let cloneable_stream = uncloneable_stream.fork();
