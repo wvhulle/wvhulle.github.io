@@ -29,13 +29,7 @@ a:hover {
     color: var(--emphasis_accent);
 }
 
-article {
-    text-align: left;
-    margin-left: 0em;
-    padding: 1.5em;
-    max-width: 40em;
-    width: 100%;
-}
+
 
 
 
@@ -108,43 +102,12 @@ ul.tags {
     font-size: 0.8em;
 }
 
-ul.post_top_headers {
-
-    padding: 0;
-    margin: 0;
-    list-style-type: decimal;
-
-}
 
 ul {
-    list-style-position: outside;
-
-
-    padding-left: 1em;
-
-    & li {
-        margin: 0.4em;
-    }
-
-
+    list-style-type: decimal;
 }
 
 
 .post_date {
     font-style: italic;
-}
-
-details {
-
-
-
-    & summary {
-        list-style: outside;
-    }
-
-    & summary::marker {
-        width: 2em;
-        height: 2em;
-        color: transparent;
-    }
 }

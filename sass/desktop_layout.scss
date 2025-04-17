@@ -19,7 +19,7 @@
 
     aside {
         flex-direction: column;
-
+        display: flex;
         align-items: center;
         padding: 2em;
         width: 250px;
@@ -28,21 +28,28 @@
         border-right: var(--border);
 
         & img {
-            margin-top: 2em;
-            height: 4em;
+            padding: 1em;
+            height: 6em;
         }
 
         & ul {
-            padding: 1.5em;
+            padding-top: 1em;
+            gap: 2.5em;
             display: flex;
             flex-direction: column;
 
+
+            padding-left: 0em;
 
             & li {
 
                 flex-direction: column;
 
                 & ul {
+                    font-size: 0.8em;
+                    padding-top: 1em;
+                    padding-left: 0.5em;
+                    gap: 1em;
                     display: flex;
                 }
             }

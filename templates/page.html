@@ -85,26 +85,26 @@
 
     {{ page.content | safe }}
 
-    <footer>
 
-
-
-        {% if page.lower %}
-        <span>Previous post:
-            <a href="{{ page.lower.permalink | safe }}">{{ page.lower.title }}</a>.</span>
-
-
-        {% endif %}
-
-        {% if page.higher %}
-        <span>Next post:
-            <a href="{{ page.higher.permalink | safe }}">{{ page.higher.title }}</a>.</span>
-
-
-        {% endif %}
-    </footer>
 </article>
 
+<footer>
 
+
+
+    {% if page.lower %}
+    <span>←
+        <a href="{{ page.lower.permalink | safe }}">{{ page.lower.title }}</a> </span>
+
+
+    {% endif %}
+
+    {% if page.higher %}
+    <span>
+        <a href="{{ page.higher.permalink | safe }}">{{ page.higher.title }}</a> → </span>
+
+
+    {% endif %}
+</footer>
 
 {% endblock content %}

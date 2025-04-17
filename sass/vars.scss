@@ -1,7 +1,9 @@
 :root {
     --code_background: #fcfeff;
     --prose_background: #ecfaff;
-    --background_accent: #b9e9ff;
+    --background_accent-rgb: 185, 233, 255;
+    --background_accent: rgb(var(--background_accent-rgb));
+    --background_accent-transparent: rgba(var(--background_accent-rgb), 0.7);
     --border: 0.05em solid var(--emphasis_accent);
     --emphasis_accent: #0099da;
     --text-width: 700px;

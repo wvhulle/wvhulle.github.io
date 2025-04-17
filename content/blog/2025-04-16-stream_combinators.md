@@ -320,7 +320,7 @@ The `futures` crate already contains a prototypical example of a complex stream 
 
 ### Forking streams (under construction)
 
-This will be a discussion of my implementation of an intermediate stream combinator in the Rust crate [`forked_stream`](https://github.com/wvhulle/forked_stream).
+This is a discussion of my implementation of an intermediate stream combinator in the Rust crate [`forked_stream`](https://github.com/wvhulle/forked_stream).
 
 A clone is also called a "fork". Every fork refers to a shared "bridge" and the bridge is shared between all the forks.
 
@@ -342,7 +342,6 @@ struct UnseenByClone<Item> {
     suspended_task: TaskState,
     unseen_items: VecDeque<Item>,
 }
-
 
 struct Bridge<BaseStream>
 where
@@ -412,3 +411,34 @@ pub fn poll(
 ```
 
 In case the input stream has a new item we have to decide whether we inform all other suspended forks of this new (unseen) item or terminate the current fork by marking it as "terminated".
+
+
+```rust
+fn terminate_or_wake_all(
+    &mut self,
+    item: Option<BaseStream::Item>,
+    clone_id: usize,
+    clone_waker: &Waker,
+) {
+    let clone = self.clones.get_mut(&clone_id).unwrap();
+    if let Some(item) = item {
+        clone.suspended_task = TaskState::Active(clone_waker.clone());
+
+        self.clones
+            .iter_mut()
+            .filter(|(other_clone, _)| clone_id != **other_clone)
+            .for_each(|(other_clone_id, other_clone)| {
+                if let TaskState::Active(waker) = &other_clone.suspended_task {
+                    other_clone.unseen_items.push_back(item.clone());
+                    waker.wake_by_ref();
+                } 
+            });
+    } else {
+        clone.suspended_task = TaskState::Terminated;
+    }
+}
+```
+
+Notice that I have to update any previously assigned `Waker`. This is because futures may be sent between different tasks or threads. Different tasks have a different associated waker, so in case a future got sent, a new waker became active. 
+
+**Important**: I am assuming here that polling (which requires a mutable reference) may only happen from one task at a time. This is not valid when the stream is wrapped in a `Mutex` which allows multiple tasks to poll and sleep simultaneously. In that case, this assumption is incorrect.
