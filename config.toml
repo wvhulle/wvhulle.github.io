@@ -1,5 +1,6 @@
-base_url = "https://wvhulle.github.io"
+base_url = "https://willemvanhulle.tech"
 author = "Willem Vanhulle"
+title = "Willem Vanhulle"
 
 
 compile_sass = true
