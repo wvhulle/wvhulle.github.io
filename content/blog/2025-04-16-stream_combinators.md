@@ -3,7 +3,7 @@ title = "Building stream combinators"
 description = "How to add functionality to asynchronous Rust by building your own stream combinators."
 weight = 4
 [taxonomies]
-tags = ["combinators", "functional", "Rust",  "operators"]
+tags = ["combinator", "functional", "Rust",  "operator", "poll", "pin", "unpin"]
 +++
 
 
@@ -314,7 +314,7 @@ I will now focus on more complicated stream combinators. These are functions tha
 The `futures` crate already contains a prototypical example of a complex stream combinator. It has several types of flatten functions for nested streams, or streams with a trait bound `Stream<Item: Stream>`:
 
 - Sequential flatten `flatten`: flattens the outer stream by pasting the output from the inner streams consecutively. This is usually not what you want, since most streams are infinite.
-- Concurrent flatten `flatten_unordered(None)`: flattens by merging as many inner streams as possible, as they arrive on the outer stream. This might seems like a useful function, but it ofte not what you want.
+- Concurrent flatten `flatten_unordered(None)`: flattens by merging as many inner streams as possible, as they arrive on the outer stream. This might seems like a useful function, but it often not what you want.
 - Buffered concurrent flatten `flatten_unordered(Some(N))`: flattens up-to N different inner streams.
 
 
@@ -322,8 +322,39 @@ The `futures` crate already contains a prototypical example of a complex stream 
 
 This will be a discussion of my implementation of an intermediate stream combinator in the Rust crate [`forked_stream`](https://github.com/wvhulle/forked_stream).
 
+A clone is also called a "fork". Every fork refers to a shared "bridge" and the bridge is shared between all the forks.
 
-The main logic is inside the `bridge.rs` file. It consists of a poll-like function that checks whether there are any unseen items in the queue for the current fork. If there is one, the item is popped, the fork is "activated" and the item is returned.
+```rust
+pub struct CloneStream<BaseStream>
+where
+    BaseStream: Stream<Item: Clone>,
+{
+    bridge: Arc<RwLock<Bridge<BaseStream>>>,
+    pub id: usize,
+}
+```
+
+A bridge is a collection of queues of items not-yet-seen by the tasks driving any other clones. It also keeps track of the wakers of those clones (in case they are active).
+
+
+```rust
+struct UnseenByClone<Item> {
+    suspended_task: TaskState,
+    unseen_items: VecDeque<Item>,
+}
+
+
+struct Bridge<BaseStream>
+where
+    BaseStream: Stream<Item: Clone>,
+{
+    base_stream: Pin<Box<Fuse<BaseStream>>>,
+    clones: BTreeMap<usize, UnseenByClone<BaseStream::Item>>,
+}
+```
+
+
+The main logic consists of a poll-like function on the `Bridge`. This function, called `poll`, checks whether there are any unseen items in the queue for the current fork/clone. If there is an unseen item, the item is popped, the fork is "activated" and the item is returned.
 
 
 ```rust

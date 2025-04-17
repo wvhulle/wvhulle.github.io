@@ -16,7 +16,7 @@ body {
         flex-direction: row;
         min-width: 100%;
         height: fit-content;
-
+        padding: 0em 0.8em;
         border-right: none;
         border-bottom: var(--border);
         flex-wrap: nowrap;
@@ -24,7 +24,8 @@ body {
         margin: 0;
 
         & img {
-            display: none;
+            height: 1.5em;
+
         }
 
         & ul {
@@ -45,17 +46,24 @@ body {
                 margin: 0;
 
                 & ul {
-                visibility: hidden;
-                            display: none;
-                    
+                    display: none;
+
                 }
             }
+        }
+
+        & .filler {
+            display: flex;
+            flex-grow: 1;
+        }
+
+        & a#back-to-top {
+            text-decoration: none;
         }
     }
 
     main {
-        margin-left: 0;
-        margin-right: 0;
+        padding: 1em;
         display: flex;
         flex-direction: column;
         align-items: center;

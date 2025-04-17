@@ -3,12 +3,12 @@ title = "Async generators"
 description = "Simple ways to generate streams or asynchronous iterators."
 weight = 2
 [taxonomies]
-tags = [ "stream", "async iterator", "generator", "functional", "Rust", "declarative", "operators"]
+tags = [ "stream", "iterator", "generator", "functional", "Rust", "declarative", "operator"]
 +++
 
 ## Introduction
 
-Something you may wonder about is _whether there is a simple way to create streams?_ You might come from a programming language that supports the `yield` keyword. Yielding values is a process used by **generator functions** to return intermediate values. A generator function, in fact, allow programmes to create an iterator in an imperative way. 
+Something you may wonder about is _whether there is a simple way to create streams?_ You might come from a programming language that supports the `yield` keyword. Yielding values is a process used by **generator functions** to return intermediate values. A generator function, in fact, allows programmers to create an iterator in an imperative way. 
 
 
 

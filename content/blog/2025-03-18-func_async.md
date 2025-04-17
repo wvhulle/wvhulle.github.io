@@ -433,3 +433,13 @@ In case you go for the last approach, there are a couple of crates available on 
 - [shared_stream](https://docs.rs/shared_stream/latest/shared_stream/): using `unsafe`, no tests.
 
 
+Using my implementation would look like:
+
+```rust
+use futures::{FutureExt, StreamExt, stream};
+use forked_stream::ForkStream;
+
+let uncloneable_stream = stream::iter(0..10);
+let cloneable_stream = uncloneable_stream.fork();
+let mut cloned_stream = cloneable_stream.clone();
+```

@@ -42,10 +42,16 @@
 
                 flex-direction: column;
 
-
+                & ul {
+                    display: flex;
+                }
             }
 
 
+        }
+
+        & a#back-to-top {
+            display: none;
         }
 
 
