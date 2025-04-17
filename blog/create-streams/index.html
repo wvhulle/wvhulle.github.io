@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <meta charset="UTF-8">
+    <title>Willem Vanhulle</title>
+    <link rel="icon" type="image/x-icon" href="/logo.png">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poiret+One&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    
+    <link rel="alternate" type="application/atom+xml" title="Willem Vanhulle's blog"
+        href="https://willemvanhulle.tech/atom.xml">
+    
+</head>
+
+<body>
+    <aside id="sidebar">
+
+        <a href="/">
+            <img src="/logo.png">
+        </a>
+
+        <ul id="navigation_links">
+            <li id="home-button">
+                <a href="/">
+                    About
+                </a>
+
+            </li>
+
+            
+            <li class="section_block">
+                <a href="/blog">Blog</a>
+
+                <ul class="section_page_list">
+
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;func-async&#x2F;">
+                            Functional asynchronous Rust
+                        </a>
+                    </li>
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;create-streams&#x2F;">
+                            Async generators
+                        </a>
+                    </li>
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;coroutines&#x2F;">
+                            Understanding coroutines
+                        </a>
+                    </li>
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;stream-combinators&#x2F;">
+                            Building stream combinators
+                        </a>
+                    </li>
+                    
+                </ul>
+
+            </li>
+
+        </ul>
+
+
+        <a href="" id="back-to-top">
+            ↑ </a>
+
+    </aside>
+
+
+
+    <main>
+
+        
+<article>
+
+    <header>
+
+
+        <h1 class="title">
+            Async generators
+        </h1>
+
+
+
+        <ul class="tags"><li><a href="https://willemvanhulle.tech/tags/stream/">stream</a></li><li><a href="https://willemvanhulle.tech/tags/iterator/">iterator</a></li><li><a href="https://willemvanhulle.tech/tags/generator/">generator</a></li><li><a href="https://willemvanhulle.tech/tags/functional/">functional</a></li><li><a href="https://willemvanhulle.tech/tags/rust/">Rust</a></li><li><a href="https://willemvanhulle.tech/tags/declarative/">declarative</a></li><li><a href="https://willemvanhulle.tech/tags/operator/">operator</a></li></ul>
+
+        <p class="post_date">Thursday, 2025-03-20</p><p class="subtitle">
+            Simple ways to generate streams or asynchronous iterators.
+        <p>
+
+
+
+
+    </header>
+
+
+    
+    <p> Previous post:
+        <a href="https://willemvanhulle.tech/blog/func-async/">Functional asynchronous Rust</a>.
+    </p>
+
+    
+
+
+
+    
+    <ul class="post_top_headers">
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/create-streams/#introduction">Introduction</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://willemvanhulle.tech/blog/create-streams/#imperative-synchronous">Imperative synchronous</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/create-streams/#stable-synchronous-iterators">Stable synchronous iterators</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/create-streams/#nightly-synchronous-generators">Nightly synchronous generators</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://willemvanhulle.tech/blog/create-streams/#imperative-asynchronous">Imperative asynchronous</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/create-streams/#stable-asynchronous-iterators">Stable asynchronous iterators</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/create-streams/#nightly-stream-generators">Nightly stream generators</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/create-streams/#declarative-synchronous">Declarative synchronous</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://willemvanhulle.tech/blog/create-streams/#declarative-asynchronous">Declarative asynchronous</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/create-streams/#primitives">Primitives</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/create-streams/#declarative-operators">Declarative operators</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/create-streams/#more-complicated-cases">More complicated cases</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+    </ul>
+    
+
+
+    <h2 id="introduction"><a class="zola-anchor" href="#introduction" aria-label="Anchor link for: introduction">Introduction</a></h2>
+<p>Something you may wonder about is <em>whether there is a simple way to create streams?</em> You might come from a programming language that supports the <code>yield</code> keyword. Yielding values is a process used by <strong>generator functions</strong> to return intermediate values. A generator function, in fact, allows programmers to create an iterator in an imperative way.</p>
+<h2 id="imperative-synchronous"><a class="zola-anchor" href="#imperative-synchronous" aria-label="Anchor link for: imperative-synchronous">Imperative synchronous</a></h2>
+<p>Let’s first look at the simple case of synchronous (non-asynchronous), normal, standard Rust iterators. This case can then be generalised to the asynchronous case.</p>
+<h3 id="stable-synchronous-iterators"><a class="zola-anchor" href="#stable-synchronous-iterators" aria-label="Anchor link for: stable-synchronous-iterators">Stable synchronous iterators</a></h3>
+<p>In computer science, functions that may return more than one value are called <strong>generators</strong>.</p>
+<p>For simple synchronous, blocking iterators, you can use the <a href="https://docs.rs/genawaiter/latest/genawaiter/"><code>genawaiter</code></a> crate.</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">let</span><span> generator </span><span style="color:#3e999f;">= </span><span>gen!({
+</span><span>    yield_!(</span><span style="color:#f07219;">10</span><span>);
+</span><span>});
+</span><span style="color:#8959a8;">let</span><span> xs: </span><span style="color:#c99e00;">Vec</span><span>&lt;</span><span style="color:#3e999f;">_</span><span>&gt; </span><span style="color:#3e999f;">=</span><span> generator.</span><span style="color:#4271ae;">into_iter</span><span>().</span><span style="color:#4271ae;">collect</span><span>();
+</span><span>assert_eq!(xs, [</span><span style="color:#f07219;">10</span><span>]);
+</span></code></pre>
+<p>The object that is returned by the <code>gen</code> macro is a concrete type that implements the <code>IntoIter</code> trait. In other words, it <em>is</em> an iterator. More precisely it’s retunr type is <code>impl IntoIter</code>.</p>
+<h3 id="nightly-synchronous-generators"><a class="zola-anchor" href="#nightly-synchronous-generators" aria-label="Anchor link for: nightly-synchronous-generators">Nightly synchronous generators</a></h3>
+<p>On Rust 2024, April 25 nightly, generators are part of the core language through <code>gen</code> blocks.</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span>gen {
+</span><span>    </span><span style="font-style:italic;color:#c82829;">yield </span><span style="color:#f07219;">1</span><span>;
+</span><span>    </span><span style="font-style:italic;color:#c82829;">yield </span><span style="color:#f07219;">2</span><span>;
+</span><span>    </span><span style="font-style:italic;color:#c82829;">yield </span><span style="color:#f07219;">3</span><span>;
+</span><span>}
+</span></code></pre>
+<h2 id="imperative-asynchronous"><a class="zola-anchor" href="#imperative-asynchronous" aria-label="Anchor link for: imperative-asynchronous">Imperative asynchronous</a></h2>
+<h3 id="stable-asynchronous-iterators"><a class="zola-anchor" href="#stable-asynchronous-iterators" aria-label="Anchor link for: stable-asynchronous-iterators">Stable asynchronous iterators</a></h3>
+<p>If you have some await points in between the yields of your generator, you can construct a <code>Stream</code> (asynchronous iterator in Rust) with a macro provided by an external crate. One possible crate is <code>async-stream</code>.</p>
+<p>A simple example from the documentation looks like:</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">use </span><span>async_stream::stream;
+</span><span>
+</span><span style="color:#8959a8;">use </span><span>futures_util::pin_mut;
+</span><span style="color:#8959a8;">use </span><span>futures_util::stream::StreamExt;
+</span><span>
+</span><span style="color:#8959a8;">let</span><span> s </span><span style="color:#3e999f;">= </span><span>stream! {
+</span><span>    </span><span style="color:#8959a8;">for</span><span> i </span><span style="color:#3e999f;">in </span><span style="color:#f07219;">0</span><span style="color:#3e999f;">..</span><span style="color:#f07219;">3 </span><span>{
+</span><span>        </span><span style="color:#4271ae;">sleep</span><span>(</span><span style="color:#3e999f;">_</span><span>).await;
+</span><span>        </span><span style="font-style:italic;color:#c82829;">yield</span><span> i;
+</span><span>    }
+</span><span>};
+</span><span>
+</span><span>pin_mut!(s); 
+</span><span>
+</span><span style="color:#8959a8;">while let </span><span style="color:#c99e00;">Some</span><span>(value) </span><span style="color:#3e999f;">=</span><span> s.</span><span style="color:#4271ae;">next</span><span>().await {
+</span><span>    println!(</span><span style="color:#839c00;">&quot;got </span><span>{}</span><span style="color:#839c00;">&quot;</span><span>, value);
+</span><span>}
+</span></code></pre>
+<p>Notice that the stream returned by this macro is not pinned yet. You have to call the <code>pin_mut</code> macro to pin it on the stack. The reason for this is that <code>next()</code> requires the stream to be <code>Unpin</code>.</p>
+<p>However, streams create through an async generator like the one produced by <code>async_stream::stream!</code> suffer from the same limitations as <code>async {}</code> blocks and most futures and are <code>!Unpin</code>: explicitly marked <strong>not <code>Unpin</code></strong>.</p>
+<h3 id="nightly-stream-generators"><a class="zola-anchor" href="#nightly-stream-generators" aria-label="Anchor link for: nightly-stream-generators">Nightly stream generators</a></h3>
+<p>On Rust edition 2024 and a nightly toolchain (after April 25), you can just add the <code>async</code> keyword in front of the <code>gen</code> keyword to create a <code>Stream</code>.</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">fn </span><span style="color:#4271ae;">create_my_generator</span><span>() -&gt; impl AsyncIterator&lt;Item = </span><span style="color:#8959a8;">i32</span><span>&gt; {
+</span><span>    async gen {
+</span><span>      </span><span style="color:#4271ae;">sleep</span><span>(</span><span style="color:#3e999f;">_</span><span>).await
+</span><span>      </span><span style="font-style:italic;color:#c82829;">yield </span><span style="color:#f07219;">1</span><span>;
+</span><span>      </span><span style="font-style:italic;color:#c82829;">yield </span><span style="color:#f07219;">2</span><span>;
+</span><span>      </span><span style="font-style:italic;color:#c82829;">yield </span><span style="color:#f07219;">3</span><span>;
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#8959a8;">let mut</span><span> my_generator </span><span style="color:#3e999f;">= </span><span style="color:#4271ae;">create_my_generator</span><span>();
+</span><span>assert_eq!(my_generator.</span><span style="color:#4271ae;">next</span><span>(), </span><span style="color:#c99e00;">Some</span><span>(</span><span style="color:#f07219;">1</span><span>));
+</span></code></pre>
+<p><strong>Important</strong>: In future version of Rust, the name <code>Stream</code> seems to have been renamed to <code>AsyncIterator</code>. However, the standard library does not include any helper methods for <code>AsyncIterator</code> yet, so it is recommended to stick with <code>Stream</code> from <code>futures</code>.</p>
+<h2 id="declarative-synchronous"><a class="zola-anchor" href="#declarative-synchronous" aria-label="Anchor link for: declarative-synchronous">Declarative synchronous</a></h2>
+<p>This topic is covered in the Rust standard library documentation. See the constructor  functions in <a href="https://doc.rust-lang.org/std/iter/index.html"><code>std::iter</code></a>.</p>
+<h2 id="declarative-asynchronous"><a class="zola-anchor" href="#declarative-asynchronous" aria-label="Anchor link for: declarative-asynchronous">Declarative asynchronous</a></h2>
+<p>The opposite of an imperative approach to creating iterators or streams would be a declarative approach. A declarative approach does not make use of the <code>yield</code> keyword. A declaratively defined stream or generator is build using primitive constructor functions provided by the <code>stream</code> module in <code>futures</code>.</p>
+<h3 id="primitives"><a class="zola-anchor" href="#primitives" aria-label="Anchor link for: primitives">Primitives</a></h3>
+<p>The simplest way to create a stream is:</p>
+<ul>
+<li>From any future with <code>into_stream</code> from the <code>FuturesExt</code> trait in <code>futures</code>. This function is equivalent to the constructor function <code>stream::once</code>. The returned stream yields just one element, immediately.</li>
+<li>Convert any cloneable Rust value into an infinite stream with <code>stream::repeat</code>.</li>
+<li>Convert any blocking iterator into a stream with <code>stream::iter</code>.</li>
+</ul>
+<p>These are of course not the most useful kind of streams. Usually, when you are looking for one of these simple methods you are either doing something wrong or you are writing silly unit tests.</p>
+<h3 id="declarative-operators"><a class="zola-anchor" href="#declarative-operators" aria-label="Anchor link for: declarative-operators">Declarative operators</a></h3>
+<p>The most common way to construct streams is by mapping, flattening, merging or filtering existing streams. See my other posts for more examples.</p>
+<h3 id="more-complicated-cases"><a class="zola-anchor" href="#more-complicated-cases" aria-label="Anchor link for: more-complicated-cases">More complicated cases</a></h3>
+<p>If you also have to keep track of some kind of asynchronous state while mapping, but you don’t want the asynchronous state to be part of the stream, you can use <code>unfold</code>.</p>
+<p>The <code>unfold</code> stream constructor takes an initial state, and an async closure that modifies the state asynchronously.</p>
+<p>The following example has a closure without any await points, but in practice you would have some await points:</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">use </span><span>futures::{stream, StreamExt};
+</span><span>
+</span><span style="color:#8959a8;">let</span><span> stream </span><span style="color:#3e999f;">= </span><span>stream::unfold(</span><span style="color:#f07219;">0</span><span>, |</span><span style="color:#f07219;">state</span><span>| async </span><span style="color:#8959a8;">move </span><span>{
+</span><span>    </span><span style="color:#8959a8;">if</span><span> state </span><span style="color:#3e999f;">&lt;= </span><span style="color:#f07219;">2 </span><span>{
+</span><span>        </span><span style="color:#8959a8;">let</span><span> next_state </span><span style="color:#3e999f;">=</span><span> state </span><span style="color:#3e999f;">+ </span><span style="color:#f07219;">1</span><span>;
+</span><span>        </span><span style="color:#8959a8;">let</span><span> yielded </span><span style="color:#3e999f;">=</span><span> state </span><span style="color:#3e999f;">* </span><span style="color:#f07219;">2</span><span>;
+</span><span>        </span><span style="color:#c99e00;">Some</span><span>((yielded, next_state))
+</span><span>    } </span><span style="color:#8959a8;">else </span><span>{
+</span><span>        </span><span style="color:#c99e00;">None
+</span><span>    }
+</span><span>});
+</span><span>
+</span><span style="color:#8959a8;">let</span><span> result </span><span style="color:#3e999f;">=</span><span> stream.collect::&lt;</span><span style="color:#c99e00;">Vec</span><span>&lt;</span><span style="color:#8959a8;">i32</span><span>&gt;&gt;().await;
+</span><span>assert_eq!(result, vec![</span><span style="color:#f07219;">0</span><span>, </span><span style="color:#f07219;">2</span><span>, </span><span style="color:#f07219;">4</span><span>]);
+</span></code></pre>
+<p>However, the <code>unfold</code> approach (which  was suggested by ChatGPT to me the first time I touched this subject) has some limitations. You are essentially moving all your state inside of the struct. This means you have to use the explicit <code>move</code> keyword, but you don’t have a nice <code>struct</code> definition with named fields to disambiguate different parts of your state.</p>
+<p>The best way forward, is to introduce a concrete type to capture your intermediate “stream state” properly. Then you can implement the required stream methods for this struct to be able to treat it as a real stream and actually use (or share) it in projects that make use of the universal <code>Stream</code> trait.</p>
+<p>See other posts on this site for example on how to proceed on this path.</p>
+
+
+
+</article>
+
+<footer>
+
+
+
+    
+    <span>←
+        <a href="https://willemvanhulle.tech/blog/func-async/">Functional asynchronous Rust</a> </span>
+
+
+    
+
+    
+    <span>
+        <a href="https://willemvanhulle.tech/blog/coroutines/">Understanding coroutines</a> → </span>
+
+
+    
+</footer>
+
+
+
+    </main>
+
+
+
+</body>
+
+</html>

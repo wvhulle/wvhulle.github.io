@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <meta charset="UTF-8">
+    <title>Willem Vanhulle</title>
+    <link rel="icon" type="image/x-icon" href="/logo.png">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poiret+One&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    
+    <link rel="alternate" type="application/atom+xml" title="Willem Vanhulle's blog"
+        href="https://willemvanhulle.tech/atom.xml">
+    
+</head>
+
+<body>
+    <aside id="sidebar">
+
+        <a href="/">
+            <img src="/logo.png">
+        </a>
+
+        <ul id="navigation_links">
+            <li id="home-button">
+                <a href="/">
+                    About
+                </a>
+
+            </li>
+
+            
+            <li class="section_block">
+                <a href="/blog">Blog</a>
+
+                <ul class="section_page_list">
+
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;func-async&#x2F;">
+                            Functional asynchronous Rust
+                        </a>
+                    </li>
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;create-streams&#x2F;">
+                            Async generators
+                        </a>
+                    </li>
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;coroutines&#x2F;">
+                            Understanding coroutines
+                        </a>
+                    </li>
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;stream-combinators&#x2F;">
+                            Building stream combinators
+                        </a>
+                    </li>
+                    
+                </ul>
+
+            </li>
+
+        </ul>
+
+
+        <a href="" id="back-to-top">
+            ↑ </a>
+
+    </aside>
+
+
+
+    <main>
+
+        
+<article>
+
+    <header>
+
+
+        <h1 class="title">
+            Understanding coroutines
+        </h1>
+
+
+
+        <ul class="tags"><li><a href="https://willemvanhulle.tech/tags/functional/">functional</a></li><li><a href="https://willemvanhulle.tech/tags/rust/">Rust</a></li><li><a href="https://willemvanhulle.tech/tags/coroutine/">coroutine</a></li><li><a href="https://willemvanhulle.tech/tags/future/">future</a></li><li><a href="https://willemvanhulle.tech/tags/poll/">poll</a></li><li><a href="https://willemvanhulle.tech/tags/pin/">pin</a></li></ul>
+
+        <p class="post_date">Tuesday, 2025-04-01</p><p class="subtitle">
+            An overview of the relationship between normal functions, coroutines and streams.
+        <p>
+
+
+
+
+    </header>
+
+
+    
+    <p> Previous post:
+        <a href="https://willemvanhulle.tech/blog/create-streams/">Async generators</a>.
+    </p>
+
+    
+
+
+
+    
+    <ul class="post_top_headers">
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/coroutines/#introduction">Introduction</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://willemvanhulle.tech/blog/coroutines/#coroutines">Coroutines</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/coroutines/#conceptual">Conceptual</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/coroutines/#implicit-coroutines">Implicit coroutines</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/coroutines/#directly-constructing-coroutines">Directly constructing coroutines</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/coroutines/#example-of-rust-coroutine">Example of Rust coroutine</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://willemvanhulle.tech/blog/coroutines/#classification-of-coroutines">Classification of coroutines</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/coroutines/#streams-as-a-type-of-coroutine">Streams as a type of coroutine</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/coroutines/#synchronous-vs-asynchronous-things">Synchronous vs. asynchronous things</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+    </ul>
+    
+
+
+    <h2 id="introduction"><a class="zola-anchor" href="#introduction" aria-label="Anchor link for: introduction">Introduction</a></h2>
+<p>In some other posts on this site, I discuss how to create streams from scratch and how to combine them into new aggregated streams. This post puts them in perspective in relation with the other common types of functions you already know.</p>
+<h2 id="coroutines"><a class="zola-anchor" href="#coroutines" aria-label="Anchor link for: coroutines">Coroutines</a></h2>
+<h3 id="conceptual"><a class="zola-anchor" href="#conceptual" aria-label="Anchor link for: conceptual">Conceptual</a></h3>
+<p>Normal functions just take input and return output (immediately).</p>
+<p><strong>Coroutines</strong> are functions that can be suspended.</p>
+<ol>
+<li>Upon being suspended a coroutine <strong>yields a value</strong>.</li>
+<li>Then the caller can continue with other functions.</li>
+<li>Later the caller may decide to resume the suspended coroutine with resumption data input</li>
+<li>If the coroutine ends, it returns (not yield) a final value</li>
+</ol>
+<h3 id="implicit-coroutines"><a class="zola-anchor" href="#implicit-coroutines" aria-label="Anchor link for: implicit-coroutines">Implicit coroutines</a></h3>
+<p>Coroutines are used internally by the compiler when creating state machines from <code>async</code> blocks.</p>
+<h3 id="directly-constructing-coroutines"><a class="zola-anchor" href="#directly-constructing-coroutines" aria-label="Anchor link for: directly-constructing-coroutines">Directly constructing coroutines</a></h3>
+<p>You may want to construct a coroutine yourself. However, the <code>Coroutine</code> trait in Rust is unstable and only available on nightly as of April 25.</p>
+<p>The <code>Coroutine</code> trait definition is an extension of the standard libraries <code>Future</code> trait:</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">pub trait </span><span>Coroutine&lt;R = ()&gt; {
+</span><span>    </span><span style="color:#8959a8;">type </span><span>Yield;
+</span><span>    </span><span style="color:#8959a8;">type </span><span>Return;
+</span><span>
+</span><span>    </span><span style="color:#8959a8;">fn </span><span style="color:#4271ae;">resume</span><span>(
+</span><span>        </span><span style="color:#f07219;">self</span><span>: Pin&lt;</span><span style="color:#3e999f;">&amp;</span><span style="color:#8959a8;">mut Self</span><span>&gt;,
+</span><span>        </span><span style="color:#f07219;">arg</span><span>: R,
+</span><span>    ) -&gt; CoroutineState&lt;</span><span style="color:#8959a8;">Self::</span><span>Yield, </span><span style="color:#8959a8;">Self::</span><span>Return&gt;;
+</span><span>}
+</span></code></pre>
+<p>Notice the <code>R</code> stands for <code>Resume</code>, is a type generic and is different from <code>Coroutine::Return</code>.</p>
+<p>This means that one same type may behave as different coroutines depending on the resume input, but can only have one <code>Return</code> type.</p>
+<h3 id="example-of-rust-coroutine"><a class="zola-anchor" href="#example-of-rust-coroutine" aria-label="Anchor link for: example-of-rust-coroutine">Example of Rust coroutine</a></h3>
+<p>The following coroutine (in nightly Rust) has resume data type <code>R = ()</code>:</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">let mut</span><span> coroutine </span><span style="color:#3e999f;">= </span><span>#[</span><span style="color:#c82728;">coroutine</span><span>] </span><span style="color:#3e999f;">|| </span><span>{
+</span><span>    </span><span style="font-style:italic;color:#c82829;">yield </span><span style="color:#f07219;">1</span><span>;
+</span><span>    </span><span style="color:#839c00;">&quot;foo&quot;
+</span><span>};
+</span><span>
+</span><span style="color:#8959a8;">match </span><span>Pin::new(</span><span style="color:#3e999f;">&amp;</span><span style="color:#8959a8;">mut</span><span> coroutine).</span><span style="color:#4271ae;">resume</span><span>(()) {
+</span><span>    CoroutineState::Yielded(</span><span style="color:#f07219;">1</span><span>) </span><span style="color:#3e999f;">=&gt; </span><span>{}
+</span><span>    </span><span style="color:#3e999f;">_ =&gt; </span><span>panic!(</span><span style="color:#839c00;">&quot;unexpected return from resume&quot;</span><span>),
+</span><span>}
+</span><span style="color:#8959a8;">match </span><span>Pin::new(</span><span style="color:#3e999f;">&amp;</span><span style="color:#8959a8;">mut</span><span> coroutine).</span><span style="color:#4271ae;">resume</span><span>(()) {
+</span><span>    CoroutineState::Complete(</span><span style="color:#839c00;">&quot;foo&quot;</span><span>) </span><span style="color:#3e999f;">=&gt; </span><span>{}
+</span><span>    </span><span style="color:#3e999f;">_ =&gt; </span><span>panic!(</span><span style="color:#839c00;">&quot;unexpected return from resume&quot;</span><span>),
+</span><span>}
+</span></code></pre>
+<h2 id="classification-of-coroutines"><a class="zola-anchor" href="#classification-of-coroutines" aria-label="Anchor link for: classification-of-coroutines">Classification of coroutines</a></h2>
+<h3 id="streams-as-a-type-of-coroutine"><a class="zola-anchor" href="#streams-as-a-type-of-coroutine" aria-label="Anchor link for: streams-as-a-type-of-coroutine">Streams as a type of coroutine</a></h3>
+<p>We can classify everything seen in this presentation up until now:</p>
+<table><thead><tr><th></th><th><em>YIELDS</em></th><th><em>RESUMES</em></th><th><em>RETURNS</em></th></tr></thead><tbody>
+<tr><td>ITERATOR</td><td>option</td><td>!</td><td>!</td></tr>
+<tr><td>FUTURE</td><td>()</td><td>waker</td><td>future output</td></tr>
+<tr><td>STREAM</td><td>future option</td><td>waker</td><td>!</td></tr>
+</tbody></table>
+<p>Remark: <code>GEN</code> stands for Rust <code>gen</code> blocks. In general, in other languages, generators can also return values.</p>
+<p>Table inspired by <a href="https://without.boats/blog/poll-next/">post by without.boats</a>.</p>
+<!-- end_slide -->
+<h3 id="synchronous-vs-asynchronous-things"><a class="zola-anchor" href="#synchronous-vs-asynchronous-things" aria-label="Anchor link for: synchronous-vs-asynchronous-things">Synchronous vs. asynchronous things</a></h3>
+<p>Coroutines are part of a bigger classification of functions.</p>
+<p>Synchronous functions:</p>
+<table><thead><tr><th></th><th><em>TAKES</em></th><th><em>CAPTURES</em></th><th><em>YIELDS</em></th><th><em>RESUMES</em></th><th><em>RETURNS</em></th></tr></thead><tbody>
+<tr><td>Imperative <code>loop {}</code></td><td>!</td><td>!</td><td>!</td><td>!</td><td>!</td></tr>
+<tr><td>Blocks <code>{}</code></td><td>!</td><td>captured</td><td>!</td><td>!</td><td>output</td></tr>
+<tr><td>Function items <code>fn</code></td><td>input</td><td>!</td><td>!</td><td>!</td><td>output</td></tr>
+<tr><td>Closures <code>Fn</code></td><td>input</td><td>captured</td><td>!</td><td>!</td><td>output</td></tr>
+<tr><td><code>Iterator</code></td><td>!</td><td>!</td><td>option</td><td>!</td><td>!</td></tr>
+<tr><td><code>#[coroutine]</code></td><td>input</td><td>!</td><td>item</td><td>any</td><td>any</td></tr>
+</tbody></table>
+<p>Asynchronous functions:</p>
+<table><thead><tr><th></th><th><em>TAKES</em></th><th><em>CAPTURES</em></th><th><em>YIELDS</em></th><th><em>RESUMES</em></th><th><em>RETURNS</em></th></tr></thead><tbody>
+<tr><td><code>Future</code></td><td>!</td><td>!</td><td>()</td><td>waker</td><td>future output</td></tr>
+<tr><td><code>async {}</code></td><td>!</td><td><code>'static</code></td><td>()</td><td>waker</td><td>future output</td></tr>
+<tr><td>Closures <code>AsyncFn</code></td><td>input</td><td>captured</td><td>!</td><td>!</td><td>future output</td></tr>
+<tr><td><code>Stream</code></td><td>!</td><td>!</td><td>future option</td><td>waker</td><td>!</td></tr>
+</tbody></table>
+
+
+
+</article>
+
+<footer>
+
+
+
+    
+    <span>←
+        <a href="https://willemvanhulle.tech/blog/create-streams/">Async generators</a> </span>
+
+
+    
+
+    
+    <span>
+        <a href="https://willemvanhulle.tech/blog/stream-combinators/">Building stream combinators</a> → </span>
+
+
+    
+</footer>
+
+
+
+    </main>
+
+
+
+</body>
+
+</html>
