@@ -31,7 +31,7 @@ Coroutines are used internally by the compiler when creating state machines from
 
 ### Directly constructing coroutines
 
-You may want to construct a coroutine yourself. However, the `Coroutine` trait in Rust is unstable and only available on nightly as of April 25.
+You may want to construct a coroutine yourself. However, the `Coroutine` trait in Rust is unstable and only available on nightly as of April 2025.
 
 The `Coroutine` trait definition is an extension of the standard libraries `Future` trait:
 

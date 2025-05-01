@@ -36,7 +36,7 @@ The object that is returned by the `gen` macro is a concrete type that implement
 
 ### Nightly synchronous generators
 
-On Rust 2024, April 25 nightly, generators are part of the core language through `gen` blocks. 
+On Rust edition 2024, April 2025 nightly, generators are part of the core language through `gen` blocks. 
 
 ```rust
 gen {
@@ -80,7 +80,7 @@ However, streams create through an async generator like the one produced by `asy
 
 ### Nightly stream generators
 
-On Rust edition 2024 and a nightly toolchain (after April 25), you can just add the `async` keyword in front of the `gen` keyword to create a `Stream`.
+On Rust edition 2024 and a nightly toolchain (after April 2025), you can just add the `async` keyword in front of the `gen` keyword to create a `Stream`.
 
 
 
