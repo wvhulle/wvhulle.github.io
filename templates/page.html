@@ -1,7 +1,27 @@
 {% extends "base.html" %}
 
 
+{% block head %}
 
+<!-- Comments with GitHub discussions -->
+<script src="https://giscus.app/client.js" data-repo="wvhulle/wvhulle.github.io" data-repo-id="R_kgDOGmD5MA"
+    data-category="Announcements" data-category-id="DIC_kwDOGmD5MM4Cpsc3" data-mapping="title" data-strict="1"
+    data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="light_high_contrast"
+    data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+    </script>
+<title>
+
+
+    {% if page.title %}
+    {{ page.title }}
+    {% else %}
+    {{ config.title }}
+    {% endif %}
+
+
+
+</title>
+{% endblock %}
 
 
 {% block content %}
@@ -36,9 +56,8 @@
         {%- endif -%}
 
         <p class="subtitle">
-            {{ page.description }}
+            {{ page.description }} <a href="#comments">Comments</a>.
         <p>
-
 
 
 
@@ -86,7 +105,12 @@
     {{ page.content | safe }}
 
 
+    <section id="comments" class="giscus"></section>
+
+
 </article>
+
+
 
 <footer>
 
