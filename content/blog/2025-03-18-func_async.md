@@ -400,7 +400,9 @@ let less_then_twenty = number_stream.all(|i| async move { i < 20 });
 assert_eq!(less_then_twenty.await, true);
 ```
 
-### Dual of streams: `Sink`s
+## `Sink`s
+
+### Dual of streams
 
 Up until now we have only seen detailed usage of the `Stream` trait. But the opposite of a stream, a "sink", is also shipped by the `futures` crate as the `Sink` trait. A `Sink` is **something that receives data, agnostic from the transport** or channel used. 
 
