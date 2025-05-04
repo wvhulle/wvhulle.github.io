@@ -176,7 +176,7 @@ _Remark: `.await` automatically converts everything in a future with `IntoFuture
 
 ### Reminder about streams
 
-A stream similar to a future, but 
+A stream object is similar in terms of definition to a future, but 
 
 - The associated type `Future::Output` is an `Option`.
 - Usually, futures that have yielded `Poll::Ready` cannot be polled anymore and will panic. A stream that is polled twice may just give two `Poll::Ready` values.
