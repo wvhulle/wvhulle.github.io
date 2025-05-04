@@ -3,14 +3,13 @@
 
 code {
     font-family: "Fira Code";
-}
+    
+    }
+    
 
 p code,
 li code {
     padding: 0 0.2em;
-    /* background-color: #BBD8A3; */
-    /* border: var(--border); */
-
     font-weight: 550;
     word-wrap: break-word;
 }
@@ -19,4 +18,4 @@ li code {
 pre {
     background-color: var(--code_background) !important;
     padding: 1em;
-}
+    }
