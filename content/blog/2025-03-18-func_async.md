@@ -197,6 +197,8 @@ First, remember that the life-time of an iterator (a normal synchronous blocking
 | 7   |            |             |  `None`   |        |
 | 8   |            | `next()`    |           | undefined |
 
+Notice that calling `next` after the iterator yielded `None` is undefined behaviour and the iteration may panic. If you do not want that, apply `fuse` to the iterator and the iterator will keep yielding `None` without panicking.
+
 The life-time of a stream/async iterator during usage looks like this:
 
 | **T**   | **Creation**      | **Iteration**     | **Yielded**     | 
