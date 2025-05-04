@@ -303,7 +303,7 @@ You could separate flatten combinators in two categories: sequential or concurre
 Sequential flatten combinators will never yield values from multiple inner streams at the same time.
 
 
-- Sequential flatten `flatten`: flattens the outer stream by pasting the output from the inner streams consecutively. This is usually not what you want, since most streams are infinite.
+- `flatten`: flattens the outer stream by pasting the output from the inner streams consecutively. This is usually not what you want, since most streams are infinite.
 - A "forgetful" flatten (also called `switch` in RxJs): a kind of flatten of nested streams that only polls the most recent stream that arrived on the outer stream. This is implemented by [`switch_map`](https://docs.rs/futures-rx/0.2.1/futures_rx/stream_ext/trait.RxExt.html#method.switch_map) in `futures-rx`.
 
 
