@@ -186,47 +186,54 @@ A rough conceptual definition of a stream would be:
 
 First, remember that the life-time of an iterator (a normal synchronous blocking one) looks like this:
 
-| T   | create     | iterate     | yield     | end    |
+| T   | create     | iterate     | yield     |  panic |
 | --- | ---------- | ----------- | --------- | ------ |
 | 1   | `(1..=10)` |             |           |        |
-| 2   |            | `it.next()` |           |        |
+| 2   |            | `next()`    |           |        |
 | 3   |            |             | `Some(1)` |        |
-| 4   |            | `it.next()` |           |        |
-| 5   |            | `1+1`       |           |        |
-| 6   |            | `it.next()` |           |        |
-| 7   |            |             |           | `None` |
-
-Here, I put the `1+1` to represent a random unrelated computation.
+| 4   |            | `next()`    |           |        |
+| 5   |            |   ...       |           |        |
+| 6   |            | `next()`    |           |        |
+| 7   |            |             |  `None`   |        |
+| 8   |            | `next()`    |           | undefined |
 
 The life-time of a stream/async iterator during usage looks like this:
 
-| T   | create      | iterate     | yield     | null   |
-| --- | ----------- | ----------- | --------- | ------ |
-| 1   | `St::new()` |             |           |        |
-| 2   |             | `st.next()` |           |        |
-| 3   |             | `await`     |           |        |
-| 4   |             |             | `Some(1)` |        |
-| 5   |             | `it.next()` |           |        |
-| 6   |             | `1+1`       |           |        |
-| 7   |             | `await`     |           |        |
-| 8   |             |             | `Some(2)` |        |
-| 9   |             | `it.next()` |           |        |
-| 10  |             | `await`     |           |        |
-| 11  |             |             |           | `None` |
-| 12  |             | `it.next()` |           |        |
-| 13  |             | `await`     |           |        |
-| 14  |             |             | `Some(3)` |        |
+| **T**   | **Creation**      | **Iteration**     | **Yielded**     | 
+| --- | ----------- | ----------- | --------- | 
+| 1   | `St::new()` |             |           | 
+| 2   |             | `next()`    |           |
+| 3   |             | `await`     |           |
+| 4   |             |             | `Some(1)` |
+| 5   |             | `next()`    |           |
+| 6   |             |  ...        |           |
+| 7   |             | `await`     |           |
+| 8   |             |             | `Some(2)` |
+| 9   |             | `next()`    |           |
+| 10  |             | `await`     |           |
+| 11  |             |             |  `None`   |
+| 12  |             | `next()`    |           | 
+| 13  |             | `await`     |           |
+| 14  |             |             | `Some(3)` |
 
 
 The lifecycle of an async iterator (stream) is clearly longer and more complicated than a normal iterator. An async iterator requires an `await` before a value is yielded. 
 
 _Remark: The `next()` method returns a future that evaluates to an `Option`. Or in Rust notation we express this with: `fn next() -> Impl Future<Output = Option<T>>`. The return type may or may not implement certain important traits. For example, it is **not guaranteed that it can be moved** once created._ 
 
-As you can see in the last table, streams may yield `None` at first and later on still yield a `Some`. This is very different from iterators. Keep this in mind, especially further on, when creating your own streams. If you do not like this behavior, you have to restrict your focus to `FusedStream`.
+As you can see in the last table, streams may yield `None` at first and later on still yield a `Some`. This is very different from iterators. Keep this in mind, especially further on, when creating your own streams. If you do not like this behavior, you have to restrict your focus to `FusedStream`, a stream that has an extra method:
+
+```rust
+pub trait FusedStream: Stream {
+    fn is_terminated(&self) -> bool;
+}
+```
+
+Usually a `FusedStream` will yield `Poll::Ready(None)` after the first `Poll::Ready(None)` and it's `is_terminated` method will be positive. However, the implementor has the freedom to break these conventions.
+
 
 
 ### `Stream`s in the wild
-
 
 The first place to look for `Stream`s is in the `futures::channel` module. It contains a concrete implementation of channels with receivers that implement `Sink` and senders that implement `Stream`.
 
@@ -400,6 +407,8 @@ let less_then_twenty = number_stream.all(|i| async move { i < 20 });
 assert_eq!(less_then_twenty.await, true);
 ```
 
+Notice here that we don't have to "pin" the `less_than_twenty` stream, because `Unpin` is not a requirement for `all`.
+
 ## `Sink`s
 
 ### Dual of streams
@@ -438,7 +447,7 @@ let (output,_) = tokio::sync::mpsc::channel();
 let output = tokio_util::PollSender::new(output);
 
 let input = stream::repeat(1).map(Ok);
-input.forward(tx).await.unwrap();
+input.forward(output).await.unwrap();
 ```
 
 Important: 
@@ -468,7 +477,7 @@ A simple example would look like:
 let stream_a = stream::repeat(1);
 let stream_b = stream::repeat(2);
 
-let merged_tagged = stream::select_all([stream_a, stream_b]);
+let merged = stream::select_all([stream_a, stream_b]);
 ```
 
 In practice, you would typically pass large vectors, compile-time-sized arrays or other iterable collections to the `select_all` function.
@@ -478,7 +487,7 @@ Often, you will want to merge (a lot of) streams that come from a different unde
 
 **Remark**: A special case of `select_all` for two input streams is the `merge` function from the Tokio helper crate `tokio-stream`. You can use it if you want, but the `select_all` function does the same thing and is more powerful and general.
 
-### Tracking source
+### Tracking origin stream
 
 If you want to keep track of the origin of the values in the merged stream, the simplest solution you can come up will probably look like this:
 
@@ -489,7 +498,7 @@ let stream_b = stream::repeat(2).map(|n| ('b', 2));
 let merged_tagged = stream::select_all([stream_a, stream_b]);
 ```
 
-This is essentially just a homogeneous merge with `select_all` preceded by tagging each individual item with an identifier for the source stream.
+This is essentially just a homogeneous merge with `select_all` preceded by tagging the items of each source stream with a unique identifier for the source stream.
 
 **Remark**: in this simple case you might want to consider a simple custom combinator (see other posts on how to build one) or the one provided by `tokio_stream::MergeMap`.
 
@@ -514,17 +523,17 @@ assert_eq!(vec![(1, 5), (2, 6), (3, 7)], vec);
 What if you need to use the same output of a stream in several places? You can do it with one of the following:
 
 - Creating a broadcast channel, send the clone-able  items into the sender and  tell many async helper tasks (or threads) to actively pull each receiver. This would be an imperative approach and requires extra heap allocations for each task and output.
-- Create a special kind of output clone-able stream that works cooperatively with any other sibling streams and wakes them up when necessary. This is a more functional approach and may require less heap allocations. It may also allow you to drop any dependency on a particular async runtime (to be verified).
+- Create a special kind of output clone-able stream that works cooperatively with any other sibling streams and wakes them up when necessary. This is a more functional approach and may require less heap allocations. It may also allow you to drop any dependency on a particular async runtime.
 
 In case you go for the last approach, there are a couple of crates available on [crates.io](crates.io) that turn a stream with clone-able items into a clone-able stream with the same items:
 
 
-- [clone-stream](https://github.com/wvhulle/clone-stream): A library that I made in April 2025. It contains several tests and was benchmarked with thousands of clones.
-- [fork_stream](https://crates.io/crates/fork_stream), slightly more complicated with a Waker queue. I tried something similar but then I moved away from tracking clones based on `Waker`s because it was hard to write unit tests for.
-- [shared_stream](https://docs.rs/shared_stream/latest/shared_stream/): This crate uses a lot of `unsafe` Rust and does not contain tests.
+- [`clone-stream`](https://github.com/wvhulle/clone-stream): A library that I made in April 2025. It contains several tests and was benchmarked with thousands of clones.
+- [`fork_stream`](https://crates.io/crates/fork_stream), slightly more complicated with a Waker queue. I tried something similar but then I moved away from tracking clones based on `Waker`s because it was hard to write unit tests for.
+- [`shared_stream`](https://docs.rs/shared_stream/latest/shared_stream/): This crate uses a lot of `unsafe` Rust and does not contain tests.
+- [`futures-rx`](https://docs.rs/futures-rx/latest/futures_rx/): contains a few useful primitives, inspired by the famous "RxJS" library. The primitive that could be useful for cloning streams is [`share`](https://docs.rs/futures-rx/latest/futures_rx/stream_ext/trait.RxExt.html#method.share). This method transforms a stream of items into a stream of references (which may, in turn, be cloned). 
 
-
-Average usage of my crate `clone-stream` looks like:
+To use the my crate `clone-stream` you have to import the trait `ForkStream`, then you call `fork` on the input stream. Afterwards, you can clone the output stream of `fork` as much as you want.
 
 ```rust
 use futures::{FutureExt, StreamExt, stream};
