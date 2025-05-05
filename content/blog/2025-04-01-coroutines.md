@@ -1,121 +1,122 @@
 +++
 title = "Understanding coroutines"
-description = "An overview of the relationship between normal functions, coroutines and streams."
+description = "An overview of the relationship between simple functions, coroutines and streams."
 weight = 3
-draft = true
+draft = false
 [taxonomies]
-tags = [ "functional", "Rust", "coroutine", "future", "poll", "pin"]
+tags = [ "functional", "Rust", "coroutine", "Future", "Poll", "Pin"]
 +++
 
 ## Introduction
 
-In some other posts on this site, I discuss how to create streams from scratch and how to combine them into new aggregated streams. This post puts them in perspective in relation with the other common types of functions you already know.
+In some other posts on this site, you will find ways to create streams from scratch and how to combine them. This post will be about the relationship between the concept of a `Stream` (or asynchronous iterator) and the other, more familiar, functions present in most programming languages.
 
+Most of this post was inspired by a [post by without.boats](https://without.boats/blog/poll-next/).
 
-## Coroutines
+## Introduction to coroutines
 
+### Concept of a coroutine
 
-### Conceptual
+Normal functions return output (immediately). They do it only once (or never).
 
-Normal functions just take input and return output (immediately).
+A **coroutine** is a special kind functions that can:
 
-**Coroutines** are functions that can be suspended.
+- be suspended multiple times
+- be resumed multiple times
+- return once
 
-1. Upon being suspended a coroutine **yields a value**.
-2. Then the caller can continue with other functions.
-3. Later the caller may decide to resume the suspended coroutine with resumption data input
-4. If the coroutine ends, it returns (not yield) a final value 
+More specifically, at runtime, coroutines go through a process (with specific terminology):
 
-### Implicit coroutines
+1. When a coroutine suspends, it **yield**s a value to the caller. This is a kind of intermediate return value.
+2. After observing (or ignoring) the yielded value, the caller can safely forget about the suspended coroutine (temporarily) and continue with other functions.
+3. Later the caller can return to this suspended coroutine. The caller needs to resume the suspended coroutine to wake it up. This step is called **resumption**. For resumption some resumption data may need to be provided.
 
-Coroutines are used internally by the compiler when creating state machines from `async` blocks.
+These steps may repeat forever or until the coroutine ends by returning. Returning is distinct from yielding, since it is final. The return value is the last value that can be observed by the caller.
+
+_**Remark**: Coroutines are used internally by the Rust compiler while compiling asynchronous code. The compiler implements a form of "stack-less" co-routines for `async {}` code-blocks. These blocks are compiled implicitly into coroutines that yield at every `await`-point._
 
 ### Directly constructing coroutines
 
-You may want to construct a coroutine yourself. However, the `Coroutine` trait in Rust is unstable and only available on nightly as of April 2025.
-
-The `Coroutine` trait definition is an extension of the standard libraries `Future` trait:
+The `Coroutine` trait definition is an extension of the `Future` trait:
 
 ```rust
-pub trait Coroutine<R = ()> {
+pub trait Coroutine<Resume = ()> {
     type Yield;
     type Return;
 
     fn resume(
         self: Pin<&mut Self>,
-        arg: R,
+        arg: Resume,
     ) -> CoroutineState<Self::Yield, Self::Return>;
 }
 ```
 
-Notice the `R` stands for `Resume`, is a type generic and is different from `Coroutine::Return`. 
+Notice that we need `Pin`, similarly to `Future`. This is because coroutines may be self-referential. The `resume` function should only be called on coroutines that may move (are `Unpin`). The reason is probably that they should extend the behaviour of `Future`s which do require `Pin`.
 
-This means that one same type may behave as different coroutines depending on the resume input, but can only have one `Return` type.
+_**Important**: The `Coroutine` trait in Rust is unstable and only available on nightly as of April 2025._
 
+If you look carefully at the `Coroutine` trait you could see that (in pseudo-code):
 
+```rust
+type Future<Output> = Coroutine<
+    Resume = Context, 
+    Yield = (), 
+    Return = Output
+>;
+```
+
+More precisely, a future is a coroutine that yields nothing when suspended.A future needs a `Context` (containing a `Waker`) to be resumed or woken.
+
+_**Remark**: The resumption data is provided by a asynchronous run-time to schedule `resume`s in an efficient way._
 
 ### Example of Rust coroutine
 
-
-The following coroutine (in nightly Rust) has resume data type `R = ()`:
+The Rust docs contain an example of a coroutine. The coroutine does not need any resumption data, but it yields a number and returns a string on completion:
 
 ```rust
 let mut coroutine = #[coroutine] || {
     yield 1;
     "foo"
 };
+```
 
+To use this `coroutine`, we have to provide an initial chunk of resumption data. By default this is the empty tuple `()`. The resumption data is passed to the `resume` function and used to anticipate the first yield. The first (and last) yield is `yield 1`.
+
+```rust
 match Pin::new(&mut coroutine).resume(()) {
     CoroutineState::Yielded(1) => {}
     _ => panic!("unexpected return from resume"),
 }
+```
+
+The next time `resume` is called, no yield is encountered and the final return value is returned (a string).
+
+```rust
 match Pin::new(&mut coroutine).resume(()) {
-    CoroutineState::Complete("foo") => {}
+    CoroutineState::Returned("foo") => {}
     _ => panic!("unexpected return from resume"),
 }
 ```
 
+If our coroutine was a `Future`, then `resume` would expect a `Context` with a `Waker`.
 
 ## Classification of coroutines
 
-### Streams as a type of coroutine
+Reflecting on the concepts of an iterator, future and stream, we can say that:
 
-We can classify everything seen in this presentation up until now:
+- An **iterator** is coroutine that yields an `Option`.
+- A **future** is a coroutine that resumes with a `Waker`.
+- A **stream** is an iterator that yields futures and resumes with a `Waker`.
 
-|          | _YIELDS_      | _RESUMES_ | _RETURNS_     |
-| -------- | ------------- | --------- | ------------- |
-| ITERATOR | option        | !         | !             |
-| FUTURE   | ()            | waker     | future output |
-| STREAM   | future option | waker     | !             |
+Coroutines are a generalisation of these cases, which can be layed-out in a table:
 
-Remark: `GEN` stands for Rust `gen` blocks. In general, in other languages, generators can also return values.
+|                     | _YIELDS_                 | _RESUMES_ | _RETURNS_ |
+| ------------------- | ------------------------ | --------- | --------- |
+| `Iterator`          | `Option`                 | `!`       | `!`       |
+| `Future`, `AsyncFn` | `()`                     | `Waker`   | `Any`     |
+| `Stream`            | `Future<Output = option` | `!`       | `!`       |
+| `Coroutine`         | `Any`                    | `Any`     | `Any`     |
 
-Table inspired by [post by without.boats](https://without.boats/blog/poll-next/).
+Notice that a `Stream` does not need a `Waker` for resumption directly, but the yielded items are `Future<Output = Option>` which are coroutines themselves (and need a `Waker`).
 
-<!-- end_slide -->
-
-### Synchronous vs. asynchronous things
-
-Coroutines are part of a bigger classification of functions.
-
-Synchronous functions:
-
-|                      | _TAKES_ | _CAPTURES_ | _YIELDS_ | _RESUMES_ | _RETURNS_ |
-| -------------------- | ------- | ---------- | -------- | --------- | --------- |
-| Imperative `loop {}` | !       | !          | !        | !         | !         |
-| Blocks `{}`          | !       | captured   | !        | !         | output    |
-| Function items `fn`  | input   | !          | !        | !         | output    |
-| Closures `Fn`        | input   | captured   | !        | !         | output    |
-| `Iterator`           | !       | !          | option   | !         | !         |
-| `#[coroutine]`       | input   | !          | item     | any       | any       |
-
-Asynchronous functions:
-
-|                    | _TAKES_ | _CAPTURES_ | _YIELDS_      | _RESUMES_ | _RETURNS_     |
-| ------------------ | ------- | ---------- | ------------- | --------- | ------------- |
-| `Future`           | !       | !          | ()            | waker     | future output |
-| `async {}`         | !       | `'static`  | ()            | waker     | future output |
-| Closures `AsyncFn` | input   | captured   | !             | !         | future output |
-| `Stream`           | !       | !          | future option | waker     | !             |
-
-
+For a practical introduction to coroutines in Rust, I recommend [Asynchronous Programming in Rust](https://github.com/PacktPublishing/Asynchronous-Programming-in-Rust).
