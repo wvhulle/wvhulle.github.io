@@ -7,13 +7,11 @@ draft = false
 tags = [ "functional", "Rust", "coroutine", "Future", "Poll", "Pin"]
 +++
 
-## Introduction
-
 In some other posts on this site, you will find ways to create streams from scratch and how to combine them. This post will be about the relationship between the concept of a `Stream` (or asynchronous iterator) and the other, more familiar, functions present in most programming languages.
 
 Most of this post was inspired by a [post by without.boats](https://without.boats/blog/poll-next/).
 
-## Introduction to coroutines
+## Simple coroutines
 
 ### Concept of a coroutine
 
@@ -46,7 +44,7 @@ pub trait Coroutine<Resume = ()> {
 
     fn resume(
         self: Pin<&mut Self>,
-        arg: Resume,
+        resumption: Resume,
     ) -> CoroutineState<Self::Yield, Self::Return>;
 }
 ```
@@ -65,11 +63,11 @@ type Future<Output> = Coroutine<
 >;
 ```
 
-More precisely, a future is a coroutine that yields nothing when suspended.A future needs a `Context` (containing a `Waker`) to be resumed or woken.
+More precisely, a future is a coroutine that yields nothing when suspended. A future needs a `Context` (containing a `Waker`) to be resumed or woken.
 
 _**Remark**: The resumption data is provided by a asynchronous run-time to schedule `resume`s in an efficient way._
 
-### Example of Rust coroutine
+### Example of a coroutine
 
 The Rust docs contain an example of a coroutine. The coroutine does not need any resumption data, but it yields a number and returns a string on completion:
 
@@ -106,16 +104,18 @@ Reflecting on the concepts of an iterator, future and stream, we can say that:
 
 - An **iterator** is coroutine that yields an `Option`.
 - A **future** is a coroutine that resumes with a `Waker`.
-- A **stream** is an iterator that yields futures and resumes with a `Waker`.
+- A **stream** is an iterator that yields futures.
 
 Coroutines are a generalisation of these cases, which can be layed-out in a table:
 
-|                     | _YIELDS_                 | _RESUMES_ | _RETURNS_ |
-| ------------------- | ------------------------ | --------- | --------- |
-| `Iterator`          | `Option`                 | `!`       | `!`       |
-| `Future`, `AsyncFn` | `()`                     | `Waker`   | `Any`     |
-| `Stream`            | `Future<Output = option` | `!`       | `!`       |
-| `Coroutine`         | `Any`                    | `Any`     | `Any`     |
+|                     | _YIELDS_                  | _RESUMES_ | _RETURNS_ |
+| ------------------- | ------------------------- | --------- | --------- |
+| `Iterator`          | `Option`                  | `!`       | `!`       |
+| `Future`, `AsyncFn` | `()`                      | `Waker`   | `Any`     |
+| `Stream`            | `Future<Output = option>` | `!`       | `!`       |
+| `Coroutine`         | `Any`                     | `Any`     | `Any`     |
+
+In this table, the `!` symbol stands for `never`, the type in Rust that does not exist, because it is never returned.
 
 Notice that a `Stream` does not need a `Waker` for resumption directly, but the yielded items are `Future<Output = Option>` which are coroutines themselves (and need a `Waker`).
 
