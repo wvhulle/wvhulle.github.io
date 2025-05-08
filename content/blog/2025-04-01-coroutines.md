@@ -112,7 +112,7 @@ Coroutines are a generalisation of these cases, which can be layed-out in a tabl
 | ------------------- | ------------------------- | --------- | --------- |
 | `Iterator`          | `Option`                  | `!`       | `!`       |
 | `Future`, `AsyncFn` | `()`                      | `Waker`   | `Any`     |
-| `Stream`            | `Option` | `!`       | `Waker`       |
+| `Stream`            | `Option`      | `Waker`       | `!` | 
 | `Coroutine`         | `Any`                     | `Any`     | `Any`     |
 
 In this table, the `!` symbol stands for `never`, the type that does not have any runtime value. In other words, `never` is not constructible. It is used often as the return time of non-terminating functions like infinite loops.
