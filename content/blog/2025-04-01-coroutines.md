@@ -1,5 +1,5 @@
 +++
-title = "Understanding coroutines"
+title = "Role of coroutines"
 description = "An overview of the relationship between simple functions, coroutines and streams."
 weight = 3
 draft = false

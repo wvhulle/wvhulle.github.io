@@ -14,7 +14,11 @@ In that case, you might try an imperative approach and create the stream using t
 
 You might also want to try using imperative design patterns like loops, channels, spawns and generic functions. This approach quickly becomes unmaintainable because of its complexity.
 
+
+
 ## Invalidation through moves
+
+_**Remark**: the following sections will be about `Unpin`. I wrote about it because I needed it later on to understand better how to construct combinators. You can skip this chapter if you want (or look at the official documentation)._
 
 The physical location of variables used in your code may move throughout the lifetime of your program. In Rust, for example, it is common to move a variable through an assignment. A variable that is called by value by a function is **moved** (literally and conceptually) into the the function. The function takes conceptual ownership. As far as I know, this is called the **move semantics** of Rust.
 
@@ -30,7 +34,7 @@ The naming of `Unpin` makes it seem like it is some counterpart to `Pin`. Howeve
 
 `Unpin` is an auto-trait, which means users cannot implement it. The compiler derives `Unpin` for everything that it deems **safe to move**. This is done at compile-time and behind the scene by the compiler for every "auto-trait".
 
-**Remark**: In that sense `Unpin` should have been named `Move`. This name was taken already, so I assume they picked another one.
+_**Remark**: Since `Unpin` means __safe to move__, it could have been named `Move` but the `move` keyword was taken already._
 
 ### Cannot be moved / `!Unpin`
 

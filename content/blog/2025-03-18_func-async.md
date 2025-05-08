@@ -1,9 +1,9 @@
 +++
-title = "Functional asynchronous Rust"
-description = "Declarative/functional asynchronous programming in Rust with streams and sinks."
+title = "Functional async"
+description = "How to start with the basics of functional asynchronous programming in Rust with streams and sinks."
 weight = 1
 [taxonomies]
-tags = ["functional", "asynchronous", "declarative", "Rust", "stream", "sink"]
+tags = ["functional", "asynchronous", "declarative", "Rust", "Stream", "Sink"]
 +++
 
 
@@ -116,7 +116,7 @@ The `MySink::new(21.0)` is a call to the constructor of `MySink`, an imaginary o
 
 
 
-## First observations
+### Clear benefits
 
 Instead of exposing variables names for input, intermediate and output variables, we omit them and focus on naming the transformations themselves. This way of dealing with computation is closer to how we communicate in natural language using verbs.
 
