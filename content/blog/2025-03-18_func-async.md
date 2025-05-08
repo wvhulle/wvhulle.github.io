@@ -186,18 +186,19 @@ A rough conceptual definition of a stream would be:
 
 First, remember that the life-time of an iterator (a normal synchronous blocking one) looks like this:
 
-| T   | create     | iterate     | yield     |  panic |
-| --- | ---------- | ----------- | --------- | ------ |
-| 1   | `(1..=10)` |             |           |        |
-| 2   |            | `next()`    |           |        |
-| 3   |            |             | `Some(1)` |        |
-| 4   |            | `next()`    |           |        |
-| 5   |            |   ...       |           |        |
-| 6   |            | `next()`    |           |        |
-| 7   |            |             |  `None`   |        |
-| 8   |            | `next()`    |           | undefined |
+| T   | create     | iterate     | yield     | 
+| --- | ---------- | ----------- | --------- | 
+| 1   | `(1..=10)` |             |           | 
+| 2   |            | `next()`    |           | 
+| 3   |            |             | `Some(1)` | 
+| 4   |            | `next()`    |           | 
+| 5   |            |   ...       |           | 
+| 6   |            | `next()`    |           | 
+| 7   |            |             |  `None`   | 
+| 8   |            | `next()`    |           | 
+| 9 |  | | `Some(2)` |
 
-Notice that calling `next` after the iterator yielded `None` is undefined behaviour and the iteration may panic. If you do not want that, apply `fuse` to the iterator and the iterator will keep yielding `None` without panicking.
+Notice that calling `next` after the iterator yielded `None` may result in a new `Some`.  If you do not want that, apply `fuse` to the iterator to obtain a `FusedIterator` that will keep yielding `None` after the first `None`.
 
 The life-time of a stream/async iterator during usage looks like this:
 
@@ -219,11 +220,9 @@ The life-time of a stream/async iterator during usage looks like this:
 | 14  |             |             | `Some(3)` |
 
 
-The lifecycle of an async iterator (stream) is clearly longer and more complicated than a normal iterator. An async iterator requires an `await` before a value is yielded. 
+The lifecycle of an async iterator (stream) is longer than a normal iterator since it requires an `await` before a value is yielded. 
 
-_Remark: The `next()` method returns a future that evaluates to an `Option`. Or in Rust notation we express this with: `fn next() -> Impl Future<Output = Option<T>>`. The return type may or may not implement certain important traits. For example, it is **not guaranteed that it can be moved** once created._ 
-
-As you can see in the last table, streams may yield `None` at first and later on still yield a `Some`. This is very different from iterators. Keep this in mind, especially further on, when creating your own streams. If you do not like this behavior, you have to restrict your focus to `FusedStream`, a stream that has an extra method:
+A `FusedStream` is the async analogue of `FusedIterator` and will yield `None` after the first `None`. In addition, it has a non-async method `is_terminated` that says whether the stream is exhausted already.
 
 ```rust
 pub trait FusedStream: Stream {

@@ -112,11 +112,9 @@ Coroutines are a generalisation of these cases, which can be layed-out in a tabl
 | ------------------- | ------------------------- | --------- | --------- |
 | `Iterator`          | `Option`                  | `!`       | `!`       |
 | `Future`, `AsyncFn` | `()`                      | `Waker`   | `Any`     |
-| `Stream`            | `Future<Output = option>` | `!`       | `!`       |
+| `Stream`            | `Option` | `!`       | `Waker`       |
 | `Coroutine`         | `Any`                     | `Any`     | `Any`     |
 
-In this table, the `!` symbol stands for `never`, the type in Rust that does not exist, because it is never returned.
-
-Notice that a `Stream` does not need a `Waker` for resumption directly, but the yielded items are `Future<Output = Option>` which are coroutines themselves (and need a `Waker`).
+In this table, the `!` symbol stands for `never`, the type that does not have any runtime value. In other words, `never` is not constructible. It is used often as the return time of non-terminating functions like infinite loops.
 
 For a practical introduction to coroutines in Rust, I recommend [Asynchronous Programming in Rust](https://github.com/PacktPublishing/Asynchronous-Programming-in-Rust).

@@ -32,9 +32,7 @@ The confusing aspect of `Pin` and `Unpin` in Rust, is that it is not `Pin` which
 
 The naming of `Unpin` makes it seem like it is some counterpart to `Pin`. However, it is not.
 
-`Unpin` is an auto-trait, which means users cannot implement it. The compiler derives `Unpin` for everything that it deems **safe to move**. This is done at compile-time and behind the scene by the compiler for every "auto-trait".
-
-_**Remark**: Since `Unpin` means __safe to move__, it could have been named `Move` but the `move` keyword was taken already._
+`Unpin` is an auto-trait which means that the compiler derives `Unpin` for everything that it deems **safe to move**. This is done at compile-time and behind the scene by the compiler for every "auto-trait".
 
 ### Cannot be moved / `!Unpin`
 
@@ -313,11 +311,19 @@ let sub_stream_b = stream.clone().map(|event| *event);
 assert_eq!((vec![0, 1, 2, 3], vec![0, 1, 2, 3]), join(sub_stream_a.collect::<Vec<_>>(), sub_stream_b.collect::<Vec<_>>()).await);
 ```
 
-In this implementation the user needs to call `Clone` on the output values of the cloned stream, since the output values are just references. (In the simple example above, `Clone` was not required since integers are `Copy`.)
+The `event`s yielded by the shared stream seem to be wrappers around `Arc<usize>`. Since `usize` is `Copy`, `*event` is treated as `&usize` and the referenced `usize` automically cloned.
+
+_Remark: Maybe I am wrong?_
+
+
 
 ### A stream of clones
 
-The implementation in `futures-rx` assumed the item type of the output streams would be a shared reference to the original items. I wanted to have output streams that yielded clones directly without reference counting. It had to be lazy as well.
+The `share` operator on streams from `futures-rx` seems to put all values on the input stream inside a reference-counted `Arc`.
+
+I wanted to derive several output streams from the input stream that yielded clones directly without reference counting.
+
+_Remark: Maybe I could just have used `share` and then cloned every element?_
 
 I decided to implement a separate stream cloning trait in a crate [`clone-stream`](https://crates.io/crates/clone-stream). The high-level API of this crate is quite simple. It is just a call to `fork` and then `stream.clone()`:
 
