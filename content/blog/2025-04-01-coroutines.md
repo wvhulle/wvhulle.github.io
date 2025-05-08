@@ -104,7 +104,7 @@ Reflecting on the concepts of an iterator, future and stream, we can say that:
 
 - An **iterator** is coroutine that yields an `Option`.
 - A **future** is a coroutine that resumes with a `Waker`.
-- A **stream** is an iterator that yields futures.
+- A **stream** is an iterator that resumes with a `Waker` and yields an `Option`.
 
 Coroutines are a generalisation of these cases, which can be layed-out in a table:
 
