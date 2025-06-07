@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <meta charset="UTF-8">
+
+    <link rel="icon" type="image/x-icon" href="/logo.png">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    
+
+<!-- Comments with GitHub discussions -->
+<script src="https://giscus.app/client.js" data-repo="wvhulle/wvhulle.github.io" data-repo-id="R_kgDOGmD5MA"
+    data-category="Comments" data-category-id="DIC_kwDOGmD5MM4Cpsng" data-mapping="title" data-strict="1"
+    data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="light_high_contrast"
+    data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+    </script>
+<title>
+
+
+    
+    Usage of GDB debugger
+    
+
+
+
+</title>
+
+
+
+    
+    <link rel="alternate" type="application/atom+xml" title="Willem Vanhulle's blog"
+        href="https://willemvanhulle.tech/atom.xml">
+    
+</head>
+
+<body>
+    <aside id="sidebar">
+
+        <a href="/">
+            <img src="/logo.png">
+        </a>
+
+        <ul id="navigation_links">
+            <li id="home-button">
+                <a href="/">
+                    About
+                </a>
+
+            </li>
+
+            
+            <li class="section_block">
+                <a href="/blog">Blog</a>
+                <ul class="section_page_list">
+                    
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;streams&#x2F;">Streams</a>
+                    </li>
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;bare-metal&#x2F;">Embedded</a>
+                    </li>
+                    
+                    
+                    
+
+                    
+                </ul>
+
+            </li>
+
+        </ul>
+
+
+        <a href="" id="back-to-top">
+            ↑ </a>
+
+    </aside>
+
+
+
+    <main>
+
+        
+<article>
+
+    <header>
+
+
+        <h1 class="title">
+            Usage of GDB debugger
+        </h1>
+
+
+
+        <ul class="tags"><li><a href="https://willemvanhulle.tech/tags/swd/">SWD</a></li><li><a href="https://willemvanhulle.tech/tags/pico/">Pico</a></li><li><a href="https://willemvanhulle.tech/tags/rust/">Rust</a></li><li><a href="https://willemvanhulle.tech/tags/cargo-embed/">cargo-embed</a></li></ul>
+
+        <p class="post_date">Friday, 2025-06-06
+
+
+<a href="#comments">Comments</a>        </p><p class="subtitle">
+            How to use the GDB debugger with a Raspberry Pi Pico 2 W. <br/>   
+        <p>
+
+
+
+    </header>
+
+
+    
+    <p> Previous post:
+        <a href="https://willemvanhulle.tech/blog/bare-metal/defmt-logging/">Logging with defmt over RTT</a>.
+    </p>
+
+    
+
+
+
+    
+    <ul class="post_top_headers">
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://willemvanhulle.tech/blog/bare-metal/gdb/#debugging-with-gdb">Debugging with GDB</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/bare-metal/gdb/#setup-of-cargo-embed">Setup of cargo-embed</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/bare-metal/gdb/#starting-a-gdb-client">Starting a GDB Client</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/bare-metal/gdb/#common-gdb-commands">Common GDB Commands</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+    </ul>
+    
+
+
+    <h2 id="debugging-with-gdb"><a class="zola-anchor" href="#debugging-with-gdb" aria-label="Anchor link for: debugging-with-gdb">Debugging with GDB</a></h2>
+<p>Once you start creating slightly more complicated embedded programs, you might want to:</p>
+<ul>
+<li>introspect the values of local variables</li>
+<li>follow the execution flow</li>
+</ul>
+<p>For this, you need a piece of software called a debugger. The most commonly used debugger for Rust and C is <a href="https://en.wikipedia.org/wiki/GNU_Debugger">GDB</a>.</p>
+<p><em>Remark: In VS Code, you can install the <code>probe-rs-debug</code> extension to use the <code>probe-rs</code> toolkit for debugging. It uses a different protocol than <code>gdb</code>. See <a href="https://probe.rs/docs/tools/debugger/">instructions</a>.</em></p>
+<h3 id="setup-of-cargo-embed"><a class="zola-anchor" href="#setup-of-cargo-embed" aria-label="Anchor link for: setup-of-cargo-embed">Setup of <code>cargo-embed</code></a></h3>
+<p>Adjust the <code>Embed.toml</code> file in the root of this repository if necessary. This file configures the behavior of the <code>cargo embed</code> command when run on your laptop.</p>
+<p>For example, if the configuration contains the following, a GDB debug server session will be started, and the loaded program will be reset to the first instruction.</p>
+<pre data-lang="toml" style="background-color:#f9f9f9;color:#111111;" class="language-toml "><code class="language-toml" data-lang="toml"><span>[</span><span style="color:#c82728;">default.gdb</span><span>]
+</span><span style="color:#c82728;">enabled </span><span>= </span><span style="color:#f07219;">true
+</span><span>
+</span><span>[</span><span style="color:#c82728;">default.reset</span><span>]
+</span><span style="color:#c82728;">halt_afterwards </span><span>= </span><span style="color:#f07219;">true
+</span></code></pre>
+<p>Prevent lines from being merged or reordered during the build step of your program. These kinds of changes can make it harder for the debugger to stop at the right breakpoints. Add the following to <code>Cargo.toml</code>:</p>
+<pre data-lang="toml" style="background-color:#f9f9f9;color:#111111;" class="language-toml "><code class="language-toml" data-lang="toml"><span>[</span><span style="color:#c82728;">profile.dev</span><span>]
+</span><span style="color:#c82728;">debug </span><span>= </span><span style="color:#f07219;">2
+</span><span style="color:#c82728;">opt-level </span><span>= </span><span style="color:#f07219;">0
+</span></code></pre>
+<p>To be sure the new configuration is used, you can clear the <code>target</code> build cache with <code>cargo clean</code> and then build again:</p>
+<pre data-lang="bash" style="background-color:#f9f9f9;color:#111111;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#c82728;">cargo</span><span style="color:#4271ae;"> clean
+</span><span style="color:#c82728;">cargo</span><span style="color:#4271ae;"> build</span><span style="color:#f07219;"> --example </span><span style="color:#8959a8;">[</span><span style="color:#4271ae;">BINARY_EXAMPLE_NAME</span><span style="color:#8959a8;">]
+</span></code></pre>
+<h3 id="starting-a-gdb-client"><a class="zola-anchor" href="#starting-a-gdb-client" aria-label="Anchor link for: starting-a-gdb-client">Starting a GDB Client</a></h3>
+<p>While searching for an appropriate GDB package, look for one that supports the architecture of your target chip. In the case of a Pico 2, <code>gdb</code> needs <code>ARM</code> support built in.</p>
+<p>Install the multi-architecture version of <code>gdb</code>:</p>
+<pre data-lang="bash" style="background-color:#f9f9f9;color:#111111;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#c82728;">sudo</span><span style="color:#4271ae;"> apt-get install gdb-multiarch
+</span></code></pre>
+<p>Then run the following command to create and connect a <code>gdb</code> debugging client:</p>
+<pre data-lang="bash" style="background-color:#f9f9f9;color:#111111;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#c82728;">gdb-multiarch</span><span style="color:#4271ae;"> target/thumbv8m.main-none-eabi/debug/</span><span style="color:#8959a8;">[</span><span style="color:#4271ae;">BINARY_EXAMPLE_NAME</span><span style="color:#8959a8;">]
+</span></code></pre>
+<p><em>Note: The command may also be <code>gdb</code>.</em></p>
+<p>Within the <code>gdb</code> client on your laptop, you have to connect to the running <code>GDB</code> server on the debug Pico probe:</p>
+<pre data-lang="txt" style="background-color:#f9f9f9;color:#111111;" class="language-txt "><code class="language-txt" data-lang="txt"><span>target remote :1337
+</span><span>monitor reset halt # optionally resets to the first instruction
+</span><span>tui enable
+</span></code></pre>
+<p>Alternatively, you can tell <code>gdb</code> to execute these commands automatically by writing them in a <code>.gdbinit</code> file in the root of this repository.</p>
+<h3 id="common-gdb-commands"><a class="zola-anchor" href="#common-gdb-commands" aria-label="Anchor link for: common-gdb-commands">Common GDB Commands</a></h3>
+<p>Breakpoints can be set in the <code>gdb</code> client by using the <code>break</code> command followed by a line number or function name:</p>
+<pre data-lang="txt" style="background-color:#f9f9f9;color:#111111;" class="language-txt "><code class="language-txt" data-lang="txt"><span>break [FUNCTION_NAME]  # Set a breakpoint at a specific function
+</span><span>break [LINE_NUMBER]  # Set a breakpoint at a specific line number
+</span><span>break [FILE_NAME]:[LINE_NUMBER]  # Set a breakpoint at a specific line in a file
+</span></code></pre>
+<p>You can also write hardware breakpoints directly in your code with <code>cortex_m::asm::bkpt()</code>.</p>
+<p>To progress through the execution of your debugged program, you can use:</p>
+<pre data-lang="txt" style="background-color:#f9f9f9;color:#111111;" class="language-txt "><code class="language-txt" data-lang="txt"><span>continue  # Continue execution until the next breakpoint is hit
+</span><span>next      # Step to the next line of code
+</span></code></pre>
+<p>For introspection of variables:</p>
+<pre data-lang="txt" style="background-color:#f9f9f9;color:#111111;" class="language-txt "><code class="language-txt" data-lang="txt"><span>print [VAR_NAME]
+</span></code></pre>
+
+
+
+    <section id="comments" class="giscus"></section>
+
+
+</article>
+
+
+
+<footer>
+
+
+
+    
+    <span>←
+        <a href="https://willemvanhulle.tech/blog/bare-metal/defmt-logging/">Logging with defmt over RTT</a> </span>
+
+
+    
+
+    
+</footer>
+
+
+
+    </main>
+
+
+
+</body>
+
+</html>
