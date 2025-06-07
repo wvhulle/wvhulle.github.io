@@ -1,10 +1,10 @@
 +++
-title = "Pico 2 as debugger"
+title = "Pico 2 as debugprobe"
 description = "How to use the Raspberry Pi Pico 2 as a hardware debugger."
 draft = false
 weight = 7
 [taxonomies]
-tags = [ "debug", "Raspberry Pi", "embedded", "Pico", "SWD", "declarative", "Rust", "probe-rs" ]
+tags = [  "Raspberry Pi", "Pico", "SWD", "declarative", "Rust", "probe-rs", "cargo-embed" ]
 +++
 
 On most popular microcontrollers used for educational purposes, there is already some hardware debugging support (also called a **hardware debug probe**) on the board itself, such as on the [Micro:bit](https://microbit.org/) or the [ESP32](https://www.espressif.com/en/products/socs/esp32).
@@ -21,17 +21,17 @@ The Pico family of microcontrollers does not have this feature built-in. You hav
 
 In this workshop, we will pursue the first option. If you get stuck, feel free to ask for a pre-made hardware debugger.
 
-### Turning a Normal Pico into a Debugger Pico
+### Turning a Pico 2 into a debugger Pico
 
 The Raspberry Pi Foundation provides images for Picos that can be flashed to turn a Pico into a hardware debugger.
 
 1. Download the latest `debugprobe_on_pico.uf2` flash image from the official [`debugprobe`](https://github.com/raspberrypi/debugprobe/releases)releases.
-2. Attach the Pico to your laptop while holding the white BOOTSEL button. A mass storage device will appear in your file manager. It will be called something like `RPI-RP2`.
+2. Attach the Pico to your laptop while holding the white BOOTSEL button. A mass storage device will appear in your file manager. It will be called something like `RP2350`.
 3. Drop the downloaded `.uf2` file onto the mass storage drive emulated by the Pico. Wait for a fraction of a second while the Pico unmounts and reboots as a fresh `debugprobe`.
 
 Now you have successfully made a cheap hardware debugging probe.
 
-### Wire Target to Debugger
+### Wire target to debugger
 
 Let's make some aliases:
 
@@ -65,7 +65,7 @@ Right now, there is no cabling between the debug probe and the target Pico. The 
 
 *Remark: You can also connect **T** to **D** for UART communication. However, I have not needed it so far.*
 
-### Configure Flashing from Laptop
+### Configure flashing from laptop
 
 There is still one step remaining: we have to configure our laptop's development environment to enable flashing (this applies to any microcontroller with an onboard or external debugger).
 
@@ -92,7 +92,7 @@ There is still one step remaining: we have to configure our laptop's development
 Now you can flash changes in the source code directly to the target Pico (without re-plugging it or holding the BOOTSEL button). The debug probe Pico will function as an intermediary between your laptop and the target Pico.
 
 ```bash
-cargo run --example external-blink
+cargo run
 ```
 
 You should see two progress bars running to completion in your terminal. As soon as the flash process is finished:
