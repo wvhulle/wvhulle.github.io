@@ -13,8 +13,44 @@
         <h1>{{ section.title }}</h1>
     </header>
 
+    {% if section.description %}
+    <p>{{ section.description }}</p>
+    {% endif %}
+
     {{ section.content | safe}}
 
+
+    {% if section.subsections %}
+
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            {% for subsection_path in section.subsections %}
+
+            {% set subsection = get_section(path=subsection_path) %}
+            <tr>
+                <td> <a href="{{ subsection.permalink }}"> {{ subsection.title }}</a></td>
+                <td>{{ subsection.description }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+
+    {% endif %}
+
+
+    {% if section.pages and section.pages | length > 0 %}
     <table>
         <thead>
             <tr>
@@ -35,7 +71,7 @@
             {% endfor %}
         </tbody>
     </table>
-
+    {% endif %}
 
 
 

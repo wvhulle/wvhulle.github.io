@@ -41,13 +41,24 @@
 
             </li>
 
-            {% set section = get_section(path="blog/_index.md") %}
+            {% set blog_section = get_section(path="blog/_index.md") %}
             <li class="section_block">
-                <a href="/blog">{{ section.title }}</a>
-
+                <a href="/blog">{{ blog_section.title }}</a>
                 <ul class="section_page_list">
+                    {% set active_section = blog_section %}
+                    {% if blog_section.subsections %}
+                    {% for sub_section_path in blog_section.subsections %}
+                    {% set sub_section = get_section(path=sub_section_path) %}
+                    <li class="section_page_link">
+                        <a href="{{ sub_section.permalink }}">{{ sub_section.title }}</a>
+                    </li>
+                    {% if section and section.path == sub_section.path %}
+                    {% set active_section = sub_section %}
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
 
-                    {% for page in section.pages %}
+                    {% for page in active_section.pages %}
                     <li class="section_page_link">
                         <a href="{{ page.permalink }}">
                             {{ page.title }}
