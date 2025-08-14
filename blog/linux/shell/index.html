@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <meta charset="UTF-8">
+
+    <link rel="icon" type="image/x-icon" href="/logo.png">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    
+
+<!-- Comments with GitHub discussions -->
+<script src="https://giscus.app/client.js" data-repo="wvhulle/wvhulle.github.io" data-repo-id="R_kgDOGmD5MA"
+    data-category="Comments" data-category-id="DIC_kwDOGmD5MM4Cpsng" data-mapping="title" data-strict="1"
+    data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="light_high_contrast"
+    data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+    </script>
+<title>
+
+
+    
+    Shell
+    
+
+
+
+</title>
+
+
+
+    
+    <link rel="alternate" type="application/atom+xml" title="Willem Vanhulle's blog"
+        href="https://willemvanhulle.tech/atom.xml">
+    
+</head>
+
+<body>
+    <aside id="sidebar">
+
+        <a href="/">
+            <img src="/logo.png">
+        </a>
+
+        <ul id="navigation_links">
+            <li id="home-button">
+                <a href="/">
+                    About
+                </a>
+
+            </li>
+
+            
+            <li class="section_block">
+                <a href="/blog">Blog</a>
+                <ul class="section_page_list">
+                    
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;linux&#x2F;">Linux</a>
+                    </li>
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;streams&#x2F;">Streams</a>
+                    </li>
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;bare-metal&#x2F;">Embedded</a>
+                    </li>
+                    
+                    
+                    
+
+                    
+                </ul>
+
+            </li>
+
+        </ul>
+
+
+        <a href="" id="back-to-top">
+            ↑ </a>
+
+    </aside>
+
+
+
+    <main>
+
+        
+<article>
+
+    <header>
+
+
+        <h1 class="title">
+            Shell
+        </h1>
+
+
+
+        <ul class="tags"><li><a href="https://willemvanhulle.tech/tags/linux/">Linux</a></li><li><a href="https://willemvanhulle.tech/tags/shell/">shell</a></li><li><a href="https://willemvanhulle.tech/tags/prompt/">prompt</a></li><li><a href="https://willemvanhulle.tech/tags/rust/">Rust</a></li></ul>
+
+        <p class="post_date">Tuesday, 2025-08-12
+
+
+<a href="#comments">Comments</a>        </p><p class="subtitle">
+            Personal Linux command shell and prompt setup. <br/>   
+        <p>
+
+
+
+    </header>
+
+
+    
+
+
+
+    
+    <ul class="post_top_headers">
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#zoxide">Zoxide</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#delta">Delta</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#git-difftool-meld">Git difftool Meld</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#nushell">Nushell</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#helix">Helix</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#atuin">Atuin</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#oh-my-posh">Oh-My-Posh</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#bat">Bat</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#direnv">Direnv</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#zellij">Zellij</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#claude-code">Claude-code</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#ripgrep">Ripgrep</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#github-cli">Github CLI</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#carapace">Carapace</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#broot">Broot</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#ncdu">NCDU</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#powertop">Powertop</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#geekbench">Geekbench</a>
+            
+        </li>
+        
+    </ul>
+    
+
+
+    <p>From most-useful to less-useful</p>
+<h2 id="zoxide"><a class="zola-anchor" href="#zoxide" aria-label="Anchor link for: zoxide"><a href="https://github.com/ajeetdsouza/zoxide">Zoxide</a></a></h2>
+<p>A fuzzy version of <code>cd</code>. A fuzzy search engine for folders in your filesystem. It learns where you want to go through usage. You can configure it to replace <code>cd</code>.</p>
+<h2 id="delta"><a class="zola-anchor" href="#delta" aria-label="Anchor link for: delta"><a href="https://github.com/dandavison/delta">Delta</a></a></h2>
+<p>A replacement for <code>diff</code> that adds syntax highlighting and paging. You can configure it as the default diff tool for Git.</p>
+<h2 id="git-difftool-meld"><a class="zola-anchor" href="#git-difftool-meld" aria-label="Anchor link for: git-difftool-meld"><a href="https://meldmerge.org/">Git difftool Meld</a></a></h2>
+<p>Not really a shell tool, but you can configure <code>meld</code> as the default difftool for Git. You can also add it as a <code>git</code> alias, you just have to write: <code>git meld [BRANCH]</code> to compare the current branch with another branch.</p>
+<h2 id="nushell"><a class="zola-anchor" href="#nushell" aria-label="Anchor link for: nushell"><a href="https://www.nushell.sh/">Nushell</a></a></h2>
+<p>A shell that consciously avoids being POSIX compliant. This may look like a disadvantage, because you can’t blindly copy-past Bash scripts from the internet anymore, but that is also the only disadvantage.</p>
+<ul>
+<li>Nu shell has an <code>rm</code> command that can be configured to delete files to the trash always.</li>
+<li>It also has an <code>ls</code> command that can be queried using a kind of SQL syntax with traditional pipes.</li>
+</ul>
+<p>Want an audio notification when a long-running command finishes? In your <code>~/.config/nushell/config.nu</code>:</p>
+<pre data-lang="bash" style="background-color:#f9f9f9;color:#111111;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#c82728;">def</span><span style="color:#4271ae;"> notify-long-command </span><span style="color:#8959a8;">[] </span><span style="color:#4271ae;">{
+</span><span style="color:#4271ae;">  const NOTIFICATION_THRESHOLD = 30sec
+</span><span style="color:#4271ae;">  const SOUND_FILE = </span><span style="color:#839c00;">&quot;/run/current-system/sw/share/sounds/freedesktop/stereo/bell.oga&quot;
+</span><span style="color:#4271ae;">
+</span><span style="color:#4271ae;">  </span><span style="color:#8e908c;"># Skip notifications if explicitly disabled
+</span><span style="color:#4271ae;">  if ($</span><span style="color:#c82728;">env</span><span style="color:#4271ae;">.DISABLE_COMMAND_NOTIFICATIONS</span><span style="color:#3e999f;">?</span><span style="color:#4271ae;"> | default false) {
+</span><span style="color:#4271ae;">    return
+</span><span style="color:#4271ae;">  }
+</span><span style="color:#4271ae;">
+</span><span style="color:#4271ae;">  let cmd_duration = (($</span><span style="color:#c82728;">env</span><span style="color:#4271ae;">.CMD_DURATION_MS</span><span style="color:#3e999f;">?</span><span style="color:#4271ae;"> | default </span><span style="color:#839c00;">&quot;0&quot;</span><span style="color:#4271ae;">) | into int | into duration -u ms)
+</span><span style="color:#4271ae;">
+</span><span style="color:#4271ae;">  if $</span><span style="color:#c82728;">cmd_duration</span><span style="color:#4271ae;"> &gt; $</span><span style="color:#c82728;">NOTIFICATION_THRESHOLD </span><span style="color:#4271ae;">{
+</span><span style="color:#4271ae;">    try { ^pw-play $</span><span style="color:#c82728;">SOUND_FILE </span><span style="color:#4271ae;">} catch { ^paplay $</span><span style="color:#c82728;">SOUND_FILE </span><span style="color:#4271ae;">}
+</span><span style="color:#4271ae;">  }
+</span><span style="color:#4271ae;">}
+</span><span>
+</span><span style="color:#c82728;">$env.config</span><span style="color:#4271ae;"> = (
+</span><span>  </span><span style="color:#c82728;">$env.config </span><span style="color:#3e999f;">| </span><span style="color:#c82728;">merge </span><span style="color:#4271ae;">{
+</span><span style="color:#4271ae;">    hooks: {
+</span><span style="color:#4271ae;">      pre_prompt: [
+</span><span style="color:#4271ae;">        {||
+</span><span style="color:#4271ae;">          refresh-theme
+</span><span style="color:#4271ae;">          notify-long-command
+</span><span style="color:#4271ae;">        }
+</span><span style="color:#4271ae;">      ]
+</span><span style="color:#4271ae;">    }
+</span><span style="color:#4271ae;">  }
+</span><span>)
+</span></code></pre>
+<h2 id="helix"><a class="zola-anchor" href="#helix" aria-label="Anchor link for: helix"><a href="https://helix-editor.com/">Helix</a></a></h2>
+<p>Terminal editor with powerful keybindings and language server support out of the box.</p>
+<h2 id="atuin"><a class="zola-anchor" href="#atuin" aria-label="Anchor link for: atuin"><a href="https://atuin.sh/">Atuin</a></a></h2>
+<p>A search engine for your shell history that sync between devices. In a sense it is a replacement for the old <code>history</code> command.</p>
+<p>Beware: By default it hijacks your upper arrow key to suggest commands from your history. However, you can make it narrow down to commands within the same Git repository or folder.</p>
+<h2 id="oh-my-posh"><a class="zola-anchor" href="#oh-my-posh" aria-label="Anchor link for: oh-my-posh"><a href="https://ohmyposh.dev/">Oh-My-Posh</a></a></h2>
+<p>Extend your system prompt with extra information (about package version, git status). A prompt that shows me my Git branch and status is essential.</p>
+<p>It’s easy to use one of the themes.</p>
+<h2 id="bat"><a class="zola-anchor" href="#bat" aria-label="Anchor link for: bat"><a href="https://github.com/sharkdp/bat">Bat</a></a></h2>
+<p>A replacement for <code>cat</code> that adds paging (so you don’t have to pipe it through <code>less</code>), syntax highlighting, and line numbers. Use it to override <code>cat</code>.</p>
+<h2 id="direnv"><a class="zola-anchor" href="#direnv" aria-label="Anchor link for: direnv"><a href="https://direnv.net/">Direnv</a></a></h2>
+<p>Scaffold system environments by just entering and exiting directories. In combination with Nix or other declarative package managers, only the packages you need are available within your projects.</p>
+<h2 id="zellij"><a class="zola-anchor" href="#zellij" aria-label="Anchor link for: zellij"><a href="https://zellij.dev/">Zellij</a></a></h2>
+<p>Easy terminal splitting. Detaching from views is possible to keep processes running in the background, you can re-attach later.</p>
+<h2 id="claude-code"><a class="zola-anchor" href="#claude-code" aria-label="Anchor link for: claude-code"><a href="https://docs.anthropic.com/en/docs/claude-code">Claude-code</a></a></h2>
+<p>For refactorings in human language. Good for matching local journal debug entries with online bug reports.</p>
+<h2 id="ripgrep"><a class="zola-anchor" href="#ripgrep" aria-label="Anchor link for: ripgrep"><a href="https://github.com/BurntSushi/ripgrep">Ripgrep</a></a></h2>
+<p>Recursively search your current directory for a string or regex pattern, ignoring git-ignored and hidden files.</p>
+<h2 id="github-cli"><a class="zola-anchor" href="#github-cli" aria-label="Anchor link for: github-cli"><a href="https://cli.github.com/">Github CLI</a></a></h2>
+<p>Create PRs from the terminal. Check their status from the terminal. Has shortcut commands to open the corresponding Github web pages in your browser.  List CI action caches.</p>
+<h2 id="carapace"><a class="zola-anchor" href="#carapace" aria-label="Anchor link for: carapace"><a href="https://carapace.sh/">Carapace</a></a></h2>
+<p>Aggregator for a useful set of shell-completers. Can even complete online GitHub repositories. Integrates with most shells.</p>
+<p>In Nu-shell, you can combine zoxide completions with carapace using this in your <code>~/.config/nushell/config.nu</code>:</p>
+<pre data-lang="bash" style="background-color:#f9f9f9;color:#111111;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#4271ae;">let external_completer </span><span style="color:#3e999f;">=</span><span style="color:#4271ae;"> {</span><span style="color:#3e999f;">|</span><span style="color:#4271ae;">spans</span><span style="color:#3e999f;">|
+</span><span>  </span><span style="color:#c82728;">match </span><span style="color:#4271ae;">$</span><span style="color:#c82728;">spans</span><span style="color:#4271ae;">.0 {
+</span><span style="color:#4271ae;">    z|zi =&gt; {
+</span><span style="color:#4271ae;">      $</span><span style="color:#c82728;">spans</span><span style="color:#4271ae;"> | skip 1 | zoxide query -l ...$</span><span style="color:#c82728;">in</span><span style="color:#4271ae;"> | lines | where {|x| $</span><span style="color:#c82728;">x</span><span style="color:#4271ae;"> != $</span><span style="color:#c82728;">env</span><span style="color:#4271ae;">.PWD }
+</span><span style="color:#4271ae;">    }
+</span><span style="color:#4271ae;">    _ =&gt; {
+</span><span style="color:#4271ae;">      carapace $</span><span style="color:#c82728;">spans</span><span style="color:#4271ae;">.0 nushell ...$</span><span style="color:#c82728;">spans</span><span style="color:#4271ae;"> | from json
+</span><span style="color:#4271ae;">    }
+</span><span style="color:#4271ae;">  }
+</span><span>}
+</span><span>
+</span><span style="color:#c82728;">$env.config</span><span style="color:#4271ae;"> = (
+</span><span>  </span><span style="color:#c82728;">$env.config </span><span style="color:#3e999f;">| </span><span style="color:#c82728;">merge </span><span style="color:#4271ae;">{
+</span><span style="color:#4271ae;">    completions: {
+</span><span style="color:#4271ae;">      external: {
+</span><span style="color:#4271ae;">        enable: true
+</span><span style="color:#4271ae;">        completer: $</span><span style="color:#c82728;">external_completer
+</span><span style="color:#4271ae;">      }
+</span><span style="color:#4271ae;">    }
+</span><span style="color:#4271ae;">  }
+</span><span>)
+</span></code></pre>
+<h2 id="broot"><a class="zola-anchor" href="#broot" aria-label="Anchor link for: broot"><a href="https://dystroy.org/broot/">Broot</a></a></h2>
+<p>Pretty file-system trees.</p>
+<h2 id="ncdu"><a class="zola-anchor" href="#ncdu" aria-label="Anchor link for: ncdu"><a href="https://dev.yorhel.nl/ncdu">NCDU</a></a></h2>
+<p>Analyze which folders use the most disk space.</p>
+<h2 id="powertop"><a class="zola-anchor" href="#powertop" aria-label="Anchor link for: powertop"><a href="https://01.org/powertop/">Powertop</a></a></h2>
+<p>See how many Watts your system is using and which processes are consuming the most power.</p>
+<p>Use it to create custom “power profiles” with <code>power-profiles-daemon</code>.</p>
+<h2 id="geekbench"><a class="zola-anchor" href="#geekbench" aria-label="Anchor link for: geekbench"><a href="https://www.geekbench.com/">Geekbench</a></a></h2>
+<p>Compare your personal hardware / operating system with others using a standardised benchmark and upload scores.</p>
+
+
+
+    <section id="comments" class="giscus"></section>
+
+
+</article>
+
+
+
+<footer>
+
+
+
+    
+
+    
+</footer>
+
+
+
+    </main>
+
+
+
+</body>
+
+</html>

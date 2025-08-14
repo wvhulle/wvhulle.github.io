@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <meta charset="UTF-8">
+
+    <link rel="icon" type="image/x-icon" href="/logo.png">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    
+
+<!-- Comments with GitHub discussions -->
+<script src="https://giscus.app/client.js" data-repo="wvhulle/wvhulle.github.io" data-repo-id="R_kgDOGmD5MA"
+    data-category="Comments" data-category-id="DIC_kwDOGmD5MM4Cpsng" data-mapping="title" data-strict="1"
+    data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="light_high_contrast"
+    data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+    </script>
+<title>
+
+
+    
+    Making generators
+    
+
+
+
+</title>
+
+
+
+    
+    <link rel="alternate" type="application/atom+xml" title="Willem Vanhulle's blog"
+        href="https://willemvanhulle.tech/atom.xml">
+    
+</head>
+
+<body>
+    <aside id="sidebar">
+
+        <a href="/">
+            <img src="/logo.png">
+        </a>
+
+        <ul id="navigation_links">
+            <li id="home-button">
+                <a href="/">
+                    About
+                </a>
+
+            </li>
+
+            
+            <li class="section_block">
+                <a href="/blog">Blog</a>
+                <ul class="section_page_list">
+                    
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;linux&#x2F;">Linux</a>
+                    </li>
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;streams&#x2F;">Streams</a>
+                    </li>
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;bare-metal&#x2F;">Embedded</a>
+                    </li>
+                    
+                    
+                    
+
+                    
+                </ul>
+
+            </li>
+
+        </ul>
+
+
+        <a href="" id="back-to-top">
+            ↑ </a>
+
+    </aside>
+
+
+
+    <main>
+
+        
+<article>
+
+    <header>
+
+
+        <h1 class="title">
+            Making generators
+        </h1>
+
+
+
+        <ul class="tags"><li><a href="https://willemvanhulle.tech/tags/stream/">Stream</a></li><li><a href="https://willemvanhulle.tech/tags/iterator/">Iterator</a></li><li><a href="https://willemvanhulle.tech/tags/generator/">generator</a></li><li><a href="https://willemvanhulle.tech/tags/functional/">functional</a></li><li><a href="https://willemvanhulle.tech/tags/rust/">Rust</a></li><li><a href="https://willemvanhulle.tech/tags/declarative/">declarative</a></li><li><a href="https://willemvanhulle.tech/tags/operator/">operator</a></li></ul>
+
+        <p class="post_date">Thursday, 2025-05-08
+
+
+<a href="#comments">Comments</a>        </p><p class="subtitle">
+            How to create simple iterators and streams from scratch in stable Rust. <br/>   
+        <p>
+
+
+
+    </header>
+
+
+    
+    <p> Previous post:
+        <a href="https://willemvanhulle.tech/blog/streams/func-async/">Functional async</a>.
+    </p>
+
+    
+
+
+
+    
+    <ul class="post_top_headers">
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://willemvanhulle.tech/blog/streams/generators/#simple-generators">Simple generators</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/generators/#iterators">Iterators</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/generators/#blocking-generators">Blocking generators</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/generators/#simple-async-generators">Simple async generators</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://willemvanhulle.tech/blog/streams/generators/#maintainable-generators">Maintainable generators</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/generators/#generator-state">Generator state</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/generators/#a-more-structured-construction">A more structured construction</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/generators/#functional-combinators">Functional combinators</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+    </ul>
+    
+
+
+    <h2 id="simple-generators"><a class="zola-anchor" href="#simple-generators" aria-label="Anchor link for: simple-generators">Simple generators</a></h2>
+<h3 id="iterators"><a class="zola-anchor" href="#iterators" aria-label="Anchor link for: iterators">Iterators</a></h3>
+<p>In functional programming, iterators replace loops. Rust provides many helper methods (called <em>adapter methods</em>) for iterators such as <code>map</code>, <code>filter</code>, <code>step_by</code>, … . But to apply this style of programming, you need some base iterators to start with.</p>
+<p>The base (or leaf) iterators are the ones that are actually important. They are provided by the core language or a foundational user crate. Usually, it is a bad idea to implement your own iterators.</p>
+<p>In case you decide to implement a new iterator anyway, have a look at the definition of an iterator:</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">pub trait </span><span>Iterator {
+</span><span>    </span><span style="color:#8959a8;">type </span><span>Item;
+</span><span>    </span><span style="color:#8959a8;">fn </span><span style="color:#4271ae;">next</span><span>(</span><span style="color:#3e999f;">&amp;</span><span style="color:#8959a8;">mut </span><span style="color:#f07219;">self</span><span>) -&gt; </span><span style="color:#c99e00;">Option</span><span>&lt;</span><span style="color:#8959a8;">Self::</span><span>Item&gt;;
+</span><span>}
+</span></code></pre>
+<h3 id="blocking-generators"><a class="zola-anchor" href="#blocking-generators" aria-label="Anchor link for: blocking-generators">Blocking generators</a></h3>
+<p>Although you could directly implement <code>next</code> for your own data-types, it might be more straightforward to use a <strong>generator</strong> to create an iterator for you. Generators are functions that output an anonymous type that implements the <code>Iterator</code> trait. The body of a generator has <code>yield X</code> statements that represent the result of an invocation to <code>next()</code> being <code> Some(X)</code>.</p>
+<p><em><strong>Remark</strong>: There is nothing special or new about generators in Rust. They have existed, for example, in JavaScript for many years.</em></p>
+<p>A good crate in Rust for writing generators is  <a href="https://docs.rs/genawaiter/latest/genawaiter/"><code>genawaiter</code></a>.</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">let</span><span> generator </span><span style="color:#3e999f;">= </span><span>gen!({
+</span><span>    yield_!(</span><span style="color:#f07219;">10</span><span>);
+</span><span>});
+</span><span style="color:#8959a8;">let</span><span> xs: </span><span style="color:#c99e00;">Vec</span><span>&lt;</span><span style="color:#3e999f;">_</span><span>&gt; </span><span style="color:#3e999f;">=</span><span> generator.</span><span style="color:#4271ae;">into_iter</span><span>().</span><span style="color:#4271ae;">collect</span><span>();
+</span><span>assert_eq!(xs, [</span><span style="color:#f07219;">10</span><span>]);
+</span></code></pre>
+<p>Using this crate, the <code>generator</code> variable is actually more than <em>just a generator</em> (something that can be converted into an <code>Iterator</code>). It is also a coroutine. See other posts on this blog to know more about coroutines in Rust.</p>
+<p><em>Remark: The <code>gen!</code> and <code>yield_!</code>-macros will become built-in the core Rust language in the coming months. The <code>gen!</code> simply becomes the <code>gen</code> keyword for code blocks. Inside <code>gen</code>-blocks you can use <code>yield</code>. For now, you need nightly to use this.</em></p>
+<h3 id="simple-async-generators"><a class="zola-anchor" href="#simple-async-generators" aria-label="Anchor link for: simple-async-generators">Simple async generators</a></h3>
+<p>The iterators generated by the previous kind of generators is <em>blocking</em> (or synchronous ). The asynchronous (non-blocking) variant of a blocking iterator is a <strong>stream</strong> (an asynchronous iterator).</p>
+<p>You can just keep using the <code>genawaiter</code> crate and add <code>await</code>-points in the body of your <code>gen!</code> generator definition. You need to, however, enable the <code>futures03</code> feature.</p>
+<p>(From the documentation)</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span>async </span><span style="color:#8959a8;">fn </span><span style="color:#4271ae;">async_one</span><span>() -&gt; </span><span style="color:#8959a8;">i32 </span><span>{ </span><span style="color:#f07219;">1 </span><span>}
+</span><span>async </span><span style="color:#8959a8;">fn </span><span style="color:#4271ae;">async_two</span><span>() -&gt; </span><span style="color:#8959a8;">i32 </span><span>{ </span><span style="color:#f07219;">2 </span><span>}
+</span><span>
+</span><span style="color:#8959a8;">let</span><span> generator </span><span style="color:#3e999f;">= </span><span>gen!({
+</span><span>    </span><span style="color:#8959a8;">let</span><span> one </span><span style="color:#3e999f;">= </span><span style="color:#4271ae;">async_one</span><span>().await;
+</span><span>    yield_!(one);
+</span><span>    </span><span style="color:#8959a8;">let</span><span> two </span><span style="color:#3e999f;">= </span><span style="color:#4271ae;">async_two</span><span>().await;
+</span><span>    yield_!(two);
+</span><span>});
+</span><span>
+</span><span style="color:#8959a8;">let</span><span> items: </span><span style="color:#c99e00;">Vec</span><span>&lt;</span><span style="color:#3e999f;">_</span><span>&gt; </span><span style="color:#3e999f;">=</span><span> stream.</span><span style="color:#4271ae;">collect</span><span>().await;
+</span><span>assert_eq!(items, [</span><span style="color:#f07219;">1</span><span>, </span><span style="color:#f07219;">2</span><span>]);
+</span></code></pre>
+<p>An alternative is the <code>async-stream</code> crate (which has been updated more recently). The generators written with its <code>stream!</code> macro are always asynchronous streams (in contrast to <code>genawaiter</code> which also supports iterators).</p>
+<p><em>Remark: Asynchronous generators will be included in stable rust in the coming months. As of May 2025 you still need to switch to a nightly compiler version and enable unstable features.</em></p>
+<h2 id="maintainable-generators"><a class="zola-anchor" href="#maintainable-generators" aria-label="Anchor link for: maintainable-generators">Maintainable generators</a></h2>
+<h3 id="generator-state"><a class="zola-anchor" href="#generator-state" aria-label="Anchor link for: generator-state">Generator state</a></h3>
+<p>While creating generators and putting yield statements, you will quickly run into very complex code. Code making use of <code>yield</code> may be hard to maintain. You will need a place to store the state of the generator. In the brute-force approach you just add local variables outside the main loop of your generator body.</p>
+<p>For example, you could have something like:</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">let</span><span> generator </span><span style="color:#3e999f;">= </span><span>gen!({
+</span><span>    </span><span style="color:#8959a8;">let mut</span><span> state </span><span style="color:#3e999f;">= </span><span style="color:#c99e00;">Some</span><span>(</span><span style="color:#f07219;">0</span><span>);
+</span><span>    </span><span style="color:#8959a8;">loop </span><span>{
+</span><span>        </span><span style="color:#4271ae;">do_something</span><span>();
+</span><span>        state.</span><span style="color:#4271ae;">update</span><span>();
+</span><span>        yield_!(state.</span><span style="color:#4271ae;">method</span><span>());
+</span><span>    }
+</span><span>});
+</span></code></pre>
+<p>When state becomes bigger, it is time to switch to another approach.</p>
+<h3 id="a-more-structured-construction"><a class="zola-anchor" href="#a-more-structured-construction" aria-label="Anchor link for: a-more-structured-construction">A more structured construction</a></h3>
+<p>The most straightforward alternative for async generatorss is to use the <code>futures::stream::unfold</code> function. This function stores the state explicitly in its first argument and updates it incrementally with a closure (returning a <code>Future</code>).</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">use </span><span>futures::{stream, StreamExt};
+</span><span>
+</span><span style="color:#8959a8;">let</span><span> stream </span><span style="color:#3e999f;">= </span><span>stream::unfold(</span><span style="color:#f07219;">0</span><span>, |</span><span style="color:#f07219;">state</span><span>| async </span><span style="color:#8959a8;">move </span><span>{
+</span><span>    </span><span style="color:#8959a8;">if</span><span> state </span><span style="color:#3e999f;">&lt;= </span><span style="color:#f07219;">2 </span><span>{
+</span><span>        </span><span style="color:#8959a8;">let</span><span> next_state </span><span style="color:#3e999f;">=</span><span> state </span><span style="color:#3e999f;">+ </span><span style="color:#f07219;">1</span><span>;
+</span><span>        </span><span style="color:#8959a8;">let</span><span> yielded </span><span style="color:#3e999f;">=</span><span> state </span><span style="color:#3e999f;">* </span><span style="color:#f07219;">2</span><span>;
+</span><span>        </span><span style="color:#c99e00;">Some</span><span>((yielded, next_state))
+</span><span>    } </span><span style="color:#8959a8;">else </span><span>{
+</span><span>        </span><span style="color:#c99e00;">None
+</span><span>    }
+</span><span>});
+</span><span>
+</span><span style="color:#8959a8;">let</span><span> result </span><span style="color:#3e999f;">=</span><span> stream.collect::&lt;</span><span style="color:#c99e00;">Vec</span><span>&lt;</span><span style="color:#8959a8;">i32</span><span>&gt;&gt;().await;
+</span><span>assert_eq!(result, vec![</span><span style="color:#f07219;">0</span><span>, </span><span style="color:#f07219;">2</span><span>, </span><span style="color:#f07219;">4</span><span>]);
+</span></code></pre>
+<p>A synchronous version of this (for normal <code>Iterator</code>s) can be found in the crate <code>itertools</code>: <a href="https://docs.rs/itertools/latest/itertools/fn.unfold.html"><code>itertools::unfold</code></a>.</p>
+<p>An example from the crate docs:</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">let mut</span><span> fibonacci </span><span style="color:#3e999f;">= </span><span style="color:#4271ae;">unfold</span><span>((</span><span style="color:#f07219;">1</span><span style="color:#8959a8;">u32</span><span>, </span><span style="color:#f07219;">1</span><span style="color:#8959a8;">u32</span><span>), |(</span><span style="color:#f07219;">x1</span><span>, </span><span style="color:#f07219;">x2</span><span>)| {
+</span><span>    </span><span style="color:#8e908c;">// Attempt to get the next Fibonacci number
+</span><span>    </span><span style="color:#8959a8;">let</span><span> next </span><span style="color:#3e999f;">=</span><span> x1.</span><span style="color:#4271ae;">saturating_add</span><span>(</span><span style="color:#3e999f;">*</span><span>x2);
+</span><span>
+</span><span>    </span><span style="color:#8e908c;">// Shift left: ret &lt;- x1 &lt;- x2 &lt;- next
+</span><span>    </span><span style="color:#8959a8;">let</span><span> ret </span><span style="color:#3e999f;">= *</span><span>x1;
+</span><span>    </span><span style="color:#3e999f;">*</span><span>x1 </span><span style="color:#3e999f;">= *</span><span>x2;
+</span><span>    </span><span style="color:#3e999f;">*</span><span>x2 </span><span style="color:#3e999f;">=</span><span> next;
+</span><span>
+</span><span>    </span><span style="color:#8e908c;">// If addition has saturated at the maximum, we are finished
+</span><span>    </span><span style="color:#8959a8;">if</span><span> ret </span><span style="color:#3e999f;">== *</span><span>x1 </span><span style="color:#3e999f;">&amp;&amp;</span><span> ret </span><span style="color:#3e999f;">&gt; </span><span style="color:#f07219;">1 </span><span>{
+</span><span>        </span><span style="color:#c99e00;">None
+</span><span>    } </span><span style="color:#8959a8;">else </span><span>{
+</span><span>        </span><span style="color:#c99e00;">Some</span><span>(ret)
+</span><span>    }
+</span><span>});
+</span><span>
+</span><span>itertools::assert_equal(fibonacci.</span><span style="color:#4271ae;">by_ref</span><span>().</span><span style="color:#4271ae;">take</span><span>(</span><span style="color:#f07219;">8</span><span>),
+</span><span>                        vec![</span><span style="color:#f07219;">1</span><span>, </span><span style="color:#f07219;">1</span><span>, </span><span style="color:#f07219;">2</span><span>, </span><span style="color:#f07219;">3</span><span>, </span><span style="color:#f07219;">5</span><span>, </span><span style="color:#f07219;">8</span><span>, </span><span style="color:#f07219;">13</span><span>, </span><span style="color:#f07219;">21</span><span>]);
+</span></code></pre>
+<h3 id="functional-combinators"><a class="zola-anchor" href="#functional-combinators" aria-label="Anchor link for: functional-combinators">Functional combinators</a></h3>
+<p>One problem with <code>unfold</code> is that less well-suited for scenarios in which you need to combine or split several streams/iterators, for example while making your own functional combinators. The constructor <code>unfold</code> seems to be most appropriate when you need to <strong>create iterators or streams from scratch</strong>.</p>
+<p>Writing your own combinators gives you the tools to <em>recombine streams</em> in a more functional or declarative way. Have a look at the combinators defined in <a href="https://docs.rs/futures/latest/futures/stream/index.html"><code>futures::stream</code></a> to see what a common combinator implementation looks like.</p>
+<p><em>Remark: See other posts about combinators for information on how to build your own <strong>declarative combinators</strong> such as custom variants on <code>merge</code> or <code>flatten</code>.</em></p>
+
+
+
+    <section id="comments" class="giscus"></section>
+
+
+</article>
+
+
+
+<footer>
+
+
+
+    
+    <span>←
+        <a href="https://willemvanhulle.tech/blog/streams/func-async/">Functional async</a> </span>
+
+
+    
+
+    
+    <span>
+        <a href="https://willemvanhulle.tech/blog/streams/coroutines/">Role of coroutines</a> → </span>
+
+
+    
+</footer>
+
+
+
+    </main>
+
+
+
+</body>
+
+</html>
