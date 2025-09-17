@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <meta charset="UTF-8">
+
+    <link rel="icon" type="image/x-icon" href="/logo.png">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    
+
+<!-- Comments with GitHub discussions -->
+<script src="https://giscus.app/client.js" data-repo="wvhulle/wvhulle.github.io" data-repo-id="R_kgDOGmD5MA"
+    data-category="Comments" data-category-id="DIC_kwDOGmD5MM4Cpsng" data-mapping="title" data-strict="1"
+    data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="light_high_contrast"
+    data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+    </script>
+<title>
+
+
+    
+    Logging with defmt over RTT
+    
+
+
+
+</title>
+
+
+
+    
+    <link rel="alternate" type="application/atom+xml" title="Willem Vanhulle's blog"
+        href="https://willemvanhulle.tech/atom.xml">
+    
+</head>
+
+<body>
+    <aside id="sidebar">
+
+        <a href="/">
+            <img src="/logo.png">
+        </a>
+
+        <ul id="navigation_links">
+            <li id="home-button">
+                <a href="/">
+                    About
+                </a>
+
+            </li>
+
+            
+            <li class="section_block">
+                <a href="/blog">Blog</a>
+                <ul class="section_page_list">
+                    
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;linux&#x2F;">Linux</a>
+                    </li>
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;bare-metal&#x2F;">Embedded</a>
+                    </li>
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;streams&#x2F;">Streams</a>
+                    </li>
+                    
+                    
+                    
+
+                    
+                </ul>
+
+            </li>
+
+        </ul>
+
+
+        <a href="" id="back-to-top">
+            ↑ </a>
+
+    </aside>
+
+
+
+    <main>
+
+        
+<article>
+
+    <header>
+
+
+        <h1 class="title">
+            Logging with defmt over RTT
+        </h1>
+
+
+
+        <ul class="tags"><li><a href="https://willemvanhulle.tech/tags/defmt/">defmt</a></li><li><a href="https://willemvanhulle.tech/tags/rtt/">RTT</a></li><li><a href="https://willemvanhulle.tech/tags/swd/">SWD</a></li><li><a href="https://willemvanhulle.tech/tags/rust/">Rust</a></li><li><a href="https://willemvanhulle.tech/tags/gdb/">GDB</a></li></ul>
+
+        <p class="post_date">Thursday, 2025-06-05
+
+
+<a href="#comments">Comments</a>        </p><p class="subtitle">
+            How to use the defmt crate to log messages from a Raspberry Pi Pico 2 W over RTT. <br/>   
+        <p>
+
+
+
+    </header>
+
+
+    
+    <p> Previous post:
+        <a href="https://willemvanhulle.tech/blog/bare-metal/embassy-example/">Introduction to Embassy</a>.
+    </p>
+
+    
+
+
+
+    
+    <ul class="post_top_headers">
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/bare-metal/defmt-logging/#simple-logging">Simple Logging</a>
+            
+        </li>
+        
+    </ul>
+    
+
+
+    <h2 id="simple-logging"><a class="zola-anchor" href="#simple-logging" aria-label="Anchor link for: simple-logging">Simple Logging</a></h2>
+<p>RTT (Real-Time Transfer) is a logging protocol that can be used on top of an SWD connection. It does not require specifying the baud rate, etc.</p>
+<p>The <code>defmt</code> crate is the most popular crate for logging from embedded Rust programs. It exports macros like <code>info!</code> and <code>debug!</code>, similar to the macros in the standard <code>log</code> or <code>tracing</code> crates in Rust.</p>
+<p>For the debug probe to actually show the log output from the target, you need to enable a “transport”. In the case of <code>defmt</code>, it is usually the <code>RTT</code> transport using the <code>defmt-rtt</code> crate. The <code>defmt-rtt</code> crate could be compared to <code>tracing-subscriber</code> or other mainstream log consumers.</p>
+<ol>
+<li>
+<p>Add <code>defmt</code> and <code>defmt-rtt</code> as a dependency to your <code>Cargo.toml</code> file. Also, enable the <code>defmt</code> features for all existing dependencies that have it.</p>
+</li>
+<li>
+<p>Import the <code>defmt-rtt</code> module in your binary or library:</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">use</span><span> defmt_rtt </span><span style="color:#3e999f;">as _</span><span>;
+</span></code></pre>
+<p>This may seem useless, but it enables the setup of data necessary to link the binary against the <code>defmt-rtt</code> crate.</p>
+</li>
+<li>
+<p>Add a compiler flag under the current target in the <code>.cargo/config.toml</code> file: <code>-C link-arg=-Tdefmt.x</code>.</p>
+<pre data-lang="toml" style="background-color:#f9f9f9;color:#111111;" class="language-toml "><code class="language-toml" data-lang="toml"><span>[</span><span style="color:#c82728;">target.thumbv8m.main-none-eabihf</span><span>]
+</span><span style="color:#c82728;">rustflags </span><span>= [
+</span><span>  </span><span style="color:#839c00;">&quot;-C&quot;</span><span>,
+</span><span>  </span><span style="color:#839c00;">&quot;link-arg=--nmagic&quot;</span><span>,
+</span><span>  </span><span style="color:#839c00;">&quot;-C&quot;</span><span>,
+</span><span>  </span><span style="color:#839c00;">&quot;link-arg=-Tlink.x&quot;</span><span>,
+</span><span>  </span><span style="color:#839c00;">&quot;-C&quot;</span><span>,
+</span><span>    </span><span style="color:#839c00;">&quot;link-arg=-Tdefmt.x&quot;</span><span>,
+</span><span>    </span><span style="color:#839c00;">&quot;-C&quot;</span><span>,
+</span><span>    </span><span style="color:#839c00;">&quot;target-cpu=cortex-m33&quot;</span><span>,
+</span><span>]
+</span></code></pre>
+</li>
+<li>
+<p>Specify the log level for <code>defmt</code> in the <code>.cargo/config.toml</code> file:</p>
+<pre data-lang="toml" style="background-color:#f9f9f9;color:#111111;" class="language-toml "><code class="language-toml" data-lang="toml"><span>[</span><span style="color:#c82728;">env</span><span>]
+</span><span style="color:#c82728;">DEFMT_LOG </span><span>= </span><span style="color:#839c00;">&quot;debug&quot;
+</span></code></pre>
+</li>
+<li>
+<p>Enable <code>rtt</code> in the <code>Embed.toml</code> file:</p>
+<pre data-lang="toml" style="background-color:#f9f9f9;color:#111111;" class="language-toml "><code class="language-toml" data-lang="toml"><span>[</span><span style="color:#c82728;">default.rtt</span><span>]
+</span><span style="color:#c82728;">enabled </span><span>= </span><span style="color:#f07219;">true
+</span></code></pre>
+</li>
+<li>
+<p>Add invocations of the <code>defmt</code> macros throughout your library or binary code (as necessary). For example, you could write:</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#8959a8;">use </span><span>defmt::info;
+</span><span>
+</span><span>async </span><span style="color:#8959a8;">fn </span><span style="color:#4271ae;">main</span><span>(</span><span style="color:#f07219;">_spawner</span><span>: Spawner) -&gt; </span><span style="color:#3e999f;">! </span><span>{
+</span><span>   </span><span style="color:#8959a8;">loop </span><span>{
+</span><span>      info!(</span><span style="color:#839c00;">&quot;A new iteration of the loop has started.&quot;</span><span>);
+</span><span>   }
+</span><span>}
+</span></code></pre>
+<p>There is nothing stopping you from adding such statements to library code.</p>
+</li>
+<li>
+<p>Compile, flash, and run your binary on the target Pico 2 W:</p>
+<pre data-lang="bash" style="background-color:#f9f9f9;color:#111111;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#c82728;">cargo</span><span style="color:#4271ae;"> ru
+</span></code></pre>
+<p>This should open an RTT console that shows the log messages emitted by the <code>defmt</code> statements in your code.</p>
+</li>
+</ol>
+
+
+
+    <section id="comments" class="giscus"></section>
+
+
+</article>
+
+
+
+<footer>
+
+
+
+    
+    <span>←
+        <a href="https://willemvanhulle.tech/blog/bare-metal/embassy-example/">Introduction to Embassy</a> </span>
+
+
+    
+
+    
+    <span>
+        <a href="https://willemvanhulle.tech/blog/bare-metal/gdb/">Usage of GDB debugger</a> → </span>
+
+
+    
+</footer>
+
+
+
+    </main>
+
+
+
+</body>
+
+</html>

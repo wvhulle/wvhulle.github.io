@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <meta charset="UTF-8">
+
+    <link rel="icon" type="image/x-icon" href="/logo.png">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    
+
+<!-- Comments with GitHub discussions -->
+<script src="https://giscus.app/client.js" data-repo="wvhulle/wvhulle.github.io" data-repo-id="R_kgDOGmD5MA"
+    data-category="Comments" data-category-id="DIC_kwDOGmD5MM4Cpsng" data-mapping="title" data-strict="1"
+    data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="light_high_contrast"
+    data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+    </script>
+<title>
+
+
+    
+    Shell
+    
+
+
+
+</title>
+
+
+
+    
+    <link rel="alternate" type="application/atom+xml" title="Willem Vanhulle's blog"
+        href="https://willemvanhulle.tech/atom.xml">
+    
+</head>
+
+<body>
+    <aside id="sidebar">
+
+        <a href="/">
+            <img src="/logo.png">
+        </a>
+
+        <ul id="navigation_links">
+            <li id="home-button">
+                <a href="/">
+                    About
+                </a>
+
+            </li>
+
+            
+            <li class="section_block">
+                <a href="/blog">Blog</a>
+                <ul class="section_page_list">
+                    
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;linux&#x2F;">Linux</a>
+                    </li>
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;bare-metal&#x2F;">Embedded</a>
+                    </li>
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;streams&#x2F;">Streams</a>
+                    </li>
+                    
+                    
+                    
+
+                    
+                </ul>
+
+            </li>
+
+        </ul>
+
+
+        <a href="" id="back-to-top">
+            ↑ </a>
+
+    </aside>
+
+
+
+    <main>
+
+        
+<article>
+
+    <header>
+
+
+        <h1 class="title">
+            Shell
+        </h1>
+
+
+
+        <ul class="tags"><li><a href="https://willemvanhulle.tech/tags/linux/">Linux</a></li><li><a href="https://willemvanhulle.tech/tags/shell/">shell</a></li><li><a href="https://willemvanhulle.tech/tags/prompt/">prompt</a></li><li><a href="https://willemvanhulle.tech/tags/rust/">Rust</a></li></ul>
+
+        <p class="post_date">Tuesday, 2025-08-12
+
+
+<a href="#comments">Comments</a>        </p><p class="subtitle">
+            List of favourite command-line tools. <br/>   
+        <p>
+
+
+
+    </header>
+
+
+    
+
+
+
+    
+    <ul class="post_top_headers">
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#zoxide">Zoxide</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#delta">Delta</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#git-difftool">Git difftool</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#nushell">Nushell</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#audio-notifications">Audio notifications</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#helix">Helix</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#atuin">Atuin</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#oh-my-posh">Oh-My-Posh</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#bat">Bat</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#direnv">Direnv</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#zellij">Zellij</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#claude-code">Claude-code</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#ripgrep">Ripgrep</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#github-cli">Github CLI</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#carapace">Carapace</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#typos">Typos</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#ncdu">NCDU</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#powertop">Powertop</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#wluma">Wluma</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#awatcher-activitywatch">AWatcher &amp; ActivityWatch</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/shell/#geekbench">Geekbench</a>
+            
+        </li>
+        
+    </ul>
+    
+
+
+    <h2 id="zoxide"><a class="zola-anchor" href="#zoxide" aria-label="Anchor link for: zoxide"><a href="https://github.com/ajeetdsouza/zoxide">Zoxide</a></a></h2>
+<p>An extension of the essential <code>cd</code>. It adds fuzzy folder name matching for your local filesystem. It uses you shell history to learn to jump to the right location.</p>
+<p>For example, I have a folder <code>~/.config/nixos</code> and don’t want to type the whole path (more than once). I can just write <code>z nixos</code> and it will jump directly to the nested directory.</p>
+<p>You can write more complex queries as well and configure your shell to point <code>cd</code> to <code>z</code> to replace <code>cd</code> completely.</p>
+<h2 id="delta"><a class="zola-anchor" href="#delta" aria-label="Anchor link for: delta"><a href="https://github.com/dandavison/delta">Delta</a></a></h2>
+<p>An extension of the <code>diff</code> command that adds syntax highlighting (for most programming languages) and paging (no need to pipe into <code>less</code> / <code>more</code>).</p>
+<p>You can configure it as the default diff tool for Git. In your <code>~/.gitconfig</code>:</p>
+<pre style="background-color:#f9f9f9;color:#111111;"><code><span>[core]
+</span><span>pager = delta
+</span></code></pre>
+<h2 id="git-difftool"><a class="zola-anchor" href="#git-difftool" aria-label="Anchor link for: git-difftool">Git difftool</a></h2>
+<p>You can configure external tools in <code>git</code>, called ‘difftools’ that improve the default diff-viewing experience. My favourite difftool is <a href="https://meldmerge.org/"><code>meld</code></a>. You can configure it in <code>git</code> as the default difftool. In
+<code>~/.gitconfig</code></p>
+<pre style="background-color:#f9f9f9;color:#111111;"><code><span>[diff]
+</span><span>tool = meld
+</span><span>
+</span><span>[difftool.meld]
+</span><span>cmd = meld &quot;$LOCAL&quot; &quot;$REMOTE&quot;
+</span></code></pre>
+<p>To launch a window comparing the whole repository at different points in time, use something like (<code>-d</code> stands for directory compare):</p>
+<ul>
+<li><code>git difftool -d [COMMIT_LEFT]..[COMMIT_RIGHT]</code></li>
+<li><code>git difftool -d [OTHER_COMMIT]</code></li>
+</ul>
+<p>I recommend going into the settings of <code>meld</code> to turn on syntax highlighting.</p>
+<p>You can also add it as a <code>git</code> alias</p>
+<pre style="background-color:#f9f9f9;color:#111111;"><code><span>[alias]
+</span><span>meld=!git difftool -t meld --dir-diff
+</span></code></pre>
+<p>Now, you just have to write: <code>git meld [BRANCH]</code> to compare the current branch with another branch.</p>
+<h2 id="nushell"><a class="zola-anchor" href="#nushell" aria-label="Anchor link for: nushell"><a href="https://www.nushell.sh/">Nushell</a></a></h2>
+<p>Bash scripts are difficult to write and maintain, because of old-fashioned syntax and a lack of modern features. Frequently, Bash itself does not support certain crucial programming operations.</p>
+<p>For example, you have to crawl the web for info on how to use <code>jq</code> to extract a basic value from an API. It almost feels like playing “Dungeons and Dragons”.</p>
+<p>Nushell alleviates the pains of frustrated Bash scripters:</p>
+<ul>
+<li>It has modern programming language features.</li>
+<li>You can still pipe as much as you want.</li>
+<li>Most commands stay the same.</li>
+</ul>
+<p>In general you don’t need to alias commands as much in Nushell:</p>
+<ul>
+<li>Nushell has an <code>rm</code> command that can be configured to delete files to the trash always. Don’t search for an external ‘safe-delete’ <code>rm</code> command, it’s already part of Nushell core.</li>
+<li>It also has an <code>ls</code> command that can be queried using a kind of SQL syntax with traditional pipes.</li>
+</ul>
+<h2 id="audio-notifications"><a class="zola-anchor" href="#audio-notifications" aria-label="Anchor link for: audio-notifications">Audio notifications</a></h2>
+<p>Do you start long-running commands and forget to follow-up on them? The visual / audio bell of <code>konsole</code> was not so reliable for me. Instead, I figured out a way to do it within Nushell.</p>
+<p>You can define a function in your Nushell config at <code>~/.config/nushell/config.nu</code> and add it as <code>pre_prompt</code> hook:</p>
+<pre data-lang="bash" style="background-color:#f9f9f9;color:#111111;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#c82728;">def</span><span style="color:#4271ae;"> notify-long-command </span><span style="color:#8959a8;">[] </span><span style="color:#4271ae;">{
+</span><span style="color:#4271ae;">  const NOTIFICATION_THRESHOLD = 30sec
+</span><span style="color:#4271ae;">  const SOUND_FILE = </span><span style="color:#839c00;">&quot;/run/current-system/sw/share/sounds/freedesktop/stereo/bell.oga&quot;
+</span><span style="color:#4271ae;">
+</span><span style="color:#4271ae;">  let cmd_duration = (($</span><span style="color:#c82728;">env</span><span style="color:#4271ae;">.CMD_DURATION_MS</span><span style="color:#3e999f;">?</span><span style="color:#4271ae;"> | default </span><span style="color:#839c00;">&quot;0&quot;</span><span style="color:#4271ae;">) | into int | into duration -u ms)
+</span><span style="color:#4271ae;">
+</span><span style="color:#4271ae;">  if $</span><span style="color:#c82728;">cmd_duration</span><span style="color:#4271ae;"> &gt; $</span><span style="color:#c82728;">NOTIFICATION_THRESHOLD </span><span style="color:#4271ae;">{
+</span><span style="color:#4271ae;">    try { ^pw-play $</span><span style="color:#c82728;">SOUND_FILE </span><span style="color:#4271ae;">} catch { ^paplay $</span><span style="color:#c82728;">SOUND_FILE </span><span style="color:#4271ae;">}
+</span><span style="color:#4271ae;">  }
+</span><span style="color:#4271ae;">}
+</span><span>
+</span><span style="color:#c82728;">$env.config</span><span style="color:#4271ae;"> = (
+</span><span>  </span><span style="color:#c82728;">$env.config </span><span style="color:#3e999f;">| </span><span style="color:#c82728;">merge </span><span style="color:#4271ae;">{
+</span><span style="color:#4271ae;">    hooks: {
+</span><span style="color:#4271ae;">      pre_prompt: [
+</span><span style="color:#4271ae;">        {||
+</span><span style="color:#4271ae;">          notify-long-command
+</span><span style="color:#4271ae;">        }
+</span><span style="color:#4271ae;">      ]
+</span><span style="color:#4271ae;">    }
+</span><span style="color:#4271ae;">  }
+</span><span>)
+</span></code></pre>
+<p>Notice that Nushell has a ‘duration’ type like Rust. Tweak the parameters as you wish. Maybe you can find out a way to modify the sound based on metadata about the previous command?</p>
+<h2 id="helix"><a class="zola-anchor" href="#helix" aria-label="Anchor link for: helix"><a href="https://helix-editor.com/">Helix</a></a></h2>
+<p>This terminal editor has intuitive and powerful keybindings that are suitable for beginners. It has a built-in fuzzy command and file search dialog.</p>
+<p>It requires much less (or no) language server configuration. Most languages have syntax highlighting and basic linting support out of the box (provided the language server is installed as a system dependency).</p>
+<p>My favourite keybindings:</p>
+<ul>
+<li>SPACE -&gt; F: Fuzzy file-name search</li>
+<li>SPACE -&gt; E: Folder browser</li>
+<li>gd: Goto definition</li>
+<li>CTRL-o: Jump back (conflicts with Zellij)</li>
+</ul>
+<p>To avoid problems with Zellij, you have to lock Zellij with CTRL-g before trying to jump back with CTRL-o.</p>
+<h2 id="atuin"><a class="zola-anchor" href="#atuin" aria-label="Anchor link for: atuin"><a href="https://atuin.sh/">Atuin</a></a></h2>
+<p>Interactive search / recommendation / sync system for your shell history.</p>
+<p>First time setup:</p>
+<ol>
+<li>Register: atuin register -u USERNAME -e EMAIL</li>
+<li>Choose password</li>
+<li>Display encryption key: atuin key</li>
+<li>Save key in password manager</li>
+<li>Sync: atuin sync</li>
+</ol>
+<p>Second machine</p>
+<ol>
+<li>Login: atuin login</li>
+<li>Enter USERNAME, PASSWORD</li>
+<li>Enter encryption key from first machine</li>
+<li>Sync: atuin sync</li>
+</ol>
+<p>If problems:</p>
+<ol>
+<li>Remove account: atuin account delete</li>
+<li>Remove local data in <code>~/.local/share/atuin</code></li>
+</ol>
+<p>Beware: By default it hijacks your upper arrow key to suggest commands from your history. However, you can make it narrow down to commands within the same Git repository or folder.</p>
+<h2 id="oh-my-posh"><a class="zola-anchor" href="#oh-my-posh" aria-label="Anchor link for: oh-my-posh"><a href="https://ohmyposh.dev/">Oh-My-Posh</a></a></h2>
+<p>The default prompt of my Bash shell looks like this:</p>
+<pre style="background-color:#f9f9f9;color:#111111;"><code><span>[wvhulle@x1:~]$
+</span></code></pre>
+<p>The default Nushell prompt is</p>
+<pre style="background-color:#f9f9f9;color:#111111;"><code><span>/root&gt;                        26-08-25 07:58:58
+</span></code></pre>
+<p>The default <code>fish</code> shell prompt is slightly better and shows the <code>git</code> branch (if any) in the current directory.</p>
+<p>Oh-My-Posh gives any shell a more meaninful shell prompt. It can display all kinds of system information such as:</p>
+<ul>
+<li>Compiler toolchain versions for many languages</li>
+<li>Battery state, command duration, …</li>
+</ul>
+<p>You don’t have to build the prompt from scratch with individual data entries. Use one of the existing themes. My current them is a minimal one: ‘zash’.</p>
+<h2 id="bat"><a class="zola-anchor" href="#bat" aria-label="Anchor link for: bat"><a href="https://github.com/sharkdp/bat">Bat</a></a></h2>
+<p>A replacement for <code>cat</code> that adds paging (so you don’t have to pipe it through <code>less</code>), syntax highlighting, and line numbers.</p>
+<p>I don’t recommend turning this into a shell alias for the standard Linux command  <code>cat</code>. It may break other tools like <code>claude-code</code> that expect a <code>cat</code> that works in a non-interactive shell.</p>
+<h2 id="direnv"><a class="zola-anchor" href="#direnv" aria-label="Anchor link for: direnv"><a href="https://direnv.net/">Direnv</a></a></h2>
+<p>Scaffold system environments by just entering and exiting directories. In combination with Nix or other declarative package managers, only the packages you need are available within your projects.</p>
+<h2 id="zellij"><a class="zola-anchor" href="#zellij" aria-label="Anchor link for: zellij"><a href="https://zellij.dev/">Zellij</a></a></h2>
+<p>Easy terminal splitting. Detaching from views is possible to keep processes running in the background, you can re-attach later.</p>
+<h2 id="claude-code"><a class="zola-anchor" href="#claude-code" aria-label="Anchor link for: claude-code"><a href="https://docs.anthropic.com/en/docs/claude-code">Claude-code</a></a></h2>
+<p>A chat agent that has access to your filesystem and system commands. It sends all your local data (file contents, command output) to remote Anthropic servers, so be careful.</p>
+<p>My favourite prompts:</p>
+<ul>
+<li>Scan the system journal for warnings or errors since the last boot and identify issues that can be resolved according to online bug reports.</li>
+<li>Use NixOS options and home-manager options to state the bug fixes you just made declaratively in <code>nix</code> files.</li>
+<li>I made this cool script, package it for distribution X.</li>
+</ul>
+<h2 id="ripgrep"><a class="zola-anchor" href="#ripgrep" aria-label="Anchor link for: ripgrep"><a href="https://github.com/BurntSushi/ripgrep">Ripgrep</a></a></h2>
+<p>Recursively search your current directory for a string or regex pattern, ignoring git-ignored and hidden files. Case insenstive search: <code>rg -i</code>.</p>
+<h2 id="github-cli"><a class="zola-anchor" href="#github-cli" aria-label="Anchor link for: github-cli"><a href="https://cli.github.com/">Github CLI</a></a></h2>
+<p>With <code>gh</code> you can manage PRs from the terminal. A frequent problem I have is that I forget if my branch got merged already. You can see this right away with: <code>gh pr view</code>.</p>
+<p>Most of the commands have a <code>--web</code> option that will automatically open the relevant page in your default web browser. For example, <code>gh repo view --web</code> will go to the main view of the current repository.</p>
+<h2 id="carapace"><a class="zola-anchor" href="#carapace" aria-label="Anchor link for: carapace"><a href="https://carapace.sh/">Carapace</a></a></h2>
+<p>Aggregator for a useful, broad set of shell-completers. Can even complete online GitHub repositories. Integrates with most shells.</p>
+<p>In Nushell, you can combine zoxide completions with carapace using this in your <code>~/.config/nushell/config.nu</code>:</p>
+<pre data-lang="bash" style="background-color:#f9f9f9;color:#111111;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#4271ae;">let external_completer </span><span style="color:#3e999f;">=</span><span style="color:#4271ae;"> {</span><span style="color:#3e999f;">|</span><span style="color:#4271ae;">spans</span><span style="color:#3e999f;">|
+</span><span>  </span><span style="color:#c82728;">match </span><span style="color:#4271ae;">$</span><span style="color:#c82728;">spans</span><span style="color:#4271ae;">.0 {
+</span><span style="color:#4271ae;">    z|zi =&gt; {
+</span><span style="color:#4271ae;">      $</span><span style="color:#c82728;">spans</span><span style="color:#4271ae;"> | skip 1 | zoxide query -l ...$</span><span style="color:#c82728;">in</span><span style="color:#4271ae;"> | lines | where {|x| $</span><span style="color:#c82728;">x</span><span style="color:#4271ae;"> != $</span><span style="color:#c82728;">env</span><span style="color:#4271ae;">.PWD }
+</span><span style="color:#4271ae;">    }
+</span><span style="color:#4271ae;">    _ =&gt; {
+</span><span style="color:#4271ae;">      carapace $</span><span style="color:#c82728;">spans</span><span style="color:#4271ae;">.0 nushell ...$</span><span style="color:#c82728;">spans</span><span style="color:#4271ae;"> | from json
+</span><span style="color:#4271ae;">    }
+</span><span style="color:#4271ae;">  }
+</span><span>}
+</span><span>
+</span><span style="color:#c82728;">$env.config</span><span style="color:#4271ae;"> = (
+</span><span>  </span><span style="color:#c82728;">$env.config </span><span style="color:#3e999f;">| </span><span style="color:#c82728;">merge </span><span style="color:#4271ae;">{
+</span><span style="color:#4271ae;">    completions: {
+</span><span style="color:#4271ae;">      external: {
+</span><span style="color:#4271ae;">        enable: true
+</span><span style="color:#4271ae;">        completer: $</span><span style="color:#c82728;">external_completer
+</span><span style="color:#4271ae;">      }
+</span><span style="color:#4271ae;">    }
+</span><span style="color:#4271ae;">  }
+</span><span>)
+</span></code></pre>
+<h2 id="typos"><a class="zola-anchor" href="#typos" aria-label="Anchor link for: typos">Typos</a></h2>
+<p>Spell-checker for source-code that knows how to parse language grammers and adapt spell-checking rules accordingly. It’s main goal is to have a low amount of false negatives and being fast.</p>
+<p>The most popular spell-checker in VS Code (based on cSpell), does not support language grammars and has too many false negatives.</p>
+<h2 id="ncdu"><a class="zola-anchor" href="#ncdu" aria-label="Anchor link for: ncdu"><a href="https://dev.yorhel.nl/ncdu">NCDU</a></a></h2>
+<p>Analyze which folders use the most disk space.</p>
+<h2 id="powertop"><a class="zola-anchor" href="#powertop" aria-label="Anchor link for: powertop"><a href="https://01.org/powertop/">Powertop</a></a></h2>
+<p>See how many Watts your system is using and which processes are consuming the most power.</p>
+<p>Use it to create custom “power profiles” with <code>power-profiles-daemon</code>.</p>
+<p>You can use a Bash script that listens for user events (like sliding the power profile slider from ‘balanced’ to ‘performance’):</p>
+<pre data-lang="bash" style="background-color:#f9f9f9;color:#111111;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#8e908c;">#!/usr/bin/env bash
+</span><span>
+</span><span style="color:#c82728;">dbus-monitor</span><span style="color:#f07219;"> --system </span><span style="color:#839c00;">&quot;type=&#39;signal&#39;,interface=&#39;org.freedesktop.UPower.PowerProfiles&#39;&quot; </span><span style="color:#3e999f;">| </span><span style="color:#8959a8;">while </span><span style="color:#4271ae;">read </span><span style="color:#f07219;">-r</span><span style="color:#4271ae;"> line</span><span style="color:#3e999f;">; </span><span style="color:#8959a8;">do
+</span><span>  </span><span style="color:#8959a8;">if </span><span style="color:#4271ae;">echo </span><span style="color:#839c00;">&quot;$</span><span style="color:#c82728;">line</span><span style="color:#839c00;">&quot; </span><span style="color:#3e999f;">| </span><span style="color:#c82728;">grep</span><span style="color:#f07219;"> -q </span><span style="color:#839c00;">&quot;ActiveProfile&quot;</span><span style="color:#3e999f;">; </span><span style="color:#8959a8;">then
+</span><span>    </span><span style="color:#8e908c;"># Get current profile
+</span><span>    </span><span style="color:#c82728;">PROFILE</span><span style="color:#3e999f;">=</span><span style="color:#839c00;">$(</span><span style="color:#c82728;">powerprofilesctl</span><span style="color:#4271ae;"> get </span><span style="color:#f07219;">2</span><span style="color:#3e999f;">&gt;</span><span style="color:#4271ae;">/dev/null </span><span style="color:#3e999f;">|| </span><span style="color:#4271ae;">echo </span><span style="color:#839c00;">&quot;balanced&quot;)
+</span><span>    </span><span style="color:#8e908c;"># Call the power profile handler
+</span><span>    </span><span style="color:#c82728;">handler.sh </span><span style="color:#839c00;">&quot;$</span><span style="color:#c82728;">PROFILE</span><span style="color:#839c00;">&quot;
+</span><span>  </span><span style="color:#8959a8;">fi
+</span><span style="color:#8959a8;">done
+</span></code></pre>
+<p>Then you just have to implement <code>handler.sh</code> to apply the right settings to your CPU and other power-consuming peripherals.</p>
+<h2 id="wluma"><a class="zola-anchor" href="#wluma" aria-label="Anchor link for: wluma">Wluma</a></h2>
+<p>Adjusts your screen and keyboard brightness according to learned preferences. Everytime you adjust the brightness manually and <code>wluma</code> is running, it uses this information to adjust the brightness the next day around this time.</p>
+<p>You can also use the webcam instead, but this might result in an LED flickering every 5 seconds.</p>
+<p>For internal screens, like laptop screens, <code>wluma</code> works with minimal configuration. For external screens, you might need a Linux kernel module <code>ddcii-driver</code>, udev rules and maybe even create a i2c device.</p>
+<h2 id="awatcher-activitywatch"><a class="zola-anchor" href="#awatcher-activitywatch" aria-label="Anchor link for: awatcher-activitywatch">AWatcher &amp; ActivityWatch</a></h2>
+<p>ActivityWatch is an open-source local time tracking server with a web-frontend.Because it is local, you don’t have to worry about companies selling your usage data. It is essential to add client programs that harvest the data and send it to the local server.</p>
+<p>Using hierarchical window title pattern matching rules you can keep track of:</p>
+<ul>
+<li>How many hours for each client / project a week.</li>
+<li>Total screen time, over the past year.</li>
+</ul>
+<p>It took me a while to figure out which client programs are actually necessary. On Wayland, you need to use <code>awatcher</code> to monitor desktop window titles and run it immediately after login (using autostart or a user service). Running it twice will result in errors.</p>
+<p>Some user programs like Firefox and VS Code have ActivityWatch extensions that can provide more fine-grained usage data.</p>
+<h2 id="geekbench"><a class="zola-anchor" href="#geekbench" aria-label="Anchor link for: geekbench"><a href="https://www.geekbench.com/">Geekbench</a></a></h2>
+<p>When you want to make a choice between different computer systems, you may want to benchmark them against eachother. I found the (closed-source) Geekbench test suites quite easy to use. They exist for all operating systems and are packaged for most Linux distributions.</p>
+<p>After installation, you can just run one of the <code>geekbench</code> commands (based on your CPU architecture). The results are uploaded to Geekbench servers and displayed in a web interface.</p>
+<p>You can directly save results to your account, which is useful if you want to monitor for performance regressions on your machines.</p>
+
+
+
+    <section id="comments" class="giscus"></section>
+
+
+</article>
+
+
+
+<footer>
+
+
+
+    
+
+    
+</footer>
+
+
+
+    </main>
+
+
+
+</body>
+
+</html>
