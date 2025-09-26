@@ -73,7 +73,7 @@ For the debug probe to actually show the log output from the target, you need to
 7. Compile, flash, and run your binary on the target Pico 2 W:
 
     ```bash
-    cargo ru
+    cargo run
     ```
 
     This should open an RTT console that shows the log messages emitted by the `defmt` statements in your code.

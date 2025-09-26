@@ -31,4 +31,11 @@
         line-height: 1.7;
     }
 
+    #announcement {
+        margin-top: 2em;
+        margin-bottom: 2em;
+        border: var(--border);
+        background-color: var(--code_background);
+    }
+
 }
