@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <meta charset="UTF-8">
+
+    <link rel="icon" type="image/x-icon" href="/logo.png">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    
+
+<!-- Comments with GitHub discussions -->
+<script src="https://giscus.app/client.js" data-repo="wvhulle/wvhulle.github.io" data-repo-id="R_kgDOGmD5MA"
+    data-category="Comments" data-category-id="DIC_kwDOGmD5MM4Cpsng" data-mapping="title" data-strict="1"
+    data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="light_high_contrast"
+    data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+    </script>
+<title>
+
+
+    
+    Introduction to Embassy
+    
+
+
+
+</title>
+
+
+
+    
+    <link rel="alternate" type="application/atom+xml" title="Willem Vanhulle's blog"
+        href="https://willemvanhulle.tech/atom.xml">
+    
+</head>
+
+<body>
+    <aside id="sidebar">
+
+        <a href="/">
+            <img src="/logo.png">
+        </a>
+
+        <ul id="navigation_links">
+            <li id="home-button">
+                <a href="/">
+                    About
+                </a>
+
+            </li>
+
+            
+            <li class="section_block">
+                <a href="/blog">Blog</a>
+                <ul class="section_page_list">
+                    
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;bare-metal&#x2F;">Embedded</a>
+                    </li>
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;linux&#x2F;">Linux</a>
+                    </li>
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;streams&#x2F;">Streams</a>
+                    </li>
+                    
+                    
+                    
+
+                    
+                </ul>
+
+            </li>
+
+        </ul>
+
+
+        <a href="" id="back-to-top">
+            ↑ </a>
+
+    </aside>
+
+
+
+    <main>
+
+        
+<article>
+
+    <header>
+
+
+        <h1 class="title">
+            Introduction to Embassy
+        </h1>
+
+
+
+        <ul class="tags"><li><a href="https://willemvanhulle.tech/tags/rust/">Rust</a></li><li><a href="https://willemvanhulle.tech/tags/embassy/">Embassy</a></li></ul>
+
+        <p class="post_date">Wednesday, 2025-06-04
+
+
+<a href="#comments">Comments</a>        </p><p class="subtitle">
+            Overview of the Embassy framework. <br/>   
+        <p>
+
+
+
+    </header>
+
+
+    
+    <p> Previous post:
+        <a href="https://willemvanhulle.tech/blog/bare-metal/pico-debug/">Pico 2 as debugprobe</a>.
+    </p>
+
+    
+
+
+
+    
+    <ul class="post_top_headers">
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/bare-metal/embassy-example/#minimal-embassy-example">Minimal Embassy example</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://willemvanhulle.tech/blog/bare-metal/embassy-example/#levels-of-abstraction-in-embedded-rust">Levels of Abstraction in Embedded Rust</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/bare-metal/embassy-example/#low-level">Low Level</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/bare-metal/embassy-example/#medium-level">Medium Level</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/bare-metal/embassy-example/#high-level">High Level</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/bare-metal/embassy-example/#more-reading-material">More Reading Material</a>
+            
+        </li>
+        
+    </ul>
+    
+
+
+    <h2 id="minimal-embassy-example"><a class="zola-anchor" href="#minimal-embassy-example" aria-label="Anchor link for: minimal-embassy-example">Minimal Embassy example</a></h2>
+<p>It can be useful to start with a minimal Embassy program. The following does nothing but can serve as a template for future programs.</p>
+<pre data-lang="rust" style="background-color:#f9f9f9;color:#111111;" class="language-rust "><code class="language-rust" data-lang="rust"><span>#![</span><span style="color:#c82728;">no_std</span><span>]
+</span><span>#![</span><span style="color:#c82728;">no_main</span><span>]
+</span><span>
+</span><span style="color:#8959a8;">use</span><span> defmt_rtt </span><span style="color:#3e999f;">as _</span><span>;
+</span><span style="color:#8959a8;">use </span><span>embassy_executor::{Spawner, main};
+</span><span style="color:#8959a8;">use </span><span>embassy_rp::config::Config;
+</span><span style="color:#8959a8;">use</span><span> panic_probe </span><span style="color:#3e999f;">as _</span><span>;
+</span><span style="color:#8959a8;">use </span><span>embassy_rp::bind_interrupts;
+</span><span>
+</span><span>bind_interrupts!(</span><span style="color:#8959a8;">struct </span><span>Irqs {
+</span><span>    PIO0_IRQ_0 =&gt; InterruptHandler&lt;PIO0&gt;;
+</span><span>});
+</span><span>
+</span><span>#[</span><span style="color:#c82728;">main</span><span>]
+</span><span>async </span><span style="color:#8959a8;">fn </span><span style="color:#4271ae;">main</span><span>(</span><span style="color:#f07219;">_spawner</span><span>: Spawner) -&gt; </span><span style="color:#3e999f;">! </span><span>{
+</span><span>   </span><span style="color:#8959a8;">let</span><span> p </span><span style="color:#3e999f;">= </span><span>embassy_rp::init(Config::default());
+</span><span>   </span><span style="color:#8959a8;">loop </span><span>{
+</span><span>      embassy_futures::yield_now().await;
+</span><span>   }
+</span><span>}
+</span></code></pre>
+<p>As you can see, there are two notable attributes at the top of the file.</p>
+<ul>
+<li><code>#![no_std]</code> means that the program does not use the standard library. Embedded systems are too small for the standard library. Instead of using <code>std::String</code>, you would a statically allocated <code>heapless::String</code>. Most <code>std</code> heap allocated container types have an analogue in <code>heapless</code>.</li>
+<li><code>#![no_main]</code> means that the program does not have a typical <code>main</code> function (with arguments or an exit code) as on a typical operating system. Instead, calling and creating the <code>main</code> function is completely handled by the Embassy framework.</li>
+</ul>
+<p>Then there are two <code>use x as _;</code> lines. These crates don’t expose functions or public modules to be used, but they contain setup code that should be included at least once in your embedded program.</p>
+<ul>
+<li>The <code>panic_probe</code> crate provides a panic handler that is compatible with Embassy. Panics are <strong>fatal errors</strong>. Every embedded program needs a panic handler because traditional panics would unwind or abort and yield control back to the operating system. This operating system is absent, so we have to tell the compiler how to handle panics. Usually, this means going into an infinite loop.</li>
+<li>The <code>defmt_rtt</code> is not useful for the moment, but once you have configured a hardware debugger, it will allow you to log messages to the debugger console. This is useful for debugging your program.</li>
+</ul>
+<p>There is a macro call <code>embassy_rp::bind_interrupts!</code> that binds hardware interrupts with the Embassy framework. This is necessary to be able to use hardware interrupts in your program. Hardware interrupts can stop the current ongoing computation and jump execution to some handler code elsewhere. Examples of hardware interrupt bindings available on the Pico 2 are:</p>
+<ul>
+<li><code>PIO0_IRQ_0</code> is an interrupt coming from the PIO peripheral.</li>
+<li><code>USBCTRL_IRQ</code> for USB interrupts (relevant in USB serial communication).</li>
+<li><code>ADC_IRQ_FIFO</code> for ADC interrupts (relevant for reading data from the analog-to-digital converter in the moisture sensor).</li>
+</ul>
+<p>The <code>spawner</code> argument allows users to spawn asynchronous tasks. Keep in mind, however, that each task should be non-generic and completely specified at compile time. This is because the Embassy framework does not support dynamic task creation at runtime.</p>
+<p>The last line <code>loop { yield_now().await }</code> may seem unnecessary. The reason I have to write it is because the return type of <code>main</code> is “never” (written as <code>!</code>). The <code>never</code> return type is the type for a function that never returns.</p>
+<p>Because of the signature of <code>main</code>, we cannot simply escape the <code>main</code> function. Running this program is the only thing that happens on the microcontroller. So we have to keep looping, even if we have already finished our work.</p>
+<h2 id="levels-of-abstraction-in-embedded-rust"><a class="zola-anchor" href="#levels-of-abstraction-in-embedded-rust" aria-label="Anchor link for: levels-of-abstraction-in-embedded-rust">Levels of Abstraction in Embedded Rust</a></h2>
+<p>This section provides an overview of the different levels of abstraction that can be used when programming microcontrollers in Rust.</p>
+<h3 id="low-level"><a class="zola-anchor" href="#low-level" aria-label="Anchor link for: low-level">Low Level</a></h3>
+<p>The lowest level of software abstraction provides direct access to the microcontroller’s hardware registers.</p>
+<ul>
+<li><strong>Core Support Crate</strong>: Enables access to the core processor’s features, like interrupts and system timers. See <a href="https://crates.io/crates/cortex-m">Cortex-M</a>.</li>
+<li><strong>Peripheral Access Crate (PAC)</strong>: Built on top of the core support crate, the PAC contains auto-generated code for accessing hardware peripherals (like GPIO, ADC, etc.) based on SVD files from the chip manufacturer. See <a href="https://crates.io/crates/rp235x-pac">RP235X-PAC</a>.</li>
+</ul>
+<p>The Embassy framework builds on top of the PAC and HAL to provide a more intuitive and convenient API for accessing the hardware.</p>
+<h3 id="medium-level"><a class="zola-anchor" href="#medium-level" aria-label="Anchor link for: medium-level">Medium Level</a></h3>
+<p>If the Embassy framework doesn’t suit your needs, you can fall back to a more conventional level of abstraction without <code>async/await</code>.</p>
+<p>The <strong>Hardware Abstraction Layer (HAL)</strong> is a more convenient way to access the hardware. It provides a higher level of abstraction than the PAC but still allows direct hardware access.</p>
+<p>The Pico 2 has <a href="https://crates.io/crates/rp235x-hal">rp235x-hal</a> as its HAL crate. You can view the <a href="https://github.com/rp-rs/rp-hal/tree/main/rp235x-hal-examples">examples</a>, which were used as a reference for this workshop.</p>
+<p><em>Remark: If you need to preempt tasks (i.e., interrupt a lower-priority task to run a higher-priority one), you should consider using <a href="https://github.com/rtic-rs/rtic">RTIC</a>. RTIC provides a different concurrency model based on preemption and priorities, which may be required for real-time applications.</em></p>
+<h3 id="high-level"><a class="zola-anchor" href="#high-level" aria-label="Anchor link for: high-level">High Level</a></h3>
+<p>For commonly used microcontrollers, there is often at least one good <strong>Board Support Package (BSP)</strong>. These are crates that provide a convenient, board-specific API, though they are sometimes less customizable than a HAL. For example, in the case of the Micro:bit controller, the BSP is called <a href="https://crates.io/crates/microbit">microbit</a> and it allows you to draw shapes on the on-board LED array.</p>
+<p>For the Raspberry Pi Pico 2 W, <code>embassy</code> (and its <code>embassy-rp</code> plugin) come the closest to a full-featured BSP.</p>
+<h2 id="more-reading-material"><a class="zola-anchor" href="#more-reading-material" aria-label="Anchor link for: more-reading-material">More Reading Material</a></h2>
+<p>Interesting books about embedded Rust:</p>
+<ul>
+<li>There is a book for beginners in embedded Rust: <a href="https://docs.rust-embedded.org/discovery-mb2/">The Discovery Book</a>. It assumes you have a Micro:bit v2 (~€20).</li>
+<li>There is also a book about embedded Rust using an STM32 chip: <a href="https://docs.rust-embedded.org/book/">The Embedded Rust Book</a>.</li>
+<li>Another book about Rust and the Raspberry Pi Pico 2 is <a href="https://pico.implrust.com/">Pico, In-Depth</a>.</li>
+</ul>
+
+
+
+    <section id="comments" class="giscus"></section>
+
+
+</article>
+
+
+
+<footer>
+
+
+
+    
+    <span>←
+        <a href="https://willemvanhulle.tech/blog/bare-metal/pico-debug/">Pico 2 as debugprobe</a> </span>
+
+
+    
+
+    
+    <span>
+        <a href="https://willemvanhulle.tech/blog/bare-metal/defmt-logging/">Logging with defmt over RTT</a> → </span>
+
+
+    
+</footer>
+
+
+
+    </main>
+
+
+
+</body>
+
+</html>
