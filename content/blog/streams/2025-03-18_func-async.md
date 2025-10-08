@@ -394,31 +394,3 @@ let merged = stream::select_all([stream_a, stream_b]);
 ```
 
 In practice, you would typically pass large vectors, compile-time-sized arrays or other iterable collections to the `select_all` function.
-
-### Filtering streams
-
-You can filter a stream of numbers to only keep the even numbers as follows:
-
-```rust
-use std::future::ready;
-use futures::{stream, StreamExt};
-
-let stream = stream::iter(1..=10);
-let events = stream.filter(|x| ready(x % 2 == 0));
-```
-
-Notice the `ready` function. This function maps primitive Rust values __into the async world__. The output of `ready` is a minimal `Future` that can be moved: it is **`Unpin`**. 
-
-_**Remark**: Don't try to implement `ready` yourself, just import it from `std::future::ready`._
-
-### Boolean operators
-
-The `futures` crate also provides analogues for the boolean operators shipped with the standard library `Iterator` such as `any`, `all`, ... :
-
-```rust
-let number_stream = stream::repeat(1).map(|n| n);
-let less_then_twenty = number_stream.all(|i| async move { i < 20 });
-assert_eq!(less_then_twenty.await, true);
-```
-
-Notice here that we don't have to "pin" the `less_then_twenty` stream, because `Unpin` is not a requirement for `all`.

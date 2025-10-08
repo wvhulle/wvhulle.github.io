@@ -14,8 +14,6 @@ In that case, you might try an imperative approach and create the stream using t
 
 You might also want to try using imperative design patterns like loops, channels, spawns and generic functions. This approach quickly becomes unmaintainable because of its complexity.
 
-
-
 ## Invalidation through moves
 
 _**Remark**: the following sections will be about `Unpin`. I wrote about it because I needed it later on to understand better how to construct combinators. You can skip this chapter if you want (or look at the official documentation)._
@@ -315,8 +313,6 @@ The `event`s yielded by the shared stream seem to be wrappers around `Arc<usize>
 
 _Remark: Maybe I am wrong?_
 
-
-
 ### A stream of clones
 
 The `share` operator on streams from `futures-rx` seems to put all values on the input stream inside a reference-counted `Arc`.
@@ -337,98 +333,4 @@ let mut cloned_stream = clone_stream.clone();
 
 _Remark: There exist a few other crates that are similar._
 
-### Stucture of the `clone-stream` crate
-
-I called the shared state of all the clones of an input stream `Fork`. The output streams that can be cloned are called `CloneStream`. The input stream is called `BaseStream`.
-
-The fork is a combination of a queue of unprocessed items and a map of the state machines of the `CloneStream`s:
-
-```rust
-struct Fork<BaseStream>
-    where  BaseStream: Stream<Item: Clone> 
-{
-    base_stream: Pin<Box<BaseStream>>,
-    queue: BTreeMap<usize, Option<BaseStream::Item>>,
-    clones: BTreeMap<usize, CloneState>,
-    next_clone_index: usize,
-    next_queue_index: usize,
-}
-```
-
-Every `CloneStream` registers at the shared `Fork` and receives a unique identifier.
-
-```rust
-fn register(&mut self) -> usize {
-    let min_available = self.next_clone_index;
-    self.clones.insert(min_available, CloneState::default());
-    self.next_clone_index += 1;
-    min_available
-}
-```
-
-Then `Fork` creates an entry for the `CloneStream` in a map containing the states of all `CloneStream`. The default entry is just `NeverPolled`.
-
-As soon as the `CloneStream` is polled, the poll call is forwarded to the `Fork` together with the waker provided by the async runtime. The `Fork` will look at the current state of the state machine associated to `CloneStream` by using it's idea. Depending on the state it will:
-
-- Pop an item from a shared item queue and return it to `CloneStream`.When there are still other `CloneStream` waiting and sleeping, just clone from the heap.
-- Poll the input stream and return pending
-- Poll the input stream, receive ready, push on queue if other `CloneStream`s are sleeping, return item.
-
-After each step, the state machine of the `CloneStream` is advanced by the `Fork` in its map.
-
-### General approach building combinators
-
-Usually, a combinator has some kind of internal state. You can choose between:
-
-- using an implicit state defined with `unfold` or
-- creating a new data type that represents the state explicitly.
-
-If you decide on the last approach, you can use the "state" data type as a handle for useful helper methods.
-
-Do not forget to give the helper methods (where appropriate) a `Waker` argument. This argument can be used by the helper methods to store the waker in case some source is unavailable and wake up the relevant sleeping tasks in case the source becomes ready in future.
-
-Only the latest `Waker` passed to `poll` is stored (at least for most futures in the wild). If you want multiple tasks to be woken from sleep by the latest passed waker, you have to build your own wrapper waker that will wake all relevant sleeping tasks.
-
-To make your own waker you can use the `unsafe` `RawWaker`, but that requires you to specify low-level behaviour that is already provided by any asynchronous runtime. Instead, create a simple struct definition that contains the wakers you need and implement the [`Wake`](https://doc.rust-lang.org/stable/std/task/trait.Wake.html) trait for that struct.
-
-For example:
-
-```rust
-struct SleepWaker {
-    wakers: Vec<Waker>,
-}
-
-impl Wake for SleepWaker {
-    fn wake(self: Arc<Self>) {
-       self.wakers.iter().for_each(Waker::wake_by_ref);
-    }
-}
-```
-
-After writing all your helper methods (that operate on some shared internal state), the only task that remains is to implement the `poll_next` method for the `Stream` trait. The body of this implementation can then make use of the helper functions on the "state" data type.
-
-As you can see in `clone-stream`, the `poll_next`-method of the output `CloneStream`s just calls methods defined previously on the internal shared object (the `Fork`):
-
-```rust
-impl<BaseStream> Stream for CloneStream<BaseStream>
-where
-    BaseStream: Stream<Item: Clone>,
-{
-    type Item = BaseStream::Item;
-
-    fn poll_next(self: Pin<&mut Self>, current_task: &mut Context) -> Poll<Option<Self::Item>> {
-        let waker = current_task.waker();
-        let mut fork = self.fork.write().unwrap();
-        fork.poll_clone(self.id, waker)
-    }
-```
-
-### Testing your async combinators
-
-Do not spend time on mocking an asynchronous runtime in your tests, because you will end up building your own buggy runtime which needs its own test suite.
-
-If you do not care much about the ordering of events, you can just use the `ThreadPool` from `futures` to create a barebones async runtime on which you can spawn async tasks. In this way you can already test a lot of invariants of your homegrown async combinator.
-
-If you are testing the ordering of events, you should use a run-time with a notion of time (the most common one is Tokio). Then you can test your code with time-outs using the `select!`-macro. Do not forget to account for situations in which parts of the system are dropped or futures cancelled. See the [tests of `clone-stream`](https://github.com/wvhulle/clone-stream/tree/main/tests).
-
-In case you are worried about the size of an additional async runtime dependency, you can add the dependency as a "dev-dependency"-only to keep your core library code light and easy to distribute.
+For more information about the `clone-stream` crate, see my [presentation at EuroRust 2025](https://github.com/wvhulle/streams-eurorust-2025).
