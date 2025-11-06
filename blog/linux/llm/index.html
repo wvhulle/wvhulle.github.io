@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <meta charset="UTF-8">
+
+    <link rel="icon" type="image/x-icon" href="/logo.png">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    
+
+<!-- Comments with GitHub discussions -->
+<script src="https://giscus.app/client.js" data-repo="wvhulle/wvhulle.github.io" data-repo-id="R_kgDOGmD5MA"
+    data-category="Comments" data-category-id="DIC_kwDOGmD5MM4Cpsng" data-mapping="title" data-strict="1"
+    data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="light_high_contrast"
+    data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+    </script>
+<title>
+
+
+    
+    LLMs
+    
+
+
+
+</title>
+
+
+
+    
+    <link rel="alternate" type="application/atom+xml" title="Willem Vanhulle's blog"
+        href="https://willemvanhulle.tech/atom.xml">
+    
+</head>
+
+<body>
+    <aside id="sidebar">
+
+        <a href="/">
+            <img src="/logo.png">
+        </a>
+
+        <ul id="navigation_links">
+            <li id="home-button">
+                <a href="/">
+                    About
+                </a>
+
+            </li>
+
+            
+            <li class="section_block">
+                <a href="/blog">Blog</a>
+                <ul class="section_page_list">
+                    
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;linux&#x2F;">Linux</a>
+                    </li>
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;streams&#x2F;">Streams</a>
+                    </li>
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;bare-metal&#x2F;">Embedded</a>
+                    </li>
+                    
+                    
+                    
+
+                    
+                </ul>
+
+            </li>
+
+        </ul>
+
+
+        <a href="" id="back-to-top">
+            ↑ </a>
+
+    </aside>
+
+
+
+    <main>
+
+        
+<article>
+
+    <header>
+
+
+        <h1 class="title">
+            LLMs
+        </h1>
+
+
+
+        <ul class="tags"><li><a href="https://willemvanhulle.tech/tags/ai/">AI</a></li><li><a href="https://willemvanhulle.tech/tags/agents/">agents</a></li><li><a href="https://willemvanhulle.tech/tags/llm/">LLM</a></li><li><a href="https://willemvanhulle.tech/tags/large-language-model/">large-language model</a></li><li><a href="https://willemvanhulle.tech/tags/tools/">tools</a></li></ul>
+
+        <p class="post_date">Sunday, 2025-11-02
+
+
+<a href="#comments">Comments</a>        </p><p class="subtitle">
+            Chat agents for when I am lazy. <br/>   
+        <p>
+
+
+
+    </header>
+
+
+    
+    <p> Previous post:
+        <a href="https://willemvanhulle.tech/blog/linux/nu/">NuShell</a>.
+    </p>
+
+    
+
+
+
+    
+    <ul class="post_top_headers">
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/llm/#claude-code">Claude Code</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/llm/#custom-nix-agent-module">Custom Nix agent module</a>
+            
+        </li>
+        
+    </ul>
+    
+
+
+    <h2 id="claude-code"><a class="zola-anchor" href="#claude-code" aria-label="Anchor link for: claude-code">Claude Code</a></h2>
+<p>Link: <a href="https://docs.anthropic.com/en/docs/claude-code">Claude-code</a></p>
+<p>A chat agent that has access to your filesystem and system commands. It sends all your local data (file contents, command output) to remote Anthropic servers, so be careful.</p>
+<h2 id="custom-nix-agent-module"><a class="zola-anchor" href="#custom-nix-agent-module" aria-label="Anchor link for: custom-nix-agent-module">Custom Nix agent module</a></h2>
+<p>I share my user prompt between different agents such a VS Code’s chat extension, using a Nix module that takes files like this as input:</p>
+<details>
+<summary>Show my user prompt for all my development tasks in Nix</summary>
+<pre data-lang="nix" style="background-color:#f9f9f9;color:#111111;" class="language-nix "><code class="language-nix" data-lang="nix"><span style="color:#8e908c;"># AI Agent Instructions Data
+</span><span style="color:#8e908c;"># Base instructions and language-specific instructions for AI coding assistants
+</span><span>{
+</span><span>  </span><span style="color:#8e908c;"># Base instructions for all AI agents (in order of importance)
+</span><span>  </span><span style="color:#c82728;">baseInstructions </span><span style="color:#3e999f;">= </span><span>[
+</span><span>    </span><span style="color:#839c00;">&quot;Don&#39;t be sycophantic and tell how good my ideas are. I may have flawed ideas.&quot;
+</span><span>    </span><span style="color:#839c00;">&quot;I am not interested in refactoring or summary documents.&quot;
+</span><span>    </span><span style="color:#839c00;">&quot;When writing in an interactive Nu shell, you should use Nushell syntax for commands.&quot;
+</span><span>    </span><span style="color:#839c00;">&quot;Use a functional and declarative programming approach&quot;
+</span><span>    </span><span style="color:#839c00;">&quot;Never comment-out or adjust tests while fixing bugs. Instead, double-check the test expectations and fix the library implementation.&quot;
+</span><span>    </span><span style="color:#839c00;">&quot;Don&#39;t use emojis or emoticons in comments or output&quot;
+</span><span>    </span><span style="color:#839c00;">&quot;Ask concise follow-up questions to figure out what I want&quot;
+</span><span>    </span><span style="color:#839c00;">&quot;When a command is missing, you can use `nix-shell -p [command-nix-package] --run &#39;command&#39;` for running the missing command.&quot;
+</span><span>    </span><span style="color:#839c00;">&quot;Only add comments when the variable or function naming is not self-explanatory.&quot;
+</span><span>    </span><span style="color:#839c00;">&quot;Always try to run linters with JSON output turned first to save tokens.&quot;
+</span><span>    </span><span style="color:#839c00;">&quot;Consider replacing comments by better variable or function names.&quot;
+</span><span>    </span><span style="color:#839c00;">&quot;Request examples when requirements are ambiguous&quot;
+</span><span>    </span><span style="color:#839c00;">&quot;Suggest testing approaches for generated code&quot;
+</span><span>    </span><span style="color:#839c00;">&quot;Prevent security problems in already written and new code&quot;
+</span><span>    </span><span style="color:#839c00;">&quot;Enable logging or tracing to debug difficult failing tests&quot;
+</span><span>    </span><span style="color:#839c00;">&quot;You should never capture or redirect stdout or stderr output unless necessary.&quot;
+</span><span>    </span><span style="color:#839c00;">&quot;Modify documents in-place and do not create new version with suffixes in the filename.&quot;
+</span><span>    </span><span style="color:#839c00;">&quot;Use sub-agents to complete tasks to require changes to unrelated files.&quot;
+</span><span>    </span><span style="color:#839c00;">&quot;Use custom composite `ast-grep` rules to make bulk code changes in large code bases to save time.&quot;
+</span><span>    </span><span style="color:#839c00;">&quot;When you are done with all tasks, search the codebase for todo (case-insensitive) comments to gather new tasks and start right away executing them.&quot;
+</span><span>    </span><span style="color:#839c00;">&quot;Remove dead / unused code and inline simple functions that are just used once.&quot;
+</span><span>  ];
+</span><span>
+</span><span style="color:#8e908c;"># Language-specific instructions
+</span><span>
+</span><span>  </span><span style="color:#c82728;">languages </span><span style="color:#3e999f;">= </span><span>{
+</span><span>    </span><span style="color:#c82728;">lean </span><span style="color:#3e999f;">= </span><span>{
+</span><span>      </span><span style="color:#c82728;">enable </span><span style="color:#3e999f;">= </span><span style="color:#f07219;">false</span><span>;
+</span><span>      </span><span style="color:#c82728;">extensions </span><span style="color:#3e999f;">= </span><span>[ </span><span style="color:#839c00;">&quot;lean&quot; </span><span>];
+</span><span>      </span><span style="color:#c82728;">instructions </span><span style="color:#3e999f;">= </span><span>[
+</span><span>        </span><span style="color:#839c00;">&quot;Use `lean-lsp-mcp` MCP server for goals/diagnostics when available&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Replace `sorry` step-by-step in tests&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Try `exact?` and then `apply?` before searching elsewhere&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Use `lake build` and avoid `lake clean`&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Keep functions computable when possible&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Use problem decomposition for complex proofs&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Leverage existing mathlib theorems before creating new ones&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Provide counterexamples when proofs fail&quot;
+</span><span>      ];
+</span><span>    };
+</span><span>
+</span><span>    </span><span style="color:#c82728;">nix </span><span style="color:#3e999f;">= </span><span>{
+</span><span>      </span><span style="color:#c82728;">enable </span><span style="color:#3e999f;">= </span><span style="color:#f07219;">true</span><span>;
+</span><span>      </span><span style="color:#c82728;">extensions </span><span style="color:#3e999f;">= </span><span>[ </span><span style="color:#839c00;">&quot;nix&quot; </span><span>];
+</span><span>      </span><span style="color:#c82728;">instructions </span><span style="color:#3e999f;">= </span><span>[
+</span><span>        </span><span style="color:#839c00;">&quot;When running as root, call `nixos-rebuild test` and skip the dry-run step.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;When running as a normal non-root user, use `nixos-rebuild dry-run` to validate the nix configuration of the current host without building it.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Never run any `find` command on the `/nix/store` folder based on filename, because absolute store paths slow to traverse and unpredictable.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Don&#39;t create new script/ directories, just embed script files directly in the parent directory.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Check for nix configuration evaluation performance regressions when making changes to the nix import structure.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Use separate files for shell scripts, never inline them in nix files (unless it is a one-liner).&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Prefer Nushell as the primary flavor for writing new shell scripting&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Never use nix built-in string replacement or substitution with `@` placeholders on external included files but implement command-line argument passing.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Declare runtime dependencies for scripts in the related Nix systemd service definition and its path option. Don&#39;t add them globally.&quot;
+</span><span>      ];
+</span><span>    };
+</span><span>
+</span><span>    </span><span style="color:#c82728;">sh </span><span style="color:#3e999f;">= </span><span>{
+</span><span>      </span><span style="color:#c82728;">enable </span><span style="color:#3e999f;">= </span><span style="color:#f07219;">true</span><span>;
+</span><span>      </span><span style="color:#c82728;">extensions </span><span style="color:#3e999f;">= </span><span>[
+</span><span>        </span><span style="color:#839c00;">&quot;sh&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;bash&quot;
+</span><span>      ];
+</span><span>      </span><span style="color:#c82728;">instructions </span><span style="color:#3e999f;">= </span><span>[
+</span><span>        </span><span style="color:#839c00;">&quot;Do not create functions in scripts that are just one line (excluding comments).&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Lint bash script files with ShellCheck linter and fix issues.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;When printing errors, consider writing to either stdout or stderr.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Prefix shell script output with journald priority levels as &lt;level&gt;.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Consider using Nushell for new scripts instead of bash.&quot;
+</span><span>      ];
+</span><span>    };
+</span><span>
+</span><span>    </span><span style="color:#c82728;">typ </span><span style="color:#3e999f;">= </span><span>{
+</span><span>      </span><span style="color:#c82728;">enable </span><span style="color:#3e999f;">= </span><span style="color:#f07219;">true</span><span>;
+</span><span>      </span><span style="color:#c82728;">extensions </span><span style="color:#3e999f;">= </span><span>[ </span><span style="color:#839c00;">&quot;typ&quot; </span><span>];
+</span><span>      </span><span style="color:#c82728;">instructions </span><span style="color:#3e999f;">= </span><span>[
+</span><span>        </span><span style="color:#839c00;">&quot;To debug a long Typst document, make a minimal example that reproduces the problem.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Extract a small amount of images of pages from the PDF output and analyze them.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Modify the template instead of the user content when fixing layout issues.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Create reusable, general layout functions for repeated patterns.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Do not duplicate functionality, but improve generalisability for existing functions.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Search online first whether someone else created a library for a common layout problem.&quot;
+</span><span>      ];
+</span><span>    };
+</span><span>
+</span><span>    </span><span style="color:#c82728;">nu </span><span style="color:#3e999f;">= </span><span>{
+</span><span>      </span><span style="color:#c82728;">enable </span><span style="color:#3e999f;">= </span><span style="color:#f07219;">true</span><span>;
+</span><span>      </span><span style="color:#c82728;">extensions </span><span style="color:#3e999f;">= </span><span>[ </span><span style="color:#839c00;">&quot;nu&quot; </span><span>];
+</span><span>      </span><span style="color:#c82728;">instructions </span><span style="color:#3e999f;">= </span><span>[
+</span><span>        </span><span style="color:#839c00;">&quot;Leverage Nushell&#39;s structured data capabilities for data manipulation.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Utilize built-in Nushell commands for common tasks instead of external utilities.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;When writing scripts, prefer pipelines and data transformations over imperative loops.&quot;
+</span><span>      ];
+</span><span>    };
+</span><span>
+</span><span>    </span><span style="color:#c82728;">py </span><span style="color:#3e999f;">= </span><span>{
+</span><span>      </span><span style="color:#c82728;">enable </span><span style="color:#3e999f;">= </span><span style="color:#f07219;">false</span><span>;
+</span><span>      </span><span style="color:#c82728;">extensions </span><span style="color:#3e999f;">= </span><span>[ </span><span style="color:#839c00;">&quot;py&quot; </span><span>];
+</span><span>      </span><span style="color:#c82728;">instructions </span><span style="color:#3e999f;">= </span><span>[
+</span><span>        </span><span style="color:#839c00;">&quot;Use type hints&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Use structured error handling with specific exception types&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Validate inputs and provide clear error messages&quot;
+</span><span>      ];
+</span><span>    };
+</span><span>
+</span><span>    </span><span style="color:#c82728;">rs </span><span style="color:#3e999f;">= </span><span>{
+</span><span>      </span><span style="color:#c82728;">enable </span><span style="color:#3e999f;">= </span><span style="color:#f07219;">true</span><span>;
+</span><span>      </span><span style="color:#c82728;">extensions </span><span style="color:#3e999f;">= </span><span>[ </span><span style="color:#839c00;">&quot;rs&quot; </span><span>];
+</span><span>      </span><span style="color:#c82728;">instructions </span><span style="color:#3e999f;">= </span><span>[
+</span><span>        </span><span style="color:#839c00;">&quot;Never use the `anyhow` dependency.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Never use the `String` type for building error types or enum variants.&quot;
+</span><span>
+</span><span>        </span><span style="color:#839c00;">&quot;Only make code `pub` or `pub(crate)` when necessary.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Use `Result` and `Option` consistently instead of panicking.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Use the `clippy` linter to improve code quality.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Write new tests for public API inside the tests/ folder&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Write new unit tests for private API inside the relevant src file&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Use extension traits to group together related methods that are always called on the same (first) argument type.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Fix a large portion of clippy problems automatically with `cargo clippy --all-targets --fix --allow-dirty`.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Instead of adding comments that become stale, add logging with the external `log` crate and its macros.&quot;
+</span><span>      ];
+</span><span>    };
+</span><span>
+</span><span>    </span><span style="color:#c82728;">md </span><span style="color:#3e999f;">= </span><span>{
+</span><span>      </span><span style="color:#c82728;">enable </span><span style="color:#3e999f;">= </span><span style="color:#f07219;">true</span><span>;
+</span><span>      </span><span style="color:#c82728;">extensions </span><span style="color:#3e999f;">= </span><span>[
+</span><span>        </span><span style="color:#839c00;">&quot;md&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;markdown&quot;
+</span><span>      ];
+</span><span>      </span><span style="color:#c82728;">instructions </span><span style="color:#3e999f;">= </span><span>[
+</span><span>        </span><span style="color:#839c00;">&quot;Do not use deeply nested sub-sections or sub-headings.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;The ratio of semantic content to layout should be high.&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Use YAML front matter for metadata when appropriate&quot;
+</span><span>        </span><span style="color:#839c00;">&quot;Only write markdown that adds value beyond improving existing code naming and structure.&quot;
+</span><span>      ];
+</span><span>    };
+</span><span>  };
+</span><span>}
+</span><span>
+</span></code></pre>
+</details>
+
+
+
+    <section id="comments" class="giscus"></section>
+
+
+</article>
+
+
+
+<footer>
+
+
+
+    
+    <span>←
+        <a href="https://willemvanhulle.tech/blog/linux/nu/">NuShell</a> </span>
+
+
+    
+
+    
+</footer>
+
+
+
+    </main>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <meta charset="UTF-8">
+
+    <link rel="icon" type="image/x-icon" href="/logo.png">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    
+
+<!-- Comments with GitHub discussions -->
+<script src="https://giscus.app/client.js" data-repo="wvhulle/wvhulle.github.io" data-repo-id="R_kgDOGmD5MA"
+    data-category="Comments" data-category-id="DIC_kwDOGmD5MM4Cpsng" data-mapping="title" data-strict="1"
+    data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="light_high_contrast"
+    data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+    </script>
+<title>
+
+
+    
+    NuShell
+    
+
+
+
+</title>
+
+
+
+    
+    <link rel="alternate" type="application/atom+xml" title="Willem Vanhulle's blog"
+        href="https://willemvanhulle.tech/atom.xml">
+    
+</head>
+
+<body>
+    <aside id="sidebar">
+
+        <a href="/">
+            <img src="/logo.png">
+        </a>
+
+        <ul id="navigation_links">
+            <li id="home-button">
+                <a href="/">
+                    About
+                </a>
+
+            </li>
+
+            
+            <li class="section_block">
+                <a href="/blog">Blog</a>
+                <ul class="section_page_list">
+                    
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;linux&#x2F;">Linux</a>
+                    </li>
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;streams&#x2F;">Streams</a>
+                    </li>
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;bare-metal&#x2F;">Embedded</a>
+                    </li>
+                    
+                    
+                    
+
+                    
+                </ul>
+
+            </li>
+
+        </ul>
+
+
+        <a href="" id="back-to-top">
+            ↑ </a>
+
+    </aside>
+
+
+
+    <main>
+
+        
+<article>
+
+    <header>
+
+
+        <h1 class="title">
+            NuShell
+        </h1>
+
+
+
+        <ul class="tags"><li><a href="https://willemvanhulle.tech/tags/linux/">Linux</a></li><li><a href="https://willemvanhulle.tech/tags/windows/">Windows</a></li><li><a href="https://willemvanhulle.tech/tags/stream/">stream</a></li><li><a href="https://willemvanhulle.tech/tags/pipeline/">pipeline</a></li><li><a href="https://willemvanhulle.tech/tags/shell/">shell</a></li><li><a href="https://willemvanhulle.tech/tags/prompt/">prompt</a></li><li><a href="https://willemvanhulle.tech/tags/rust/">Rust</a></li></ul>
+
+        <p class="post_date">Sunday, 2025-11-02
+
+
+<a href="#comments">Comments</a>        </p><p class="subtitle">
+            Tooling built around NuShell, a modern structured shell <br/>   
+        <p>
+
+
+
+    </header>
+
+
+    
+    <p> Previous post:
+        <a href="https://willemvanhulle.tech/blog/linux/gui/">GUI</a>.
+    </p>
+
+    
+
+
+
+    
+    <ul class="post_top_headers">
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/linux/nu/#introduction">Introduction</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://willemvanhulle.tech/blog/linux/nu/#tooling-for-nushell">Tooling for NuShell</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/linux/nu/#linter">Linter</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://willemvanhulle.tech/blog/linux/nu/#configuration-extensions">Configuration extensions</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/linux/nu/#audio-notifications">Audio notifications</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+    </ul>
+    
+
+
+    <p>I am organising a workshop about NuShell in December 2025, <a href="https://sysghent.be/events/nushell">more information</a>.</p>
+<h2 id="introduction"><a class="zola-anchor" href="#introduction" aria-label="Anchor link for: introduction">Introduction</a></h2>
+<p>Bash scripts are difficult to write and maintain, because of old-fashioned syntax and a lack of modern features. Frequently, Bash itself does not support certain crucial programming operations.</p>
+<p>For example, you have to crawl the web for info on how to use <code>jq</code> to extract a basic value from an API. It almost feels like playing “Dungeons and Dragons”.</p>
+<p><a href="https://www.nushell.sh/">Nushell</a> alleviates the pains of frustrated Bash scripters:</p>
+<ul>
+<li>It has modern programming language features.</li>
+<li>You can still pipe as much as you want.</li>
+<li>Most commands stay the same.</li>
+</ul>
+<p>In general you don’t need to alias commands as much in Nushell:</p>
+<ul>
+<li>Nushell has an <code>rm</code> command that can be configured to delete files to the trash always. Don’t search for an external ‘safe-delete’ <code>rm</code> command, it’s already part of Nushell core.</li>
+<li>It also has an <code>ls</code> command that can be queried using a kind of SQL syntax with traditional pipes.</li>
+</ul>
+<p>The community collects good NuShell scripts in the <a href="https://github.com/nushell/nu_scripts">nu_scripts</a> repository.</p>
+<h2 id="tooling-for-nushell"><a class="zola-anchor" href="#tooling-for-nushell" aria-label="Anchor link for: tooling-for-nushell">Tooling for NuShell</a></h2>
+<p>Currently, the tooling is lacking a bit for NuShell.</p>
+<h3 id="linter"><a class="zola-anchor" href="#linter" aria-label="Anchor link for: linter">Linter</a></h3>
+<p>There is no real linter, so I created my own: <a href="https://github.com/wvhulle/nu-lint">nu-lint</a>. It was inspired by my experience with Clippy (a Rust linter). Please try it out and report any bugs in the issue tracker, thanks!</p>
+<h2 id="configuration-extensions"><a class="zola-anchor" href="#configuration-extensions" aria-label="Anchor link for: configuration-extensions">Configuration extensions</a></h2>
+<h3 id="audio-notifications"><a class="zola-anchor" href="#audio-notifications" aria-label="Anchor link for: audio-notifications">Audio notifications</a></h3>
+<p>Do you start long-running commands and forget to follow-up on them? The visual / audio bell of <code>konsole</code> was not so reliable for me. Instead, I figured out a way to do it within Nushell.</p>
+<p>You can define a function in your Nushell config at <code>~/.config/nushell/config.nu</code> and add it as <code>pre_prompt</code> hook:</p>
+<details>
+<summary>Click to show Nu shell snippet for audio notifications</summary>
+```bash
+def notify-long-command [] {
+  const NOTIFICATION_THRESHOLD = 30sec
+  const SOUND_FILE = "/run/current-system/sw/share/sounds/freedesktop/stereo/bell.oga"
+<p>let cmd_duration = (($env.CMD_DURATION_MS? | default “0”) | into int | into duration -u ms)</p>
+<p>if $cmd_duration &gt; $NOTIFICATION_THRESHOLD {
+try { ^pw-play $SOUND_FILE } catch { ^paplay $SOUND_FILE }
+}
+}</p>
+<p>$env.config = (
+$env.config | merge {
+hooks: {
+pre_prompt: [
+{||
+notify-long-command
+}
+]
+}
+}
+)</p>
+<pre style="background-color:#f9f9f9;color:#111111;"><code><span>&lt;/details&gt;
+</span><span>
+</span><span>Notice that Nushell has a &#39;duration&#39; type like Rust. Tweak the parameters as you wish. Maybe you can find out a way to modify the sound based on metadata about the previous command?
+</span></code></pre>
+
+
+
+    <section id="comments" class="giscus"></section>
+
+
+</article>
+
+
+
+<footer>
+
+
+
+    
+    <span>←
+        <a href="https://willemvanhulle.tech/blog/linux/gui/">GUI</a> </span>
+
+
+    
+
+    
+    <span>
+        <a href="https://willemvanhulle.tech/blog/linux/llm/">LLMs</a> → </span>
+
+
+    
+</footer>
+
+
+
+    </main>
+
+
+
+</body>
+
+</html>
