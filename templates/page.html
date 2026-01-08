@@ -36,13 +36,6 @@
 
 
 
-        <ul class="tags">
-            {%- for tag in page.taxonomies.tags -%}
-            <li><a href="{{ get_taxonomy_url(kind='tags', name=tag) }}">{{ tag }}</a></li>
-            {%- endfor -%}
-
-        </ul>
-
         <p class="post_date">{{ page.date | date(format="%A, %Y-%m-%d") }}
 
 
@@ -53,13 +46,20 @@
 
 
 
+        <ul class="tags">
+            {%- for tag in page.taxonomies.tags -%}
+            <li><a href="{{ get_taxonomy_url(kind='tags', name=tag) }}">{{ tag }}</a></li>
+            {%- endfor -%}
+
+        </ul>
         {%- else -%}
+
         <h4>Uncategorised</h4>
 
         {%- endif -%}
 
         <p class="subtitle">
-            {{ page.description }} <br/>   
+            {{ page.description }} <br/>
         <p>
 
 
