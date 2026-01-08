@@ -1,7 +1,7 @@
 +++
 title = "Blog"
 insert_anchor_links = "heading"
-sort_by ="weight"
+sort_by ="date"
 +++
 
 

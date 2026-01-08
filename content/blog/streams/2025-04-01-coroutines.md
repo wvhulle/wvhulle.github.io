@@ -57,8 +57,8 @@ If you look carefully at the `Coroutine` trait you could see that (in pseudo-cod
 
 ```rust
 type Future<Output> = Coroutine<
-    Resume = Context, 
-    Yield = (), 
+    Resume = Context,
+    Yield = (),
     Return = Output
 >;
 ```
@@ -106,14 +106,14 @@ Reflecting on the concepts of an iterator, future and stream, we can say that:
 - A **future** is a coroutine that resumes with a `Waker`.
 - A **stream** is an iterator that resumes with a `Waker` and yields an `Option`.
 
-Coroutines are a generalisation of these cases, which can be layed-out in a table:
+Coroutines are a generalisation of these cases, which can be laid-out in a table:
 
-|                     | _YIELDS_                  | _RESUMES_ | _RETURNS_ |
-| ------------------- | ------------------------- | --------- | --------- |
-| `Iterator`          | `Option`                  | `!`       | `!`       |
-| `Future`, `AsyncFn` | `()`                      | `Waker`   | `Any`     |
-| `Stream`            | `Option`      | `Waker`       | `!` | 
-| `Coroutine`         | `Any`                     | `Any`     | `Any`     |
+|                     | _YIELDS_ | _RESUMES_ | _RETURNS_ |
+| ------------------- | -------- | --------- | --------- |
+| `Iterator`          | `Option` | `!`       | `!`       |
+| `Future`, `AsyncFn` | `()`     | `Waker`   | `Any`     |
+| `Stream`            | `Option` | `Waker`   | `!`       |
+| `Coroutine`         | `Any`    | `Any`     | `Any`     |
 
 In this table, the `!` symbol stands for `never`, the type that does not have any runtime value. In other words, `never` is not constructible. It is used often as the return time of non-terminating functions like infinite loops.
 

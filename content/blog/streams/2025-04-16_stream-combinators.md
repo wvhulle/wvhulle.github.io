@@ -101,7 +101,7 @@ impl<Fut> Future for MapFut<Fut> {
     fn poll(self: Pin<&mut Self>) -> Poll {
         // We need to do something with `self.fut`.
         // We need `Pin<&mut Self> -> &mut Self`.
-        // The following wil not compile, because `Self: !Unpin`.
+        // The following will not compile, because `Self: !Unpin`.
         let mut this = self.get_mut();
         unimplemented!()
     }

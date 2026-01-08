@@ -36,21 +36,32 @@
         <ul id="navigation_links">
             <li id="home-button">
                 <a href="/">
-                    About
+                    Home
                 </a>
-
             </li>
 
-            {% set blog_section = get_section(path="blog/_index.md") %}
+            {% set root_section = get_section(path="_index.md") %}
+
+            {% for page_item in root_section.pages %}
+            <li>
+                <a href="{{ page_item.permalink }}">{{ page_item.title }}</a>
+            </li>
+            {% endfor %}
+
+            {% for subsection_path in root_section.subsections %}
+            {% set main_section = get_section(path=subsection_path) %}
             <li class="section_block">
-                <a href="/blog">{{ blog_section.title }}</a>
+                <a href="{{ main_section.permalink }}">{{ main_section.title }}</a>
                 <ul class="section_page_list">
-                    {% set active_section = blog_section %}
-                    {% if blog_section.subsections %}
-                    {% for sub_section_path in blog_section.subsections %}
+                    {% set active_section = main_section %}
+                    {% if main_section.subsections %}
+                    {% for sub_section_path in main_section.subsections %}
                     {% set sub_section = get_section(path=sub_section_path) %}
                     <li class="section_page_link">
                         <a href="{{ sub_section.permalink }}">{{ sub_section.title }}</a>
+                        {% if sub_section.pages %}
+                        <em>{{ sub_section.pages | first | get(key="date") | date(format="%b %-d") }}</em>
+                        {% endif %}
                     </li>
                     {% if section and section.path == sub_section.path %}
                     {% set active_section = sub_section %}
@@ -66,8 +77,8 @@
                     </li>
                     {% endfor %}
                 </ul>
-
             </li>
+            {% endfor %}
 
         </ul>
 

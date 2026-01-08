@@ -52,6 +52,11 @@
                     gap: 1em;
                     display: flex;
                 }
+
+                & em {
+                    text-decoration: none;
+                    font-weight: 300;
+                }
             }
 
 

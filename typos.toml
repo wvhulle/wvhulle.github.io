@@ -1,0 +1,23 @@
+[default]
+extend-ignore-re = [
+  "(?i)ba[ds]s",  # bass, bads in URLs or code
+]
+
+[files]
+extend-exclude = [
+  "public/",
+  "static/",
+  "*.min.js",
+  "*.min.css",
+]
+
+[default.extend-words]
+Vanhulle = "Vanhulle"
+Willem = "Willem"
+SysGhent = "SysGhent"
+willemvanhulle = "willemvanhulle"
+wvhulle = "wvhulle"
+Zola = "Zola"
+githubusercontent = "githubusercontent"
+pretix = "pretix"
+devlab = "devlab"
