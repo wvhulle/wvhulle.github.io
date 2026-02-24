@@ -1,28 +1,16 @@
 # Homepage of Willem Vanhulle
 
-Personal website of Willem Vanhulle, served at [GitHub pages](https://willemvanhulle.tech/).
+Personal website of Willem Vanhulle, served at [willemvanhulle.be](https://willemvanhulle.be).
 
-To preview, install `zola`.
+
+## Development
+
+Static blog generated with [Zola](https://www.getzola.org/). Blog posts are located in [`content/`](./content/).
+
+To run a local development server, install `zola` binary. Then run:
 
 ```bash
 zola serve
 ```
 
-Templating in [./templates](./templates/) with [Tera](https://keats.github.io/tera/docs/).
-
-## Helix
-
-The standard editor Helix used for this project needs some configuration.
-
-Markdown language server is [`marksman`](https://github.com/artempyanykh/marksman). It is automatically used by Helix if it is in the path.
-
-Markdown formatter should be installed: [`dprint`](https://dprint.dev/).
-
-Configure the formatter in `~/.config/helix/languages.toml`:
-
-```toml
-[[language]]
-name = "markdown"
-formatter = { command = "dprint", args = ["fmt", "--stdin", "md"] }
-auto-format = true
-```
+I recommend using [`mpls`](https://github.com/mhersson/mpls) for Markdown file preview while writing content. This does not require the `zola` binary.
