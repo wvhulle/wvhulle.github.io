@@ -18,7 +18,7 @@ bottom_footnotes = true
 smart_punctuation = true
 render_emoji = true
 
-# Code
-highlight_code = true
-highlight_theme = "demain"
-error_on_missing_highlight = true
+# # Code
+# highlight_code = true
+# highlight_theme = "demain"
+# error_on_missing_highlight = true
