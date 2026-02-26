@@ -1,0 +1,1 @@
+@import "./vars.css";code{font-family:"Fira Code"}p code,li code{padding:0 .2em;font-weight:550;word-wrap:break-word}pre{background-color:var(--code_background) !important;padding:1em}

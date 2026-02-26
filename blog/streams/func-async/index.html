@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <meta charset="UTF-8">
+
+    <link rel="icon" type="image/x-icon" href="/logo.png">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    
+
+<!-- Comments with GitHub discussions -->
+<script src="https://giscus.app/client.js" data-repo="wvhulle/wvhulle.github.io" data-repo-id="R_kgDOGmD5MA"
+    data-category="Comments" data-category-id="DIC_kwDOGmD5MM4Cpsng" data-mapping="title" data-strict="1"
+    data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="light_high_contrast"
+    data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+    </script>
+<title>
+
+
+    
+    Functional async
+    
+
+
+
+</title>
+
+
+
+    
+    <link rel="alternate" type="application/atom+xml" title="Willem Vanhulle's blog"
+        href="https://willemvanhulle.tech/atom.xml">
+    
+</head>
+
+<body>
+    <aside id="sidebar">
+
+        <a href="/">
+            <img src="/logo.png">
+        </a>
+
+        <ul id="navigation_links">
+            <li id="home-button">
+                <a href="/">
+                    Home
+                </a>
+            </li>
+
+            
+
+            
+            <li>
+                <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;about&#x2F;">About</a>
+            </li>
+            
+
+            
+            
+            <li class="section_block">
+                <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;">Blog</a>
+                <ul class="section_page_list">
+                    
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;streams&#x2F;">Streams</a>
+                        
+                        <em>Mar 18</em>
+                        
+                    </li>
+                    
+                    
+                    
+
+                    
+                </ul>
+            </li>
+            
+
+        </ul>
+
+
+        <a href="" id="back-to-top">
+            ↑ </a>
+
+    </aside>
+
+
+
+    <main>
+
+        
+<article>
+
+    <header>
+
+
+        <h1 class="title">
+            Functional async
+        </h1>
+
+
+
+        <p class="post_date">Tuesday, 2025-03-18
+
+
+<a href="#comments">Comments</a>        </p><ul class="tags"><li><a href="https://willemvanhulle.tech/tags/functional/">functional</a></li><li><a href="https://willemvanhulle.tech/tags/asynchronous/">asynchronous</a></li><li><a href="https://willemvanhulle.tech/tags/declarative/">declarative</a></li><li><a href="https://willemvanhulle.tech/tags/rust/">Rust</a></li><li><a href="https://willemvanhulle.tech/tags/stream/">Stream</a></li><li><a href="https://willemvanhulle.tech/tags/sink/">Sink</a></li></ul><p class="subtitle">
+            How to start with the basics of functional asynchronous programming in Rust with streams and sinks. <br/>
+        <p>
+
+
+
+    </header>
+
+
+    
+
+
+
+    
+    <ul class="post_top_headers">
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/streams/func-async/#introduction">Introduction</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://willemvanhulle.tech/blog/streams/func-async/#use-cases">Use-cases</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/func-async/#channels">Channels</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/func-async/#reactive-ui-input">Reactive UI input</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/func-async/#clear-benefits">Clear benefits</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/func-async/#streams">Streams</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/func-async/#relationship-with-iterators">Relationship with iterators</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/func-async/#consuming-streams">Consuming streams</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/func-async/#stream-test-helpers">Stream test helpers</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/func-async/#filtering-streams">Filtering streams</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/func-async/#boolean-operators">Boolean operators</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/func-async/#sinks">Sinks</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/func-async/#dual-of-streams">Dual of streams</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/func-async/#flushing-a-stream-into-a-sink">Flushing a Stream into a Sink</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/func-async/#more-sink-operators">More Sink operators</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/func-async/#splitting-streams">Splitting streams</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/func-async/#collapsing-an-iterable-of-streams">Collapsing an iterable of streams</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+    </ul>
+    
+
+
+    <h2 id="introduction"><a class="zola-anchor" href="#introduction" aria-label="Anchor link for: introduction">Introduction</a></h2>
+<p>Let’s get started with some definitions you may have heard about already.</p>
+<p><strong>Declarative programming</strong> is when you write code and make sure that the inputs and outputs of sub-modules behave predictably according to fixed invariants. Logic or constraint solver languages like Prolog or <a rel="external" href="https://manyworlds.site/">ManyWorlds</a> (written by my friend <a rel="external" href="https://jodevriendt.com">Jo Devriendt</a>) are part of this family.</p>
+<p><strong>Functional programming</strong> is building the majority of your code from well-defined and side-effect-free functions. It is a sub-set of declarative programming. Languages like ML, Haskell, OCaml, Lisp are part of this family. They are all extensions of Lambda Calculus.</p>
+<p><strong>Asynchronous programming</strong> is a kind of programming where you not only have functions that evaluate immediately, but there are also functions that <em>may evaluate in the future</em>. Such functions are called asynchronous functions. JavaScript, C#, and Rust are examples.</p>
+<p>In the following, I will show how declarative, functional, and asynchronous programming can be combined in the Rust programming language with the semi-standard library crate <code>futures</code>.</p>
+<h2 id="use-cases"><a class="zola-anchor" href="#use-cases" aria-label="Anchor link for: use-cases">Use-cases</a></h2>
+<p>Normal imperative asynchronous programming contains a combination of the <code>async</code>, <code>await</code> keywords with imperative keywords like <code>while</code>, <code>loop</code>, or <code>continue</code>.</p>
+<p>To illustrate where functional asynchronous programming would be useful, I will give a few examples.</p>
+<h3 id="channels"><a class="zola-anchor" href="#channels" aria-label="Anchor link for: channels">Channels</a></h3>
+<p>One approach that you might take when dealing with different sub-modules in a large project is using channels to communicate between the different modules.</p>
+<p>This could look like this:</p>
+<pre><code data-lang="rust">let (tx, rx) = channel::new();
+let (broadcast_tx, broadcast_rx) = broadcast_channel();
+let forward_task = spawn(async move {
+   loop {
+       let result = rx.recv().await;
+       match result {
+           Ok(input) =&gt; {
+               let output = get_output(input);
+               broadcast_tx.send(output).unwrap();
+           }
+           Err(_) =&gt; break,
+       }
+   }
+});
+</code></pre>
+<p>In this example, I use “watch” and “broadcast” channels from the Tokio crate.</p>
+<p>If we would translate this to a functional asynchronous version, we get:</p>
+<pre><code data-lang="rust">let (sender, receiver) = channel::new();
+let (broadcast_sender, broadcast_receiver) = broadcast_channel();
+
+let forward_task = spawn(
+   async move {
+       receiver
+           .map(Result::ok)
+           .filter_map(|result| result.ok())
+           .map(get_output)
+           .forward(broadcast_sender)
+   }
+);
+</code></pre>
+<p>So what happened during the translation?</p>
+<ul>
+<li>Replace the channel receiver with an implementor of the trait <code>Stream</code> from <code>futures</code>. A <strong>stream</strong> is just something that produces data at possibly irregular intervals. A channel receiver is an example of this.</li>
+<li>Replace the channel sender with a type implementing the <code>Sink</code> trait from <code>futures</code>. A <strong>sink</strong> is something that receives data, agnostic from the transport or channel used. An implementor of the <code>Sink</code> is something in which you can put data and flush it.</li>
+<li><strong>Redirect</strong> the stream into the sink with <code>forward</code>. This process could be seen as “flushing” the stream into the sink. However, the <code>flush</code> name is already taken by the <code>flush</code> method of the <code>Sink</code> trait.</li>
+</ul>
+<p>By shifting the focus from input, intermediate, and output variables to transformations with <code>map</code>, we replaced N imperative variables in the loop by N-1 <strong>functional</strong> closures passed to <code>map</code>. You could still argue that the variables did not really disappear, but they are now hidden in the closures and the code is more readable.</p>
+<p><em>Remark: JavaScript frameworks for building web-apps usually call <code>sink</code> a “signal” or “writable observable”. The <code>gstremar-rs</code> crate also has “sinks” but they are not directly related to the “sinks” in <code>futures</code></em></p>
+<h3 id="reactive-ui-input"><a class="zola-anchor" href="#reactive-ui-input" aria-label="Anchor link for: reactive-ui-input">Reactive UI input</a></h3>
+<p>Another place where functional asynchronous programming is useful is on the frontend.</p>
+<p>An imperative version might look like this:</p>
+<pre><code data-lang="rust">let mut target_temperature = 21.0;
+slider.on_slide(move |new_t| {
+   if acceptable(new_t) {
+       let new_target = some_op(new_t);
+       target_temperature = new_target;
+   }
+});
+</code></pre>
+<p>Although this particular example is small, writing large amounts of a large codebase in this style could introduce problems:</p>
+<ul>
+<li>It introduces a lot of indentation. A developer who is new to the codebase might feel intimidated by the indentation. After careful consideration, he might decide to add his own logic on top of the existing code and then split the whole thing up into smaller chunks, thinking he improves readability, but actually breaking sequential readability.</li>
+<li>By using an <code>if</code> statement, you also create multiple branches. The reader or maintainer has to know that the <code>else</code> branch is irrelevant in this particular case. A call to <code>StreamExt::filter</code> already conveys the message that the <code>true</code> branch is the only one that matters.</li>
+<li>A maintainer also has to keep track of one more variable <code>new_t</code> (the argument to the closure). The naming of intermediate variables (variables for data that appears before or after a computation) is hard, and names like <code>old_t</code>, <code>new_t</code>, or <code>updated_t</code> are not helpful for the reader.</li>
+</ul>
+<p>The imperative version can be translated to a functional version like this:</p>
+<pre><code data-lang="rust">let mut target_temperature = MySink::new(21.0);
+slider.value
+   .filter(acceptable)
+   .map(some_op)
+   .forward(target_temperature);
+</code></pre>
+<p>The <code>MySink::new(21.0)</code> is a call to the constructor of <code>MySink</code>, an imaginary object that implements the <code>Sink</code> trait.</p>
+<h3 id="clear-benefits"><a class="zola-anchor" href="#clear-benefits" aria-label="Anchor link for: clear-benefits">Clear benefits</a></h3>
+<p>Instead of exposing variables names for input, intermediate, and output variables, we omit them and focus on naming the transformations themselves. This way of dealing with computation is closer to how we communicate in natural language using verbs.</p>
+<p>Another benefit of the functional approach is that it does not rely on a concrete type. If you are stuck in the middle of writing a module to provide a <code>Stream</code> but you also have to write something that consumes it, you can just continue with the last one.</p>
+<pre><code data-lang="rust">struct MyStream {
+   // ...
+}
+
+impl MyStream {
+   fn new() -&gt; Self {
+       unimplemented!()
+   }
+}
+
+impl Stream for MyStream {
+   type Item = i32;
+   fn poll_next(self) -&gt; Poll&lt;Option&lt;Self::Item&gt;&gt; {
+       unimplemented!()
+   }
+}
+</code></pre>
+<p>You could then already start with another module that consumes it. But instead of directly depending on <code>MyStream</code>, you can just depend on the <code>Stream</code> trait. This way, you can write your code without having to know the implementation details of <code>MyStream</code>.</p>
+<pre><code data-lang="rust">struct MyConsumer {
+   // ...
+}
+
+impl MyConsumer {
+   fn consume(stream: impl Stream&lt;Item = i32&gt;) {
+       // We can start already!
+       // ...
+   }
+}
+</code></pre>
+<p>The important part is <code>impl Stream&lt;Item = i32&gt;</code>. This means that the <code>consume</code> function can take any type that implements the <code>Stream</code> trait and produces <code>i32</code> items.</p>
+<p>We have separated the problem into two levels of abstraction that can be dealt with independently and simultaneously:</p>
+<ul>
+<li>The <strong>trait</strong> level: describes the invariants and properties of inputs and outputs. Working on this level in Rust is accomplished using the <code>impl Trait</code> syntax.</li>
+<li>The <strong>concrete type</strong> level: describes the transport, the speed, the efficiency, the logic. For a concrete type, you will have to either:</li>
+<li>Pick an implementor from a public crate (like <code>futures</code> or <code>tokio</code>).</li>
+<li>Write your own implementor of the <code>Stream</code> trait. This is a bit more work, but it is not that hard. I will show you how to do this later on.</li>
+</ul>
+<p>As of April 2025, the traits <code>Stream</code> and <code>Sink</code> are used universally by crates published on <a href="https://willemvanhulle.tech/blog/streams/func-async/crates.io">crates.io</a>. If you make use of these traits, which describe a common behavior, and implement them for your own types, you make your code more interoperable with the rest of the world.</p>
+<p><strong>Important</strong>: It is important to know while using Rust that it is not required to know everything about <code>Pin</code> or <code>Poll</code>. You can just use the high-level methods provided by the standard library and <code>futures</code> crate.</p>
+<h3 id="streams"><a class="zola-anchor" href="#streams" aria-label="Anchor link for: streams">Streams</a></h3>
+<h3 id="relationship-with-iterators"><a class="zola-anchor" href="#relationship-with-iterators" aria-label="Anchor link for: relationship-with-iterators">Relationship with iterators</a></h3>
+<p>The main thing that is added in functional asynchronous programming is the <code>Stream</code> trait. You are supposed to use it everywhere. There are other things of course, but this is the main concept that you will need.</p>
+<p>So what is a <strong>stream</strong>? It is just something that implements the <code>Stream</code> trait from the <code>futures</code> crate. It nothing more than an asynchronous iterator.</p>
+<p>A rough conceptual definition of a stream would be:</p>
+<blockquote>
+<p>A function that returns multiple values at unpredictable times.</p>
+</blockquote>
+<p>First, remember that the life-time of an iterator (a normal synchronous blocking one) looks like this:</p>
+<table><thead><tr><th>T</th><th>create</th><th>iterate</th><th>yield</th></tr></thead><tbody>
+<tr><td>1</td><td><code>(1..=10)</code></td><td></td><td></td></tr>
+<tr><td>2</td><td></td><td><code>next()</code></td><td></td></tr>
+<tr><td>3</td><td></td><td></td><td><code>Some(1)</code></td></tr>
+<tr><td>4</td><td></td><td><code>next()</code></td><td></td></tr>
+<tr><td>5</td><td></td><td>…</td><td></td></tr>
+<tr><td>6</td><td></td><td><code>next()</code></td><td></td></tr>
+<tr><td>7</td><td></td><td></td><td><code>None</code></td></tr>
+<tr><td>8</td><td></td><td><code>next()</code></td><td></td></tr>
+<tr><td>9</td><td></td><td></td><td><code>Some(2)</code></td></tr>
+</tbody></table>
+<p>Notice that calling <code>next</code> after the iterator yielded <code>None</code> may result in a new <code>Some</code>. If you do not want that, apply <code>fuse</code> to the iterator to obtain a <code>FusedIterator</code> that will keep yielding <code>None</code> after the first <code>None</code>.</p>
+<p>The life-time of a stream/async iterator during usage looks like this:</p>
+<table><thead><tr><th><strong>T</strong></th><th><strong>Creation</strong></th><th><strong>Iteration</strong></th><th><strong>Yielted</strong></th></tr></thead><tbody>
+<tr><td>1</td><td><code>St::new()</code></td><td></td><td></td></tr>
+<tr><td>2</td><td></td><td><code>next()</code></td><td></td></tr>
+<tr><td>3</td><td></td><td><code>await</code></td><td></td></tr>
+<tr><td>4</td><td></td><td></td><td><code>Some(1)</code></td></tr>
+<tr><td>5</td><td></td><td><code>next()</code></td><td></td></tr>
+<tr><td>6</td><td></td><td>…</td><td></td></tr>
+<tr><td>7</td><td></td><td><code>await</code></td><td></td></tr>
+<tr><td>8</td><td></td><td></td><td><code>Some(2)</code></td></tr>
+<tr><td>9</td><td></td><td><code>next()</code></td><td></td></tr>
+<tr><td>10</td><td></td><td></td><td><code>None</code></td></tr>
+</tbody></table>
+<p>The lifecycle of an async iterator (stream) is longer than a normal iterator since it requires an <code>await</code> before a value is yielded.</p>
+<p>A <code>FusedStream</code> is the async analogue of <code>FusedIterator</code> and will yield <code>None</code> after the first <code>None</code>. In addition, it has a non-async method <code>is_terminated</code> that says whether the stream is exhausted already.</p>
+<pre><code data-lang="rust">pub trait FusedStream: Stream {
+   fn is_terminated(&amp;self) -&gt; bool;
+}
+</code></pre>
+<p>Usually a <code>FusedStream</code> will yield <code>Poll::Ready(None)</code> after the first <code>Poll::Ready(None)</code> and it’s <code>is_terminated</code> method will be positive. However, the implementor has the freedom to break these conventions.</p>
+<h3 id="consuming-streams"><a class="zola-anchor" href="#consuming-streams" aria-label="Anchor link for: consuming-streams">Consuming streams</a></h3>
+<p><em><strong>Remark</strong>: As of April 2025, all the methods you need for streams are in <a rel="external" href="https://docs.rs/futures/latest/futures/stream/trait.StreamExt.html"><code>StreamExt</code></a> from <code>futures</code>. For the rest of this article, almost all <code>Stream</code>-related methods come from this trait.</em></p>
+<p>The simplest case would be the case where you just want to perform an operation for each element that is yielded by the stream. For this, you should use the <code>for_each</code> method to act on each item in <code>Some(item)</code>.</p>
+<pre><code data-lang="rust">let mut x = 0;
+let fut = stream::repeat(1).take(3).for_each(|item| {
+   x += item;
+    future::ready(())
+});
+fut.await;
+assert_eq!(x, 3);
+</code></pre>
+<p>Observe that the argument for the closure in <code>for_each</code> does not take an <code>Option</code>. The stream returned by <code>for_each</code> is fused; it is an implementor of <code>FusedStream</code>. A <code>FusedStream</code> is a special type of stream that terminates as soon as one item yielded by the input stream is <code>None</code>.</p>
+<p><strong>Important</strong>:</p>
+<ul>
+<li>The futures that are evaluated while consuming the <code>for_each</code> will not overlap in execution. They will happen sequentially.</li>
+<li>The <code>for_each</code> will not do any work, unless it is <strong>driven</strong> by an asynchronous executor. The reason is that streams are <em>lazy</em>, just like normal iterators in Rust.</li>
+</ul>
+<p>Very often we just have to apply one blocking, synchronous operation to every output item from an input stream and return a new stream with the mapped items. The <code>map</code> stream operator is the right tool for this:</p>
+<pre><code data-lang="rust">let stream = stream::iter(1..=3);
+let stream = stream.map(|x| x + 3);
+</code></pre>
+<p>When the operation in the closure is asynchronous you should use <code>then</code> (as in <code>Future::then</code>).</p>
+<pre><code data-lang="rust">let stream = stream::iter(1..=3);
+let stream = stream.then(|x| async move { convert(x).await });
+</code></pre>
+<p>Feel free to use async closures <code>async |_| {}</code> or <code>AsyncFn</code> in recent Rust versions. Asynchronous closures were only recently stabilized as of April 2025. Since I do not understand the implementation of async closures very well, I prefer to keep using the old syntax: <code>|x| async move {}</code> for now. This syntax works better with older versions of Rust.</p>
+<p><em><strong>Remark</strong>: In previous major version releases of <code>futures</code>, <code>then</code> and <code>map</code> were a single function. The crate <code>futures-preview</code> an old version. Avoid reading the documentation of <code>futures-preview</code> to prevent confusion. (Everything you need for the rest of this presentation is available in <code>futures &gt;= 0.3.31</code>.)</em></p>
+<h3 id="stream-test-helpers"><a class="zola-anchor" href="#stream-test-helpers" aria-label="Anchor link for: stream-test-helpers">Stream test helpers</a></h3>
+<p>While implementing your own streams (maybe not now but later on), you will run into situations where you need consume the streams as if you were a typical consumer. The <code>futures</code> crate provides helpers for tests that are analogous to the ones in <code>Iterator</code>. The only thing that distinguishes them is being <strong>operators on asynchronous iterators</strong>:</p>
+<p>The following <code>Stream</code> helpers / operators take a stream and perform some simple actions on it without changing the values:</p>
+<ul>
+<li><code>skip_while</code>: Drops items from a stream while a condition is met (provided as a boolean closure on the items of the input stream).</li>
+<li><code>peekable</code>: Adds a <code>peek</code> method that can be used to preview a <strong>reference to the next item</strong> without consuming it (yet). This is useful when you don’t want to <em>step too fast</em> through the stream.</li>
+<li><code>take</code>: Simply skip a number of items from the beginning of the stream.</li>
+<li><code>enumerate</code>: Adds an increasing index to the items of stream, starting from the beginning.</li>
+</ul>
+<p>For example, you can use <code>enumerate</code> as follows:</p>
+<pre><code data-lang="rust">let stream = stream::iter(vec![&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]);
+
+let mut stream = stream.enumerate();
+
+assert_eq!(stream.next().await, Some((0, &#39;a&#39;)));
+assert_eq!(stream.next().await, Some((1, &#39;b&#39;)));
+assert_eq!(stream.next().await, Some((2, &#39;c&#39;)));
+assert_eq!(stream.next().await, None);
+</code></pre>
+<h3 id="filtering-streams"><a class="zola-anchor" href="#filtering-streams" aria-label="Anchor link for: filtering-streams">Filtering streams</a></h3>
+<p>You can filter a stream of numbers to only keep the even numbers as follows:</p>
+<pre><code data-lang="rust">use std::future::ready;
+use futures::{stream, StreamExt};
+
+let stream = stream::iter(1..=10);
+let events = stream.filter(|x| ready(x % 2 == 0));
+</code></pre>
+<p>Notice the <code>ready</code> function. This function maps primitive Rust values <strong>into the async world</strong>. The output of <code>ready</code> is a minimal <code>Future</code> that can be moved: it is <strong><code>Unpin</code></strong>.</p>
+<p><em><strong>Remark</strong>: Don’t try to implement <code>ready</code> yourself, just import it from <code>std::future::ready</code>.</em></p>
+<h3 id="boolean-operators"><a class="zola-anchor" href="#boolean-operators" aria-label="Anchor link for: boolean-operators">Boolean operators</a></h3>
+<p>The <code>futures</code> crate also provides analogues for the boolean operators shipped with the standard library <code>Iterator</code> such as <code>any</code>, <code>all</code>, … :</p>
+<pre><code data-lang="rust">let number_stream = stream::repeat(1).map(|n| n);
+let less_then_twenty = number_stream.all(|i| async move { i &lt; 20 });
+assert_eq!(less_then_twenty.await, true);
+</code></pre>
+<p>Notice here that we don’t have to “pin” the <code>less_then_twenty</code> stream, because <code>Unpin</code> is not a requirement for <code>all</code>.</p>
+<h3 id="sinks"><a class="zola-anchor" href="#sinks" aria-label="Anchor link for: sinks">Sinks</a></h3>
+<h3 id="dual-of-streams"><a class="zola-anchor" href="#dual-of-streams" aria-label="Anchor link for: dual-of-streams">Dual of streams</a></h3>
+<p>Up until now we have only seen detailed usage of the <code>Stream</code> trait. But the opposite of a stream, a “sink”, is also shipped by the <code>futures</code> crate as the <code>Sink</code> trait. A <code>Sink</code> is <strong>something that receives data, agnostic from the transport</strong> or channel used.</p>
+<p>The different life-cycle stages of a <code>Sink</code> can be summarized as follows:</p>
+<table><thead><tr><th>stage</th><th>name</th><th>method</th><th>meaning</th><th>remark</th></tr></thead><tbody>
+<tr><td>creation</td><td>new</td><td></td><td>Initial state</td><td></td></tr>
+<tr><td>send</td><td>ready</td><td><code>ready().await</code></td><td>Wait until cache ready</td><td>may be full</td></tr>
+<tr><td>send</td><td>start send</td><td><code>start_send(item)</code></td><td>Load into cache</td><td>not actual send</td></tr>
+<tr><td>send</td><td>flush</td><td><code>flush().await</code></td><td>Send items from cache</td><td></td></tr>
+<tr><td>close</td><td>close</td><td><code>close().await</code></td><td>Close the <code>Sink</code></td><td>not automatic</td></tr>
+</tbody></table>
+<p>The analogue of the map function for streams <code>StreamExt::map</code> for <code>Sink</code>s is the sink operator <code>SinkExt::with</code>. Instead mapping the output items of a stream, it applies a mapping function to all items that are going to be flushed into the sink.</p>
+<p>If a <code>Sink</code> becomes full easily and you depend on the concrete underlying type (such as for example a sink derived from a particular type of sender of a Tokio channel), you can allocate an extra buffer with <code>StreamExt::buffer()</code> to cache elements that don’s fit in the sink.</p>
+<p><em>Remark: The <code>Sink</code> trait is not as common as the <code>Stream</code> trait in the crates that I have used. It is, however, very easy to implement yourself.</em></p>
+<h3 id="flushing-a-stream-into-a-sink"><a class="zola-anchor" href="#flushing-a-stream-into-a-sink" aria-label="Anchor link for: flushing-a-stream-into-a-sink">Flushing a <code>Stream</code> into a <code>Sink</code></a></h3>
+<p>A <code>Sink</code> may appear in combination with a <code>Stream</code>. In that case, it is possible to create a fully functional pipeline that takes a stream and flushes it into a sink. This is done with the <code>forward</code> method of the <code>Sink</code> trait.</p>
+<pre><code data-lang="rust">let (output,_) = channel::new();
+let output = PollSender::new(output);
+
+let input = stream::repeat(1).map(Ok);
+input.forward(output).await.unwrap();
+</code></pre>
+<p>Important:</p>
+<ul>
+<li><code>StreamExt::forward</code> takes a <code>TryStream</code> (items are <code>Result</code>)</li>
+<li>returns future of <code>Result</code> (need to ignore error).</li>
+</ul>
+<h3 id="more-sink-operators"><a class="zola-anchor" href="#more-sink-operators" aria-label="Anchor link for: more-sink-operators">More <code>Sink</code> operators</a></h3>
+<p>The <code>forward</code> method will also close the <code>Sink</code> upon termination of the input stream. If you don’t want to close the <code>Sink</code> after stream returned <code>None</code>, use the sink operator <code>SinkExt::send_all</code>.</p>
+<p>When you have one input stream and know <code>n</code> output sinks <strong>at compile-time</strong>, you can use <code>StreamExt::fanout</code>. Otherwise you will need a mechanism to <code>Clone</code> the input stream at run-time.</p>
+<h3 id="splitting-streams"><a class="zola-anchor" href="#splitting-streams" aria-label="Anchor link for: splitting-streams">Splitting streams</a></h3>
+<h3 id="collapsing-an-iterable-of-streams"><a class="zola-anchor" href="#collapsing-an-iterable-of-streams" aria-label="Anchor link for: collapsing-an-iterable-of-streams">Collapsing an iterable of streams</a></h3>
+<p>Given an iterable of streams, you can collapse the whole iterable into one stream with <code>select_all</code>. This function will just emit the stream items from all the streams (assuming the iterator is finite) as they arrive.</p>
+<p>A simple example would look like this:</p>
+<pre><code data-lang="rust">let stream_a = stream::repeat(1);
+let stream_b = stream::repeat(2);
+
+let merged = stream::select_all([stream_a, stream_b]);
+</code></pre>
+<p>In practice, you would typically pass large vectors, compile-time-sized arrays or other iterable collections to the <code>select_all</code> function.</p>
+
+
+
+    <section id="comments" class="giscus"></section>
+
+
+</article>
+
+
+
+<footer>
+
+
+
+    
+
+    
+    <span>
+        <a href="https://willemvanhulle.tech/blog/streams/generators/">Making generators</a> → </span>
+
+
+    
+</footer>
+
+
+
+    </main>
+
+
+
+</body>
+
+</html>

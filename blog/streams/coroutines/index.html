@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <meta charset="UTF-8">
+
+    <link rel="icon" type="image/x-icon" href="/logo.png">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    
+
+<!-- Comments with GitHub discussions -->
+<script src="https://giscus.app/client.js" data-repo="wvhulle/wvhulle.github.io" data-repo-id="R_kgDOGmD5MA"
+    data-category="Comments" data-category-id="DIC_kwDOGmD5MM4Cpsng" data-mapping="title" data-strict="1"
+    data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="light_high_contrast"
+    data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+    </script>
+<title>
+
+
+    
+    Role of coroutines
+    
+
+
+
+</title>
+
+
+
+    
+    <link rel="alternate" type="application/atom+xml" title="Willem Vanhulle's blog"
+        href="https://willemvanhulle.tech/atom.xml">
+    
+</head>
+
+<body>
+    <aside id="sidebar">
+
+        <a href="/">
+            <img src="/logo.png">
+        </a>
+
+        <ul id="navigation_links">
+            <li id="home-button">
+                <a href="/">
+                    Home
+                </a>
+            </li>
+
+            
+
+            
+            <li>
+                <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;about&#x2F;">About</a>
+            </li>
+            
+
+            
+            
+            <li class="section_block">
+                <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;">Blog</a>
+                <ul class="section_page_list">
+                    
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;streams&#x2F;">Streams</a>
+                        
+                        <em>Mar 18</em>
+                        
+                    </li>
+                    
+                    
+                    
+
+                    
+                </ul>
+            </li>
+            
+
+        </ul>
+
+
+        <a href="" id="back-to-top">
+            ↑ </a>
+
+    </aside>
+
+
+
+    <main>
+
+        
+<article>
+
+    <header>
+
+
+        <h1 class="title">
+            Role of coroutines
+        </h1>
+
+
+
+        <p class="post_date">Tuesday, 2025-04-01
+
+
+<a href="#comments">Comments</a>        </p><ul class="tags"><li><a href="https://willemvanhulle.tech/tags/functional/">functional</a></li><li><a href="https://willemvanhulle.tech/tags/rust/">Rust</a></li><li><a href="https://willemvanhulle.tech/tags/coroutine/">coroutine</a></li><li><a href="https://willemvanhulle.tech/tags/future/">Future</a></li><li><a href="https://willemvanhulle.tech/tags/poll/">Poll</a></li><li><a href="https://willemvanhulle.tech/tags/pin/">Pin</a></li></ul><p class="subtitle">
+            An overview of the relationship between simple functions, coroutines and streams. <br/>
+        <p>
+
+
+
+    </header>
+
+
+    
+    <p> Previous post:
+        <a href="https://willemvanhulle.tech/blog/streams/generators/">Making generators</a>.
+    </p>
+
+    
+
+
+
+    
+    <ul class="post_top_headers">
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://willemvanhulle.tech/blog/streams/coroutines/#simple-coroutines">Simple coroutines</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/coroutines/#concept-of-a-coroutine">Concept of a coroutine</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/coroutines/#directly-constructing-coroutines">Directly constructing coroutines</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/coroutines/#example-of-a-coroutine">Example of a coroutine</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/streams/coroutines/#classification-of-coroutines">Classification of coroutines</a>
+            
+        </li>
+        
+    </ul>
+    
+
+
+    <p>In some other posts on this site, you will find ways to create streams from scratch and how to combine them. This post will be about the relationship between the concept of a <code>Stream</code> (or asynchronous iterator) and the other, more familiar, functions present in most programming languages.</p>
+<p>Most of this post was inspired by a <a rel="external" href="https://without.boats/blog/poll-next/">post by without.boats</a>.</p>
+<h2 id="simple-coroutines"><a class="zola-anchor" href="#simple-coroutines" aria-label="Anchor link for: simple-coroutines">Simple coroutines</a></h2>
+<h3 id="concept-of-a-coroutine"><a class="zola-anchor" href="#concept-of-a-coroutine" aria-label="Anchor link for: concept-of-a-coroutine">Concept of a coroutine</a></h3>
+<p>Normal functions return output (immediately). They do it only once (or never).</p>
+<p>A <strong>coroutine</strong> is a special kind functions that can:</p>
+<ul>
+<li>be suspended multiple times</li>
+<li>be resumed multiple times</li>
+<li>return once</li>
+</ul>
+<p>More specifically, at runtime, coroutines go through a process (with specific terminology):</p>
+<ol>
+<li>When a coroutine suspends, it <strong>yield</strong>s a value to the caller. This is a kind of intermediate return value.</li>
+<li>After observing (or ignoring) the yielded value, the caller can safely forget about the suspended coroutine (temporarily) and continue with other functions.</li>
+<li>Later the caller can return to this suspended coroutine. The caller needs to resume the suspended coroutine to wake it up. This step is called <strong>resumption</strong>. For resumption some resumption data may need to be provided.</li>
+</ol>
+<p>These steps may repeat forever or until the coroutine ends by returning. Returning is distinct from yielding, since it is final. The return value is the last value that can be observed by the caller.</p>
+<p><em><strong>Remark</strong>: Coroutines are used internally by the Rust compiler while compiling asynchronous code. The compiler implements a form of “stack-less” co-routines for <code>async {}</code> code-blocks. These blocks are compiled implicitly into coroutines that yield at every <code>await</code>-point.</em></p>
+<h3 id="directly-constructing-coroutines"><a class="zola-anchor" href="#directly-constructing-coroutines" aria-label="Anchor link for: directly-constructing-coroutines">Directly constructing coroutines</a></h3>
+<p>The <code>Coroutine</code> trait definition is an extension of the <code>Future</code> trait:</p>
+<pre><code data-lang="rust">pub trait Coroutine&lt;Resume = ()&gt; {
+    type Yield;
+    type Return;
+
+    fn resume(
+        self: Pin&lt;&amp;mut Self&gt;,
+        resumption: Resume,
+    ) -&gt; CoroutineState&lt;Self::Yield, Self::Return&gt;;
+}
+</code></pre>
+<p>Notice that we need <code>Pin</code>, similarly to <code>Future</code>. This is because coroutines may be self-referential. The <code>resume</code> function should only be called on coroutines that may move (are <code>Unpin</code>). The reason is probably that they should extend the behaviour of <code>Future</code>s which do require <code>Pin</code>.</p>
+<p><em><strong>Important</strong>: The <code>Coroutine</code> trait in Rust is unstable and only available on nightly as of April 2025.</em></p>
+<p>If you look carefully at the <code>Coroutine</code> trait you could see that (in pseudo-code):</p>
+<pre><code data-lang="rust">type Future&lt;Output&gt; = Coroutine&lt;
+    Resume = Context,
+    Yield = (),
+    Return = Output
+&gt;;
+</code></pre>
+<p>More precisely, a future is a coroutine that yields nothing when suspended. A future needs a <code>Context</code> (containing a <code>Waker</code>) to be resumed or woken.</p>
+<p><em><strong>Remark</strong>: The resumption data is provided by a asynchronous run-time to schedule <code>resume</code>s in an efficient way.</em></p>
+<h3 id="example-of-a-coroutine"><a class="zola-anchor" href="#example-of-a-coroutine" aria-label="Anchor link for: example-of-a-coroutine">Example of a coroutine</a></h3>
+<p>The Rust docs contain an example of a coroutine. The coroutine does not need any resumption data, but it yields a number and returns a string on completion:</p>
+<pre><code data-lang="rust">let mut coroutine = #[coroutine] || {
+    yield 1;
+    &quot;foo&quot;
+};
+</code></pre>
+<p>To use this <code>coroutine</code>, we have to provide an initial chunk of resumption data. By default this is the empty tuple <code>()</code>. The resumption data is passed to the <code>resume</code> function and used to anticipate the first yield. The first (and last) yield is <code>yield 1</code>.</p>
+<pre><code data-lang="rust">match Pin::new(&amp;mut coroutine).resume(()) {
+    CoroutineState::Yielded(1) =&gt; {}
+    _ =&gt; panic!(&quot;unexpected return from resume&quot;),
+}
+</code></pre>
+<p>The next time <code>resume</code> is called, no yield is encountered and the final return value is returned (a string).</p>
+<pre><code data-lang="rust">match Pin::new(&amp;mut coroutine).resume(()) {
+    CoroutineState::Returned(&quot;foo&quot;) =&gt; {}
+    _ =&gt; panic!(&quot;unexpected return from resume&quot;),
+}
+</code></pre>
+<p>If our coroutine was a <code>Future</code>, then <code>resume</code> would expect a <code>Context</code> with a <code>Waker</code>.</p>
+<h2 id="classification-of-coroutines"><a class="zola-anchor" href="#classification-of-coroutines" aria-label="Anchor link for: classification-of-coroutines">Classification of coroutines</a></h2>
+<p>Reflecting on the concepts of an iterator, future and stream, we can say that:</p>
+<ul>
+<li>An <strong>iterator</strong> is coroutine that yields an <code>Option</code>.</li>
+<li>A <strong>future</strong> is a coroutine that resumes with a <code>Waker</code>.</li>
+<li>A <strong>stream</strong> is an iterator that resumes with a <code>Waker</code> and yields an <code>Option</code>.</li>
+</ul>
+<p>Coroutines are a generalisation of these cases, which can be laid-out in a table:</p>
+<table><thead><tr><th></th><th><em>YIELDS</em></th><th><em>RESUMES</em></th><th><em>RETURNS</em></th></tr></thead><tbody>
+<tr><td><code>Iterator</code></td><td><code>Option</code></td><td><code>!</code></td><td><code>!</code></td></tr>
+<tr><td><code>Future</code>, <code>AsyncFn</code></td><td><code>()</code></td><td><code>Waker</code></td><td><code>Any</code></td></tr>
+<tr><td><code>Stream</code></td><td><code>Option</code></td><td><code>Waker</code></td><td><code>!</code></td></tr>
+<tr><td><code>Coroutine</code></td><td><code>Any</code></td><td><code>Any</code></td><td><code>Any</code></td></tr>
+</tbody></table>
+<p>In this table, the <code>!</code> symbol stands for <code>never</code>, the type that does not have any runtime value. In other words, <code>never</code> is not constructible. It is used often as the return time of non-terminating functions like infinite loops.</p>
+<p>For a practical introduction to coroutines in Rust, I recommend <a rel="external" href="https://github.com/PacktPublishing/Asynchronous-Programming-in-Rust">Asynchronous Programming in Rust</a>.</p>
+
+
+
+    <section id="comments" class="giscus"></section>
+
+
+</article>
+
+
+
+<footer>
+
+
+
+    
+    <span>←
+        <a href="https://willemvanhulle.tech/blog/streams/generators/">Making generators</a> </span>
+
+
+    
+
+    
+    <span>
+        <a href="https://willemvanhulle.tech/blog/streams/stream-combinators/">Building stream combinators</a> → </span>
+
+
+    
+</footer>
+
+
+
+    </main>
+
+
+
+</body>
+
+</html>

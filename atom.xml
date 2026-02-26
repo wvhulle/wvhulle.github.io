@@ -1,0 +1,816 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Willem Vanhulle</title>
+    <link rel="self" type="application/atom+xml" href="https://willemvanhulle.tech/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://willemvanhulle.tech"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2026-01-08T00:00:00+00:00</updated>
+    <id>https://willemvanhulle.tech/atom.xml</id>
+    <entry xml:lang="en">
+        <title>About</title>
+        <published>2026-01-08T00:00:00+00:00</published>
+        <updated>2026-01-08T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Willem Vanhulle
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://willemvanhulle.tech/about/"/>
+        <id>https://willemvanhulle.tech/about/</id>
+        
+        <content type="html" xml:base="https://willemvanhulle.tech/about/">&lt;h2 id=&quot;professional&quot;&gt;Professional&lt;&#x2F;h2&gt;
+&lt;p&gt;I am a &lt;em&gt;mathematician and computer scientist&lt;&#x2F;em&gt; from Ghent, Belgium. I attempted physics, but became enamoured with &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;www.inbiose.com&#x2F;&quot;&gt;fermenting bacteria&lt;&#x2F;a&gt; before finishing. Since 2020, I have worked in scientific and tech start-ups as a software engineer. In 2025, I gathered my experience and taught a &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;wvhulle&#x2F;rust-course-ghent&quot;&gt;Rust course&lt;&#x2F;a&gt; for intermediate developers.&lt;&#x2F;p&gt;
+&lt;p&gt;In the past year I broadened my horizon to include C++ in my expertise and help companies deal with their large legacy codebases.&lt;&#x2F;p&gt;
+&lt;p&gt;For a more complete overview, see my &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;wvhulle&#x2F;cv&#x2F;blob&#x2F;main&#x2F;resume.pdf&quot;&gt;CV&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;personal&quot;&gt;Personal&lt;&#x2F;h2&gt;
+&lt;p&gt;I organise &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;sysghent.be&quot;&gt;SysGhent&lt;&#x2F;a&gt;, an open community for systems programmers. It’s a group of people who finished their studies, but miss learning and we do lectures and meet-ups. Life is too short to sit only behind your computer.&lt;&#x2F;p&gt;
+&lt;p&gt;I maintain a tool for learning the Nu scripting language: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;crates.io&#x2F;crates&#x2F;nu-lint&quot;&gt;&lt;code&gt;nu-lint&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;My latest open-source projects are hosted at  &lt;a href=&quot;https:&#x2F;&#x2F;codeberg.org&#x2F;wvhulle&quot;&gt;Codeberg&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;Recently, GitHub became slow and bloated, but you can still find there at &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;wvhulle&quot;&gt;GitHub&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;div class=&quot;bio&quot;&gt;
+&lt;img src=&quot;&#x2F;willem.jpg&quot; alt=&quot;Willem Vanhulle&quot;&gt;
+&lt;&#x2F;div&gt;
+&lt;h2 id=&quot;contact&quot;&gt;Contact&lt;&#x2F;h2&gt;
+&lt;p&gt;Are you interested in hiring me or working together? Reach out!&lt;&#x2F;p&gt;
+&lt;p&gt;Things I could certainly help your with:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Rust training&lt;&#x2F;li&gt;
+&lt;li&gt;Distributed systems&lt;&#x2F;li&gt;
+&lt;li&gt;Formal verification&lt;&#x2F;li&gt;
+&lt;li&gt;Embedded &#x2F; IoT&lt;&#x2F;li&gt;
+&lt;li&gt;Migrations from C&#x2F;C++ to Rust&lt;&#x2F;li&gt;
+&lt;li&gt;Anything else that you currently need …&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;nav&gt;
+&lt;a href=&quot;mailto:willemvanhulle@protonmail.com&quot;&gt;Email&lt;&#x2F;a&gt; |
+&lt;a href=&quot;tel:+32479080252&quot;&gt;Phone&lt;&#x2F;a&gt; |
+&lt;a href=&quot;https:&#x2F;&#x2F;www.linkedin.com&#x2F;in&#x2F;willem-vanhulle-2657aa180&#x2F;&quot;&gt;LinkedIn&lt;&#x2F;a&gt;
+&lt;&#x2F;nav&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Making generators</title>
+        <published>2025-05-08T00:00:00+00:00</published>
+        <updated>2025-05-08T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Willem Vanhulle
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://willemvanhulle.tech/blog/streams/generators/"/>
+        <id>https://willemvanhulle.tech/blog/streams/generators/</id>
+        
+        <content type="html" xml:base="https://willemvanhulle.tech/blog/streams/generators/">&lt;h2 id=&quot;simple-generators&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#simple-generators&quot; aria-label=&quot;Anchor link for: simple-generators&quot;&gt;Simple generators&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;iterators&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#iterators&quot; aria-label=&quot;Anchor link for: iterators&quot;&gt;Iterators&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;In functional programming, iterators replace loops. Rust provides many helper methods (called &lt;em&gt;adapter methods&lt;&#x2F;em&gt;) for iterators such as &lt;code&gt;map&lt;&#x2F;code&gt;, &lt;code&gt;filter&lt;&#x2F;code&gt;, &lt;code&gt;step_by&lt;&#x2F;code&gt;, … . But to apply this style of programming, you need some base iterators to start with.&lt;&#x2F;p&gt;
+&lt;p&gt;The base (or leaf) iterators are the ones that are actually important. They are provided by the core language or a foundational user crate. Usually, it is a bad idea to implement your own iterators.&lt;&#x2F;p&gt;
+&lt;p&gt;In case you decide to implement a new iterator anyway, have a look at the definition of an iterator:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;pub trait Iterator {
+    type Item;
+    fn next(&amp;amp;mut self) -&amp;gt; Option&amp;lt;Self::Item&amp;gt;;
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;blocking-generators&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#blocking-generators&quot; aria-label=&quot;Anchor link for: blocking-generators&quot;&gt;Blocking generators&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Although you could directly implement &lt;code&gt;next&lt;&#x2F;code&gt; for your own data-types, it might be more straightforward to use a &lt;strong&gt;generator&lt;&#x2F;strong&gt; to create an iterator for you. Generators are functions that output an anonymous type that implements the &lt;code&gt;Iterator&lt;&#x2F;code&gt; trait. The body of a generator has &lt;code&gt;yield X&lt;&#x2F;code&gt; statements that represent the result of an invocation to &lt;code&gt;next()&lt;&#x2F;code&gt; being &lt;code&gt; Some(X)&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;Remark&lt;&#x2F;strong&gt;: There is nothing special or new about generators in Rust. They have existed, for example, in JavaScript for many years.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;A good crate in Rust for writing generators is  &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;genawaiter&#x2F;latest&#x2F;genawaiter&#x2F;&quot;&gt;&lt;code&gt;genawaiter&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;let generator = gen!({
+    yield_!(10);
+});
+let xs: Vec&amp;lt;_&amp;gt; = generator.into_iter().collect();
+assert_eq!(xs, [10]);
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Using this crate, the &lt;code&gt;generator&lt;&#x2F;code&gt; variable is actually more than &lt;em&gt;just a generator&lt;&#x2F;em&gt; (something that can be converted into an &lt;code&gt;Iterator&lt;&#x2F;code&gt;). It is also a coroutine. See other posts on this blog to know more about coroutines in Rust.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Remark: The &lt;code&gt;gen!&lt;&#x2F;code&gt; and &lt;code&gt;yield_!&lt;&#x2F;code&gt;-macros will become built-in the core Rust language in the coming months. The &lt;code&gt;gen!&lt;&#x2F;code&gt; simply becomes the &lt;code&gt;gen&lt;&#x2F;code&gt; keyword for code blocks. Inside &lt;code&gt;gen&lt;&#x2F;code&gt;-blocks you can use &lt;code&gt;yield&lt;&#x2F;code&gt;. For now, you need nightly to use this.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;simple-async-generators&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#simple-async-generators&quot; aria-label=&quot;Anchor link for: simple-async-generators&quot;&gt;Simple async generators&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The iterators generated by the previous kind of generators is &lt;em&gt;blocking&lt;&#x2F;em&gt; (or synchronous ). The asynchronous (non-blocking) variant of a blocking iterator is a &lt;strong&gt;stream&lt;&#x2F;strong&gt; (an asynchronous iterator).&lt;&#x2F;p&gt;
+&lt;p&gt;You can just keep using the &lt;code&gt;genawaiter&lt;&#x2F;code&gt; crate and add &lt;code&gt;await&lt;&#x2F;code&gt;-points in the body of your &lt;code&gt;gen!&lt;&#x2F;code&gt; generator definition. You need to, however, enable the &lt;code&gt;futures03&lt;&#x2F;code&gt; feature.&lt;&#x2F;p&gt;
+&lt;p&gt;(From the documentation)&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;async fn async_one() -&amp;gt; i32 { 1 }
+async fn async_two() -&amp;gt; i32 { 2 }
+
+let generator = gen!({
+    let one = async_one().await;
+    yield_!(one);
+    let two = async_two().await;
+    yield_!(two);
+});
+
+let items: Vec&amp;lt;_&amp;gt; = stream.collect().await;
+assert_eq!(items, [1, 2]);
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;An alternative is the &lt;code&gt;async-stream&lt;&#x2F;code&gt; crate (which has been updated more recently). The generators written with its &lt;code&gt;stream!&lt;&#x2F;code&gt; macro are always asynchronous streams (in contrast to &lt;code&gt;genawaiter&lt;&#x2F;code&gt; which also supports iterators).&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Remark: Asynchronous generators will be included in stable rust in the coming months. As of May 2025 you still need to switch to a nightly compiler version and enable unstable features.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;maintainable-generators&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#maintainable-generators&quot; aria-label=&quot;Anchor link for: maintainable-generators&quot;&gt;Maintainable generators&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;generator-state&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#generator-state&quot; aria-label=&quot;Anchor link for: generator-state&quot;&gt;Generator state&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;While creating generators and putting yield statements, you will quickly run into very complex code. Code making use of &lt;code&gt;yield&lt;&#x2F;code&gt; may be hard to maintain. You will need a place to store the state of the generator. In the brute-force approach you just add local variables outside the main loop of your generator body.&lt;&#x2F;p&gt;
+&lt;p&gt;For example, you could have something like:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;let generator = gen!({
+    let mut state = Some(0);
+    loop {
+        do_something();
+        state.update();
+        yield_!(state.method());
+    }
+});
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;When state becomes bigger, it is time to switch to another approach.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;a-more-structured-construction&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#a-more-structured-construction&quot; aria-label=&quot;Anchor link for: a-more-structured-construction&quot;&gt;A more structured construction&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The most straightforward alternative for async generatorss is to use the &lt;code&gt;futures::stream::unfold&lt;&#x2F;code&gt; function. This function stores the state explicitly in its first argument and updates it incrementally with a closure (returning a &lt;code&gt;Future&lt;&#x2F;code&gt;).&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;use futures::{stream, StreamExt};
+
+let stream = stream::unfold(0, |state| async move {
+    if state &amp;lt;= 2 {
+        let next_state = state + 1;
+        let yielded = state * 2;
+        Some((yielded, next_state))
+    } else {
+        None
+    }
+});
+
+let result = stream.collect::&amp;lt;Vec&amp;lt;i32&amp;gt;&amp;gt;().await;
+assert_eq!(result, vec![0, 2, 4]);
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;A synchronous version of this (for normal &lt;code&gt;Iterator&lt;&#x2F;code&gt;s) can be found in the crate &lt;code&gt;itertools&lt;&#x2F;code&gt;: &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;itertools&#x2F;latest&#x2F;itertools&#x2F;fn.unfold.html&quot;&gt;&lt;code&gt;itertools::unfold&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;An example from the crate docs:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;let mut fibonacci = unfold((1u32, 1u32), |(x1, x2)| {
+    &#x2F;&#x2F; Attempt to get the next Fibonacci number
+    let next = x1.saturating_add(*x2);
+
+    &#x2F;&#x2F; Shift left: ret &amp;lt;- x1 &amp;lt;- x2 &amp;lt;- next
+    let ret = *x1;
+    *x1 = *x2;
+    *x2 = next;
+
+    &#x2F;&#x2F; If addition has saturated at the maximum, we are finished
+    if ret == *x1 &amp;amp;&amp;amp; ret &amp;gt; 1 {
+        None
+    } else {
+        Some(ret)
+    }
+});
+
+itertools::assert_equal(fibonacci.by_ref().take(8),
+                        vec![1, 1, 2, 3, 5, 8, 13, 21]);
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;functional-combinators&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#functional-combinators&quot; aria-label=&quot;Anchor link for: functional-combinators&quot;&gt;Functional combinators&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;One problem with &lt;code&gt;unfold&lt;&#x2F;code&gt; is that less well-suited for scenarios in which you need to combine or split several streams&#x2F;iterators, for example while making your own functional combinators. The constructor &lt;code&gt;unfold&lt;&#x2F;code&gt; seems to be most appropriate when you need to &lt;strong&gt;create iterators or streams from scratch&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Writing your own combinators gives you the tools to &lt;em&gt;recombine streams&lt;&#x2F;em&gt; in a more functional or declarative way. Have a look at the combinators defined in &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;futures&#x2F;latest&#x2F;futures&#x2F;stream&#x2F;index.html&quot;&gt;&lt;code&gt;futures::stream&lt;&#x2F;code&gt;&lt;&#x2F;a&gt; to see what a common combinator implementation looks like.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Remark: See other posts about combinators for information on how to build your own &lt;strong&gt;declarative combinators&lt;&#x2F;strong&gt; such as custom variants on &lt;code&gt;merge&lt;&#x2F;code&gt; or &lt;code&gt;flatten&lt;&#x2F;code&gt;.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Building stream combinators</title>
+        <published>2025-04-16T00:00:00+00:00</published>
+        <updated>2025-04-16T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Willem Vanhulle
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://willemvanhulle.tech/blog/streams/stream-combinators/"/>
+        <id>https://willemvanhulle.tech/blog/streams/stream-combinators/</id>
+        
+        <content type="html" xml:base="https://willemvanhulle.tech/blog/streams/stream-combinators/">&lt;h2 id=&quot;introduction&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#introduction&quot; aria-label=&quot;Anchor link for: introduction&quot;&gt;Introduction&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;What if you know how to use streams, but you need some kind of functionality that is not in the &lt;code&gt;StreamExt&lt;&#x2F;code&gt; trait from &lt;code&gt;futures&lt;&#x2F;code&gt; or the standard library?&lt;&#x2F;p&gt;
+&lt;p&gt;In that case, you might try an imperative approach and create the stream using the &lt;code&gt;unfold&lt;&#x2F;code&gt; function. This is a solution for simple cases, but it does not generalise well. Disambiguating between different parts of intermediate stream state quickly becomes difficult.&lt;&#x2F;p&gt;
+&lt;p&gt;You might also want to try using imperative design patterns like loops, channels, spawns and generic functions. This approach quickly becomes unmaintainable because of its complexity.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;invalidation-through-moves&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#invalidation-through-moves&quot; aria-label=&quot;Anchor link for: invalidation-through-moves&quot;&gt;Invalidation through moves&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;Remark&lt;&#x2F;strong&gt;: the following sections will be about &lt;code&gt;Unpin&lt;&#x2F;code&gt;. I wrote about it because I needed it later on to understand better how to construct combinators. You can skip this chapter if you want (or look at the official documentation).&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The physical location of variables used in your code may move throughout the lifetime of your program. In Rust, for example, it is common to move a variable through an assignment. A variable that is called by value by a function is &lt;strong&gt;moved&lt;&#x2F;strong&gt; (literally and conceptually) into the the function. The function takes conceptual ownership. As far as I know, this is called the &lt;strong&gt;move semantics&lt;&#x2F;strong&gt; of Rust.&lt;&#x2F;p&gt;
+&lt;p&gt;However, through this conceptual&#x2F;semantical moving process, a physical move of the data in the registers of the CPU or other parts of memory may also occur. This is dangerous when the data being moved is self-referencing.&lt;&#x2F;p&gt;
+&lt;p&gt;For more information, see &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;doc.rust-lang.org&#x2F;std&#x2F;pin&#x2F;index.html&quot;&gt;&lt;code&gt;std::pin&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;clearing-up-unpin&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#clearing-up-unpin&quot; aria-label=&quot;Anchor link for: clearing-up-unpin&quot;&gt;Clearing up &lt;code&gt;Unpin&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The confusing aspect of &lt;code&gt;Pin&lt;&#x2F;code&gt; and &lt;code&gt;Unpin&lt;&#x2F;code&gt; in Rust, is that it is not &lt;code&gt;Pin&lt;&#x2F;code&gt; which is the first that you should understand, but it is &lt;code&gt;Unpin&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;The naming of &lt;code&gt;Unpin&lt;&#x2F;code&gt; makes it seem like it is some counterpart to &lt;code&gt;Pin&lt;&#x2F;code&gt;. However, it is not.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;code&gt;Unpin&lt;&#x2F;code&gt; is an auto-trait which means that the compiler derives &lt;code&gt;Unpin&lt;&#x2F;code&gt; for everything that it deems &lt;strong&gt;safe to move&lt;&#x2F;strong&gt;. This is done at compile-time and behind the scene by the compiler for every “auto-trait”.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;cannot-be-moved-unpin&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#cannot-be-moved-unpin&quot; aria-label=&quot;Anchor link for: cannot-be-moved-unpin&quot;&gt;Cannot be moved &#x2F; &lt;code&gt;!Unpin&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Anything that looks like it cannot be moved by the compiler, will be marked automatically as &lt;code&gt;!Unpin&lt;&#x2F;code&gt;, not &lt;code&gt;Unpin&lt;&#x2F;code&gt;, or un-moveable. The reasoning by the compiler is that it necessary to detect when some kind of data type would be invalidated by a move and prevent dangerous actions by users (programmers implementing async functionality).&lt;&#x2F;p&gt;
+&lt;p&gt;Examples of &lt;code&gt;!Unpin&lt;&#x2F;code&gt; Rust data-types:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;generators:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;normal generators written with &lt;code&gt;gen&lt;&#x2F;code&gt;-blocks or macros&lt;&#x2F;li&gt;
+&lt;li&gt;async generators written with the macro &lt;code&gt;async_stream::stream! {}&lt;&#x2F;code&gt; (implementing the &lt;code&gt;Stream&lt;&#x2F;code&gt; trait)&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;self-referencing data that is &lt;strong&gt;code-generated by the compiler&lt;&#x2F;strong&gt;&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;state machines generated by &lt;code&gt;async {}&lt;&#x2F;code&gt; blocks&lt;&#x2F;li&gt;
+&lt;li&gt;… ?&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;self-referencing user data structures:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;naive trees&lt;&#x2F;li&gt;
+&lt;li&gt;strings with slices&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;types with a manual &lt;code&gt;PhantomPinned&lt;&#x2F;code&gt; field&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;strong&gt;Important&lt;&#x2F;strong&gt;: The reason that &lt;code&gt;async {}&lt;&#x2F;code&gt; blocks are &lt;code&gt;!Unpin&lt;&#x2F;code&gt; is that the compiler is lazy and does not analyze such blocks automatically to check whether they are &lt;code&gt;Unpin&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;purpose-of-data-type-pin&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#purpose-of-data-type-pin&quot; aria-label=&quot;Anchor link for: purpose-of-data-type-pin&quot;&gt;Purpose of data-type &lt;code&gt;Pin&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;code&gt;Pin&lt;&#x2F;code&gt; as a data-type has only one requirement: it’s inner type should implement &lt;code&gt;Deref&lt;&#x2F;code&gt;. In other words, &lt;code&gt;Pin&lt;&#x2F;code&gt; is a wrapper around pointer &#x2F; reference-like datatypes.&lt;&#x2F;p&gt;
+&lt;p&gt;The concrete type &lt;code&gt;Pin&lt;&#x2F;code&gt; is, in fact, not a real physical type. It does not represent a different location or address in memory. It is merely a Rust compiler construct that manifests itself as a type available to the users.&lt;&#x2F;p&gt;
+&lt;p&gt;The &lt;code&gt;Pin&lt;&#x2F;code&gt; type is essentially a contract for pointer-like types, maintained by two methods that require the pointed-to (also called “pointee”) to implement &lt;code&gt;Unpin&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;A &lt;strong&gt;constructor &lt;code&gt;Pin::new()&lt;&#x2F;code&gt;&lt;&#x2F;strong&gt;: takes any owned &lt;code&gt;Unpin&lt;&#x2F;code&gt; object (safe-to-move, not &lt;code&gt;!Unpin&lt;&#x2F;code&gt;) and takes ownership of it. There is no way to get ownership back. You may, however, implement a &lt;code&gt;Drop&lt;&#x2F;code&gt; implementation which will be run on de-allocation of &lt;code&gt;Pin&lt;&#x2F;code&gt;.&lt;&#x2F;li&gt;
+&lt;li&gt;A &lt;strong&gt;mutable getter &lt;code&gt;Pin::get_mut()&lt;&#x2F;code&gt;&lt;&#x2F;strong&gt;: allows you get mutable access to the contained, pinned, &lt;code&gt;Unpin&lt;&#x2F;code&gt; value. This allows you to still call methods with the &lt;code&gt;&amp;amp;mut Self&lt;&#x2F;code&gt; signature on the pinned data.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;The reason that the &lt;code&gt;get_mut&lt;&#x2F;code&gt; method requires the pointee to be &lt;code&gt;Unpin&lt;&#x2F;code&gt; is that mutable access through a mutable reference can be used to move the content of the &lt;code&gt;Pin&lt;&#x2F;code&gt; with a function like &lt;code&gt;std::mem::replace&lt;&#x2F;code&gt;. This could invalidate any pinned otherwise unmoveable &lt;code&gt;!Unpin&lt;&#x2F;code&gt; type.&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;strong&gt;Metaphor&lt;&#x2F;strong&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;strong&gt;Type state&lt;&#x2F;strong&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;strong&gt;Ownership event&lt;&#x2F;strong&gt;&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;&lt;em&gt;undressed&lt;&#x2F;em&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;Type&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;moveable &#x2F; free&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;em&gt;dress-up&lt;&#x2F;em&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;Pin::new(Type)&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;give up ownership&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;em&gt;dressed-up&lt;&#x2F;em&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;Pin&amp;lt;Type&amp;gt;&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;stuck in memory&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;em&gt;dress-down&lt;&#x2F;em&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;Pin::new(Type).get_mut()&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;acquire edit access&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;Conclusion:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;Pin&lt;&#x2F;code&gt; does not pin anything physically at run-time, but relies on the auto-trait &lt;code&gt;!Unpin&lt;&#x2F;code&gt; to prevent dangerous moves at run-time.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;h3 id=&quot;convert-unpin-into-unpin&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#convert-unpin-into-unpin&quot; aria-label=&quot;Anchor link for: convert-unpin-into-unpin&quot;&gt;Convert &lt;code&gt;!Unpin&lt;&#x2F;code&gt; into &lt;code&gt;Unpin&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Almost all primitives in Rust are &lt;code&gt;Unpin&lt;&#x2F;code&gt;. Whenever you encounter something that is not &lt;code&gt;Unpin&lt;&#x2F;code&gt; (and has not non-&lt;code&gt;&#x27;static&lt;&#x2F;code&gt; references), you can just allocate it on the heap with the function &lt;code&gt;Box::pin&lt;&#x2F;code&gt;. The &lt;code&gt;Box::pin&lt;&#x2F;code&gt; is shorthand for &lt;code&gt;Pin::new(Box::new())&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;The result of the &lt;code&gt;Box::pin&lt;&#x2F;code&gt; is a combination:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;The heap-allocated pinned object will not be moved by any code generated by the Rust compiler;&lt;&#x2F;li&gt;
+&lt;li&gt;We can still drop the pinned object and the &lt;code&gt;Drop&lt;&#x2F;code&gt; implementations will run.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Let’s take the following as an example of something that is &lt;code&gt;!Unpin&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;struct MapFut&amp;lt;Fut&amp;gt; where Fut: Future {
+    fut: Fut,
+    ...
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;A common approach when handling extensions or combinators of futures which are themselves futures, is by &lt;strong&gt;projecting&lt;&#x2F;strong&gt; &lt;code&gt;Pin&amp;lt;&amp;amp;mut Self&amp;gt;&lt;&#x2F;code&gt;into &lt;code&gt;&amp;amp;mut Self&lt;&#x2F;code&gt;. The projection is usually called &lt;code&gt;this&lt;&#x2F;code&gt; (the &lt;code&gt;self&lt;&#x2F;code&gt; keyword is reserved).&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;impl&amp;lt;Fut&amp;gt; Future for MapFut&amp;lt;Fut&amp;gt; {
+    fn poll(self: Pin&amp;lt;&amp;amp;mut Self&amp;gt;) -&amp;gt; Poll {
+        &#x2F;&#x2F; We need to do something with `self.fut`.
+        &#x2F;&#x2F; We need `Pin&amp;lt;&amp;amp;mut Self&amp;gt; -&amp;gt; &amp;amp;mut Self`.
+        &#x2F;&#x2F; The following will not compile, because `Self: !Unpin`.
+        let mut this = self.get_mut();
+        unimplemented!()
+    }
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;In this example the user struct &lt;code&gt;MapFut&lt;&#x2F;code&gt; is &lt;code&gt;!Unpin&lt;&#x2F;code&gt;, so &lt;code&gt;get_mut&lt;&#x2F;code&gt; cannot be used. The &lt;code&gt;get_mut&lt;&#x2F;code&gt; function requires &lt;code&gt;Self: Unpin&lt;&#x2F;code&gt; as mentioned in the previous section.&lt;&#x2F;p&gt;
+&lt;p&gt;The simplest solution is to refine the definition of &lt;code&gt;MapFut&lt;&#x2F;code&gt; as follows:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;struct MapFut&amp;lt;Fut&amp;gt; where Fut: Future {
+    fut: Pin&amp;lt;Box&amp;lt;Fut&amp;gt;&amp;gt;,
+    ...
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Now &lt;code&gt;fut&lt;&#x2F;code&gt; is a pinned pointer to a location on the heap.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;unsafe-pin-methods-optional&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#unsafe-pin-methods-optional&quot; aria-label=&quot;Anchor link for: unsafe-pin-methods-optional&quot;&gt;Unsafe &lt;code&gt;Pin&lt;&#x2F;code&gt; methods (optional)&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Until now I explicitly avoided mentioning or using the unsafe methods of the &lt;code&gt;Pin&lt;&#x2F;code&gt; type. Beside &lt;code&gt;Pin::new()&lt;&#x2F;code&gt; and &lt;code&gt;Pin::get_mut()&lt;&#x2F;code&gt;, &lt;code&gt;Pin&lt;&#x2F;code&gt; also has a few &lt;code&gt;unsafe&lt;&#x2F;code&gt; counterparts.&lt;&#x2F;p&gt;
+&lt;p&gt;You might have been tempted by the Rust compiler to use the &lt;code&gt;unsafe&lt;&#x2F;code&gt; methods because they do not have an &lt;code&gt;Unpin&lt;&#x2F;code&gt; constraint. But if you go in that direction, you effectively disable automatic and important checks by the compiler at run-time.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;the-ready-future&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#the-ready-future&quot; aria-label=&quot;Anchor link for: the-ready-future&quot;&gt;The &lt;code&gt;Ready&lt;&#x2F;code&gt; future&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Anything can be turned into a future using the &lt;code&gt;Ready&lt;&#x2F;code&gt; future. This future takes the source and puts it inside an &lt;code&gt;Option&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;pub struct Ready&amp;lt;T&amp;gt;(Option&amp;lt;T&amp;gt;);
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This future never has to wake up, because it yields a value immediately and is read on the first &lt;code&gt;poll&lt;&#x2F;code&gt; call. This is why the context (and its waker) are ignored.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;impl&amp;lt;T&amp;gt; Future for Ready&amp;lt;T&amp;gt; {
+    type Output = T;
+
+    fn poll(mut self: Pin&amp;lt;&amp;amp;mut Self&amp;gt;, _cx: &amp;amp;mut Context&amp;lt;&amp;#39;_&amp;gt;) -&amp;gt; Poll&amp;lt;T&amp;gt; {
+        Poll::Ready(self.0.take().expect(&amp;quot;Ready polled after completion&amp;quot;))
+    }
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;To use this future, you can directly call the constructor &lt;code&gt;Ready::new()&lt;&#x2F;code&gt; or you can call &lt;code&gt;ready()&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;assert_eq!(1, ready(1).await)`;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;em&gt;Remark: &lt;code&gt;.await&lt;&#x2F;code&gt; automatically converts everything in a future with &lt;code&gt;IntoFuture&lt;&#x2F;code&gt;, so it might not even be necessary to use &lt;code&gt;Ready&lt;&#x2F;code&gt; explicitly.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;simple-stream-combinators&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#simple-stream-combinators&quot; aria-label=&quot;Anchor link for: simple-stream-combinators&quot;&gt;Simple stream combinators&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;definition-of-a-stream&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#definition-of-a-stream&quot; aria-label=&quot;Anchor link for: definition-of-a-stream&quot;&gt;Definition of a stream&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;A stream is an future that may be polled more than once and yield more than one &lt;code&gt;Poll::Ready&lt;&#x2F;code&gt; value.&lt;&#x2F;p&gt;
+&lt;p&gt;The official definition is a trait:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;pub trait Stream {
+    type Item;
+
+    fn poll_next(
+        self: Pin&amp;lt;&amp;amp;mut Self&amp;gt;,
+        cx: &amp;amp;mut Context&amp;lt;&amp;#39;_&amp;gt;,
+    ) -&amp;gt; Poll&amp;lt;Option&amp;lt;Self::Item&amp;gt;&amp;gt;;
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Notice the similary with the &lt;code&gt;Future&lt;&#x2F;code&gt; trait.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Important: As of April 2025, the &lt;code&gt;Stream&lt;&#x2F;code&gt; trait is not yet in stable Rust.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;futures-as-streams-with-once&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#futures-as-streams-with-once&quot; aria-label=&quot;Anchor link for: futures-as-streams-with-once&quot;&gt;Futures as streams with &lt;code&gt;Once&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Every future &lt;code&gt;Fut&lt;&#x2F;code&gt; can be converted into a stream by returning &lt;code&gt;Some(Fut::Output)&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;pub struct Once&amp;lt;Fut&amp;gt; {
+    future: Option&amp;lt;Fut&amp;gt;
+}
+
+impl&amp;lt;Fut: Future&amp;gt; Stream for Once&amp;lt;Fut&amp;gt; {
+  type Item = Fut::Output;
+
+  fn poll_next(self: Pin&amp;lt;&amp;amp;mut Self&amp;gt;, cx: &amp;amp;mut Context&amp;lt;&amp;#39;_&amp;gt;) -&amp;gt; Poll&amp;lt;Option&amp;lt;Self::Item&amp;gt;&amp;gt; {
+      let mut this = self.project();
+      let v = match this.future.as_mut().as_pin_mut() {
+          Some(fut) =&amp;gt; ready!(fut.poll(cx)),
+          None =&amp;gt; return Poll::Ready(None),
+      };
+      this.future.set(None);
+      Poll::Ready(Some(v))
+  }
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Here, &lt;code&gt;ready!&lt;&#x2F;code&gt; converts &lt;code&gt;Poll&lt;&#x2F;code&gt; into &lt;code&gt;Option&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;functional-building-block-map&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#functional-building-block-map&quot; aria-label=&quot;Anchor link for: functional-building-block-map&quot;&gt;Functional building block &lt;code&gt;Map&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Let’s look at a simple example from the “semi-standard” library crate &lt;code&gt;futures&lt;&#x2F;code&gt;: the &lt;code&gt;map&lt;&#x2F;code&gt; combinator. This combinator just maps the items of an input stream and returns an new output stream (while consuming the input stream.)&lt;&#x2F;p&gt;
+&lt;p&gt;The combinator’s source code looks like this:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;pub struct Map&amp;lt;St, F&amp;gt; {
+    #[pin]
+    stream: St,
+    f: F,
+}
+
+impl&amp;lt;St, F&amp;gt; Stream for Map&amp;lt;St, F&amp;gt;
+where
+    St: Stream,
+    F: FnMut&amp;lt;St::Item&amp;gt;,
+{
+    type Item = F::Output;
+
+    fn poll_next(self: Pin&amp;lt;&amp;amp;mut Self&amp;gt;, cx: &amp;amp;mut Context&amp;lt;&amp;#39;_&amp;gt;) -&amp;gt; Poll&amp;lt;Option&amp;lt;Self::Item&amp;gt;&amp;gt; { ... }
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Ignore the field attribute &lt;code&gt;pin&lt;&#x2F;code&gt; for now.&lt;&#x2F;p&gt;
+&lt;p&gt;The definition of &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;futures&#x2F;latest&#x2F;futures&#x2F;stream&#x2F;struct.Map.html&quot;&gt;&lt;code&gt;map&lt;&#x2F;code&gt;&lt;&#x2F;a&gt; and all the behaviour that we expect from a &lt;code&gt;map&lt;&#x2F;code&gt; function essentially boils down to storing two things:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;The original input stream.&lt;&#x2F;li&gt;
+&lt;li&gt;The function or closure that maps elements of the input stream.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Then the authors of &lt;code&gt;futures&lt;&#x2F;code&gt; had to implement the single required method of the &lt;code&gt;Stream&lt;&#x2F;code&gt; trait: &lt;code&gt;poll_next&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;impl&amp;lt;St, F&amp;gt; Stream for Map&amp;lt;St, F&amp;gt;
+where
+    St: Stream,
+    F: FnMut&amp;lt;St::Item&amp;gt;,
+{
+    type Item = F::Output;
+
+    fn poll_next(self: Pin&amp;lt;&amp;amp;mut Self&amp;gt;, cx: &amp;amp;mut Context&amp;lt;&amp;#39;_&amp;gt;) -&amp;gt; Poll&amp;lt;Option&amp;lt;Self::Item&amp;gt;&amp;gt; {
+        let mut this = self.project();
+        let res = ready!(this.stream.as_mut().poll_next(cx));
+        Poll::Ready(res.map(|x| this.f.call_mut(x)))
+    }
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;At the beginning of the &lt;code&gt;poll_next&lt;&#x2F;code&gt; function, only a &lt;code&gt;Pin&amp;lt;&amp;amp;mut Self&amp;gt;&lt;&#x2F;code&gt; is given. It has to be “undressed” to a mutable reference to the state object &lt;code&gt;Map&lt;&#x2F;code&gt;. This happens through a process called &lt;strong&gt;projection&lt;&#x2F;strong&gt;, which is essentially just calling &lt;code&gt;get_mut&lt;&#x2F;code&gt; on &lt;code&gt;Pin&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;projecting-with-pin-project-optional&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#projecting-with-pin-project-optional&quot; aria-label=&quot;Anchor link for: projecting-with-pin-project-optional&quot;&gt;Projecting with &lt;code&gt;pin_project&lt;&#x2F;code&gt; (optional)&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Almost any library I encountered uses the &lt;code&gt;pin_project&lt;&#x2F;code&gt; crate which provides the &lt;code&gt;#[pin]&lt;&#x2F;code&gt; field attribute that I asked you to ignore. The &lt;code&gt;pin_project&lt;&#x2F;code&gt; crate takes care of two things:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;You don’t have to call &lt;code&gt;Box::pin&lt;&#x2F;code&gt; yourself or &lt;code&gt;pin_mut!&lt;&#x2F;code&gt; inside the constructor function of your aggregated stream.&lt;&#x2F;li&gt;
+&lt;li&gt;You get a &lt;code&gt;project&lt;&#x2F;code&gt; function which allows you to call &lt;code&gt;as_mut()&lt;&#x2F;code&gt; (equivalent to &lt;code&gt;get_mut()&lt;&#x2F;code&gt;).&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;strong&gt;Remark&lt;&#x2F;strong&gt;: Internally (if I read the code correctly), &lt;code&gt;pin_project&lt;&#x2F;code&gt; makes use of several &lt;code&gt;unsafe&lt;&#x2F;code&gt; function calls of the &lt;code&gt;Pin&lt;&#x2F;code&gt; type. This is not that strange, considering that most of the standard library is written in &lt;code&gt;unsafe&lt;&#x2F;code&gt;. On the other hand, using &lt;code&gt;Box::pin&lt;&#x2F;code&gt; will not have a significant performance impact and it does not require a macro from an external crate.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;stream-combinators&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#stream-combinators&quot; aria-label=&quot;Anchor link for: stream-combinators&quot;&gt;Stream combinators&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;I will now focus on more complicated stream combinators. These are functions that take one or more input streams and output an output stream. I will call such higher-order functions &lt;strong&gt;stream combinators&lt;&#x2F;strong&gt; from now on.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Remark: The &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;crates.io&#x2F;crates&#x2F;futures-rx&quot;&gt;&lt;code&gt;futures-rx&lt;&#x2F;code&gt;&lt;&#x2F;a&gt; crate is a good crate to look for if you want to save time and just use combinators made by someone else.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;flattening-nested-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#flattening-nested-streams&quot; aria-label=&quot;Anchor link for: flattening-nested-streams&quot;&gt;Flattening nested streams&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The &lt;code&gt;futures&lt;&#x2F;code&gt; crate has several types of flatten functions for nested streams. Nested streams are Rust data types &lt;code&gt;S&lt;&#x2F;code&gt; with a trait bound &lt;code&gt;S: Stream&amp;lt;Item: Stream&amp;gt;&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;You could separate flatten combinators in two categories: sequential or concurrent.&lt;&#x2F;p&gt;
+&lt;p&gt;Sequential flatten combinators will never yield values from multiple inner streams at the same time.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;flatten&lt;&#x2F;code&gt;: flattens the outer stream by pasting the output from the inner streams consecutively. This is usually not what you want, since most streams are infinite and you don’t want to block the outer stream.&lt;&#x2F;li&gt;
+&lt;li&gt;A “forgetful” flatten (also called &lt;code&gt;switch&lt;&#x2F;code&gt; in RxJs): a kind of flatten of nested streams that only polls the most recent stream that arrived on the outer stream. This is implemented by &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;futures-rx&#x2F;0.2.1&#x2F;futures_rx&#x2F;stream_ext&#x2F;trait.RxExt.html#method.switch_map&quot;&gt;&lt;code&gt;switch_map&lt;&#x2F;code&gt;&lt;&#x2F;a&gt; in &lt;code&gt;futures-rx&lt;&#x2F;code&gt;.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Concurrent flatten combinators will combine values from multiple inner streams:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Concurrent &lt;code&gt;flatten_unordered(None)&lt;&#x2F;code&gt;: flattens by merging as many inner streams as possible, as they arrive on the outer stream. This might seems like a useful function, but it often not what you want.&lt;&#x2F;li&gt;
+&lt;li&gt;Buffered concurrent &lt;code&gt;flatten_unordered(Some(N))&lt;&#x2F;code&gt;: flattens up-to N different inner streams.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Keep in mind that you can also use the &lt;code&gt;select_all&lt;&#x2F;code&gt; function from &lt;code&gt;futures::stream&lt;&#x2F;code&gt; to flatten in the situation where your outer stream is not a real stream but a finite iterable of streams.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;a-stream-of-arcs&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#a-stream-of-arcs&quot; aria-label=&quot;Anchor link for: a-stream-of-arcs&quot;&gt;A stream of &lt;code&gt;Arc&lt;&#x2F;code&gt;s&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Sometimes you might want to use the items yielded by a single stream in several places simultaneously. You could wrap all the items yielded by the input stream inside a shared reference &lt;code&gt;Arc&lt;&#x2F;code&gt;. The disadvantage of this approach is that you need (a limited form of) garbage cleaning by reference counting.&lt;&#x2F;p&gt;
+&lt;p&gt;The &lt;code&gt;futures-rx&lt;&#x2F;code&gt; crate exposes a &lt;code&gt;share&lt;&#x2F;code&gt; method that can be used for splitting an input stream.&lt;&#x2F;p&gt;
+&lt;p&gt;Looking at the &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;futures-rx&#x2F;0.2.1&#x2F;futures_rx&#x2F;stream_ext&#x2F;trait.RxExt.html#method.share&quot;&gt;docs&lt;&#x2F;a&gt;, there is an example:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;use futures::{stream::{StreamExt, self}, future::join};
+use futures_rx::{Notification, RxExt};
+
+let stream = stream::iter(0..=3);
+let stream = stream.share();
+
+let sub_stream_a = stream.clone().map(|event| *event); 
+let sub_stream_b = stream.clone().map(|event| *event); 
+
+assert_eq!((vec![0, 1, 2, 3], vec![0, 1, 2, 3]), join(sub_stream_a.collect::&amp;lt;Vec&amp;lt;_&amp;gt;&amp;gt;(), sub_stream_b.collect::&amp;lt;Vec&amp;lt;_&amp;gt;&amp;gt;()).await);
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The &lt;code&gt;event&lt;&#x2F;code&gt;s yielded by the shared stream seem to be wrappers around &lt;code&gt;Arc&amp;lt;usize&amp;gt;&lt;&#x2F;code&gt;. Since &lt;code&gt;usize&lt;&#x2F;code&gt; is &lt;code&gt;Copy&lt;&#x2F;code&gt;, &lt;code&gt;*event&lt;&#x2F;code&gt; is treated as &lt;code&gt;&amp;amp;usize&lt;&#x2F;code&gt; and the referenced &lt;code&gt;usize&lt;&#x2F;code&gt; automically cloned.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Remark: Maybe I am wrong?&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;a-stream-of-clones&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#a-stream-of-clones&quot; aria-label=&quot;Anchor link for: a-stream-of-clones&quot;&gt;A stream of clones&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The &lt;code&gt;share&lt;&#x2F;code&gt; operator on streams from &lt;code&gt;futures-rx&lt;&#x2F;code&gt; seems to put all values on the input stream inside a reference-counted &lt;code&gt;Arc&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;I wanted to derive several output streams from the input stream that yielded clones directly without reference counting.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Remark: Maybe I could just have used &lt;code&gt;share&lt;&#x2F;code&gt; and then cloned every element?&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;I decided to implement a separate stream cloning trait in a crate &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;crates.io&#x2F;crates&#x2F;clone-stream&quot;&gt;&lt;code&gt;clone-stream&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;. The high-level API of this crate is quite simple. It is just a call to &lt;code&gt;fork&lt;&#x2F;code&gt; and then &lt;code&gt;stream.clone()&lt;&#x2F;code&gt;:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;use clone_stream::ForkStream;
+use futures::{FutureExt, StreamExt, stream};
+let non_clone_stream = stream::iter(0..10);
+let clone_stream = non_clone_stream.fork();
+let mut cloned_stream = clone_stream.clone();
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;&lt;em&gt;Remark: There exist a few other crates that are similar.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;For more information about the &lt;code&gt;clone-stream&lt;&#x2F;code&gt; crate, see my &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;wvhulle&#x2F;streams-eurorust-2025&quot;&gt;presentation at EuroRust 2025&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Role of coroutines</title>
+        <published>2025-04-01T00:00:00+00:00</published>
+        <updated>2025-04-01T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Willem Vanhulle
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://willemvanhulle.tech/blog/streams/coroutines/"/>
+        <id>https://willemvanhulle.tech/blog/streams/coroutines/</id>
+        
+        <content type="html" xml:base="https://willemvanhulle.tech/blog/streams/coroutines/">&lt;p&gt;In some other posts on this site, you will find ways to create streams from scratch and how to combine them. This post will be about the relationship between the concept of a &lt;code&gt;Stream&lt;&#x2F;code&gt; (or asynchronous iterator) and the other, more familiar, functions present in most programming languages.&lt;&#x2F;p&gt;
+&lt;p&gt;Most of this post was inspired by a &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;without.boats&#x2F;blog&#x2F;poll-next&#x2F;&quot;&gt;post by without.boats&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;simple-coroutines&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#simple-coroutines&quot; aria-label=&quot;Anchor link for: simple-coroutines&quot;&gt;Simple coroutines&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;concept-of-a-coroutine&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#concept-of-a-coroutine&quot; aria-label=&quot;Anchor link for: concept-of-a-coroutine&quot;&gt;Concept of a coroutine&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Normal functions return output (immediately). They do it only once (or never).&lt;&#x2F;p&gt;
+&lt;p&gt;A &lt;strong&gt;coroutine&lt;&#x2F;strong&gt; is a special kind functions that can:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;be suspended multiple times&lt;&#x2F;li&gt;
+&lt;li&gt;be resumed multiple times&lt;&#x2F;li&gt;
+&lt;li&gt;return once&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;More specifically, at runtime, coroutines go through a process (with specific terminology):&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;When a coroutine suspends, it &lt;strong&gt;yield&lt;&#x2F;strong&gt;s a value to the caller. This is a kind of intermediate return value.&lt;&#x2F;li&gt;
+&lt;li&gt;After observing (or ignoring) the yielded value, the caller can safely forget about the suspended coroutine (temporarily) and continue with other functions.&lt;&#x2F;li&gt;
+&lt;li&gt;Later the caller can return to this suspended coroutine. The caller needs to resume the suspended coroutine to wake it up. This step is called &lt;strong&gt;resumption&lt;&#x2F;strong&gt;. For resumption some resumption data may need to be provided.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;These steps may repeat forever or until the coroutine ends by returning. Returning is distinct from yielding, since it is final. The return value is the last value that can be observed by the caller.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;Remark&lt;&#x2F;strong&gt;: Coroutines are used internally by the Rust compiler while compiling asynchronous code. The compiler implements a form of “stack-less” co-routines for &lt;code&gt;async {}&lt;&#x2F;code&gt; code-blocks. These blocks are compiled implicitly into coroutines that yield at every &lt;code&gt;await&lt;&#x2F;code&gt;-point.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;directly-constructing-coroutines&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#directly-constructing-coroutines&quot; aria-label=&quot;Anchor link for: directly-constructing-coroutines&quot;&gt;Directly constructing coroutines&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The &lt;code&gt;Coroutine&lt;&#x2F;code&gt; trait definition is an extension of the &lt;code&gt;Future&lt;&#x2F;code&gt; trait:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;pub trait Coroutine&amp;lt;Resume = ()&amp;gt; {
+    type Yield;
+    type Return;
+
+    fn resume(
+        self: Pin&amp;lt;&amp;amp;mut Self&amp;gt;,
+        resumption: Resume,
+    ) -&amp;gt; CoroutineState&amp;lt;Self::Yield, Self::Return&amp;gt;;
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Notice that we need &lt;code&gt;Pin&lt;&#x2F;code&gt;, similarly to &lt;code&gt;Future&lt;&#x2F;code&gt;. This is because coroutines may be self-referential. The &lt;code&gt;resume&lt;&#x2F;code&gt; function should only be called on coroutines that may move (are &lt;code&gt;Unpin&lt;&#x2F;code&gt;). The reason is probably that they should extend the behaviour of &lt;code&gt;Future&lt;&#x2F;code&gt;s which do require &lt;code&gt;Pin&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;Important&lt;&#x2F;strong&gt;: The &lt;code&gt;Coroutine&lt;&#x2F;code&gt; trait in Rust is unstable and only available on nightly as of April 2025.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;If you look carefully at the &lt;code&gt;Coroutine&lt;&#x2F;code&gt; trait you could see that (in pseudo-code):&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;type Future&amp;lt;Output&amp;gt; = Coroutine&amp;lt;
+    Resume = Context,
+    Yield = (),
+    Return = Output
+&amp;gt;;
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;More precisely, a future is a coroutine that yields nothing when suspended. A future needs a &lt;code&gt;Context&lt;&#x2F;code&gt; (containing a &lt;code&gt;Waker&lt;&#x2F;code&gt;) to be resumed or woken.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;Remark&lt;&#x2F;strong&gt;: The resumption data is provided by a asynchronous run-time to schedule &lt;code&gt;resume&lt;&#x2F;code&gt;s in an efficient way.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;example-of-a-coroutine&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#example-of-a-coroutine&quot; aria-label=&quot;Anchor link for: example-of-a-coroutine&quot;&gt;Example of a coroutine&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The Rust docs contain an example of a coroutine. The coroutine does not need any resumption data, but it yields a number and returns a string on completion:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;let mut coroutine = #[coroutine] || {
+    yield 1;
+    &amp;quot;foo&amp;quot;
+};
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;To use this &lt;code&gt;coroutine&lt;&#x2F;code&gt;, we have to provide an initial chunk of resumption data. By default this is the empty tuple &lt;code&gt;()&lt;&#x2F;code&gt;. The resumption data is passed to the &lt;code&gt;resume&lt;&#x2F;code&gt; function and used to anticipate the first yield. The first (and last) yield is &lt;code&gt;yield 1&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;match Pin::new(&amp;amp;mut coroutine).resume(()) {
+    CoroutineState::Yielded(1) =&amp;gt; {}
+    _ =&amp;gt; panic!(&amp;quot;unexpected return from resume&amp;quot;),
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The next time &lt;code&gt;resume&lt;&#x2F;code&gt; is called, no yield is encountered and the final return value is returned (a string).&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;match Pin::new(&amp;amp;mut coroutine).resume(()) {
+    CoroutineState::Returned(&amp;quot;foo&amp;quot;) =&amp;gt; {}
+    _ =&amp;gt; panic!(&amp;quot;unexpected return from resume&amp;quot;),
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;If our coroutine was a &lt;code&gt;Future&lt;&#x2F;code&gt;, then &lt;code&gt;resume&lt;&#x2F;code&gt; would expect a &lt;code&gt;Context&lt;&#x2F;code&gt; with a &lt;code&gt;Waker&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;classification-of-coroutines&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#classification-of-coroutines&quot; aria-label=&quot;Anchor link for: classification-of-coroutines&quot;&gt;Classification of coroutines&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;Reflecting on the concepts of an iterator, future and stream, we can say that:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;An &lt;strong&gt;iterator&lt;&#x2F;strong&gt; is coroutine that yields an &lt;code&gt;Option&lt;&#x2F;code&gt;.&lt;&#x2F;li&gt;
+&lt;li&gt;A &lt;strong&gt;future&lt;&#x2F;strong&gt; is a coroutine that resumes with a &lt;code&gt;Waker&lt;&#x2F;code&gt;.&lt;&#x2F;li&gt;
+&lt;li&gt;A &lt;strong&gt;stream&lt;&#x2F;strong&gt; is an iterator that resumes with a &lt;code&gt;Waker&lt;&#x2F;code&gt; and yields an &lt;code&gt;Option&lt;&#x2F;code&gt;.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Coroutines are a generalisation of these cases, which can be laid-out in a table:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;em&gt;YIELDS&lt;&#x2F;em&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;em&gt;RESUMES&lt;&#x2F;em&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;em&gt;RETURNS&lt;&#x2F;em&gt;&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;&lt;code&gt;Iterator&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;Option&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;!&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;!&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;code&gt;Future&lt;&#x2F;code&gt;, &lt;code&gt;AsyncFn&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;()&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;Waker&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;Any&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;code&gt;Stream&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;Option&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;Waker&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;!&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;code&gt;Coroutine&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;Any&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;Any&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;Any&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;In this table, the &lt;code&gt;!&lt;&#x2F;code&gt; symbol stands for &lt;code&gt;never&lt;&#x2F;code&gt;, the type that does not have any runtime value. In other words, &lt;code&gt;never&lt;&#x2F;code&gt; is not constructible. It is used often as the return time of non-terminating functions like infinite loops.&lt;&#x2F;p&gt;
+&lt;p&gt;For a practical introduction to coroutines in Rust, I recommend &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;PacktPublishing&#x2F;Asynchronous-Programming-in-Rust&quot;&gt;Asynchronous Programming in Rust&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Functional async</title>
+        <published>2025-03-18T00:00:00+00:00</published>
+        <updated>2025-03-18T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Willem Vanhulle
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://willemvanhulle.tech/blog/streams/func-async/"/>
+        <id>https://willemvanhulle.tech/blog/streams/func-async/</id>
+        
+        <content type="html" xml:base="https://willemvanhulle.tech/blog/streams/func-async/">&lt;h2 id=&quot;introduction&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#introduction&quot; aria-label=&quot;Anchor link for: introduction&quot;&gt;Introduction&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;Let’s get started with some definitions you may have heard about already.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Declarative programming&lt;&#x2F;strong&gt; is when you write code and make sure that the inputs and outputs of sub-modules behave predictably according to fixed invariants. Logic or constraint solver languages like Prolog or &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;manyworlds.site&#x2F;&quot;&gt;ManyWorlds&lt;&#x2F;a&gt; (written by my friend &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;jodevriendt.com&quot;&gt;Jo Devriendt&lt;&#x2F;a&gt;) are part of this family.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Functional programming&lt;&#x2F;strong&gt; is building the majority of your code from well-defined and side-effect-free functions. It is a sub-set of declarative programming. Languages like ML, Haskell, OCaml, Lisp are part of this family. They are all extensions of Lambda Calculus.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Asynchronous programming&lt;&#x2F;strong&gt; is a kind of programming where you not only have functions that evaluate immediately, but there are also functions that &lt;em&gt;may evaluate in the future&lt;&#x2F;em&gt;. Such functions are called asynchronous functions. JavaScript, C#, and Rust are examples.&lt;&#x2F;p&gt;
+&lt;p&gt;In the following, I will show how declarative, functional, and asynchronous programming can be combined in the Rust programming language with the semi-standard library crate &lt;code&gt;futures&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;use-cases&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#use-cases&quot; aria-label=&quot;Anchor link for: use-cases&quot;&gt;Use-cases&lt;&#x2F;a&gt;&lt;&#x2F;h2&gt;
+&lt;p&gt;Normal imperative asynchronous programming contains a combination of the &lt;code&gt;async&lt;&#x2F;code&gt;, &lt;code&gt;await&lt;&#x2F;code&gt; keywords with imperative keywords like &lt;code&gt;while&lt;&#x2F;code&gt;, &lt;code&gt;loop&lt;&#x2F;code&gt;, or &lt;code&gt;continue&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;To illustrate where functional asynchronous programming would be useful, I will give a few examples.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;channels&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#channels&quot; aria-label=&quot;Anchor link for: channels&quot;&gt;Channels&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;One approach that you might take when dealing with different sub-modules in a large project is using channels to communicate between the different modules.&lt;&#x2F;p&gt;
+&lt;p&gt;This could look like this:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;let (tx, rx) = channel::new();
+let (broadcast_tx, broadcast_rx) = broadcast_channel();
+let forward_task = spawn(async move {
+   loop {
+       let result = rx.recv().await;
+       match result {
+           Ok(input) =&amp;gt; {
+               let output = get_output(input);
+               broadcast_tx.send(output).unwrap();
+           }
+           Err(_) =&amp;gt; break,
+       }
+   }
+});
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;In this example, I use “watch” and “broadcast” channels from the Tokio crate.&lt;&#x2F;p&gt;
+&lt;p&gt;If we would translate this to a functional asynchronous version, we get:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;let (sender, receiver) = channel::new();
+let (broadcast_sender, broadcast_receiver) = broadcast_channel();
+
+let forward_task = spawn(
+   async move {
+       receiver
+           .map(Result::ok)
+           .filter_map(|result| result.ok())
+           .map(get_output)
+           .forward(broadcast_sender)
+   }
+);
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;So what happened during the translation?&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Replace the channel receiver with an implementor of the trait &lt;code&gt;Stream&lt;&#x2F;code&gt; from &lt;code&gt;futures&lt;&#x2F;code&gt;. A &lt;strong&gt;stream&lt;&#x2F;strong&gt; is just something that produces data at possibly irregular intervals. A channel receiver is an example of this.&lt;&#x2F;li&gt;
+&lt;li&gt;Replace the channel sender with a type implementing the &lt;code&gt;Sink&lt;&#x2F;code&gt; trait from &lt;code&gt;futures&lt;&#x2F;code&gt;. A &lt;strong&gt;sink&lt;&#x2F;strong&gt; is something that receives data, agnostic from the transport or channel used. An implementor of the &lt;code&gt;Sink&lt;&#x2F;code&gt; is something in which you can put data and flush it.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Redirect&lt;&#x2F;strong&gt; the stream into the sink with &lt;code&gt;forward&lt;&#x2F;code&gt;. This process could be seen as “flushing” the stream into the sink. However, the &lt;code&gt;flush&lt;&#x2F;code&gt; name is already taken by the &lt;code&gt;flush&lt;&#x2F;code&gt; method of the &lt;code&gt;Sink&lt;&#x2F;code&gt; trait.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;By shifting the focus from input, intermediate, and output variables to transformations with &lt;code&gt;map&lt;&#x2F;code&gt;, we replaced N imperative variables in the loop by N-1 &lt;strong&gt;functional&lt;&#x2F;strong&gt; closures passed to &lt;code&gt;map&lt;&#x2F;code&gt;. You could still argue that the variables did not really disappear, but they are now hidden in the closures and the code is more readable.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Remark: JavaScript frameworks for building web-apps usually call &lt;code&gt;sink&lt;&#x2F;code&gt; a “signal” or “writable observable”. The &lt;code&gt;gstremar-rs&lt;&#x2F;code&gt; crate also has “sinks” but they are not directly related to the “sinks” in &lt;code&gt;futures&lt;&#x2F;code&gt;&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;reactive-ui-input&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#reactive-ui-input&quot; aria-label=&quot;Anchor link for: reactive-ui-input&quot;&gt;Reactive UI input&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Another place where functional asynchronous programming is useful is on the frontend.&lt;&#x2F;p&gt;
+&lt;p&gt;An imperative version might look like this:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;let mut target_temperature = 21.0;
+slider.on_slide(move |new_t| {
+   if acceptable(new_t) {
+       let new_target = some_op(new_t);
+       target_temperature = new_target;
+   }
+});
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Although this particular example is small, writing large amounts of a large codebase in this style could introduce problems:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;It introduces a lot of indentation. A developer who is new to the codebase might feel intimidated by the indentation. After careful consideration, he might decide to add his own logic on top of the existing code and then split the whole thing up into smaller chunks, thinking he improves readability, but actually breaking sequential readability.&lt;&#x2F;li&gt;
+&lt;li&gt;By using an &lt;code&gt;if&lt;&#x2F;code&gt; statement, you also create multiple branches. The reader or maintainer has to know that the &lt;code&gt;else&lt;&#x2F;code&gt; branch is irrelevant in this particular case. A call to &lt;code&gt;StreamExt::filter&lt;&#x2F;code&gt; already conveys the message that the &lt;code&gt;true&lt;&#x2F;code&gt; branch is the only one that matters.&lt;&#x2F;li&gt;
+&lt;li&gt;A maintainer also has to keep track of one more variable &lt;code&gt;new_t&lt;&#x2F;code&gt; (the argument to the closure). The naming of intermediate variables (variables for data that appears before or after a computation) is hard, and names like &lt;code&gt;old_t&lt;&#x2F;code&gt;, &lt;code&gt;new_t&lt;&#x2F;code&gt;, or &lt;code&gt;updated_t&lt;&#x2F;code&gt; are not helpful for the reader.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;The imperative version can be translated to a functional version like this:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;let mut target_temperature = MySink::new(21.0);
+slider.value
+   .filter(acceptable)
+   .map(some_op)
+   .forward(target_temperature);
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The &lt;code&gt;MySink::new(21.0)&lt;&#x2F;code&gt; is a call to the constructor of &lt;code&gt;MySink&lt;&#x2F;code&gt;, an imaginary object that implements the &lt;code&gt;Sink&lt;&#x2F;code&gt; trait.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;clear-benefits&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#clear-benefits&quot; aria-label=&quot;Anchor link for: clear-benefits&quot;&gt;Clear benefits&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Instead of exposing variables names for input, intermediate, and output variables, we omit them and focus on naming the transformations themselves. This way of dealing with computation is closer to how we communicate in natural language using verbs.&lt;&#x2F;p&gt;
+&lt;p&gt;Another benefit of the functional approach is that it does not rely on a concrete type. If you are stuck in the middle of writing a module to provide a &lt;code&gt;Stream&lt;&#x2F;code&gt; but you also have to write something that consumes it, you can just continue with the last one.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;struct MyStream {
+   &#x2F;&#x2F; ...
+}
+
+impl MyStream {
+   fn new() -&amp;gt; Self {
+       unimplemented!()
+   }
+}
+
+impl Stream for MyStream {
+   type Item = i32;
+   fn poll_next(self) -&amp;gt; Poll&amp;lt;Option&amp;lt;Self::Item&amp;gt;&amp;gt; {
+       unimplemented!()
+   }
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;You could then already start with another module that consumes it. But instead of directly depending on &lt;code&gt;MyStream&lt;&#x2F;code&gt;, you can just depend on the &lt;code&gt;Stream&lt;&#x2F;code&gt; trait. This way, you can write your code without having to know the implementation details of &lt;code&gt;MyStream&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;struct MyConsumer {
+   &#x2F;&#x2F; ...
+}
+
+impl MyConsumer {
+   fn consume(stream: impl Stream&amp;lt;Item = i32&amp;gt;) {
+       &#x2F;&#x2F; We can start already!
+       &#x2F;&#x2F; ...
+   }
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;The important part is &lt;code&gt;impl Stream&amp;lt;Item = i32&amp;gt;&lt;&#x2F;code&gt;. This means that the &lt;code&gt;consume&lt;&#x2F;code&gt; function can take any type that implements the &lt;code&gt;Stream&lt;&#x2F;code&gt; trait and produces &lt;code&gt;i32&lt;&#x2F;code&gt; items.&lt;&#x2F;p&gt;
+&lt;p&gt;We have separated the problem into two levels of abstraction that can be dealt with independently and simultaneously:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;The &lt;strong&gt;trait&lt;&#x2F;strong&gt; level: describes the invariants and properties of inputs and outputs. Working on this level in Rust is accomplished using the &lt;code&gt;impl Trait&lt;&#x2F;code&gt; syntax.&lt;&#x2F;li&gt;
+&lt;li&gt;The &lt;strong&gt;concrete type&lt;&#x2F;strong&gt; level: describes the transport, the speed, the efficiency, the logic. For a concrete type, you will have to either:&lt;&#x2F;li&gt;
+&lt;li&gt;Pick an implementor from a public crate (like &lt;code&gt;futures&lt;&#x2F;code&gt; or &lt;code&gt;tokio&lt;&#x2F;code&gt;).&lt;&#x2F;li&gt;
+&lt;li&gt;Write your own implementor of the &lt;code&gt;Stream&lt;&#x2F;code&gt; trait. This is a bit more work, but it is not that hard. I will show you how to do this later on.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;As of April 2025, the traits &lt;code&gt;Stream&lt;&#x2F;code&gt; and &lt;code&gt;Sink&lt;&#x2F;code&gt; are used universally by crates published on &lt;a href=&quot;https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;streams&#x2F;func-async&#x2F;crates.io&quot;&gt;crates.io&lt;&#x2F;a&gt;. If you make use of these traits, which describe a common behavior, and implement them for your own types, you make your code more interoperable with the rest of the world.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Important&lt;&#x2F;strong&gt;: It is important to know while using Rust that it is not required to know everything about &lt;code&gt;Pin&lt;&#x2F;code&gt; or &lt;code&gt;Poll&lt;&#x2F;code&gt;. You can just use the high-level methods provided by the standard library and &lt;code&gt;futures&lt;&#x2F;code&gt; crate.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#streams&quot; aria-label=&quot;Anchor link for: streams&quot;&gt;Streams&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;h3 id=&quot;relationship-with-iterators&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#relationship-with-iterators&quot; aria-label=&quot;Anchor link for: relationship-with-iterators&quot;&gt;Relationship with iterators&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The main thing that is added in functional asynchronous programming is the &lt;code&gt;Stream&lt;&#x2F;code&gt; trait. You are supposed to use it everywhere. There are other things of course, but this is the main concept that you will need.&lt;&#x2F;p&gt;
+&lt;p&gt;So what is a &lt;strong&gt;stream&lt;&#x2F;strong&gt;? It is just something that implements the &lt;code&gt;Stream&lt;&#x2F;code&gt; trait from the &lt;code&gt;futures&lt;&#x2F;code&gt; crate. It nothing more than an asynchronous iterator.&lt;&#x2F;p&gt;
+&lt;p&gt;A rough conceptual definition of a stream would be:&lt;&#x2F;p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A function that returns multiple values at unpredictable times.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;First, remember that the life-time of an iterator (a normal synchronous blocking one) looks like this:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;T&lt;&#x2F;th&gt;&lt;th&gt;create&lt;&#x2F;th&gt;&lt;th&gt;iterate&lt;&#x2F;th&gt;&lt;th&gt;yield&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;1&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;(1..=10)&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;next()&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;3&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;Some(1)&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;4&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;next()&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;5&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;…&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;6&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;next()&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;7&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;None&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;8&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;next()&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;9&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;Some(2)&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;Notice that calling &lt;code&gt;next&lt;&#x2F;code&gt; after the iterator yielded &lt;code&gt;None&lt;&#x2F;code&gt; may result in a new &lt;code&gt;Some&lt;&#x2F;code&gt;. If you do not want that, apply &lt;code&gt;fuse&lt;&#x2F;code&gt; to the iterator to obtain a &lt;code&gt;FusedIterator&lt;&#x2F;code&gt; that will keep yielding &lt;code&gt;None&lt;&#x2F;code&gt; after the first &lt;code&gt;None&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;The life-time of a stream&#x2F;async iterator during usage looks like this:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;strong&gt;T&lt;&#x2F;strong&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;strong&gt;Creation&lt;&#x2F;strong&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;strong&gt;Iteration&lt;&#x2F;strong&gt;&lt;&#x2F;th&gt;&lt;th&gt;&lt;strong&gt;Yielted&lt;&#x2F;strong&gt;&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;1&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;St::new()&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;2&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;next()&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;3&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;await&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;4&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;Some(1)&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;5&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;next()&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;6&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;…&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;7&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;await&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;8&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;Some(2)&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;9&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;next()&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;10&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;None&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;The lifecycle of an async iterator (stream) is longer than a normal iterator since it requires an &lt;code&gt;await&lt;&#x2F;code&gt; before a value is yielded.&lt;&#x2F;p&gt;
+&lt;p&gt;A &lt;code&gt;FusedStream&lt;&#x2F;code&gt; is the async analogue of &lt;code&gt;FusedIterator&lt;&#x2F;code&gt; and will yield &lt;code&gt;None&lt;&#x2F;code&gt; after the first &lt;code&gt;None&lt;&#x2F;code&gt;. In addition, it has a non-async method &lt;code&gt;is_terminated&lt;&#x2F;code&gt; that says whether the stream is exhausted already.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;pub trait FusedStream: Stream {
+   fn is_terminated(&amp;amp;self) -&amp;gt; bool;
+}
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Usually a &lt;code&gt;FusedStream&lt;&#x2F;code&gt; will yield &lt;code&gt;Poll::Ready(None)&lt;&#x2F;code&gt; after the first &lt;code&gt;Poll::Ready(None)&lt;&#x2F;code&gt; and it’s &lt;code&gt;is_terminated&lt;&#x2F;code&gt; method will be positive. However, the implementor has the freedom to break these conventions.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;consuming-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#consuming-streams&quot; aria-label=&quot;Anchor link for: consuming-streams&quot;&gt;Consuming streams&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;Remark&lt;&#x2F;strong&gt;: As of April 2025, all the methods you need for streams are in &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;docs.rs&#x2F;futures&#x2F;latest&#x2F;futures&#x2F;stream&#x2F;trait.StreamExt.html&quot;&gt;&lt;code&gt;StreamExt&lt;&#x2F;code&gt;&lt;&#x2F;a&gt; from &lt;code&gt;futures&lt;&#x2F;code&gt;. For the rest of this article, almost all &lt;code&gt;Stream&lt;&#x2F;code&gt;-related methods come from this trait.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;The simplest case would be the case where you just want to perform an operation for each element that is yielded by the stream. For this, you should use the &lt;code&gt;for_each&lt;&#x2F;code&gt; method to act on each item in &lt;code&gt;Some(item)&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;let mut x = 0;
+let fut = stream::repeat(1).take(3).for_each(|item| {
+   x += item;
+    future::ready(())
+});
+fut.await;
+assert_eq!(x, 3);
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Observe that the argument for the closure in &lt;code&gt;for_each&lt;&#x2F;code&gt; does not take an &lt;code&gt;Option&lt;&#x2F;code&gt;. The stream returned by &lt;code&gt;for_each&lt;&#x2F;code&gt; is fused; it is an implementor of &lt;code&gt;FusedStream&lt;&#x2F;code&gt;. A &lt;code&gt;FusedStream&lt;&#x2F;code&gt; is a special type of stream that terminates as soon as one item yielded by the input stream is &lt;code&gt;None&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;strong&gt;Important&lt;&#x2F;strong&gt;:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;The futures that are evaluated while consuming the &lt;code&gt;for_each&lt;&#x2F;code&gt; will not overlap in execution. They will happen sequentially.&lt;&#x2F;li&gt;
+&lt;li&gt;The &lt;code&gt;for_each&lt;&#x2F;code&gt; will not do any work, unless it is &lt;strong&gt;driven&lt;&#x2F;strong&gt; by an asynchronous executor. The reason is that streams are &lt;em&gt;lazy&lt;&#x2F;em&gt;, just like normal iterators in Rust.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Very often we just have to apply one blocking, synchronous operation to every output item from an input stream and return a new stream with the mapped items. The &lt;code&gt;map&lt;&#x2F;code&gt; stream operator is the right tool for this:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;let stream = stream::iter(1..=3);
+let stream = stream.map(|x| x + 3);
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;When the operation in the closure is asynchronous you should use &lt;code&gt;then&lt;&#x2F;code&gt; (as in &lt;code&gt;Future::then&lt;&#x2F;code&gt;).&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;let stream = stream::iter(1..=3);
+let stream = stream.then(|x| async move { convert(x).await });
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Feel free to use async closures &lt;code&gt;async |_| {}&lt;&#x2F;code&gt; or &lt;code&gt;AsyncFn&lt;&#x2F;code&gt; in recent Rust versions. Asynchronous closures were only recently stabilized as of April 2025. Since I do not understand the implementation of async closures very well, I prefer to keep using the old syntax: &lt;code&gt;|x| async move {}&lt;&#x2F;code&gt; for now. This syntax works better with older versions of Rust.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;Remark&lt;&#x2F;strong&gt;: In previous major version releases of &lt;code&gt;futures&lt;&#x2F;code&gt;, &lt;code&gt;then&lt;&#x2F;code&gt; and &lt;code&gt;map&lt;&#x2F;code&gt; were a single function. The crate &lt;code&gt;futures-preview&lt;&#x2F;code&gt; an old version. Avoid reading the documentation of &lt;code&gt;futures-preview&lt;&#x2F;code&gt; to prevent confusion. (Everything you need for the rest of this presentation is available in &lt;code&gt;futures &amp;gt;= 0.3.31&lt;&#x2F;code&gt;.)&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;stream-test-helpers&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#stream-test-helpers&quot; aria-label=&quot;Anchor link for: stream-test-helpers&quot;&gt;Stream test helpers&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;While implementing your own streams (maybe not now but later on), you will run into situations where you need consume the streams as if you were a typical consumer. The &lt;code&gt;futures&lt;&#x2F;code&gt; crate provides helpers for tests that are analogous to the ones in &lt;code&gt;Iterator&lt;&#x2F;code&gt;. The only thing that distinguishes them is being &lt;strong&gt;operators on asynchronous iterators&lt;&#x2F;strong&gt;:&lt;&#x2F;p&gt;
+&lt;p&gt;The following &lt;code&gt;Stream&lt;&#x2F;code&gt; helpers &#x2F; operators take a stream and perform some simple actions on it without changing the values:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;skip_while&lt;&#x2F;code&gt;: Drops items from a stream while a condition is met (provided as a boolean closure on the items of the input stream).&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;peekable&lt;&#x2F;code&gt;: Adds a &lt;code&gt;peek&lt;&#x2F;code&gt; method that can be used to preview a &lt;strong&gt;reference to the next item&lt;&#x2F;strong&gt; without consuming it (yet). This is useful when you don’t want to &lt;em&gt;step too fast&lt;&#x2F;em&gt; through the stream.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;take&lt;&#x2F;code&gt;: Simply skip a number of items from the beginning of the stream.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;code&gt;enumerate&lt;&#x2F;code&gt;: Adds an increasing index to the items of stream, starting from the beginning.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;For example, you can use &lt;code&gt;enumerate&lt;&#x2F;code&gt; as follows:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;let stream = stream::iter(vec![&amp;#39;a&amp;#39;, &amp;#39;b&amp;#39;, &amp;#39;c&amp;#39;]);
+
+let mut stream = stream.enumerate();
+
+assert_eq!(stream.next().await, Some((0, &amp;#39;a&amp;#39;)));
+assert_eq!(stream.next().await, Some((1, &amp;#39;b&amp;#39;)));
+assert_eq!(stream.next().await, Some((2, &amp;#39;c&amp;#39;)));
+assert_eq!(stream.next().await, None);
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;filtering-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#filtering-streams&quot; aria-label=&quot;Anchor link for: filtering-streams&quot;&gt;Filtering streams&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;You can filter a stream of numbers to only keep the even numbers as follows:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;use std::future::ready;
+use futures::{stream, StreamExt};
+
+let stream = stream::iter(1..=10);
+let events = stream.filter(|x| ready(x % 2 == 0));
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Notice the &lt;code&gt;ready&lt;&#x2F;code&gt; function. This function maps primitive Rust values &lt;strong&gt;into the async world&lt;&#x2F;strong&gt;. The output of &lt;code&gt;ready&lt;&#x2F;code&gt; is a minimal &lt;code&gt;Future&lt;&#x2F;code&gt; that can be moved: it is &lt;strong&gt;&lt;code&gt;Unpin&lt;&#x2F;code&gt;&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;&lt;strong&gt;Remark&lt;&#x2F;strong&gt;: Don’t try to implement &lt;code&gt;ready&lt;&#x2F;code&gt; yourself, just import it from &lt;code&gt;std::future::ready&lt;&#x2F;code&gt;.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;boolean-operators&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#boolean-operators&quot; aria-label=&quot;Anchor link for: boolean-operators&quot;&gt;Boolean operators&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The &lt;code&gt;futures&lt;&#x2F;code&gt; crate also provides analogues for the boolean operators shipped with the standard library &lt;code&gt;Iterator&lt;&#x2F;code&gt; such as &lt;code&gt;any&lt;&#x2F;code&gt;, &lt;code&gt;all&lt;&#x2F;code&gt;, … :&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;let number_stream = stream::repeat(1).map(|n| n);
+let less_then_twenty = number_stream.all(|i| async move { i &amp;lt; 20 });
+assert_eq!(less_then_twenty.await, true);
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Notice here that we don’t have to “pin” the &lt;code&gt;less_then_twenty&lt;&#x2F;code&gt; stream, because &lt;code&gt;Unpin&lt;&#x2F;code&gt; is not a requirement for &lt;code&gt;all&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;sinks&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#sinks&quot; aria-label=&quot;Anchor link for: sinks&quot;&gt;Sinks&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;h3 id=&quot;dual-of-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#dual-of-streams&quot; aria-label=&quot;Anchor link for: dual-of-streams&quot;&gt;Dual of streams&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Up until now we have only seen detailed usage of the &lt;code&gt;Stream&lt;&#x2F;code&gt; trait. But the opposite of a stream, a “sink”, is also shipped by the &lt;code&gt;futures&lt;&#x2F;code&gt; crate as the &lt;code&gt;Sink&lt;&#x2F;code&gt; trait. A &lt;code&gt;Sink&lt;&#x2F;code&gt; is &lt;strong&gt;something that receives data, agnostic from the transport&lt;&#x2F;strong&gt; or channel used.&lt;&#x2F;p&gt;
+&lt;p&gt;The different life-cycle stages of a &lt;code&gt;Sink&lt;&#x2F;code&gt; can be summarized as follows:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;stage&lt;&#x2F;th&gt;&lt;th&gt;name&lt;&#x2F;th&gt;&lt;th&gt;method&lt;&#x2F;th&gt;&lt;th&gt;meaning&lt;&#x2F;th&gt;&lt;th&gt;remark&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;creation&lt;&#x2F;td&gt;&lt;td&gt;new&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;td&gt;Initial state&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;send&lt;&#x2F;td&gt;&lt;td&gt;ready&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;ready().await&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;Wait until cache ready&lt;&#x2F;td&gt;&lt;td&gt;may be full&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;send&lt;&#x2F;td&gt;&lt;td&gt;start send&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;start_send(item)&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;Load into cache&lt;&#x2F;td&gt;&lt;td&gt;not actual send&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;send&lt;&#x2F;td&gt;&lt;td&gt;flush&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;flush().await&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;Send items from cache&lt;&#x2F;td&gt;&lt;td&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;close&lt;&#x2F;td&gt;&lt;td&gt;close&lt;&#x2F;td&gt;&lt;td&gt;&lt;code&gt;close().await&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;Close the &lt;code&gt;Sink&lt;&#x2F;code&gt;&lt;&#x2F;td&gt;&lt;td&gt;not automatic&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;The analogue of the map function for streams &lt;code&gt;StreamExt::map&lt;&#x2F;code&gt; for &lt;code&gt;Sink&lt;&#x2F;code&gt;s is the sink operator &lt;code&gt;SinkExt::with&lt;&#x2F;code&gt;. Instead mapping the output items of a stream, it applies a mapping function to all items that are going to be flushed into the sink.&lt;&#x2F;p&gt;
+&lt;p&gt;If a &lt;code&gt;Sink&lt;&#x2F;code&gt; becomes full easily and you depend on the concrete underlying type (such as for example a sink derived from a particular type of sender of a Tokio channel), you can allocate an extra buffer with &lt;code&gt;StreamExt::buffer()&lt;&#x2F;code&gt; to cache elements that don’s fit in the sink.&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;em&gt;Remark: The &lt;code&gt;Sink&lt;&#x2F;code&gt; trait is not as common as the &lt;code&gt;Stream&lt;&#x2F;code&gt; trait in the crates that I have used. It is, however, very easy to implement yourself.&lt;&#x2F;em&gt;&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;flushing-a-stream-into-a-sink&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#flushing-a-stream-into-a-sink&quot; aria-label=&quot;Anchor link for: flushing-a-stream-into-a-sink&quot;&gt;Flushing a &lt;code&gt;Stream&lt;&#x2F;code&gt; into a &lt;code&gt;Sink&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;A &lt;code&gt;Sink&lt;&#x2F;code&gt; may appear in combination with a &lt;code&gt;Stream&lt;&#x2F;code&gt;. In that case, it is possible to create a fully functional pipeline that takes a stream and flushes it into a sink. This is done with the &lt;code&gt;forward&lt;&#x2F;code&gt; method of the &lt;code&gt;Sink&lt;&#x2F;code&gt; trait.&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;let (output,_) = channel::new();
+let output = PollSender::new(output);
+
+let input = stream::repeat(1).map(Ok);
+input.forward(output).await.unwrap();
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Important:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;StreamExt::forward&lt;&#x2F;code&gt; takes a &lt;code&gt;TryStream&lt;&#x2F;code&gt; (items are &lt;code&gt;Result&lt;&#x2F;code&gt;)&lt;&#x2F;li&gt;
+&lt;li&gt;returns future of &lt;code&gt;Result&lt;&#x2F;code&gt; (need to ignore error).&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h3 id=&quot;more-sink-operators&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#more-sink-operators&quot; aria-label=&quot;Anchor link for: more-sink-operators&quot;&gt;More &lt;code&gt;Sink&lt;&#x2F;code&gt; operators&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;The &lt;code&gt;forward&lt;&#x2F;code&gt; method will also close the &lt;code&gt;Sink&lt;&#x2F;code&gt; upon termination of the input stream. If you don’t want to close the &lt;code&gt;Sink&lt;&#x2F;code&gt; after stream returned &lt;code&gt;None&lt;&#x2F;code&gt;, use the sink operator &lt;code&gt;SinkExt::send_all&lt;&#x2F;code&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;When you have one input stream and know &lt;code&gt;n&lt;&#x2F;code&gt; output sinks &lt;strong&gt;at compile-time&lt;&#x2F;strong&gt;, you can use &lt;code&gt;StreamExt::fanout&lt;&#x2F;code&gt;. Otherwise you will need a mechanism to &lt;code&gt;Clone&lt;&#x2F;code&gt; the input stream at run-time.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;splitting-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#splitting-streams&quot; aria-label=&quot;Anchor link for: splitting-streams&quot;&gt;Splitting streams&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;h3 id=&quot;collapsing-an-iterable-of-streams&quot;&gt;&lt;a class=&quot;zola-anchor&quot; href=&quot;#collapsing-an-iterable-of-streams&quot; aria-label=&quot;Anchor link for: collapsing-an-iterable-of-streams&quot;&gt;Collapsing an iterable of streams&lt;&#x2F;a&gt;&lt;&#x2F;h3&gt;
+&lt;p&gt;Given an iterable of streams, you can collapse the whole iterable into one stream with &lt;code&gt;select_all&lt;&#x2F;code&gt;. This function will just emit the stream items from all the streams (assuming the iterator is finite) as they arrive.&lt;&#x2F;p&gt;
+&lt;p&gt;A simple example would look like this:&lt;&#x2F;p&gt;
+&lt;pre&gt;&lt;code data-lang=&quot;rust&quot;&gt;let stream_a = stream::repeat(1);
+let stream_b = stream::repeat(2);
+
+let merged = stream::select_all([stream_a, stream_b]);
+&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;In practice, you would typically pass large vectors, compile-time-sized arrays or other iterable collections to the &lt;code&gt;select_all&lt;&#x2F;code&gt; function.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

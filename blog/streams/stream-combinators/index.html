@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width">
+    <meta charset="UTF-8">
+
+    <link rel="icon" type="image/x-icon" href="/logo.png">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/styles.css">
+
+    
+
+<!-- Comments with GitHub discussions -->
+<script src="https://giscus.app/client.js" data-repo="wvhulle/wvhulle.github.io" data-repo-id="R_kgDOGmD5MA"
+    data-category="Comments" data-category-id="DIC_kwDOGmD5MM4Cpsng" data-mapping="title" data-strict="1"
+    data-reactions-enabled="1" data-emit-metadata="0" data-input-position="bottom" data-theme="light_high_contrast"
+    data-lang="en" data-loading="lazy" crossorigin="anonymous" async>
+    </script>
+<title>
+
+
+    
+    Building stream combinators
+    
+
+
+
+</title>
+
+
+
+    
+    <link rel="alternate" type="application/atom+xml" title="Willem Vanhulle's blog"
+        href="https://willemvanhulle.tech/atom.xml">
+    
+</head>
+
+<body>
+    <aside id="sidebar">
+
+        <a href="/">
+            <img src="/logo.png">
+        </a>
+
+        <ul id="navigation_links">
+            <li id="home-button">
+                <a href="/">
+                    Home
+                </a>
+            </li>
+
+            
+
+            
+            <li>
+                <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;about&#x2F;">About</a>
+            </li>
+            
+
+            
+            
+            <li class="section_block">
+                <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;">Blog</a>
+                <ul class="section_page_list">
+                    
+                    
+                    
+                    
+                    <li class="section_page_link">
+                        <a href="https:&#x2F;&#x2F;willemvanhulle.tech&#x2F;blog&#x2F;streams&#x2F;">Streams</a>
+                        
+                        <em>Mar 18</em>
+                        
+                    </li>
+                    
+                    
+                    
+
+                    
+                </ul>
+            </li>
+            
+
+        </ul>
+
+
+        <a href="" id="back-to-top">
+            ↑ </a>
+
+    </aside>
+
+
+
+    <main>
+
+        
+<article>
+
+    <header>
+
+
+        <h1 class="title">
+            Building stream combinators
+        </h1>
+
+
+
+        <p class="post_date">Wednesday, 2025-04-16
+
+
+<a href="#comments">Comments</a>        </p><ul class="tags"><li><a href="https://willemvanhulle.tech/tags/combinator/">combinator</a></li><li><a href="https://willemvanhulle.tech/tags/functional/">functional</a></li><li><a href="https://willemvanhulle.tech/tags/rust/">Rust</a></li><li><a href="https://willemvanhulle.tech/tags/operator/">operator</a></li><li><a href="https://willemvanhulle.tech/tags/poll/">Poll</a></li><li><a href="https://willemvanhulle.tech/tags/pin/">Pin</a></li><li><a href="https://willemvanhulle.tech/tags/unpin/">Unpin</a></li></ul><p class="subtitle">
+            How to add functionality to asynchronous Rust by building your own stream combinators. <br/>
+        <p>
+
+
+
+    </header>
+
+
+    
+    <p> Previous post:
+        <a href="https://willemvanhulle.tech/blog/streams/coroutines/">Role of coroutines</a>.
+    </p>
+
+    
+
+
+
+    
+    <ul class="post_top_headers">
+        
+        <li>
+
+
+            
+            <a href="https://willemvanhulle.tech/blog/streams/stream-combinators/#introduction">Introduction</a>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://willemvanhulle.tech/blog/streams/stream-combinators/#invalidation-through-moves">Invalidation through moves</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/stream-combinators/#clearing-up-unpin">Clearing up Unpin</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/stream-combinators/#cannot-be-moved-unpin">Cannot be moved &#x2F; !Unpin</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/stream-combinators/#purpose-of-data-type-pin">Purpose of data-type Pin</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/stream-combinators/#convert-unpin-into-unpin">Convert !Unpin into Unpin</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/stream-combinators/#unsafe-pin-methods-optional">Unsafe Pin methods (optional)</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/stream-combinators/#the-ready-future">The Ready future</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://willemvanhulle.tech/blog/streams/stream-combinators/#simple-stream-combinators">Simple stream combinators</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/stream-combinators/#definition-of-a-stream">Definition of a stream</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/stream-combinators/#futures-as-streams-with-once">Futures as streams with Once</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/stream-combinators/#functional-building-block-map">Functional building block Map</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/stream-combinators/#projecting-with-pin-project-optional">Projecting with pin_project (optional)</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+        <li>
+
+
+            
+            <details>
+
+                <summary>
+                    <a href="https://willemvanhulle.tech/blog/streams/stream-combinators/#stream-combinators">Stream combinators</a>
+                </summary>
+                <ul>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/stream-combinators/#flattening-nested-streams">Flattening nested streams</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/stream-combinators/#a-stream-of-arcs">A stream of Arcs</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://willemvanhulle.tech/blog/streams/stream-combinators/#a-stream-of-clones">A stream of clones</a>
+                    </li>
+                    
+                </ul>
+            </details>
+            
+        </li>
+        
+    </ul>
+    
+
+
+    <h2 id="introduction"><a class="zola-anchor" href="#introduction" aria-label="Anchor link for: introduction">Introduction</a></h2>
+<p>What if you know how to use streams, but you need some kind of functionality that is not in the <code>StreamExt</code> trait from <code>futures</code> or the standard library?</p>
+<p>In that case, you might try an imperative approach and create the stream using the <code>unfold</code> function. This is a solution for simple cases, but it does not generalise well. Disambiguating between different parts of intermediate stream state quickly becomes difficult.</p>
+<p>You might also want to try using imperative design patterns like loops, channels, spawns and generic functions. This approach quickly becomes unmaintainable because of its complexity.</p>
+<h2 id="invalidation-through-moves"><a class="zola-anchor" href="#invalidation-through-moves" aria-label="Anchor link for: invalidation-through-moves">Invalidation through moves</a></h2>
+<p><em><strong>Remark</strong>: the following sections will be about <code>Unpin</code>. I wrote about it because I needed it later on to understand better how to construct combinators. You can skip this chapter if you want (or look at the official documentation).</em></p>
+<p>The physical location of variables used in your code may move throughout the lifetime of your program. In Rust, for example, it is common to move a variable through an assignment. A variable that is called by value by a function is <strong>moved</strong> (literally and conceptually) into the the function. The function takes conceptual ownership. As far as I know, this is called the <strong>move semantics</strong> of Rust.</p>
+<p>However, through this conceptual/semantical moving process, a physical move of the data in the registers of the CPU or other parts of memory may also occur. This is dangerous when the data being moved is self-referencing.</p>
+<p>For more information, see <a rel="external" href="https://doc.rust-lang.org/std/pin/index.html"><code>std::pin</code></a>.</p>
+<h3 id="clearing-up-unpin"><a class="zola-anchor" href="#clearing-up-unpin" aria-label="Anchor link for: clearing-up-unpin">Clearing up <code>Unpin</code></a></h3>
+<p>The confusing aspect of <code>Pin</code> and <code>Unpin</code> in Rust, is that it is not <code>Pin</code> which is the first that you should understand, but it is <code>Unpin</code>.</p>
+<p>The naming of <code>Unpin</code> makes it seem like it is some counterpart to <code>Pin</code>. However, it is not.</p>
+<p><code>Unpin</code> is an auto-trait which means that the compiler derives <code>Unpin</code> for everything that it deems <strong>safe to move</strong>. This is done at compile-time and behind the scene by the compiler for every “auto-trait”.</p>
+<h3 id="cannot-be-moved-unpin"><a class="zola-anchor" href="#cannot-be-moved-unpin" aria-label="Anchor link for: cannot-be-moved-unpin">Cannot be moved / <code>!Unpin</code></a></h3>
+<p>Anything that looks like it cannot be moved by the compiler, will be marked automatically as <code>!Unpin</code>, not <code>Unpin</code>, or un-moveable. The reasoning by the compiler is that it necessary to detect when some kind of data type would be invalidated by a move and prevent dangerous actions by users (programmers implementing async functionality).</p>
+<p>Examples of <code>!Unpin</code> Rust data-types:</p>
+<ul>
+<li>
+<p>generators:</p>
+<ul>
+<li>normal generators written with <code>gen</code>-blocks or macros</li>
+<li>async generators written with the macro <code>async_stream::stream! {}</code> (implementing the <code>Stream</code> trait)</li>
+</ul>
+</li>
+<li>
+<p>self-referencing data that is <strong>code-generated by the compiler</strong></p>
+<ul>
+<li>state machines generated by <code>async {}</code> blocks</li>
+<li>… ?</li>
+</ul>
+</li>
+<li>
+<p>self-referencing user data structures:</p>
+<ul>
+<li>naive trees</li>
+<li>strings with slices</li>
+</ul>
+</li>
+<li>
+<p>types with a manual <code>PhantomPinned</code> field</p>
+</li>
+</ul>
+<p><strong>Important</strong>: The reason that <code>async {}</code> blocks are <code>!Unpin</code> is that the compiler is lazy and does not analyze such blocks automatically to check whether they are <code>Unpin</code>.</p>
+<h3 id="purpose-of-data-type-pin"><a class="zola-anchor" href="#purpose-of-data-type-pin" aria-label="Anchor link for: purpose-of-data-type-pin">Purpose of data-type <code>Pin</code></a></h3>
+<p><code>Pin</code> as a data-type has only one requirement: it’s inner type should implement <code>Deref</code>. In other words, <code>Pin</code> is a wrapper around pointer / reference-like datatypes.</p>
+<p>The concrete type <code>Pin</code> is, in fact, not a real physical type. It does not represent a different location or address in memory. It is merely a Rust compiler construct that manifests itself as a type available to the users.</p>
+<p>The <code>Pin</code> type is essentially a contract for pointer-like types, maintained by two methods that require the pointed-to (also called “pointee”) to implement <code>Unpin</code>:</p>
+<ul>
+<li>A <strong>constructor <code>Pin::new()</code></strong>: takes any owned <code>Unpin</code> object (safe-to-move, not <code>!Unpin</code>) and takes ownership of it. There is no way to get ownership back. You may, however, implement a <code>Drop</code> implementation which will be run on de-allocation of <code>Pin</code>.</li>
+<li>A <strong>mutable getter <code>Pin::get_mut()</code></strong>: allows you get mutable access to the contained, pinned, <code>Unpin</code> value. This allows you to still call methods with the <code>&amp;mut Self</code> signature on the pinned data.</li>
+</ul>
+<p>The reason that the <code>get_mut</code> method requires the pointee to be <code>Unpin</code> is that mutable access through a mutable reference can be used to move the content of the <code>Pin</code> with a function like <code>std::mem::replace</code>. This could invalidate any pinned otherwise unmoveable <code>!Unpin</code> type.</p>
+<table><thead><tr><th><strong>Metaphor</strong></th><th><strong>Type state</strong></th><th><strong>Ownership event</strong></th></tr></thead><tbody>
+<tr><td><em>undressed</em></td><td><code>Type</code></td><td>moveable / free</td></tr>
+<tr><td><em>dress-up</em></td><td><code>Pin::new(Type)</code></td><td>give up ownership</td></tr>
+<tr><td><em>dressed-up</em></td><td><code>Pin&lt;Type&gt;</code></td><td>stuck in memory</td></tr>
+<tr><td><em>dress-down</em></td><td><code>Pin::new(Type).get_mut()</code></td><td>acquire edit access</td></tr>
+</tbody></table>
+<p>Conclusion:</p>
+<blockquote>
+<p><code>Pin</code> does not pin anything physically at run-time, but relies on the auto-trait <code>!Unpin</code> to prevent dangerous moves at run-time.</p>
+</blockquote>
+<h3 id="convert-unpin-into-unpin"><a class="zola-anchor" href="#convert-unpin-into-unpin" aria-label="Anchor link for: convert-unpin-into-unpin">Convert <code>!Unpin</code> into <code>Unpin</code></a></h3>
+<p>Almost all primitives in Rust are <code>Unpin</code>. Whenever you encounter something that is not <code>Unpin</code> (and has not non-<code>'static</code> references), you can just allocate it on the heap with the function <code>Box::pin</code>. The <code>Box::pin</code> is shorthand for <code>Pin::new(Box::new())</code>.</p>
+<p>The result of the <code>Box::pin</code> is a combination:</p>
+<ul>
+<li>The heap-allocated pinned object will not be moved by any code generated by the Rust compiler;</li>
+<li>We can still drop the pinned object and the <code>Drop</code> implementations will run.</li>
+</ul>
+<p>Let’s take the following as an example of something that is <code>!Unpin</code>.</p>
+<pre><code data-lang="rust">struct MapFut&lt;Fut&gt; where Fut: Future {
+    fut: Fut,
+    ...
+}
+</code></pre>
+<p>A common approach when handling extensions or combinators of futures which are themselves futures, is by <strong>projecting</strong> <code>Pin&lt;&amp;mut Self&gt;</code>into <code>&amp;mut Self</code>. The projection is usually called <code>this</code> (the <code>self</code> keyword is reserved).</p>
+<pre><code data-lang="rust">impl&lt;Fut&gt; Future for MapFut&lt;Fut&gt; {
+    fn poll(self: Pin&lt;&amp;mut Self&gt;) -&gt; Poll {
+        // We need to do something with `self.fut`.
+        // We need `Pin&lt;&amp;mut Self&gt; -&gt; &amp;mut Self`.
+        // The following will not compile, because `Self: !Unpin`.
+        let mut this = self.get_mut();
+        unimplemented!()
+    }
+}
+</code></pre>
+<p>In this example the user struct <code>MapFut</code> is <code>!Unpin</code>, so <code>get_mut</code> cannot be used. The <code>get_mut</code> function requires <code>Self: Unpin</code> as mentioned in the previous section.</p>
+<p>The simplest solution is to refine the definition of <code>MapFut</code> as follows:</p>
+<pre><code data-lang="rust">struct MapFut&lt;Fut&gt; where Fut: Future {
+    fut: Pin&lt;Box&lt;Fut&gt;&gt;,
+    ...
+}
+</code></pre>
+<p>Now <code>fut</code> is a pinned pointer to a location on the heap.</p>
+<h3 id="unsafe-pin-methods-optional"><a class="zola-anchor" href="#unsafe-pin-methods-optional" aria-label="Anchor link for: unsafe-pin-methods-optional">Unsafe <code>Pin</code> methods (optional)</a></h3>
+<p>Until now I explicitly avoided mentioning or using the unsafe methods of the <code>Pin</code> type. Beside <code>Pin::new()</code> and <code>Pin::get_mut()</code>, <code>Pin</code> also has a few <code>unsafe</code> counterparts.</p>
+<p>You might have been tempted by the Rust compiler to use the <code>unsafe</code> methods because they do not have an <code>Unpin</code> constraint. But if you go in that direction, you effectively disable automatic and important checks by the compiler at run-time.</p>
+<h3 id="the-ready-future"><a class="zola-anchor" href="#the-ready-future" aria-label="Anchor link for: the-ready-future">The <code>Ready</code> future</a></h3>
+<p>Anything can be turned into a future using the <code>Ready</code> future. This future takes the source and puts it inside an <code>Option</code>.</p>
+<pre><code data-lang="rust">pub struct Ready&lt;T&gt;(Option&lt;T&gt;);
+</code></pre>
+<p>This future never has to wake up, because it yields a value immediately and is read on the first <code>poll</code> call. This is why the context (and its waker) are ignored.</p>
+<pre><code data-lang="rust">impl&lt;T&gt; Future for Ready&lt;T&gt; {
+    type Output = T;
+
+    fn poll(mut self: Pin&lt;&amp;mut Self&gt;, _cx: &amp;mut Context&lt;&#39;_&gt;) -&gt; Poll&lt;T&gt; {
+        Poll::Ready(self.0.take().expect(&quot;Ready polled after completion&quot;))
+    }
+}
+</code></pre>
+<p>To use this future, you can directly call the constructor <code>Ready::new()</code> or you can call <code>ready()</code>:</p>
+<pre><code data-lang="rust">assert_eq!(1, ready(1).await)`;
+</code></pre>
+<p><em>Remark: <code>.await</code> automatically converts everything in a future with <code>IntoFuture</code>, so it might not even be necessary to use <code>Ready</code> explicitly.</em></p>
+<h2 id="simple-stream-combinators"><a class="zola-anchor" href="#simple-stream-combinators" aria-label="Anchor link for: simple-stream-combinators">Simple stream combinators</a></h2>
+<h3 id="definition-of-a-stream"><a class="zola-anchor" href="#definition-of-a-stream" aria-label="Anchor link for: definition-of-a-stream">Definition of a stream</a></h3>
+<p>A stream is an future that may be polled more than once and yield more than one <code>Poll::Ready</code> value.</p>
+<p>The official definition is a trait:</p>
+<pre><code data-lang="rust">pub trait Stream {
+    type Item;
+
+    fn poll_next(
+        self: Pin&lt;&amp;mut Self&gt;,
+        cx: &amp;mut Context&lt;&#39;_&gt;,
+    ) -&gt; Poll&lt;Option&lt;Self::Item&gt;&gt;;
+}
+</code></pre>
+<p>Notice the similary with the <code>Future</code> trait.</p>
+<p><em>Important: As of April 2025, the <code>Stream</code> trait is not yet in stable Rust.</em></p>
+<h3 id="futures-as-streams-with-once"><a class="zola-anchor" href="#futures-as-streams-with-once" aria-label="Anchor link for: futures-as-streams-with-once">Futures as streams with <code>Once</code></a></h3>
+<p>Every future <code>Fut</code> can be converted into a stream by returning <code>Some(Fut::Output)</code>:</p>
+<pre><code data-lang="rust">pub struct Once&lt;Fut&gt; {
+    future: Option&lt;Fut&gt;
+}
+
+impl&lt;Fut: Future&gt; Stream for Once&lt;Fut&gt; {
+  type Item = Fut::Output;
+
+  fn poll_next(self: Pin&lt;&amp;mut Self&gt;, cx: &amp;mut Context&lt;&#39;_&gt;) -&gt; Poll&lt;Option&lt;Self::Item&gt;&gt; {
+      let mut this = self.project();
+      let v = match this.future.as_mut().as_pin_mut() {
+          Some(fut) =&gt; ready!(fut.poll(cx)),
+          None =&gt; return Poll::Ready(None),
+      };
+      this.future.set(None);
+      Poll::Ready(Some(v))
+  }
+}
+</code></pre>
+<p>Here, <code>ready!</code> converts <code>Poll</code> into <code>Option</code>.</p>
+<h3 id="functional-building-block-map"><a class="zola-anchor" href="#functional-building-block-map" aria-label="Anchor link for: functional-building-block-map">Functional building block <code>Map</code></a></h3>
+<p>Let’s look at a simple example from the “semi-standard” library crate <code>futures</code>: the <code>map</code> combinator. This combinator just maps the items of an input stream and returns an new output stream (while consuming the input stream.)</p>
+<p>The combinator’s source code looks like this:</p>
+<pre><code data-lang="rust">pub struct Map&lt;St, F&gt; {
+    #[pin]
+    stream: St,
+    f: F,
+}
+
+impl&lt;St, F&gt; Stream for Map&lt;St, F&gt;
+where
+    St: Stream,
+    F: FnMut&lt;St::Item&gt;,
+{
+    type Item = F::Output;
+
+    fn poll_next(self: Pin&lt;&amp;mut Self&gt;, cx: &amp;mut Context&lt;&#39;_&gt;) -&gt; Poll&lt;Option&lt;Self::Item&gt;&gt; { ... }
+}
+</code></pre>
+<p>Ignore the field attribute <code>pin</code> for now.</p>
+<p>The definition of <a rel="external" href="https://docs.rs/futures/latest/futures/stream/struct.Map.html"><code>map</code></a> and all the behaviour that we expect from a <code>map</code> function essentially boils down to storing two things:</p>
+<ul>
+<li>The original input stream.</li>
+<li>The function or closure that maps elements of the input stream.</li>
+</ul>
+<p>Then the authors of <code>futures</code> had to implement the single required method of the <code>Stream</code> trait: <code>poll_next</code>:</p>
+<pre><code data-lang="rust">impl&lt;St, F&gt; Stream for Map&lt;St, F&gt;
+where
+    St: Stream,
+    F: FnMut&lt;St::Item&gt;,
+{
+    type Item = F::Output;
+
+    fn poll_next(self: Pin&lt;&amp;mut Self&gt;, cx: &amp;mut Context&lt;&#39;_&gt;) -&gt; Poll&lt;Option&lt;Self::Item&gt;&gt; {
+        let mut this = self.project();
+        let res = ready!(this.stream.as_mut().poll_next(cx));
+        Poll::Ready(res.map(|x| this.f.call_mut(x)))
+    }
+}
+</code></pre>
+<p>At the beginning of the <code>poll_next</code> function, only a <code>Pin&lt;&amp;mut Self&gt;</code> is given. It has to be “undressed” to a mutable reference to the state object <code>Map</code>. This happens through a process called <strong>projection</strong>, which is essentially just calling <code>get_mut</code> on <code>Pin</code>.</p>
+<h3 id="projecting-with-pin-project-optional"><a class="zola-anchor" href="#projecting-with-pin-project-optional" aria-label="Anchor link for: projecting-with-pin-project-optional">Projecting with <code>pin_project</code> (optional)</a></h3>
+<p>Almost any library I encountered uses the <code>pin_project</code> crate which provides the <code>#[pin]</code> field attribute that I asked you to ignore. The <code>pin_project</code> crate takes care of two things:</p>
+<ul>
+<li>You don’t have to call <code>Box::pin</code> yourself or <code>pin_mut!</code> inside the constructor function of your aggregated stream.</li>
+<li>You get a <code>project</code> function which allows you to call <code>as_mut()</code> (equivalent to <code>get_mut()</code>).</li>
+</ul>
+<p><strong>Remark</strong>: Internally (if I read the code correctly), <code>pin_project</code> makes use of several <code>unsafe</code> function calls of the <code>Pin</code> type. This is not that strange, considering that most of the standard library is written in <code>unsafe</code>. On the other hand, using <code>Box::pin</code> will not have a significant performance impact and it does not require a macro from an external crate.</p>
+<h2 id="stream-combinators"><a class="zola-anchor" href="#stream-combinators" aria-label="Anchor link for: stream-combinators">Stream combinators</a></h2>
+<p>I will now focus on more complicated stream combinators. These are functions that take one or more input streams and output an output stream. I will call such higher-order functions <strong>stream combinators</strong> from now on.</p>
+<p><em>Remark: The <a rel="external" href="https://crates.io/crates/futures-rx"><code>futures-rx</code></a> crate is a good crate to look for if you want to save time and just use combinators made by someone else.</em></p>
+<h3 id="flattening-nested-streams"><a class="zola-anchor" href="#flattening-nested-streams" aria-label="Anchor link for: flattening-nested-streams">Flattening nested streams</a></h3>
+<p>The <code>futures</code> crate has several types of flatten functions for nested streams. Nested streams are Rust data types <code>S</code> with a trait bound <code>S: Stream&lt;Item: Stream&gt;</code>.</p>
+<p>You could separate flatten combinators in two categories: sequential or concurrent.</p>
+<p>Sequential flatten combinators will never yield values from multiple inner streams at the same time.</p>
+<ul>
+<li><code>flatten</code>: flattens the outer stream by pasting the output from the inner streams consecutively. This is usually not what you want, since most streams are infinite and you don’t want to block the outer stream.</li>
+<li>A “forgetful” flatten (also called <code>switch</code> in RxJs): a kind of flatten of nested streams that only polls the most recent stream that arrived on the outer stream. This is implemented by <a rel="external" href="https://docs.rs/futures-rx/0.2.1/futures_rx/stream_ext/trait.RxExt.html#method.switch_map"><code>switch_map</code></a> in <code>futures-rx</code>.</li>
+</ul>
+<p>Concurrent flatten combinators will combine values from multiple inner streams:</p>
+<ul>
+<li>Concurrent <code>flatten_unordered(None)</code>: flattens by merging as many inner streams as possible, as they arrive on the outer stream. This might seems like a useful function, but it often not what you want.</li>
+<li>Buffered concurrent <code>flatten_unordered(Some(N))</code>: flattens up-to N different inner streams.</li>
+</ul>
+<p>Keep in mind that you can also use the <code>select_all</code> function from <code>futures::stream</code> to flatten in the situation where your outer stream is not a real stream but a finite iterable of streams.</p>
+<h3 id="a-stream-of-arcs"><a class="zola-anchor" href="#a-stream-of-arcs" aria-label="Anchor link for: a-stream-of-arcs">A stream of <code>Arc</code>s</a></h3>
+<p>Sometimes you might want to use the items yielded by a single stream in several places simultaneously. You could wrap all the items yielded by the input stream inside a shared reference <code>Arc</code>. The disadvantage of this approach is that you need (a limited form of) garbage cleaning by reference counting.</p>
+<p>The <code>futures-rx</code> crate exposes a <code>share</code> method that can be used for splitting an input stream.</p>
+<p>Looking at the <a rel="external" href="https://docs.rs/futures-rx/0.2.1/futures_rx/stream_ext/trait.RxExt.html#method.share">docs</a>, there is an example:</p>
+<pre><code data-lang="rust">use futures::{stream::{StreamExt, self}, future::join};
+use futures_rx::{Notification, RxExt};
+
+let stream = stream::iter(0..=3);
+let stream = stream.share();
+
+let sub_stream_a = stream.clone().map(|event| *event); 
+let sub_stream_b = stream.clone().map(|event| *event); 
+
+assert_eq!((vec![0, 1, 2, 3], vec![0, 1, 2, 3]), join(sub_stream_a.collect::&lt;Vec&lt;_&gt;&gt;(), sub_stream_b.collect::&lt;Vec&lt;_&gt;&gt;()).await);
+</code></pre>
+<p>The <code>event</code>s yielded by the shared stream seem to be wrappers around <code>Arc&lt;usize&gt;</code>. Since <code>usize</code> is <code>Copy</code>, <code>*event</code> is treated as <code>&amp;usize</code> and the referenced <code>usize</code> automically cloned.</p>
+<p><em>Remark: Maybe I am wrong?</em></p>
+<h3 id="a-stream-of-clones"><a class="zola-anchor" href="#a-stream-of-clones" aria-label="Anchor link for: a-stream-of-clones">A stream of clones</a></h3>
+<p>The <code>share</code> operator on streams from <code>futures-rx</code> seems to put all values on the input stream inside a reference-counted <code>Arc</code>.</p>
+<p>I wanted to derive several output streams from the input stream that yielded clones directly without reference counting.</p>
+<p><em>Remark: Maybe I could just have used <code>share</code> and then cloned every element?</em></p>
+<p>I decided to implement a separate stream cloning trait in a crate <a rel="external" href="https://crates.io/crates/clone-stream"><code>clone-stream</code></a>. The high-level API of this crate is quite simple. It is just a call to <code>fork</code> and then <code>stream.clone()</code>:</p>
+<pre><code data-lang="rust">use clone_stream::ForkStream;
+use futures::{FutureExt, StreamExt, stream};
+let non_clone_stream = stream::iter(0..10);
+let clone_stream = non_clone_stream.fork();
+let mut cloned_stream = clone_stream.clone();
+</code></pre>
+<p><em>Remark: There exist a few other crates that are similar.</em></p>
+<p>For more information about the <code>clone-stream</code> crate, see my <a rel="external" href="https://github.com/wvhulle/streams-eurorust-2025">presentation at EuroRust 2025</a>.</p>
+
+
+
+    <section id="comments" class="giscus"></section>
+
+
+</article>
+
+
+
+<footer>
+
+
+
+    
+    <span>←
+        <a href="https://willemvanhulle.tech/blog/streams/coroutines/">Role of coroutines</a> </span>
+
+
+    
+
+    
+</footer>
+
+
+
+    </main>
+
+
+
+</body>
+
+</html>
