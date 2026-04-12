@@ -13,4 +13,4 @@ To run a local development server, install `zola` binary. Then run:
 zola serve
 ```
 
-I recommend using [`mpls`](https://github.com/mhersson/mpls) for Markdown file preview while writing content. This does not require the `zola` binary.
+I recommend using [`mpls`](https://github.com/mhersson/mpls) for Markdown file preview while writing content. This does not require the `zola` binary
