@@ -1,12 +1,12 @@
-base_url = "https://willemvanhulle.tech"
 author = "Willem Vanhulle"
+base_url = "https://willemvanhulle.be"
 title = "Willem Vanhulle"
 
 
-compile_sass = true
 build_search_index = true
-generate_feeds = true
+compile_sass = true
 feed_filenames = ["atom.xml"]
+generate_feeds = true
 taxonomies = [{ name = "tags", description = "Tags" }]
 
 [markdown]
@@ -15,8 +15,8 @@ taxonomies = [{ name = "tags", description = "Tags" }]
 bottom_footnotes = true
 
 # Prose
-smart_punctuation = true
 render_emoji = true
+smart_punctuation = true
 
 # # Code
 # highlight_code = true
